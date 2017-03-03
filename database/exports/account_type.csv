@@ -1,0 +1,18 @@
+id;default_chart_of_account_id;type;name;Priority;caption;description;code;active
+1;42;LIABILITY;Credit Card;1500;Credit Card;Credit card purchases, bills, and payments.;;1
+2;42;LIABILITY;Inventory Account;2000;Accounts Payable - Inventory;Short Term (i.e. 30 days) money owed, specifically credit you have with vendors. This will be for inventory: raw materials, finished goods, supplies, only;;1
+3;42;LIABILITY;Expense Account;1000;Accounts Payable - Expense;Short Term (i.e. 30 days) money owed, specifically credit you have with vendors. This will be for expense and Cost of Goods Sold categories;;1
+4;3;ASSETS;Checking Account;800;Checking Account;Business Checking Accounts. Also good for Payroll Checking and Escrow Accounts, however they may use a different chart of account - check with the chart of accounts for the correct option.;;1
+5;2;ASSETS;Cash Account;800;Cash Account;Petty Cash, Cash Accounts, Deposit Bags, Safe;;1
+6;5;ASSETS;Saving Account;800;Saving Account;Saving Account;;1
+7;60;LIABILITY;Short Term Liability;0;Short Term Liability;Line Of Credit, Over Draft, Short Term Loans;;1
+9;3;ASSETS;Debit Card;0;Debit Card;Debit Cards Pull straight from checking account, so it actually is similar to using a check, not like a credit card at all.;;1
+10;0;NONE;Non Posting;1800;Not an accounting account;Non posting account to store random account information, primarily login information for internet accounts like amtrak, shutterfly, ebay, apple, amazon, etc.;;1
+14;61;LIABILITY;Long Term Liability;0;Long Term Liability;Liabilities such as loans or mortgages scheduled to be paid over periods longer than one year.;;1
+15;0;ASSETS;Equity;0;Equity;Owner's equity, including capital investment, drawings, and retained earnings.;;1
+17;9;ASSETS;Accounts Receivable - Customer;0;Accounts Receivable - Customer;Account information for customers on account;;1
+18;9;ASSETS;Accounts Receivable - Credit Card Processor;0;Accounts Receivable - Credit Card Processor;Account information for credit card processors: National Bancard, NPC, Square, chase, paypal, etc;;1
+19;2;ASSETS;Cash Register Account;900;Cash Register Account;Same as a bank account, however might be able to assist in register creation;;1
+20;0;ASSETS;Revenue;0;Revenue;Sales, returns, etc.;;
+21;0;ASSETS;Cost Of Goods Sold;0;Cost Of Goods Sold;COGS for service, COGS, purchase discounts, etc;;1
+22;0;ASSETS;Store Credit;0;Store Credit;Anything related to store credit - gift cards, etc...;;1

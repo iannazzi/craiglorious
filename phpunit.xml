@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="bootstrap/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="true">
+    <testsuites>
+
+        <testsuite name="craiglorious">
+            <file>tests/in/CraigloriousDatabaseTest.php</file>
+        </testsuite>
+        <testsuite name="tenant">
+            <file>tests/in/TenantDatabaseTest.php</file>
+        </testsuite>
+        <testsuite name="login_not_working">
+            <file>tests/in/LoginTest.php</file>
+        </testsuite>
+        <testsuite name="register_not_working">
+            <file>tests/in/RegisterTest.php</file>
+        </testsuite>
+        
+        <testsuite name="vendors">
+            <file>tests/in/VendorTest.php</file>
+        </testsuite>
+        <testsuite name="roles">
+            <file>tests/in/RoleTest.php</file>
+        </testsuite>
+        <testsuite name="users">
+            <file>tests/in/UserTest.php</file>
+        </testsuite>
+        <testsuite name="locations">
+            <file>tests/in/LocationTest.php</file>
+        </testsuite>
+
+
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">app/</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="DB_DATABASE" value="testing_a"/>
+        <env name="DB_PREFIX" value="testing"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_DRIVER" value="sync"/>
+    </php>
+</phpunit>

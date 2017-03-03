@@ -1,0 +1,98 @@
+
+#rooms_search_div{
+  margin: 20px 0px 0px 0px;
+}
+
+#search_div{
+  @extend .col-xs-12;
+  @extend .col-sm-offset-3;
+  @extend .col-sm-5;
+  @extend .col-md-offset-0;
+  @extend .col-md-4;
+  //@extend .col-md-offset-1;
+}
+.room_button_div{
+  @extend .col-xs-6;
+  @extend .col-sm-4;
+  @extend .col-md-2;
+
+}
+.room_button_div button {
+  @extend .btn;
+  @extend .btn-default;
+  margin: 0px 0px 10px 0px;
+  white-space: normal;
+  width: 100%;
+  height: 60px;
+  line-height: 1.1em;
+  @extend .text-capitalize;
+  font-size: 1.5em;
+}
+#rooms_search_div  button:hover {
+  background-color: white;
+  color: black;
+}
+
+#rooms_search_div  .customer_counter {
+  background-color: $magic-indigo;
+  color: white;
+}
+#rooms_search_div .office {
+  color: white;
+  background-color: $magic-violet;
+}
+#rooms_search_div  .back-room {
+  color: white;
+  background-color: $magic-teal;
+}
+#rooms_search_div  .system {
+  color: white;
+  background-color: $magic-orange;
+}
+#rooms_search_div .active {
+  background-color: #eeeeee;
+  color: black;
+  border-color: darkslategray;
+}
+
+#search_input{
+  height:60px;
+  //vertical-align: bottom;
+  padding-left : 10px;
+  width: 100%;
+  font-size: 1.5em;
+
+}
+//dashboard div
+.views_div{
+margin: 10 0 0 0;
+}
+.dashbtn{
+  @extend .col-xs-6;
+  @extend .col-sm-4;
+  @extend .col-md-3;
+  @extend .col-lg-2;
+}
+//dashboard button
+.dashbtn a{
+  //background-color: ;
+  @extend .text-capitalize;
+  @extend .btn;
+  @extend .btn-lg;
+  @extend .btn-default;
+  @extend .btn-block;
+  height: 120px;
+  //width: 120px;
+  margin-bottom: 10px;
+  white-space: normal;
+
+}
+
+#dashbtnname {
+  font-size: 0.75em;
+  font-weight: normal;
+}
+#dashicon {
+  padding-bottom: 10px;
+}
+

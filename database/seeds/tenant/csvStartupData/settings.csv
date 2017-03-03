@@ -1,0 +1,19 @@
+group_name;name;value;options;description
+accounting;accounting_method;CASH BASIS;CASH BASIS,ACCRUAL BASIS;
+system;admin_email;admin@embrasse-moi.com;;
+company;company_address;1 N Main Street;;
+company;company_legal_name;Embrasse-Moi, LLC;;
+company;company_logo;E M B R A S S E - M O I;;
+company;company_name;Embrasse-Moi;;
+POS;default_return_checking_account;;;
+purchase_orders;default_send_po_email_subject;New Order From Embrasse-Moi!;;
+purchase_orders;default_send_po_email_text;PLEASE NOTE: We are having trouble with some vendors regarding paperwork: Primarily we are missing payment information for accounts on credit card. We need receipts for all charges to credit cards including the date, the last 4 of the card and the invoice number. As many of you know we have about 3000 credit cards, tracking down charges is becoming a full time position. We prefer these receipts for charges be included in shipments, the next best option is a combination of fax/email/mail: 585-383-1172 and accounting@embrasse-moi.com. ;;
+purchase_orders;email_update_subject;ORDER ERROR : Update Request.;;
+POS;invoice_email_logo;invoice_email_logo.jpg;;Invoice email logo is the logo used in the email. It is 700 px width x 100 px height. It can be turned on/off using invoice_email_logo_active 
+POS;invoice_email_logo_active ;1;;Set this to 1 if you want to use the email logo for invoices. Keep in mind this will use more data.
+POS;invoice_print_logo_active;1;;
+POS;invoice_print_logo_name;invoice_logo_file_high_res.jpg;;Invoice Logo is the logo that goes on the print invoice. It is 1000px width x 1000px height 300DPI
+POS;invoice_return_policy;Due to the nature of the merchandise, we cannot accept returns for refund. Should an item present fit issues, we will gladly exchange, alter, or issue store credit for the unworn item within 14 days. Altered and sale items are considered final sale. Unworn gifts, excluding lingerie, can be returned for store credit or exchange within 30 days of purchase. Other refunds are subject to a restocking & processing fee.;;
+POS;logo_font;Times New Roman;;
+POS;maxReturnDays;30;;Maximum Number of days a return is allowed. Invoices beyond this date will not show in the returns section of the point of sale
+company;office_email;office@embrasse-moi.com;;

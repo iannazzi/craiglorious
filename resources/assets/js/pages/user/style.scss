@@ -1,0 +1,25 @@
+
+.passwords{
+  margin: 40px 0px 0px 0px;
+
+}
+.password{
+  @extend .col-md-4;
+  @extend .col-md-offset-2;
+}
+.passcode{
+  @extend .col-md-3;
+  @extend .col-md-offset-1;
+}
+.panel{
+
+  //@extend .col-md-6;
+  //margin: 20px 20px 20px 20px;
+
+}
+.panel-body{
+  //margin: 20px 0px 0px 0px;
+
+  //@extend .col-md-8;
+  //@extend .col-md-offset-2;
+}

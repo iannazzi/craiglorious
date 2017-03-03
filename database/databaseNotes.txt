@@ -1,0 +1,60 @@
+REMEBER TO RUN ALL ARTISAN COMMANDS FROM THE WORKSPACE CONTAINER
+
+Laradock creates two databases:
+local_a and
+testing_a
+
+.env uses
+
+DB_PREFIX=local
+MAIN_DB_NAME=a
+
+
+phpunit.xml specifies
+
+<env name="APP_ENV" value="testing"/>
+<env name="DB_DATABASE" value="testing_a"/>
+<env name="DB_PREFIX" value="testing"/>
+
+
+these local_a and testing_a obvy need to match
+
+
+
+For Testing the database is brought automatically up using......
+ Artisan::call('migrate', [
+            '--path' => "database/migrations/craiglorious",
+            '--database' => 'main',
+        ]);
+
+To get started in development run
+php artisan migrate --database='main'  --path=database/migrations/craiglorious
+
+
+I created packages/iannazzi.....
+php artisan list should show zz:dms
+
+If not...
+add to composer.json
+ "psr-4": {
+            "Iannazzi\\Generators\\": "packages/iannazzi/Laravel-5-Generators/src",
+            "IannazziTestLibrary\\Tests\\": "tests/"
+        }
+add to app/providers/AppServiveProvider
+ if ($this->app->environment() == 'local') {
+            $this->app->register('Iannazzi\Generators\ImporterServiceProvider');
+
+        }
+
+
+php artisan zz:dms
+
+rebuilding development database with seeds....
+
+
+CREATING NEW SEEDERSS
+
+when adding new seed classes need to dump auto load
+composer dumpautoload
+
+csv data is loaded in the migration file

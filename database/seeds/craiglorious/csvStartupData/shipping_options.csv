@@ -1,0 +1,7 @@
+id;sales_tax_category_id;barcode;carrier_name;method_name;priority;weight_min;weight_max;fee;fee_type;active;comments
+4;3;SH-4;UPS;Standard;5;0.25;150.00;5.00000;amount;1;
+5;3;SH-5;UPS;2nd Day Air;4;0.25;150.00;5.00000;amount;1;
+6;3;SH-6;UPS;Next Day Air;5;0.25;150.00;5.00000;amount;1;
+7;3;SH-7;UPS;Ground;2;0.25;150.00;5.00000;amount;1;
+9;3;SH-9;UPS;Worldwide Epress;5;0.01;150.00;5.00000;percent;1;
+11;3;SH-11;UPS;Worldwide Expedited;5;0.01;150.00;5.00000;percent;1;

@@ -1,0 +1,56 @@
+coa_number;name;type;description;required
+10000;Petty Cash;Cash;Cash in your shoe box;1
+11000;Accounts Receivable;Accounts Receivable;Outstanding invoices the company has issued out to the client but has not yet received in cash at balance date. ;1
+12000;Undeposited Funds;Accounts Receivable;;
+12100;Inventory Asset;Current Asset;;
+15000;Furniture, Fixtures, and Equipment;Long-Term Asset;;
+17000;Accumulated Depreciation;Other Asset;;
+20000;Accounts Payable;Accounts Payable;;1
+21000;Customer Deposits;Current Liabilities;;
+23100;Sales Tax Payable;Current Liabilities;;
+23200;Wages Payable;Current Liabilities;;
+23400;Federal Payroll Taxes Payable;Current Liabilities;;
+23600;State Payroll Taxes Payable;Current Liabilities;;
+30000;Opening Balance Equity;Equity;;
+30800;Owner's Draw;Equity;;
+32000;Owner's Capitol;Equity;;
+39000;Retained Earnings;Equity;Do Not Use;1
+40000;Sales;Revenue;;
+50000;Finished Goods Purchases;Cost Of Goods Sold;;
+60000;Advertising;Expense;;
+60100;Marketing;Expense;;
+60200;Research And Development;Expense;;
+60500;Amortization;Expense;;
+61500;Bad Debt;Expense;;
+62000;Bank Fees;Expense;;
+62100;Credit Card Processing Fees;Expense;;
+62500;Cash Over and Short;Expense;;
+63000;Charitable Contributions;Expense;;
+64500;Dues and Subscriptions;Expense;;
+65500;Freight Expense;Expense;;
+66000;Gifts Expense;Expense;;
+67000;Insurance, Business;Expense;;
+67050;Insurance, Workers Compensation;Expense;;
+67100;Insurance, Vehicle;Expense;;
+67500;Interest;Expense;;
+68000;Laundry and Dry Cleaning;Expense;;
+68500;Legal and Professional;Expense;;
+70000;Maintenance;Expense;;
+70500;Meals and Entertainment;Expense;;
+71000;Office;Expense;;
+71100;Supplies Expense, Office;Expense;;
+72000;Payroll - Salaries And Wages;Expense;;
+72100;Payroll - Taxes;Expense;;
+72500;Penalties and Fines;Expense;;
+73500;Postage;Expense;;
+74000;Rent or Lease;Expense;;
+74600;Vehicle;Expense;;
+75000;Officers' Salaries;Expense;;
+77000;Telephone;Expense;;
+77500;Internet;Expense;;
+77600;Web Site Maintenance;Expense;;
+78000;Travel;Expense;;
+78100;Training;Expense;;
+78500;Utilities;Expense;;
+80000;Ask Accountant;Expense;;
+90500;Personal Expense;Expense;;

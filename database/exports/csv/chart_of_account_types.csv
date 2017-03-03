@@ -1,0 +1,10 @@
+id;account_type_name;Options;priority;comments
+1;Current Assets;Bank, Cash, Not Specified, Inventory;1000;
+2;Long-Term Assets;;1500;
+3;Other Assests;;1900;
+4;Current Liabilities;;2000;
+5;Long-Term Liabilities;;2600;
+6;Equity;;3500;
+7;Revenue;;4000;
+8;Cost Of Goods Sold;;5000;
+9;Expense;;6000;

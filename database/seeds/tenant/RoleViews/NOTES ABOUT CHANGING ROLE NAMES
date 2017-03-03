@@ -1,0 +1,3 @@
+When changing a role name in the roles.csv file
+update the name in RoleViews.csv
+update the name in UserTableSeeder

@@ -1,0 +1,16 @@
+/node_modules
+/public/storage
+/public/hot
+/public/css
+/public/fonts
+/public/img
+/public/js
+/public/vendor
+/public/build
+/storage/*.key
+/vendor
+/.idea
+Homestead.json
+Homestead.yaml
+.env
+_ide_helper*.php

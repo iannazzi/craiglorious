@@ -1,0 +1,9 @@
+id;parent_id;name;restrict_to_terminal_access;timeout_minutes;ip_address_restrictions;relogin_on_ip_address_change;allow_edit_invoice_details;allow_voids;allow_refunds;max_discount_percent;edit_closed_contents;allow_edit_closed_invoice;edit_closed_payments;edit_closed_customer;allow_other_payment;allow_cc_return;allow_advanced_return;open_close_terminal;po_max_open_past_cancel;po_max_received_not_invoiced;active;comments
+1;;Administrator;0;720;0;0;1;1;1;100;1;1;1;1;1;1;1;1;0;0;1;The system administrators
+2;1;Owner;0;720;0;0;1;1;1;100;1;1;1;1;1;1;1;1;100;100;1;Power Users
+3;2;Sales Manager;0;720;0;0;1;1;1;100;0;0;0;1;0;1;0;1;50;50;1;Running day to day operations
+4;3;Sales Associate;1;720;0;0;1;1;1;30;0;0;0;1;0;1;0;0;20;20;1;Sales Floor, with limited returns
+5;3;Back End Associate;1;720;0;0;0;0;0;0;0;0;0;0;0;0;0;0;20;20;1;Inventory, simple sales, no returns
+6;2;Accountant;0;720;0;0;0;0;0;0;0;0;0;0;0;0;0;0;20;20;1;No sales or inventory access, but can enter receipts, invoices, etc
+7;3;Guest;1;720;0;0;0;0;0;0;0;0;0;0;0;0;0;0;20;20;1;Reading, no writing
+8;3;Trainee;1;720;0;0;0;0;0;0;0;0;0;0;0;0;0;0;20;20;1;This one not so sure about....

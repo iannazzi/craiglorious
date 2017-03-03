@@ -1,0 +1,44 @@
+<?php
+use App\Classes\Routes\CIRoutes;
+
+Route::get('/', function () {
+    return view('pages.home');
+});
+//tenant auth routes... login, logout, and check session
+Route::group([], function(){
+    Route::get('check-session', ['middleware' => 'CheckSession' , 'uses' => 'Auth\AuthController@checkSession']);
+    Route::get('/auth/logout', ['middleware' => 'Logout', 'as'=>'logout', 'uses' => 'Auth\AuthController@getLogout']);
+    Route::get('/logout', ['middleware' => 'Logout', 'uses' => 'Auth\AuthController@getLogout']);
+    Route::get('/auth/login', ['middleware' => 'LoginAuthenticate', 'as' => 'login', 'uses' => 'Auth\AuthController@getLogin']);
+    Route::post('/auth/login', ['middleware' => 'LoginAuthenticate', 'as' => 'login', 'uses' => 'Auth\AuthController@postLogin']);
+    //for posting of login - depricated
+//    Route::controllers([
+//        'auth' => 'Auth\AuthController',
+//        'password' => 'Auth\PasswordController',
+//    ]);
+});
+
+////DASHBOARD
+
+Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
+
+    Route::get('/dashboard', [ 'as' => 'dashboard', 'uses' => 'DashboardController@getIndex']);
+
+    Route::resource('tests', 'TestController');
+
+    CIRoutes::addRoutes('roles');
+    CIRoutes::addRoutes('users');
+    Route::get('user/', 'UserController@getPreferences');
+    Route::post('user/', 'UserController@postPreferences');
+
+    CIRoutes::addRoutes('locations');
+    CIRoutes::addRoutes('terminals');
+    CIRoutes::addRoutes('printers');
+
+
+    CIRoutes::addRoutes('vendors');
+
+});
+
+
+

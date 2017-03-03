@@ -1,0 +1,12 @@
+id;discount_name;discount_code;discount_amount;percent_or_dollars;max_discount;active;admin_only;comments
+1;Damaged;001;0.00000;$;0.00000;1;0;
+2;Customer Loyalty;002;0.00000;$;0.00000;1;0;
+3;Our Bad;003;0.00000;$;0.00000;1;0;
+4;Bulk Discount;004;0.00000;$;0.00000;1;0;
+5;411;411;0.00000;$;0.00000;1;1;
+6;Seamed Cup Buy One Get One 20% Off;Seam20;20.00000;%;0.00000;0;0;
+7;20% Off Matching Bra and Panty Sets;Set20;20.00000;%;0.00000;0;0;
+8;Employee Discount;913;0.00000;%;0.00000;1;0;
+9;Friends We Owe;FF2014;30.00000;%;0.00000;0;0;
+10;Promotion;pro;0.00000;$;0.00000;1;0;
+11;BOGO;BOGO;100.00000;%;0.00000;1;0;
