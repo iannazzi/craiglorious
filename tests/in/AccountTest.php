@@ -9,7 +9,7 @@ use App\Models\Tenant\Store;
 use App\Models\Tenant\Vendor;
 use Iannazzi\Generators\DatabaseImporter\DatabaseCSVCreator;
 use Iannazzi\Generators\DatabaseImporter\DatabaseDataImporter;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 
 
 class AccountTest extends ApiTester

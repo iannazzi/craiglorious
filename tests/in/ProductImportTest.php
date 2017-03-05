@@ -4,7 +4,7 @@
 use Iannazzi\Generators\DatabaseImporter\DatabaseConnector;
 use Iannazzi\Generators\DatabaseImporter\DatabaseCSVCreator;
 use Iannazzi\Generators\DatabaseImporter\DatabaseMigrationMap;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 
 class ProductImportTest extends ApiTester
 {

@@ -2,7 +2,7 @@
 
 use App\Classes\TenantSystem\TenantSystemBuilder;
 use App\Models\Craiglorious\System;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 
 class SystemTest extends ApiTester
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 use Iannazzi\Generators\DatabaseImporter\DatabaseCSVCreator;
 class CSVStartUpDataTest extends ApiTester
 {

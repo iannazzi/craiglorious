@@ -1,3 +1,5 @@
+process.env.DISABLE_NOTIFIER = true
+
 let mix = require('laravel-mix');
 
 
@@ -20,6 +22,7 @@ mix.js('resources/assets/js/server_connection.js', 'public/js/server_connection.
 
 
 mix.copy('node_modules/font-awesome/fonts/', 'public/fonts/');
+mix.copy('resources/assets/img/', 'public/img/');
 
 
 

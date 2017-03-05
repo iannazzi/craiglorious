@@ -7,7 +7,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="true">
+         stopOnFailure="false">
     <testsuites>
 
         <testsuite name="craiglorious">
@@ -15,6 +15,9 @@
         </testsuite>
         <testsuite name="tenant">
             <file>tests/in/TenantDatabaseTest.php</file>
+        </testsuite>
+        <testsuite name="logout">
+        <file>tests/in/LogoutTest.php</file>
         </testsuite>
         <testsuite name="login_not_working">
             <file>tests/in/LoginTest.php</file>

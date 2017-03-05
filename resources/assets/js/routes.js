@@ -5,7 +5,7 @@ let routes = [
     {
         path:'',
         // component: require('./pages/dashboard/entry')
-        component: require('./views/Dashboard.vue')
+        component: require('./views/Dashboard/Dashboard.vue')
 
     },
     {

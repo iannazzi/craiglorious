@@ -7,7 +7,7 @@ use App\Models\Tenant\Company;
 use App\Models\Tenant\Store;
 use Iannazzi\Generators\DatabaseImporter\DatabaseCSVCreator;
 use Iannazzi\Generators\DatabaseImporter\DatabaseDestroyer;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 use App\Classes\TenantSystem\TenantSystemBuilder;
 use App\Models\Craiglorious\System;
 

@@ -27,8 +27,9 @@ class RoleController extends Controller
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        //return response($request->user());
         $number_of_records_available = Role::all()->count();
         $return_data['roles'] = [];//getRoleChildrenIds()
         $return_data['page'] = 'index';

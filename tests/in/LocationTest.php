@@ -1,6 +1,6 @@
 <?php
 use App\Models\Tenant\Location;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 

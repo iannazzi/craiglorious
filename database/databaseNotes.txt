@@ -38,7 +38,7 @@ If not...
 add to composer.json
  "psr-4": {
             "Iannazzi\\Generators\\": "packages/iannazzi/Laravel-5-Generators/src",
-            "IannazziTestLibrary\\Tests\\": "tests/"
+            "\Tests\\": "tests/"
         }
 add to app/providers/AppServiveProvider
  if ($this->app->environment() == 'local') {

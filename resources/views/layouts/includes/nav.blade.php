@@ -28,7 +28,7 @@
                         <i class="fa fa-user-circle fa-2x"></i></a>
                         <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-to-body">
 
-                            <li role="menuitem"><a href="/logout">Logout</a></li>
+                            <li role="menuitem"><a href = "/auth/logout">Logout</a></li>
                             <li class="divider"></li>
                             <li role="menuitem"><a href="/user">Preferences</a></li>
                         </ul>

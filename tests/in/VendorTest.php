@@ -1,6 +1,6 @@
 <?php
 use App\Models\Tenant\Vendor;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 use Iannazzi\Generators\DatabaseImporter\DatabaseDestroyer;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
@@ -37,7 +37,7 @@ class VendorTest extends ApiTester
         $rawContent = '{"search_fields":{"vendor_table_id":"123","vendor_table_name":"","vendor_table_account_number":"","vendor_table_active":"null"},"table_name":"vendor_table"}';
 
         $this->json('POST', '/vendors/search', json_decode($rawContent, true))
-            ->seeJson([
+            ->assertJsonFragment([
                 'id' => 123,
             ]);
 
@@ -51,7 +51,7 @@ class VendorTest extends ApiTester
         $rawContent = '{"data":[{"id":"","name":"new","check_name":"New","account_number":"new","main_email":"craig.201@gmail.com","cc_email":"201.ambrose@wyman.com","main_phone":"201-123-9128 x757","work_phone":"201.123.3615","mobile":"+1-201-201-1728","fax":"","active":1,"billing_address":"201 Davis Orchard Suite 077\nEverettestad, KY 25917-201","shipping_address":"201 Renner Flat Suite 886\nMariannatown, HI 201","comments":"nan nan yup yup"}],"_method":"patch"}';
 
         $this->json('put', '/vendors', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
 
     }
     /** @test */
@@ -63,10 +63,10 @@ class VendorTest extends ApiTester
         $rawContent = '{"data":[{"id":123,"name":"Craig Iannazzi","check_name":"Craig Iannazzi","account_number":"go man go","main_email":"craig.blanda@gmail.com","cc_email":"craig.ambrose@wyman.com","main_phone":"123-123-9128 x757","work_phone":"123.123.3615","mobile":"+1-123-912-1728","fax":"","active":0,"billing_address":"123 Davis Orchard Suite 077\nEverettestad, KY 25917-5824","shipping_address":"123 Renner Flat Suite 886\nMariannatown, HI 03571","comments":"yup yup yup"}],"_method":"patch"}';
 
         $this->json('put', '/vendors', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
 
         $this->json('put', '/vendors', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
     }
     /** @test */
     function a_vendor_can_be_destroyed()
@@ -75,7 +75,7 @@ class VendorTest extends ApiTester
         $this->withoutMiddleware();
         $rawContent = '{"_method":"delete","data":{"id":7}}';
         $this->json('delete', '/vendors', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
     }
 
 }

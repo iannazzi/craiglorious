@@ -1,18 +1,11 @@
 <?php
-namespace IannazziTestLibrary\Tests;
 
-use Illuminate\Foundation\Testing\TestCase as TC;
+namespace Tests;
+
 use Illuminate\Contracts\Console\Kernel;
 
-class TestCase extends TC
+trait CreatesApplication
 {
-    /**
-     * The base URL to use while testing the application.
-     *
-     * @var string
-     */
-    protected $baseUrl = 'http://localhost';
-
     /**
      * Creates the application.
      *

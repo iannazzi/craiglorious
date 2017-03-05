@@ -6,7 +6,7 @@ use App\Models\Tenant\Product;
 use App\Models\Tenant\ProductAttribute;
 use App\Models\Tenant\ProductOption;
 use App\Models\Tenant\ProductSku;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 
 class ProductTest extends ApiTester
 {

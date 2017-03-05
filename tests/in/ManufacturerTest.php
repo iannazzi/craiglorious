@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Tenant\Manufacturer;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 
 class ManufacturerTest extends ApiTester
 {

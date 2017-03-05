@@ -4,8 +4,8 @@
 @include('layouts.includes.head')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <body id="bootstrap-overrides">
-@include('layouts.includes.nav')
 <div id="app">
+    @include('layouts.includes.nav')
     @yield('content')
 </div>
 @include('layouts.includes.footer')

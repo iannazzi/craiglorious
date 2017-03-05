@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Tenant\Brand;
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 
 class BrandTest extends ApiTester
 {

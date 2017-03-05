@@ -1,6 +1,6 @@
 <?php
 
-use IannazziTestLibrary\Tests\ApiTester;
+use Tests\ApiTester;
 use App\Models\Tenant\User;
 
 class LoginTest extends ApiTester{

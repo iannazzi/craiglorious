@@ -1,15 +1,11 @@
 <?php
-namespace IannazziTestLibrary\Tests;
+namespace Tests;
 use App\Models\Craiglorious\System;
 use Faker\Factory as Faker;
 use Artisan;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
-
-
-//FROM JEFFERY WAY INCREMENTAL API
-//SOURCE: https://gist.github.com/laracasts/10407179
 
 abstract class ApiTester extends TestCase {
 
@@ -25,6 +21,7 @@ abstract class ApiTester extends TestCase {
      */
     function __construct()
     {
+        parent::__construct();
         $this->fake = Faker::create();
         $this->faker = Faker::create();
     }
@@ -113,10 +110,10 @@ abstract class ApiTester extends TestCase {
      * @param array  $parameters
      * @return mixed
      */
-    protected function getJson($uri, $method = 'GET', $parameters = [])
-    {
-        return json_decode($this->call($method, $uri, $parameters)->getContent());
-    }
+//    public function getJson($uri, $method = 'GET', $parameters = [])
+//    {
+//        return json_decode($this->call($method, $uri, $parameters)->getContent());
+//    }
     public function postRawJson($uri, $rawContent = null, array $data = [], array $headers = [] )
     {
         $server = $this->transformHeadersToServerVars($headers);

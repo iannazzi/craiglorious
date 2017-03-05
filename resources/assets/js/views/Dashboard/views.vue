@@ -1,6 +1,5 @@
 <template>
-
-    <div id ="vuedb" class="container-fluid">
+    <div id="vuedb" class="container-fluid">
         <div id="rooms_search_div" class="row">
             <div class='room_button_div' v-for="room in rooms" v-show="room.show">
                 <button
@@ -10,9 +9,7 @@
                         v-bind:class="[room.class, {active: room.active }]"
 
                         type="button">
-
-                    @{{ room.name }}
-
+                    {{ room.name }}
                 </button>
             </div>
             <div id="search_div" class="">
@@ -28,7 +25,7 @@
 
 
         </div>
-        <div class="views_div row"  >
+        <div class="views_div row">
             <div v-for="view in views" v-show="view.show" class="dashbtn">
                 <router-link :to="view.route">
 
@@ -40,9 +37,7 @@
             </div>
         </div>
     </div>
-
 </template>
-
 <script>
     views.forEach(function (entry) {
         entry.show = true
@@ -164,5 +159,4 @@
             },
         }
     }
-
 </script>
