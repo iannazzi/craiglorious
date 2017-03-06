@@ -24,6 +24,7 @@ Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
     Route::get('/dashboard', [ 'as' => 'dashboard', 'uses' => 'DashboardController@getIndex']);
 
     Route::resource('tests', 'TestController');
+    Route::get('calendar', 'CalendarController@getEvents');
 
     CIRoutes::addRoutes('roles');
     CIRoutes::addRoutes('users');

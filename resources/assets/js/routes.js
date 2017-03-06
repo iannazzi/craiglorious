@@ -12,6 +12,11 @@ let routes = [
         path:'/roles',
         component: require('./views/Roles.vue')
     },
+    {
+        path:'/calendar',
+        component: require('./views/' +
+            'Calendar.vue')
+    },
     // {
     //     path:'/vendors',
     //     component: require('./views/Vendors.vue')

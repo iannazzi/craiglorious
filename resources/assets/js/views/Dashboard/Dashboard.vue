@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--<zzi-nav></zzi-nav>-->
-        <zzi-calendar></zzi-calendar>
+        <!--<zzi-calendar></zzi-calendar>-->
         <zzi-views></zzi-views>
     </div>
 </template>
@@ -10,7 +10,7 @@
     export default {
         components: {
             'zzi-views': require('./views.vue'),
-            'zzi-calendar': require('./calendar.vue')
+//            'zzi-calendar': require('./calendar.vue')
         },
         mounted: function () {
             $('#search_input').focus()
