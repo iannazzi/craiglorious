@@ -16,7 +16,7 @@ class DestroyCreateTenantDatabasesWithFakeDataSeeder extends Seeder
     // php artisan db:seed --class=localDatabaseSeeder
     public function run()
     {
-        echo 'running local database seeder ';
+        echo 'running DestroyCreateTenantDatabasesWithFakeDataSeeder seeder ';
 		Model::unguard();
 
     	//$this->call('CraigloriousFakeDataDatabaseSeeder');

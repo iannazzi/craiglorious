@@ -41,10 +41,10 @@ return [
 
         'main' => [
             'driver'    => 'mysql',
-            'host'      => env('DB_HOST', 'localhost'),
-            'database'  => env('DB_DATABASE', 'forge'),
-            'username'  => env('DB_USERNAME', 'forge'),
-            'password'  => env('DB_PASSWORD', ''),
+            'host'      => env(strtoupper(env('DB_PREFIX')) . '_DB_HOST'),
+            'database'  => strtolower(env('DB_PREFIX')) .'_'. env('MAIN_DB_NAME'),
+            'username'  => env(strtoupper(env('DB_PREFIX')) . '_DB_USERNAME'),
+            'password'  => env(strtoupper(env('DB_PREFIX')) . '_DB_PASSWORD'),
             'port' => env('DB_PORT', 3306),
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',

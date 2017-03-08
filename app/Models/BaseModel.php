@@ -14,16 +14,19 @@ class BaseModel extends Model
         return $this->$column;
 
     }
-    public static function create(array $attributes = [])
-    {
-        try{
-            Parent::create($attributes);
-        }
-        catch(Exception $e)
-        {
-            dd($e->getMessage());
-        }
-    }
+//    public static function create(array $attributes = [])
+//    {
+//        $model = static::query()->create($attributes);
+//        return $model;
+//
+//        try{
+//            Parent::create($attributes);
+//        }
+//        catch(Exception $e)
+//        {
+//            dd($e->getMessage());
+//        }
+//    }
 //    public static function getSelectValues($value_column, $name_column)
 //    {
 //        $instance = new static;

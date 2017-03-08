@@ -45,7 +45,7 @@ class MainDatabaseConnector
     }
     public static function checkDB($database)
     {
-
+        dd('error on DB connection - check your credentials ' . $database);
 
         $sql = "SELECT SCHEMA_NAME FROM
                 INFORMATION_SCHEMA.SCHEMATA
