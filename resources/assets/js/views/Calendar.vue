@@ -37,6 +37,7 @@
                 // page is now ready, initialize the calendar...
 
                 $('#calendar').fullCalendar({
+                    height: 650,
                     events: '/calendar',
                     clientEvent: function(event){
                         console.log('client event');
@@ -59,7 +60,13 @@
                     eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
                         console.log('update after event resize');
 
-                        let post_data=JSON.stringify(event);
+                        let post_data = {
+                            id: event.id,
+                            title: event.title,
+                            start: event.start.format(),
+                            end:   event.end.format()
+                        }
+                        console.log(post_data)
                         let data = {data: post_data, _method: 'put'};
 
                         console.log(JSON.stringify(data))
@@ -107,22 +114,25 @@
                     header: {
                         left: 'prev,next today myCustomButton',
                         center: 'title',
-                        right: 'month,agendaWeek,listWeek,agendaDay'
+                        right: 'month,agendaWeek,listWeek,agendaDay,agendaFourDay,agendaTenDay'
                     },
                     navLinks: true,
                     dayClick: function(date, jsEvent, view) {
+
                         $('#calendar').fullCalendar( 'changeView', 'agendaDay' )
 
-//                            $('#calendar').fullCalendar('renderEvent', { title: 'YOUR TITLE', start: date, allDay: true }, true );
 
 
-//                        alert('Clicked on: ' + date.format());
-//
-//                        alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-//
-//                        alert('Current view: ' + view.name);
-                        // change the day's background color just for fun
-//                        $(this).css('background-color', 'red');
+                            alert('Clicked on: ' + date.format());
+
+                            alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+                            alert('Current view: ' + view.name);
+
+                            // change the day's background color just for fun
+                            $(this).css('background-color', 'red');
+
+
 
                     },
                     scrollTime: '12:00:00',
@@ -144,7 +154,22 @@
                             start: '12:00', // 10am
                             end: '17:00' // 4pm
                         }
-                    ]
+                    ],
+                    views: {
+                        agendaFourDay: {
+                            type: 'basicDay',
+                            duration: { days: 4 },
+                            buttonText: '4 day'
+                        },
+                        agendaTenDay: {
+                            type: 'agenda',
+                            duration: { days: 10 },
+                            minTime:'09:00:00',
+                            maxTime:'22:00:00',
+                            buttonText: '10 day',
+
+                        }
+                    }
                 })
 
 

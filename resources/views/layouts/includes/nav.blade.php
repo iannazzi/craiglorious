@@ -33,7 +33,7 @@
                             <li role="menuitem"><a href="/user">Preferences</a></li>
                         </ul>
                     </li>
-                    <li><a href="/dashboard">
+                    <li><a href="/dashboard#">
                             <i class="fa fa-dashboard fa-2x"></i></a>
                     </li>
 

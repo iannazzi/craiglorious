@@ -72,19 +72,19 @@ class CalendarController extends Controller
 //        $data = json_decode($request->data,true);
 
         $data = $request->data;
-        $data = json_decode($data);
-        $id = $data->id;
+//        dd($data);
+//        $data = json_decode($data);
+        $id = $data['id'];
 
 
         $rules = array(
             'title' => 'required',
         );
 
-        $validation = \Validator::make([['title'=>'blaa']], $rules);
+        $validation = \Validator::make($data, $rules);
         if ($validation->passes())
         {
             $update = CalendarEntry::firstOrNew(['id' => $id]);
-            //$update = Vendor::find($id);
             $update->fill($data);
             if ($update->save())
             {
@@ -103,16 +103,6 @@ class CalendarController extends Controller
             'message' => $errors
         ], 422);
 
-        //$request->merge(json_decode($request->getContent(),true));
-
-//        $data = $request->data;
-//        $this->validate($data, [
-//            'name' => 'required|unique:vendors',
-//        ]);
-//        $vendor = Vendor::find($id);
-//        return json_encode($vendor);
-        //$vendor->update($data[0]);
-        //return json_encode($data[0]);
 
 
     }

@@ -24,7 +24,7 @@ class VendorTest extends ApiTester
         $system = $this->getSystem();
         $this->withoutMiddleware();
 
-        $this->get('/vendors');
+        $this->get('/vendors')->assertStatus(200);
 
 
     }

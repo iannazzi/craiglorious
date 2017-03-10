@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 class RoleTest extends ApiTester
 {
+
     /** @test */
     function loaded()
     {
@@ -17,7 +18,7 @@ class RoleTest extends ApiTester
     {
         $system = $this->getSystem();
         $this->withoutMiddleware();
-        $this->get('/roles');
+        $this->get('/roles')->assertStatus(200);
     }
     /** @test */
     function can_be_searched_raw_json()
@@ -38,7 +39,7 @@ class RoleTest extends ApiTester
         $system = $this->getSystem();
         $this->withoutMiddleware();
 
-        $rawContent = '{"data":[{"id":"","name":"sg","timeout_minutes":"120","ip_address_restrictions":"Add ip addresses separated by ,","relogin_on_ip_address_change":1,"restrict_to_terminal_access":0,"allow_edit_invoice_details":1,"allow_edit_closed_invoice":0,"allow_voids":0,"allow_refunds":1,"max_discount_percent":"10","edit_closed_contents":0,"edit_closed_payments":1,"edit_closed_customer":0,"allow_other_payment":0,"allow_cc_return":0,"allow_advanced_return":0,"open_close_terminal":0,"po_max_open_past_cancel":"10","po_max_received_not_invoiced":"10","active":1,"comments":""}],"_method":"put"}';
+        $rawContent = '{"data":[{"id":"","name":"'.$this->faker->firstName.'","timeout_minutes":"120","ip_address_restrictions":"Add ip addresses separated by ,","relogin_on_ip_address_change":1,"restrict_to_terminal_access":0,"allow_edit_invoice_details":1,"allow_edit_closed_invoice":0,"allow_voids":0,"allow_refunds":1,"max_discount_percent":"10","edit_closed_contents":0,"edit_closed_payments":1,"edit_closed_customer":0,"allow_other_payment":0,"allow_cc_return":0,"allow_advanced_return":0,"open_close_terminal":0,"po_max_open_past_cancel":"10","po_max_received_not_invoiced":"10","active":1,"comments":""}],"_method":"put"}';
 
         $this->json('put', '/roles', json_decode($rawContent, true))
             ->assertJson(["success"=>'true']);
@@ -55,8 +56,8 @@ class RoleTest extends ApiTester
         $this->json('put', '/roles', json_decode($rawContent, true))
             ->assertJson(["success"=>'true']);
 
-        $this->json('put', '/roles', json_decode($rawContent, true))
-            ->assertJson(["success"=>'true']);
+//        $this->json('put', '/roles', json_decode($rawContent, true))
+//            ->assertJson(["success"=>'true']);
     }
     /** @test */
     function can_be_destroyed()

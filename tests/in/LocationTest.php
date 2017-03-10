@@ -28,7 +28,8 @@ class LocationTest extends ApiTester
 
 
         $this->json('POST', '/locations/search', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
+
 //            ->seeJson([
 //                'id' => 2,
 //            ]);
@@ -43,7 +44,8 @@ class LocationTest extends ApiTester
         $rawContent = '{"data":[{"id":"","parent_id":"1","name":"locker","barcode":"1234","active":1,"comments":"asdf"}],"_method":"put"}';
 
         $this->json('put', '/locations', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
+
 
     }
     /** @test */
@@ -55,7 +57,8 @@ class LocationTest extends ApiTester
         $rawContent = '{"data":[{"id":6,"parent_id":"1","name":"a98","barcode":"1234","active":1,"comments":"asdf"}],"_method":"put"}';
 
         $this->json('put', '/locations', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
+
     }
     /** @test */
     function can_be_destroyed()
@@ -64,7 +67,8 @@ class LocationTest extends ApiTester
         $this->withoutMiddleware();
         $rawContent = '{"_method":"delete","data":{"id":1}}';
         $this->json('delete', '/locations', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
+
     }
 
 }

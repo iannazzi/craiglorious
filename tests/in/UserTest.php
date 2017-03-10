@@ -34,7 +34,8 @@ class UserTest extends ApiTester
         $rawContent = '{"search_fields":{"user_table_id":"5","user_table_role_id":"null","user_table_username":"","user_table_active":"null"},"table_name":"user_table"}';
 
         $this->json('POST', '/users/search', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
+
 
 
     }
@@ -54,7 +55,8 @@ class UserTest extends ApiTester
         $rawContent = '{"data":[{"id":"","role_id":"4","username":"' . $username . '","password":"' . $password . '","password_confirmation":"' . $password . '","passcode":"","passcode_confirmation":"","employee_id":"null","active":1}],"_method":"put"}';
 
         $this->json('put', '/users', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
+
 
     }
 
@@ -72,7 +74,8 @@ class UserTest extends ApiTester
 ';
 
         $this->json('post', '/user', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
+
 
     }
     /** @test */
@@ -89,7 +92,8 @@ class UserTest extends ApiTester
 ';
 
         $this->json('post', '/user', json_decode($rawContent, true))
-            ->see('"success":false');
+            ->assertJson(["success"=>false]);
+
 
     }
     /** @test */
@@ -102,7 +106,8 @@ class UserTest extends ApiTester
         $rawContent = '{"passcode":"11111","passcode_confirmation":"11111"}';
 
         $this->json('post', '/user', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>'true']);
+
 
     }
     /** @test */
@@ -117,7 +122,8 @@ class UserTest extends ApiTester
 ';
 
         $this->json('post', '/user', json_decode($rawContent, true))
-            ->see('"success":false');
+            ->assertJson(["success"=>false]);
+
 
     }
 
@@ -131,13 +137,15 @@ class UserTest extends ApiTester
         $this->withoutMiddleware();
         $rawContent = '{"passcode":"01111","passcode_confirmation":"01111"}';
         $this->json('post', '/user', json_decode($rawContent, true))
-            ->see('"success":true');
+            ->assertJson(["success"=>true]);
+
 
         $user = User::find(3);
         $this->be($user);
         $rawContent = '{"passcode":"01111","passcode_confirmation":"01111"}';
         $this->json('post', '/user', json_decode($rawContent, true))
-            ->see('"success":false');
+            ->assertJson(["success"=>false]);
+
 
     }
 
