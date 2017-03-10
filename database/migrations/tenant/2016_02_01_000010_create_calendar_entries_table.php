@@ -17,15 +17,15 @@ class CreateCalendarEntriesTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('title');
-            $table->string('allDay');
+            $table->string('all_day');
             $table->dateTime('start');
             $table->dateTime('end');
             $table->string('url');
-            $table->string('className');
+            $table->string('class_name');
             $table->boolean('editable');
-            $table->boolean('startEditable');
-            $table->boolean('durationEditable');
-            $table->boolean('resourceEditable');
+            $table->boolean('start_editable');
+            $table->boolean('duration_editable');
+            $table->boolean('resource_editable');
             $table->timestamps();
         });
     }

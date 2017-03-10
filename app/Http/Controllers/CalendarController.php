@@ -12,7 +12,27 @@ class CalendarController extends Controller
 {
     public function getEvents(Request $request)
     {
-        echo json_encode(CalendarEntry::all()->toArray());
+        $entries = CalendarEntry::all();
+        return response()->json($entries->toArray());
+//        $return_data = [];
+//        foreach ($entries as $entry){
+//            $tmp = [
+//                'id' => $entry->id
+//
+//
+//
+//            ];
+//
+//
+//
+//            $return_data[] = $tmp;
+//
+//
+//        }
+////        $arr[$newkey] = $arr[$oldkey];
+////        unset($arr[$oldkey]);
+
+
     }
     public function postEvents(Request $request){
         echo json_encode(['name'=>'got the post event ',
@@ -23,8 +43,8 @@ class CalendarController extends Controller
         $data = $request->all();
         $table_name = $data['table_name'] . '_';
         $search = $data['search_fields'];
-        $title = $search[ $table_name . 'title' ];
-        $id = $search[ $table_name . 'id' ];
+        $title = $search[ 'title' ];
+        $id = $search['id' ];
 //        $start = $search[ $table_name . 'start' ];
 //        $end = $search[ $table_name . 'end' ];
 //        $allDay = $search[ $table_name . 'all_day' ];
@@ -51,16 +71,16 @@ class CalendarController extends Controller
         //now I have to scrub the data...
 //        $data = json_decode($request->data,true);
 
-        $data = $request->data[0];
-        $id = $data['id'];
+        $data = $request->data;
+        $data = json_decode($data);
+        $id = $data->id;
+
 
         $rules = array(
             'title' => 'required',
-            'start' => 'date',
-            'end' => 'date',
         );
 
-        $validation = \Validator::make($data, $rules);
+        $validation = \Validator::make([['title'=>'blaa']], $rules);
         if ($validation->passes())
         {
             $update = CalendarEntry::firstOrNew(['id' => $id]);
@@ -101,7 +121,7 @@ class CalendarController extends Controller
         $data = $request->data;
         $id = $data['id'];
 
-        $data = Vendor::findOrFail($id);
+        $data = CalendarEntry::findOrFail($id);
         $data->delete();
 
         return response()->json([

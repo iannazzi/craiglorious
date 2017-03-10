@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 class VendorTest extends ApiTester
 {
     /** @test */
-    function vendors_are_loaded()
+    function are_loaded()
     {
         $system = $this->getSystem();
         //DatabaseDestroyer::emptyTable($system->dbc(), 'vendors');
@@ -19,7 +19,7 @@ class VendorTest extends ApiTester
         $this->assertNotNull(Vendor::all());
     }
     /** @test */
-    function vendors_index()
+    function get_index()
     {
         $system = $this->getSystem();
         $this->withoutMiddleware();
@@ -29,7 +29,7 @@ class VendorTest extends ApiTester
 
     }
     /** @test */
-    function vendors_can_be_searched_raw_json()
+    function can_be_searched()
     {
         $system = $this->getSystem();
         $this->withoutMiddleware();
@@ -43,7 +43,7 @@ class VendorTest extends ApiTester
 
     }
     /** @test */
-    function vendor_can_be_created()
+    function can_be_created()
     {
         $system = $this->getSystem();
         $this->withoutMiddleware();
@@ -55,7 +55,7 @@ class VendorTest extends ApiTester
 
     }
     /** @test */
-    function vendor_can_be_updated()
+    function can_be_updated()
     {
         $system = $this->getSystem();
         $this->withoutMiddleware();
@@ -69,7 +69,7 @@ class VendorTest extends ApiTester
             ->assertJson(["success"=>'true']);
     }
     /** @test */
-    function a_vendor_can_be_destroyed()
+    function can_be_destroyed()
     {
         $system = $this->getSystem();
         $this->withoutMiddleware();

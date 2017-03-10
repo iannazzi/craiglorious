@@ -24,8 +24,9 @@ Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
     Route::get('/dashboard', [ 'as' => 'dashboard', 'uses' => 'DashboardController@getIndex']);
 
     Route::resource('tests', 'TestController');
-    Route::get('calendar', 'CalendarController@getEvents');
-    Route::post('calendar', 'CalendarController@postEvents');
+
+
+
 
 
     CIRoutes::addRoutes('roles');
@@ -39,6 +40,12 @@ Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
 
 
     CIRoutes::addRoutes('vendors');
+
+    Route::get('calendar', 'CalendarController@getEvents');
+//    Route::post('calendar', 'CalendarController@postEvents');
+    Route::post('calendar/search', 'CalendarController@search');
+    Route::put('calendar', 'CalendarController@update');
+    Route::delete('calendar', 'CalendarController@destroy');
 
 });
 

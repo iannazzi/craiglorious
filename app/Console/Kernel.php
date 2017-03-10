@@ -13,7 +13,12 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\SpitTableDef::class,
+        Commands\SpitColumnDef::class,
+        Commands\DBColumnsToArray::class,
+        Commands\RoleViews::class,
+        Commands\test::class,
+
     ];
 
     /**

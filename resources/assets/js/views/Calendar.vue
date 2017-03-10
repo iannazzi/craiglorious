@@ -38,23 +38,63 @@
 
                 $('#calendar').fullCalendar({
                     events: '/calendar',
-                    eventClick:  function(event, jsEvent, view) {
-                        $('#modalTitle').html(event.title);
-                        $('#modalBody').html(event.description);
-                        $('#eventUrl').attr('href',event.url);
-                        $('#fullCalModal').modal();
+                    clientEvent: function(event){
+                        console.log('client event');
                     },
-                    updateEvent: function(event){
+                    eventRender: function(event, element) {
+//                       console.log('render event');
+                    },
+                    eventAfterRender: function(event, element) {
+//                        console.log('after render event');
+                    },
+                    eventAfterAllRender: function(event, element) {
+//                        console.log('after all render event');
+                    },
+                    eventDestroy: function(event, element) {
+//                        console.log('destroy event');
+                    },
+                    eventDragStop: function(event, jsEvent, ui, view) {
+                        console.log('update after event drag stop');
+                    },
+                    eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
+                        console.log('update after event resize');
+
+                        let post_data=JSON.stringify(event);
+                        let data = {data: post_data, _method: 'put'};
+
+                        console.log(JSON.stringify(data))
+
                         $.ajax({
                             url: '/calendar',
                             type: 'POST',
-                            data: {data: JSON.stringify(event)},
+                            data: data,
                             success: function (response) {
                                 //get the response from server and process it
 //                                $("#calendarupdated").append(response);
                                 console.log(response);
                             }
                         });
+                    },
+
+                    eventClick:  function(event, jsEvent, view) {
+                        console.log(event.title + ' clicked - pop up modal');
+//                        $('#modalTitle').html(event.title);
+//                        $('#modalBody').html(event.description);
+//                        $('#eventUrl').attr('href',event.url);
+//                        $('#fullCalModal').modal();
+                    },
+                    updateEvent: function(event){
+                        console.log('send in update');
+//                        $.ajax({
+//                            url: '/calendar',
+//                            type: 'POST',
+//                            data: {data: JSON.stringify(event)},
+//                            success: function (response) {
+//                                //get the response from server and process it
+////                                $("#calendarupdated").append(response);
+//                                console.log(response);
+//                            }
+//                        });
                     },
                     customButtons: {
                         myCustomButton: {
@@ -73,7 +113,7 @@
                     dayClick: function(date, jsEvent, view) {
                         $('#calendar').fullCalendar( 'changeView', 'agendaDay' )
 
-                            $('#calendar').fullCalendar('renderEvent', { title: 'YOUR TITLE', start: date, allDay: true }, true );
+//                            $('#calendar').fullCalendar('renderEvent', { title: 'YOUR TITLE', start: date, allDay: true }, true );
 
 
 //                        alert('Clicked on: ' + date.format());
