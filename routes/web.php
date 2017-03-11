@@ -42,6 +42,7 @@ Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
     CIRoutes::addRoutes('vendors');
 
     Route::get('calendar', 'CalendarController@getEvents');
+    Route::get('calendar/event_types', 'CalendarController@getEventTypes');
 //    Route::post('calendar', 'CalendarController@postEvents');
     Route::post('calendar/search', 'CalendarController@search');
     Route::put('calendar', 'CalendarController@update');

@@ -6,6 +6,7 @@ use App\Models\Tenant\CalendarEntry;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+
 //use App\Http\Controllers\Controller;
 
 class CalendarController extends Controller
@@ -13,42 +14,51 @@ class CalendarController extends Controller
     public function getEvents(Request $request)
     {
         $entries = CalendarEntry::all();
-        return response()->json($entries->toArray());
-//        $return_data = [];
-//        foreach ($entries as $entry){
-//            $tmp = [
-//                'id' => $entry->id
-//
-//
-//
-//            ];
-//
-//
-//
-//            $return_data[] = $tmp;
-//
-//
-//        }
-////        $arr[$newkey] = $arr[$oldkey];
-////        unset($arr[$oldkey]);
+        $return_data = [];
+        foreach ($entries as $entry)
+        {
+            $tmp = [
+                'id' => $entry->id,
+                'title' => $entry->title,
+                'start' => $entry->start,
+                'end' => $entry->end,
+                'className' => $entry->class_name,
+                'startEditable' => $entry->start_editable,
+                'editable' => $entry->editable,
+                'durationEditable' => $entry->duration_editable,
+                'resourceEditable' => $entry->resource_editable,
+                'allDay' => $entry->all_day,
+            ];
+            $return_data[] = $tmp;
+
+
+        }
+
+        return response()->json($return_data);
 
 
     }
-    public function postEvents(Request $request){
-        echo json_encode(['name'=>'got the post event ',
-        'requesrt' => $request->all()]);
+    public function getEventTypes(){
+
+        return response()->json( CalendarEntry::getEventTypes());
     }
+
+    public function postEvents(Request $request)
+    {
+        echo json_encode(['name' => 'got the post event ',
+            'requesrt' => $request->all()]);
+    }
+
     public function search(Request $request)
     {
         $data = $request->all();
         $table_name = $data['table_name'] . '_';
         $search = $data['search_fields'];
-        $title = $search[ 'title' ];
-        $id = $search['id' ];
+        $title = $search['title'];
+        $id = $search['id'];
 //        $start = $search[ $table_name . 'start' ];
 //        $end = $search[ $table_name . 'end' ];
 //        $allDay = $search[ $table_name . 'all_day' ];
-
 
 
         $data = CalendarEntry::where('title', 'LIKE', "%{$title}%")
@@ -65,6 +75,7 @@ class CalendarController extends Controller
 
 
     }
+
     public function update(Request $request)
     {
 
@@ -104,8 +115,8 @@ class CalendarController extends Controller
         ], 422);
 
 
-
     }
+
     public function destroy(Request $request)
     {
         $data = $request->data;

@@ -23,7 +23,9 @@
 
 
     <script>
-        var views = <? echo $views ?>;
+        var server_data = <? echo $server_data ?>;
+        var views = server_data.views;
+
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('vendor/vendor.js') }}"></script>

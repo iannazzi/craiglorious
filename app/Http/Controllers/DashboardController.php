@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Tenant\CalendarEntry;
 use Illuminate\Http\Request;
 use Auth, View;
 
@@ -11,9 +12,18 @@ class DashboardController extends Controller
     {
 
         $user = \Auth::user();
-        $views = $user->views();
+        $views =
+        $page_data = [
+            'calendar'=> [
+                'event_types' => CalendarEntry::getEventTypes(),
+            ]
+        ];
+        $return = [
+            'views'=> $user->views(),
+            'page_data' => $page_data,
+        ];
         //return View::make('dashboard/vue');
-        return View::make('pages/dashboard',['views' => json_encode($views)]);
+        return View::make('pages/dashboard',['server_data' => json_encode($return)]);
 
 
     }

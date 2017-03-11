@@ -12,7 +12,19 @@ class CalendarEntry extends BaseTenantModel {
         'duration_editable' => 'boolean',
         'start_editable' => 'boolean',
         'resource_editable' => 'boolean',
-
     ];
+    public static function getEventTypes()
+    {
+        return [
+            'scheduled_shift',
+            'actual_shift',
+            'customer_appointment',
+            'personal_appointment',
+            'internal_meeting',
+            'external_meeting',
+            'external_event',
+            'location_event',
+        ];
+    }
 
 }

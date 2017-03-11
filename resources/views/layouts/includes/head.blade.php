@@ -7,9 +7,9 @@
     <!-- CSRF Token -->
 
     @yield('styles')
+    <link rel="stylesheet" href="{{ asset('css/fullcalendar.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/fullcalendar.min.css') }}">
 
 
 </head>

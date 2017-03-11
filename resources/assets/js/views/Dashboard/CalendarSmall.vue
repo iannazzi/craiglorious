@@ -4,9 +4,7 @@
 </div>
 </template>
 <style>
-    #calendar{
-        padding:20px;
-    }
+
 </style>
 <script>
 
@@ -26,26 +24,26 @@
                     events: '/calendar',
 
                     eventClick:  function(event, jsEvent, view) {
-                        console.log(event.title + ' clicked - pop up modal');
+                        window.location='/dashboard#/calendar?event='+event.id;
 //                        $('#modalTitle').html(event.title);
 //                        $('#modalBody').html(event.description);
 //                        $('#eventUrl').attr('href',event.url);
 //                        $('#fullCalModal').modal();
                     },
-                    navLinks: true,
+                    navLinks: false,
                     dayClick: function(date, jsEvent, view) {
-
+                        window.location='/dashboard#/calendar?day='+date.format('YYYY-MM-DD');
 
 
                     },
-                    defaultView: 'agendaTenDay',
+                    defaultView: 'basicTenDay',
                     views: {
                         agendaFourDay: {
                             type: 'basicDay',
                             duration: { days: 4 },
                             buttonText: '4 day'
                         },
-                        agendaTenDay: {
+                        basicTenDay: {
                             type: 'basicDay',
                             duration: { days: 10 },
                             minTime:'09:00:00',
