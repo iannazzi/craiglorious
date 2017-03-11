@@ -12,8 +12,12 @@
                             <div class="row">
                                 <div class="col-xs-12 col-sm-4">
                                     <label for="type">Event Type</label>
-                                    <select name="type" class="form-control" >
-                                        <option v-for="eventType in eventTypes" selected="" :value="eventType">{{formattedEventType(eventType)}}</option>
+                                    <select v-model="selected" name="type" class="form-control" >
+                                        <option v-for="eventType in eventTypes"
+                                                v-show="eventType.visible" 
+                                                :value="eventType.value">
+                                            {{eventType.name}}
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-xs-12 col-sm-3">
@@ -53,14 +57,64 @@
     export default {
         data(){
             return {
+                selected:null,
                 show:false,
-                eventTypes: server_data.page_data.calendar.event_types
+//                eventTypes: server_data.page_data.calendar.event_types
+                eventTypes:[
+                    {
+                        'value': 'null',
+                        'name': 'Select....',
+                        'visible':true
+                    },
+                    {
+                        'value': 'scheduled_shift',
+                        'name': 'Scheduled Shift',
+                        'visible':true
+                    },
+                    {
+                        'value': 'actual_shift',
+                        'name': 'Actual Shift',
+                        'visible':false
+                    },
+                    {
+                        'value': 'customer_appointment',
+                        'name': 'Appointment',
+                        'visible':true
+                    },
+                    {
+                        'value': 'personal_appointment',
+                        'name': 'Personal Appointment',
+                        'visible':true
+                    },
+                    {
+                        'value': 'internal_meeting',
+                        'name': 'Meeting',
+                        'visible':true
+                    },
+                    {
+                        'value': 'location_event',
+                        'name': 'Event',
+                        'visible':false
+
+                    },
+                    {
+                        'value': 'external_meeting',
+                        'name': 'External Meeting',
+                        'visible':false
+                    },
+                    {
+                        'value': 'external_event',
+                        'name': 'External Event',
+                        'visible':false
+                    },
+
+                ]
             }
         }, computed: {
             // a computed getter
-            formattedEventType: function (val) {
+            formattedEventType: function () {
                 // `this` points to the vm instance
-               console.log(val)
+
             }
         },
         mounted(){
