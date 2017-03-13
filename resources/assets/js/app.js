@@ -22,12 +22,17 @@ window.Event = new class {
 
 Vue.component('zzi-nav', require('./components/nav/nav.vue'))
 Vue.component('zzi-calendar-entry-modal', require('./components/calendar/CalendarEventModal.vue'))
+// Vue.component('zzi-calendar-entry-modal2', require('./components/modals/vueBootstrapModal.vue'))
 
 
 
 
-
-const app = new Vue({
+window.bus = new Vue();
+window.hello3 = function (x)
+{
+    console.log(x);
+}
+let rootvvvv = new Vue({
     el: '#app',
     router: router,
     methods: {
@@ -51,3 +56,4 @@ const app = new Vue({
         Event.listen('applied', () => alert('handling ir'));
     },
 });
+window.rootvvv = rootvvvv;

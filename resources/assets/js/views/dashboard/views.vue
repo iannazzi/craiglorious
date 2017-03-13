@@ -87,6 +87,7 @@
         },
         mounted: function () {
             $('#search_input').focus()
+            console.log(this.query)
         },
         methods: {
             loadIcons: function () {

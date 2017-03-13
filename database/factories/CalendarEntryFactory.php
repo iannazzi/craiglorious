@@ -11,7 +11,14 @@ $factory->define(App\Models\Tenant\CalendarEntry::class,  function (Faker\Genera
     $endDate = Carbon::createFromFormat('Y-m-d H:i:s', $startDate)->addHours(random_int(1,4));
 
 
+$classname = $faker->randomElement([
+            'scheduled_shift',
+            'customer_appointment',
+            'personal_appointment',
+            'internal_meeting',
+            'external_event'
 
+        ]);
 
     $return = [
         'title' =>  $faker->word,
@@ -19,7 +26,7 @@ $factory->define(App\Models\Tenant\CalendarEntry::class,  function (Faker\Genera
         'start' => $startDate,
         'end' => $endDate,
         'editable' => 1,
-        'class_name'=> $faker->randomElement(CalendarEntry::getEventTypes()),
+        'class_name'=> $classname['id'],
         'duration_editable' => 1,
         'resource_editable' => 1,
         'start_editable' => 1,

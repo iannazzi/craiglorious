@@ -2,6 +2,11 @@
 <div>
     <div id="calendar"></div>
     <zzi-calendar-entry-modal></zzi-calendar-entry-modal>
+
+
+
+
+
 </div>
 </template>
 <style>
@@ -23,38 +28,17 @@
 //                    this.event_types = data;
 //                    console.log(this.event_types);
 //            });
+            let self=this;
             $(document).ready(function () {
 
                 $('#calendar').fullCalendar({
                     height: 650,
                     events: '/calendar',
                     eventDragStop: function(event, jsEvent, ui, view) {
-                        console.log('update after event drag stop');
+                        self.saveEvent(event);
                     },
                     eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
-                        console.log('update after event resize');
-
-                        let post_data = {
-                            id: event.id,
-                            title: event.title,
-                            start: event.start.format(),
-                            end:   event.end.format()
-                        }
-                        console.log(post_data)
-                        let data = {data: post_data, _method: 'put'};
-
-                        console.log(JSON.stringify(data))
-
-                        $.ajax({
-                            url: '/calendar',
-                            type: 'POST',
-                            data: data,
-                            success: function (response) {
-                                //get the response from server and process it
-//                                $("#calendarupdated").append(response);
-                                console.log(response);
-                            }
-                        });
+                        self.saveEvent(event);
                     },
                     updateEvent: function(event){
                         console.log('send in update');
@@ -74,40 +58,10 @@
                     },
                     navLinks: true,
                     dayClick: function(date, jsEvent, view) {
-//                        Session.set( 'eventModal', { type: 'add', date: date.format() } );
-
-
-                        $( '#add-edit-event' ).html('Add Event');
-                        $( '#add-edit-event-modal' ).modal( 'show' );
-
-//                        $('#calendar').fullCalendar( 'changeView', 'agendaDay' )
-//
-//
-//
-//                            alert('Clicked on: ' + date.format());
-//
-//                            alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-//
-//                            alert('Current view: ' + view.name);
-//
-//                            // change the day's background color just for fun
-//                            $(this).css('background-color', 'red');
-
-
-
+                        bus.$emit('add_calendar_entry', date)
                     },
                     eventClick:  function(event, jsEvent, view) {
-//                        Session.set( 'eventModal', { type: 'edit', event: event._id } );
-
-                        $( '#add-edit-event' ).html('Edit Event ' + event.title);
-                        $( '#add-edit-event-modal' ).modal( 'show' );
-
-
-                        console.log(event.title + ' clicked - pop up modal');
-//                        $('#modalTitle').html(event.title);
-//                        $('#modalBody').html(event.description);
-//                        $('#eventUrl').attr('href',event.url);
-//                        $('#fullCalModal').modal();
+                        bus.$emit('edit_calendar_entry', event)
                     },
                     scrollTime: '14:00:00',
 //                    minTime:'05:00:00',
@@ -135,7 +89,33 @@
 
             });
         },
-        methods: {}
+        methods: {
+            saveEvent(event){
+                console.log('saveEvent');
+                let post_data = {
+                    id: event.id,
+                    title: event.title,
+                    start: event.start.format(),
+                    end:   event.end.format()
+                }
+                console.log(post_data)
+                let data = {data: post_data, _method: 'put'};
+
+                console.log(JSON.stringify(data))
+
+                $.ajax({
+                    url: '/calendar',
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        //get the response from server and process it
+//                                $("#calendarupdated").append(response);
+                        console.log(response);
+                        $('#calendar').fullCalendar( 'refetchEvents' );
+                    }
+                });
+            }
+        }
 
     }
 
