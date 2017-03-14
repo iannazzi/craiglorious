@@ -7,7 +7,7 @@ import router from './routes'
 //Vue.component('zzi-table', require('./components/table.vue'))
 
 Vue.component('zzi-nav', require('./components/nav/nav.vue'))
-Vue.component('zzi-calendar-entry-modal', require('./components/calendar/CalendarEventModal.vue'))
+Vue.component('zzi-calendar-entry-modal', require('./views/calendar/CalendarEventModal.vue'))
 // Vue.component('zzi-calendar-entry-modal2', require('./components/modals/vueBootstrapModal.vue'))
 
 

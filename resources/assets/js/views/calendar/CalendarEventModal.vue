@@ -1,6 +1,7 @@
 <template>
     <div class="modal fade" id="add-edit-event-modal" tabindex="-1" role="dialog"
-         aria-labelledby="add-edit-event-modal">
+         aria-labelledby="add-edit-event-modal"
+         data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div v-if="!loading">
@@ -71,12 +72,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label>Day</label>
-                                    <input type="date" class="form-control" v-model="start_date" @change="checkDate">
+                                    <input @keydown="errors.clear('start')" type="date" class="form-control" v-model="start_date" @change="checkDate">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Time</label>
 
-                                    <input type="time" @change="checkDate" class="form-control" v-model="start_time">
+                                    <input @keydown="errors.clear('start')" type="time" @change="checkDate" class="form-control" v-model="start_time">
                                 </div>
 
 
@@ -94,11 +95,11 @@
 
                                 <div class="col-md-4">
                                     <label>Day</label>
-                                    <input type="date" class="form-control" v-model="end_date" @change="checkDate">
+                                    <input @keydown="errors.clear('end')" type="date" class="form-control" v-model="end_date" @change="checkDate">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Time</label>
-                                    <input type="time" class="form-control" v-model="end_time" @change="checkDate">
+                                    <input @keydown="errors.clear('end')" type="time" class="form-control" v-model="end_time" @change="checkDate">
                                 </div>
 
                             </div>
@@ -167,9 +168,11 @@
 //            this.errors={};
             delete this.errors[field];
         }
+        clearAll(){
+            this.errors={};
+        }
 
         record(errors) {
-            console.log(errors);
             this.errors = errors;
         }
     }
@@ -190,7 +193,11 @@
                     title: '',
                     id: '',
                 }),
+                event:{
+
+                },
                 class_name: null,
+                add_edit : false,
                 loading: false,
                 add: true,
                 allDay: false,
@@ -201,9 +208,7 @@
                 title: '',
                 id: '',
                 errors: new Errors(),
-
                 show: false,
-                event: {},
                 eventTypes: server_data.page_data.calendar.event_types
 //                eventTypes:[
 //                    {
@@ -277,19 +282,14 @@
         mounted(){
             let self = this;
 
-            bus.$on('save_event', function (event) {
-                console.log('save_event');
-                self.loadEventData(event);
-                self.save();
-
-            });
             bus.$on('add_calendar_entry', function (date) {
+                self.add_edit = true;
                 self.addEvent(date);
-
             })
             bus.$on('edit_calendar_entry', function (event) {
-                console.log(event);
+                self.add_edit = true;
                 self.add = false;
+                self.loading=false;
                 self.loadEventData(event);
 
 //                self.show=true;
@@ -298,11 +298,36 @@
 
 
             })
-            bus.$on('copy_event',function(event){
+            bus.$on('drag_copy_event',function(event){
+                self.add_edit = false;
                 self.loadEventData(event);
                 self.id='';
                 self.save();
             })
+            bus.$on('move_event',function(event){
+                self.add_edit = false;
+                self.loadEventData(event);
+                self.save();
+            })
+            bus.$on('resize_event',function(event){
+                self.add_edit = false;
+                self.loadEventData(event);
+                self.save();
+            })
+            bus.$on('event_saved', function(){
+                console.log('event_saved bus');
+                self.loading = false;
+                self.hideModal();
+                if (self.add){
+                    bus.$emit('add_event', self.getEvent());
+                }
+            })
+            bus.$on('event_save_error', function(response){
+                self.loading = false;
+                console.log('event_save_error bus');
+                self.errors.record(response.responseJSON.message);
+            })
+
 
             $('#add-edit-event-modal').on('shown.bs.modal', function () {
                 $('#entry_title').focus();
@@ -311,29 +336,46 @@
         },
         methods: {
             loadEventData(event){
-                self.start_date = event.start.format('YYYY-MM-DD');
-                self.end_date = event.end.format('YYYY-MM-DD');
-                self.start_time = event.start.format('HH:mm');
-                self.end_time = event.end.format('HH:mm');
-                self.class_name = event.className[0];
-                self.title = event.title;
-                self.id = event.id;
+
+                this.start_date = event.start.format('YYYY-MM-DD');
+                this.end_date = event.end.format('YYYY-MM-DD');
+                this.start_time = event.start.format('HH:mm');
+                this.end_time = event.end.format('HH:mm');
+                this.class_name = event.className[0];
+                this.allDay = event.allDay;
+                this.title = event.title;
+                this.id = event.id;
             },
             hideModal(){
                 this.show = false;
                 $('#add-edit-event-modal').modal('hide');
             },
             addEvent(date){
+                this.loading=false;
                 this.add = true;
+                this.errors.clearAll();
                 this.start_date = date.format('YYYY-MM-DD');
                 this.end_date = date.format('YYYY-MM-DD');
                 this.start_time = date.format('HH:mm');
                 this.end_time = date.add(1,'hour').format('HH:mm');
-                console.log(this.end_time);
                 this.class_name = null;
                 this.title = '';
                 this.id = '';
                 $('#add-edit-event-modal').modal('show');
+            },
+            getEvent(){
+                return {
+                    className:  this.class_name,
+                    allDay: this.allDay,
+                    start: this.getStartDateTime(),
+                    end: this.getEndDateTime(),
+                    title: this.title,
+                    id: this.id,
+                    editable: 1,
+                    startEditable: 1,
+                    durationEditable: 1,
+                    resourceEditable: 1,
+                }
             },
             checkDate(){
                 console.log(this.start_date);
@@ -351,6 +393,27 @@
             },
             onDelete(){
 
+                let post_data = {
+                    id: this.id,
+                }
+                let data = {data: post_data, _method: 'delete'};
+                let self = this;
+                console.log(JSON.stringify(data))
+                this.loading = true;
+
+                $.ajax({
+                    url: '/calendar',
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        self.loading = false;
+                        self.hideModal();
+                        bus.$emit('refetchEvents');
+                    },
+                    error(response){
+                       console.log(response);
+                    }
+                });
             },
             onCopy(){
                 //lets see.....
@@ -361,14 +424,16 @@
             onSave(){
                 this.loading = true;
                 this.save();
-                console.log('saveEvent');
+                let self = this;
+
             },
             save(){
+
                 let post_data = {
                     id: this.id,
                     title: this.title,
-                    start: this.start_date + ' ' + this.start_time + ':00',
-                    end: this.end_date + ' ' + this.end_time + ':00',
+                    start: this.getStartDateTime(),
+                    end: this.getEndDateTime(),
                     all_day: this.allDay,
                     class_name: this.class_name,
                     editable: 1,
@@ -378,30 +443,28 @@
                 }
                 let data = {data: post_data, _method: 'put'};
                 let self = this;
-                console.log(JSON.stringify(data))
+//                console.log(JSON.stringify(data))
 
                 $.ajax({
                     url: '/calendar',
                     type: 'POST',
                     data: data,
                     success: function (response) {
-                        self.saveSuccess(response);
+                        console.log('event_saved');
+                        if(self.add_edit) {
+                            bus.$emit('event_saved');
+                        }
                     },
                     error(response){
-                       self.saveError(response);
+                        bus.$emit('event_save_error', response);
                     }
                 });
             },
-            saveSuccess(response){
-                console.log(response);
-                this.loading = false;
-                this.hideModal();
-                $('#calendar').fullCalendar('refetchEvents');
+            getStartDateTime(){
+                return  this.start_date + ' ' + this.start_time + ':00'
             },
-            saveError(response){
-                this.loading = false;
-                console.log(response);
-                this.errors.record(response.responseJSON.message);
+            getEndDateTime(){
+                return  this.end_date + ' ' + this.end_time + ':00'
             },
         }
     }

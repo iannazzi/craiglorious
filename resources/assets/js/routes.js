@@ -14,8 +14,7 @@ let routes = [
     },
     {
         path:'/calendar',
-        component: require('./views/' +
-            'Calendar.vue')
+        component: require('./views/calendar/CalendarPage.vue')
     },
     // {
     //     path:'/vendors',
