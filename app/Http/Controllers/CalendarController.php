@@ -83,19 +83,22 @@ class CalendarController extends Controller
 //        $data = json_decode($request->data,true);
 
         $data = $request->data;
-//        dd($data);
-//        $data = json_decode($data);
         $id = $data['id'];
-
-
+        $end = $data['end'];
+        $start = $data['start'];
+        //dd(strtotime($start) <= strtotime($end));
         $rules = array(
             'title' => 'required',
+            'class_name' => 'required',
+            'start' => 'required',
+            'end'=>'required|after:'.$start,
         );
 
         $validation = \Validator::make($data, $rules);
         if ($validation->passes())
         {
             $update = CalendarEntry::firstOrNew(['id' => $id]);
+
             $update->fill($data);
             if ($update->save())
             {

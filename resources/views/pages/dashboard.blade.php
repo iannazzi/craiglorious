@@ -28,7 +28,7 @@
 
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('vendor/vendor.js') }}"></script>
+    {{--<script src="{{ asset('vendor/vendor.js') }}"></script>--}}
 
     {{--<script src="{{ asset('js/server_connection.js') }}"></script>--}}
 

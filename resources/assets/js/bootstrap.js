@@ -2,6 +2,11 @@
 
 window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
+window.thenby = require('thenby');
+window.jsuri = require('jsuri');
+window.moment = require('moment');
+window.fullcalendar = require('fullcalendar');
+
 require('bootstrap-sass');
 
 import Vue from 'vue';

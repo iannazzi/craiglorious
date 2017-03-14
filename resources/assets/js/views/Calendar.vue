@@ -3,8 +3,20 @@
     <div id="calendar"></div>
     <zzi-calendar-entry-modal></zzi-calendar-entry-modal>
 
-
-
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Some Help....</h1>
+            <p>I added keyboard commands to make your life easier</p>
+        </div>
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th>Action</th><th>Keyboard Shortcut</th>
+            </tr>
+            <tr>
+                <td>Copy Event</td><td>shift + click and drag</td>
+            </tr>
+        </table>
+    </div>
 
 
 </div>
@@ -23,22 +35,45 @@
         mounted: function () {
             //we are going to need some data from the server...
             this.event_types = [];
-//             $.get('/calendar/event_types',
-//                function( data ) {
-//                    this.event_types = data;
-//                    console.log(this.event_types);
-//            });
+
             let self=this;
+            var copyKey = false;
+            //keep track of the shift key for copy event
+            $(document).keydown(function (e) {
+                copyKey = e.shiftKey;
+            }).keyup(function () {
+                copyKey = false;
+            });
             $(document).ready(function () {
 
                 $('#calendar').fullCalendar({
                     height: 650,
                     events: '/calendar',
+                    eventDragStart: function (event, jsEvent, ui, view) {
+//                        console.log('copy?')
+//                        if (!copyKey) return;
+//                        bus.$emit('copy_event', event);
+                    },
                     eventDragStop: function(event, jsEvent, ui, view) {
-                        self.saveEvent(event);
+                        //console.log(event);
+                        //bus.$emit('save_event', event);
+                    },
+                    eventDrop(event, delta, revertFunc, jsEvent, ui, view ) {
+                        console.log(event);
+                        console.log(copyKey)
+                        if(copyKey){
+                            console.log('copy');
+                            bus.$emit('copy_event', event);
+                        }
+                        else
+                        {
+                            console.log('save');
+                            bus.$emit('save_event', event);
+                        }
+                        console.log(delta);
                     },
                     eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
-                        self.saveEvent(event);
+                        bus.$emit('save_event', event);
                     },
                     updateEvent: function(event){
                         console.log('send in update');
@@ -89,33 +124,6 @@
 
             });
         },
-        methods: {
-            saveEvent(event){
-                console.log('saveEvent');
-                let post_data = {
-                    id: event.id,
-                    title: event.title,
-                    start: event.start.format(),
-                    end:   event.end.format()
-                }
-                console.log(post_data)
-                let data = {data: post_data, _method: 'put'};
-
-                console.log(JSON.stringify(data))
-
-                $.ajax({
-                    url: '/calendar',
-                    type: 'POST',
-                    data: data,
-                    success: function (response) {
-                        //get the response from server and process it
-//                                $("#calendarupdated").append(response);
-                        console.log(response);
-                        $('#calendar').fullCalendar( 'refetchEvents' );
-                    }
-                });
-            }
-        }
 
     }
 

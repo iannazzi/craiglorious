@@ -17,7 +17,7 @@ class CreateCalendarEntriesTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('title');
-            $table->string('all_day');
+            $table->boolean('all_day');
             $table->dateTime('start');
             $table->dateTime('end');
             $table->string('url');
