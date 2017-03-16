@@ -97,7 +97,7 @@ export class SearchTableController extends DataTableController {
 
     }
     saveSearch(){
-        let uri = new Uri(window.location.href)
+        let uri = new JsUri(window.location.href)
         this.addSearchToUri(uri)
         this.removeSortFromUri(uri)
         this.pushState(uri);
@@ -122,7 +122,7 @@ export class SearchTableController extends DataTableController {
         this.setFocusToFirstInputOfSearch()
         this.view.addMessageInsteadOfTable(`Press search to display results`)
 
-        let uri = new Uri(window.location.href)
+        let uri = new JsUri(window.location.href)
         this.deleteValuesFromUri(uri);
         this.removeSortFromUri(uri);
         console.log(uri.toString())
@@ -134,7 +134,7 @@ export class SearchTableController extends DataTableController {
     }
 
     checkForUriSearch() {
-        let uri = new Uri(window.location.href)
+        let uri = new JsUri(window.location.href)
         for (let i = 0; i < this.view.search_elements.length; i++) {
             if (uri.getQueryParamValue(this.view.search_elements[i].name)) {
                 return true;
@@ -150,7 +150,7 @@ export class SearchTableController extends DataTableController {
     }
 
     populateSearchValuesFromUri() {
-        let uri = new Uri(window.location.href)
+        let uri = new JsUri(window.location.href)
         this.view.search_elements.forEach(element => {
             if (uri.getQueryParamValue(element.name)) {
                 element.value = uri.getQueryParamValue(element.name)
@@ -168,7 +168,7 @@ export class SearchTableController extends DataTableController {
             }
         })
         //now add the elements to the uri
-        let uri = new Uri(window.location.href)
+        let uri = new JsUri(window.location.href)
         this.addSearchToUri(uri);
         // ? this.pushState(uri)
 

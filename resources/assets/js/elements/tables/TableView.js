@@ -297,7 +297,7 @@ export class TableView {
         if(this.model.td.table_type == 'index')
         {
             let a = document.createElement('a');
-            a.href =   col_def['route'] + '/'  + data;
+            a.href =   'dashboard#/' + col_def['route'] + '/'  + data;
 
             let c = document.createTextNode(data);
             a.appendChild(c);

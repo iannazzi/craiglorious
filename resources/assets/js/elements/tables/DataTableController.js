@@ -55,7 +55,7 @@ export class DataTableController extends TableController {
 
     loadSortArrayFromUri() {
         //go through the params in order....
-        let uri = new Uri(window.location.href);
+        let uri = new JsUri(window.location.href);
         let params = uri.queryPairs
         let self = this;
         params.forEach(param => {

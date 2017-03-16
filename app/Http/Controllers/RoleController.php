@@ -18,11 +18,11 @@ class RoleController extends Controller
         $q = Role::where('name', 'LIKE', "%{$name}%")
             ->where('id', 'LIKE', "%{$id}%");
 
-        $result = $q->get();
+        $return_data = $q->get();
         return response()->json([
             'success' => true,
             'message' => 'search returned',
-            'data' => $result,
+            'data' => $return_data,
         ], 200);
 
     }
@@ -32,7 +32,6 @@ class RoleController extends Controller
         //return response($request->user());
         $number_of_records_available = Role::all()->count();
         $return_data['roles'] = [];//getRoleChildrenIds()
-        $return_data['page'] = 'index';
         $return_data['data'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
 
@@ -49,10 +48,14 @@ class RoleController extends Controller
     public function show($id)
     {
         $role = Role::findOrFail($id);
-        $return_data['page'] = 'show';
-        $return_data['data'] = [$role]; //let js handle the data through ajax
-        $return_data['view'] = $role->systemViews();
-        return \View::make('pages/roles/roles', ['json' => json_encode($return_data)]);
+        $return_data['role'] = [$role]; //let js handle the data through ajax
+        $return_data['views'] = \Auth::user()->role->systemViews();
+        $return_data['roles'] = \Auth::user()->role->getRoleSelectTree();
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data,
+        ], 200);
 
     }
     public function views()
@@ -63,9 +66,17 @@ class RoleController extends Controller
     }
     public function create()
     {
-        $return_data['page'] = 'create';
-        $return_data['data'] = []; //let js handle the data through ajax
-        return \View::make('pages/roles/roles', ['json' => json_encode($return_data)]);
+        $user = \Auth::user();
+        $return_data['role'] = [];
+        $return_data['roles'] = $user->role->getRoleSelectTree();
+        $return_data['views'] = $user->role->systemViews();
+
+
+        return response()->json([
+            'success' => true,
+            'message' => '',
+            'data' => $return_data,
+        ], 200);
 
     }
 

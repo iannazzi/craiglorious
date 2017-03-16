@@ -15,6 +15,7 @@ class TenantFakeDataDatabaseSeeder extends Seeder
         echo 'running TenantFakeDataDatabaseSeeder' . PHP_EOL;
         $this->call('VendorsTableSeeder');
         $this->call('CalendarEntriesTableSeeder');
+        $this->call('EmployeesTableSeeder');
 //        $this->call('CalendarEntriesTableSeeder');
 
     }

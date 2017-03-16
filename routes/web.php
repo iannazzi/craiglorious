@@ -37,9 +37,8 @@ Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
     CIRoutes::addRoutes('locations');
     CIRoutes::addRoutes('terminals');
     CIRoutes::addRoutes('printers');
-
-
     CIRoutes::addRoutes('vendors');
+    CIRoutes::addRoutes('employees');
 
     Route::get('calendar', 'CalendarController@getEvents');
     Route::get('calendar/event_types', 'CalendarController@getEventTypes');

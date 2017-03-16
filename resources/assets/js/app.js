@@ -1,5 +1,6 @@
 import './bootstrap';
 import router from './routes'
+require('./server_connection.js');
 
 
 
@@ -7,7 +8,7 @@ import router from './routes'
 //Vue.component('zzi-table', require('./components/table.vue'))
 
 Vue.component('zzi-nav', require('./components/nav/nav.vue'))
-Vue.component('zzi-calendar-entry-modal', require('./views/calendar/CalendarEventModal.vue'))
+Vue.component('zzi-calendar-entry-modal', require('./pages/calendar/CalendarEventModal.vue'))
 // Vue.component('zzi-calendar-entry-modal2', require('./components/modals/vueBootstrapModal.vue'))
 
 
@@ -55,4 +56,3 @@ let rootvvvv = new Vue({
         Event.listen('applied', () => alert('handling ir'));
     },
 });
-window.rootvvv = rootvvvv;

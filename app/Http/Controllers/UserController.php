@@ -108,20 +108,16 @@ class UserController extends Controller
         $return_data['page'] = 'edit';
         $passcode = unique_random('users', 'passcode', 5, 'number');
         $password = createPassword();
-        $return_data['data'] = [
-            [
-                'password' => $password,
-                'password_confirmation' => $password,
-                'passcode' => $passcode,
-                'passcode_confirmation' => $passcode
-            ]
-        ];
         $return_data = \App\Classes\Views\CIResponse::response();
+        $return_data['pass'] = $password;
+        $return_data['code'] = $passcode;
 
-        return \View::make('pages/users/user', ['json' => json_encode($return_data), 'pass' => $password, 'code' => $passcode]);
+        return response()->json([
+            'success' => true,
+            'message' => '',
+            'data' => $return_data
+        ], 200);
 
-        //update password
-        //update passcode
     }
 
     public function postPreferences(Request $request)

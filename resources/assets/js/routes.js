@@ -3,39 +3,78 @@ import VueRouter from 'vue-router'
 
 let routes = [
     {
-        path:'',
+        path: '',
         // component: require('./pages/dashboard/entry')
-        component: require('./views/dashboard/Dashboard.vue')
+        component: require('./pages/dashboard/dashboard.vue')
 
     },
     {
-        path:'/roles',
-        component: require('./views/Roles.vue')
+        path: '/roles',
+        component: require('./pages/roles/roles.vue'),
+        props: {  },
+        children: [
+            {
+                path:'',
+                component: require('./pages/roles/index.vue'),
+                props: { page: 'index' },
+            },
+            {
+                path: 'create',
+                component: require('./pages/roles/show.vue'),
+                props: { page: 'create' }
+            },
+            {
+                path: ':id',
+                component:{template: '<router-view></router-view>'},
+                children: [
+                    {
+                        path: '',
+                        component: require('./pages/roles/show.vue'),
+                        props: { page: 'show' }
+                    },
+                    {
+                        path: 'edit',
+                        component: require('./pages/roles/show.vue'),
+                        props: { page: 'edit' }
+                    }
+
+                    ],
+            },
+
+        ]
     },
     {
-        path:'/calendar',
-        component: require('./views/calendar/CalendarPage.vue')
+        path: '/calendar',
+        component: require('./pages/calendar/calendarPage.vue')
     },
-    // {
-    //     path:'/vendors',
-    //     component: require('./views/Vendors.vue')
-    // },
-    // {
-    //     path:'/users',
-    //     component: require('./views/Users.vue')
-    // },
-    // {
-    //     path:'/locations',
-    //     component: require('./views/Locations.vue')
-    // },
-    // {
-    //     path:'/terminals',
-    //     component: require('./views/Terminals.vue')
-    // },
-    // {
-    //     path:'/printers',
-    //     component: require('./views/Printers.vue')
-    // },
+    {
+        path: '/vendors',
+        component: require('./pages/vendors/vendors.vue')
+    },
+    {
+        path: '/users',
+        component: require('./pages/users/users.vue')
+    },
+    {
+        path: '/user',
+        component: require('./pages/user/user.vue')
+    },
+    {
+        path: '/locations',
+        component: require('./pages/locations/locations.vue')
+    },
+    {
+        path: '/terminals',
+        component: require('./pages/terminals/terminals.vue')
+    },
+    {
+        path: '/printers',
+        component: require('./pages/printers/printers.vue')
+    },
+    {
+        path: '/browser_tests',
+        component: require('./pages/tests/browser_tests.vue')
+    },
 
 ]
 

@@ -1,8 +1,4 @@
-import {search} from './search';
-import {show} from './show';
-
-export function pageSetup(server_response_data) {
-
+export default function(data){
     let column_definition = [
         {
             "db_field": "id",
@@ -21,10 +17,10 @@ export function pageSetup(server_response_data) {
             "post": true
         },
         {
-            "db_field": "parent_role_id",
+            "db_field": "parent_id",
             "caption": "Parent Role Id",
             "type": "select",
-            "select_values": server_response_data.roles,
+            "select_values": data.roles,
             "show_on_list": true,
             "show_on_view": true,
             "show_on_edit": true,
@@ -75,33 +71,7 @@ export function pageSetup(server_response_data) {
             "properties": [],
             "word_wrap": true,
             "post": true
-        }, {
-            "db_field": "max_connections",
-            "caption": "max_connections",
-            "type": "text",
-            "default_value": "1",
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "class": "",
-            "events": [],
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        }, {
-            "db_field": "relogin_on_browser_change",
-            "caption": "relogin_on_browser_change",
-            "type": "checkbox",
-            "default_value": "1",
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "events": [],
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        }, {
+        },  {
             "db_field": "relogin_on_ip_address_change",
             "caption": "relogin_on_ip_address_change",
             "type": "checkbox",
@@ -257,30 +227,5 @@ export function pageSetup(server_response_data) {
         "header": [],
         "column_definition": column_definition,
     };
-
-    switch (server_response_data.page) {
-        case 'show':
-            table_definition.table_type = 'show';
-            return show(table_definition, server_response_data);
-            break;
-        case 'create' :
-            table_definition.table_type = 'create';
-            return show(table_definition, server_response_data);
-            break;
-        case 'edit' :
-            table_definition.table_type = 'edit';
-            return show(table_definition, server_response_data);
-            break;
-        case 'index':
-            table_definition.table_type = 'index';
-            return search(table_definition, server_response_data)
-
-            break;
-        default:
-            return document.createTextNode('Wrong page sent in ... ' + data.page);
-    }
+    return table_definition;
 }
-
-
-
-

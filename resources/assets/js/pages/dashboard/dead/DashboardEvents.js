@@ -1,7 +1,7 @@
 /**
  * Created by embrasse-moi on 2/28/17.
  */
-import {CIEvent} from '../../events/CIEvent'
+import {CIEvent} from '../../../events/CIEvent'
 export class DashboardEvents {
     constructor(controller) {
         let view = controller.view;

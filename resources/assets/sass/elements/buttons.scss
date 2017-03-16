@@ -7,23 +7,17 @@ button {
 .btn-new {
 
 	@extend .btn-success;
-	//@extend .btn-lg;
+	@extend .btn-lg;
+}
+.btn-new  i {
+
+	padding-right: 5px;
 }
 .btn-back {
 	@extend .btn-info;
 	@extend .btn-lg;
 }
+.btn-back  i {
 
-
-
-
-
-.app-screen {
-	.btn {
-		transition: background-color 0.2s ease;
-	}
-
-	.btn-link {
-		font-weight: 300;
-	}
+	padding-right: 5px;
 }

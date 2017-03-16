@@ -1,7 +1,7 @@
 <div style="margin-top: 125px;">
     <!-- Push Footer -->
 </div>
-<footer class="footer">
+<footer class="footer hidden-print">
     <div class="container" style="color: #777;">
         <!-- Company Information -->
         <div class="pull-left" style="padding-top: 28px;">

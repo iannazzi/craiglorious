@@ -275,7 +275,7 @@ class ViewsTableSeeder extends Seeder
                 'icon' => 'fa fa-safari',
                 'place' => json_encode(['System']),
                 'priority'=> 0,
-                'route'=> 'tests',
+                'route'=> 'browser_tests',
             ],
 
         ];

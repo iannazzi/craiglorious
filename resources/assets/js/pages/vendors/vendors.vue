@@ -7,16 +7,16 @@
 </template>
 
 <script>
-    import { pageSetup }from '../pages/roles/pageSetup'
+    import { pageSetup }from './pageSetup'
     export default {
         data() {
             return {
             }
         },
         mounted: function () {
-            console.log('roles coming')
+            console.log('vendors coming')
             //we need to get some data
-            $.get('/roles', function(data) {
+            $.get('/vendors', function(data) {
                 // if session was expired
                  console.log(data);
                 let div = document.getElementById("data_table_view");

@@ -12,8 +12,8 @@
         </div>
 
         @include('layouts.includes.footer')
+        <script src="{{ asset('js/main_page.js') }}"></script>
 
-        <script src="{{ asset('vendor/vendor.js') }}"></script>
             @yield('include_scripts')
         <script>
             @yield('script')

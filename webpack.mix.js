@@ -23,6 +23,8 @@ mix.js('resources/assets/js/server_connection.js', 'public/js/server_connection.
 
 mix.copy('node_modules/font-awesome/fonts/', 'public/fonts/');
 mix.copy('node_modules/fullcalendar/dist/fullcalendar.min.css', 'public/css/');
+mix.copy('node_modules/fullcalendar/dist/fullcalendar.print.min.css', 'public/css/');
+
 mix.copy('resources/assets/img/', 'public/img/');
 
 

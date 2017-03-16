@@ -479,4 +479,7 @@
         display: flex;
         align-items: center;
     }
+    select option[value="scheduled_shift"] { /* value not val */
+        background: rgba(100, 100, 100, 0.3);
+    }
 </style>

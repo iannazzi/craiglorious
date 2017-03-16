@@ -3,12 +3,12 @@
         <div id="calendar"></div>
         <zzi-calendar-entry-modal></zzi-calendar-entry-modal>
 
-        <div class="container">
+        <div class="container hidden-print">
             <div class="jumbotron">
                 <h1>Help is here</h1>
                 <p></p>
             </div>
-            <div class="panel">
+            <div class="panel ">
                 <h2>I added keyboard commands to make your life easier</h2>
                 <table class="table table-bordered table-hover">
                     <tr>
@@ -31,6 +31,7 @@
     #calendar {
         padding: 20px;
     }
+    @media print{@page {size: landscape}}
 </style>
 <script>
     export default {

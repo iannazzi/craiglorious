@@ -6,11 +6,8 @@ const elixir = require('laravel-elixir');
 elixir((mix) => {
 
     mix.scripts([
-        '/jsuri/Uri.js',
-        'thenby/thenBy.min.js',
-        'moment/min/moment.min.js',
-        'fullcalendar/dist/fullcalendar.min.js'
-    ], 'public/vendor/vendor.js', 'node_modules')
+        '/jquery/dist/jquery.js',
+    ], 'public/js/main_page.js', 'node_modules')
 
 
 })

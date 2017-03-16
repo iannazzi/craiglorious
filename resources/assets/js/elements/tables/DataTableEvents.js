@@ -64,7 +64,7 @@ export class DataTableEvents extends TableEvents{
             function (sender, args) {
                 //coming in from click the header
                 //set the uri and stored uri
-                let uri = new Uri(window.location.href)
+                let uri = new JsUri(window.location.href)
                 let event = args[0];
                 let th = args[1];
                 //this code is the tri-selector: switches between none, asc, and desc

@@ -8,49 +8,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class VendorController extends Controller
+class EmployeeController extends Controller
 {
 
-    public function search(Request $request)
-    {
-        $data = $request->all();
-        $table_name = $data['table_name'] . '_';
-        $search = $data['search_fields'];
-        $name = $search[ $table_name . 'name' ];
-        $id = $search[ $table_name . 'id' ];
-        $active = $search[ $table_name . 'active' ];
-        $account_number = $search[ $table_name . 'account_number' ];
-
-
-        $vendors = Vendor::where('name', 'LIKE', "%{$name}%")
-            ->where('account_number', 'LIKE', "%{$account_number}%")
-            ->where('id', 'LIKE', "%{$id}%");
-        if ($active != 'null')
-        {
-            $vendors->where('active', '=', $active);
-        }
-        $result = $vendors->get();
-
-
-//        $query = \DB::table('vendors');
-//        $query->where('name', 'LIKE', "%{$name}%");
-//        $query->where('account_number', 'LIKE', "%{$account_number}%");
-//        $query->where('id', 'LIKE', "%{$id}%");
-//        if ($active != 'null')
-//        {
-//            $query->where('active', '=', $active);
-//        }
-//        $result = $query->get();
-
-
-        return response()->json([
-            'success' => true,
-            'message' => 'search returned',
-            'data' => $result
-        ], 200);
-
-
-    }
 
     public function index()
     {
@@ -65,12 +25,8 @@ class VendorController extends Controller
         $return_data['page'] = 'index';
         $return_data['data'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
-        return response()->json([
-            'success' => true,
-            'message' => 'index returned',
-            'data' => $return_data,
-        ], 200);
 
+        return \View::make('pages/vendors/vendors', ['json' => json_encode($return_data)]);
         //
     }
 
