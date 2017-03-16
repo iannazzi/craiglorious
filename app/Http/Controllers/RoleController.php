@@ -31,7 +31,7 @@ class RoleController extends Controller
     {
         //return response($request->user());
         $number_of_records_available = Role::all()->count();
-        $return_data['roles'] = [];//getRoleChildrenIds()
+        $return_data['roles'] = \Auth::user()->role->getRoleSelectTree();
         $return_data['data'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
 

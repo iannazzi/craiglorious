@@ -507,7 +507,6 @@ export class TableView {
     }
     addNestedSelectOptions (element, array, level)
     {
-        console.log(array);
         array.forEach((category, r) =>
         {
             let option = document.createElement('option');

@@ -105,7 +105,9 @@ export class RecordTableController extends TableController {
             data: data,
             success: function (result) {
                 //self.view.showWaitModal(false);
-                window.location.href = self.model.td.route;
+                if(self.model.options.deleteSuccess){
+                    self.model.options.deleteSuccess();
+                }
             }
         });
     }

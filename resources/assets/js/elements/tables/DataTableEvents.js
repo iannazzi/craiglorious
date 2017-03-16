@@ -9,6 +9,7 @@ export class DataTableEvents extends TableEvents{
 
         let view = controller.view;
         let model = controller.model;
+        controller.loadPageEvent= new TableEvent(controller);
         controller.createTableEvent = new TableEvent(view);
         view.addColumnClicked = new TableEvent(view);
         view.deleteColumnClicked = new TableEvent(view);

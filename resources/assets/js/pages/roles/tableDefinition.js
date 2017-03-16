@@ -1,4 +1,4 @@
-export default function(data){
+export default function(data,page){
     let column_definition = [
         {
             "db_field": "id",
@@ -19,7 +19,7 @@ export default function(data){
         {
             "db_field": "parent_id",
             "caption": "Parent Role Id",
-            "type": "select",
+            "type": "tree_select",
             "select_values": data.roles,
             "show_on_list": true,
             "show_on_view": true,
@@ -221,7 +221,7 @@ export default function(data){
         "access": "READ",
         "record_table_buttons": ['edit'],
         "dynamic_table_buttons": ['addRow', 'deleteRow', 'deleteAllRows', 'moveRows', 'copyRows', 'edit'],
-        "table_type": "KEY_VALUE INDEX",
+        "table_type": page,
         "route": "/roles",
         "footer": [],
         "header": [],

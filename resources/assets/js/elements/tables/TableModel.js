@@ -9,15 +9,15 @@ export class TableModel {
      and delivers a 2d array back
      the model can have more info than the view
      */
-    constructor(table_def, data) {
+    constructor(options) {
         //this.data = data; //may or may not be needed....
 
-        this.original_data = data;
-        this.table_definition = table_def;
-        this.td = table_def;
+        this.original_data = options.data;
+        this.options = options;
+        this.td = this.table_definition = options.table_definition;
         this.tdo = [];
         this.rdo = {};
-        this.cdo = table_def.column_definition;
+        this.cdo = this.td.column_definition;
 
         this.modelChanged = new TableEvent(this);
         this.newRow = new TableEvent(this);
@@ -25,11 +25,11 @@ export class TableModel {
         let self = this;
         this.modelChanged.attach(function () {
             self.updateTableObjectLineNumbers()
+
         });
 
-
         //this.addDataLoadedEvent = new TableEvent(this);
-        this.loadData(data);
+        this.loadData(options.data);
 
     }
 
@@ -40,8 +40,8 @@ export class TableModel {
     loadData(data) {
         this.tdo = [];
         this.data = data;
-        console.log('data');
-         console.log(data);
+        // console.log('data');
+        //  console.log(data);
         for (let i = 0; i < data.length; i++) {
             this.addDataRow(data[i]);
         }

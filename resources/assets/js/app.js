@@ -1,21 +1,6 @@
 import './bootstrap';
 import router from './routes'
 require('./server_connection.js');
-
-
-
-
-//Vue.component('zzi-table', require('./components/table.vue'))
-
-Vue.component('zzi-nav', require('./components/nav/nav.vue'))
-Vue.component('zzi-calendar-entry-modal', require('./pages/calendar/CalendarEventModal.vue'))
-// Vue.component('zzi-calendar-entry-modal2', require('./components/modals/vueBootstrapModal.vue'))
-
-
-
-//i need an event bus... for some reason this will not work on the main vue instance
-// so i use a second vue instance just for the event bus
-//another method window.event is shown
 window.bus = new Vue();
 window.Event = new class {
     constructor() {
@@ -32,9 +17,24 @@ window.Event = new class {
         this.vue.$on(event, callback);
     }
 }
-let rootvvvv = new Vue({
+
+
+
+
+
+
+//Vue.component('zzi-table', require('./components/table.vue'))
+
+Vue.component('zzi-nav', require('./components/nav/nav.vue'))
+Vue.component('zzi-wait', require('./components/modals/waitModal.vue'))
+Vue.component('zzi-calendar-entry-modal', require('./pages/calendar/CalendarEventModal.vue'))
+// Vue.component('zzi-calendar-entry-modal2', require('./components/modals/vueBootstrapModal.vue'))
+
+ new Vue({
     el: '#app',
     router: router,
+     data:{},
+
     methods: {
         another(){
             alert('another it was applied');
@@ -53,6 +53,5 @@ let rootvvvv = new Vue({
     },
 
     created(){
-        Event.listen('applied', () => alert('handling ir'));
     },
 });

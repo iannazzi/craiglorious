@@ -3,12 +3,12 @@ import {parseQuery} from '../../lib/url'
 import {SearchTableEvents} from './SearchTableEvents';
 
 export class SearchTableController extends DataTableController {
-    constructor(model, view, number_of_records_available) {
+    constructor(model, view) {
         super(model, view)
         let self = this;
         this.show_records_autmatically_below = 50;
         this.saved_search = this.model.td.name + '_saved_search';
-        this.number_of_records_available = number_of_records_available;
+        this.number_of_records_available = model.options.number_of_records_available;
 
         this.searchTableEvents = new SearchTableEvents(this);
 

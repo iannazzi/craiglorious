@@ -41,6 +41,7 @@
         mounted: function () {
             let self = this;
             bus.$on('add_event', function(event){
+                console.log('add event');
                 $('#calendar').fullCalendar('renderEvent', self.clone(event));
             });
             bus.$on('refetchEvents', function(){

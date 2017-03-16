@@ -12,8 +12,7 @@ export function createWaitModal() {
     // let div2 = document.createElement('div');
     // div.setAttribute("class", "modal fade");
 
-    let msg1 = '' +
-        '';
+    let msg1 = 'Please wait...';
     let msg2 = 'I am communicating with the server...';
 
     let template = `

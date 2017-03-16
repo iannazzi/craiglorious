@@ -202,7 +202,6 @@ createSearchButtons(){
             }
         })
 
-
     }
 
     addMessageInsteadOfTable(message)
