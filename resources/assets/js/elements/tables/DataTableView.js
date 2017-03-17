@@ -10,9 +10,9 @@ export class DataTableView extends TableView {
         super(model);
 
         //use these to set and track sorting
-        this.header_array = []; //array of th's
+        this.header_elements_array = []; //array of th's
         this.header_elements = {}; //th's by name
-        this.saved_sort_array = []; //[{name:'asc'},{name:'desc'}....]
+        this.sort = []; //[{name:'asc'},{name:'desc'}....]
 
     }
 
@@ -70,7 +70,7 @@ export class DataTableView extends TableView {
     updateThead() {
         this.checkTHeaderArray();
         this.thead.innerHTML = '';
-        this.header_array = [];
+        this.header_elements_array = [];
         let tr = [];
         for (let i = 0; i < this.header_row_span; i++) {
             tr[i] = this.thead.insertRow();
@@ -121,7 +121,7 @@ export class DataTableView extends TableView {
                         th.rowSpan = this.header_row_span;
                         tr[0].appendChild(th);
                         //keep track of the elements in order and by name
-                        this.header_array.push(th);
+                        this.header_elements_array.push(th);
                         this.header_elements[col_def.db_field] = th;
 
 
@@ -140,13 +140,13 @@ export class DataTableView extends TableView {
         let self = this;
 
         //first remove all formatting....
-        this.header_array.forEach(th => {
+        this.header_elements_array.forEach(th => {
             th.classList.remove("thHighlight")
             th.childNodes[1].className = 'fa fa-sort';
             th.sort = 0;
         })
-        //now based on the sort_array set the format
-        this.saved_sort_array.forEach(sort_value => {
+        //now based on the sort set the format
+        this.sort.forEach(sort_value => {
             //should be db_field : asc or desc
             let keys = Object.keys(sort_value);
             let db_field = keys[0];

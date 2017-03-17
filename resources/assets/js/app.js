@@ -28,6 +28,8 @@ window.Event = new class {
 Vue.component('zzi-nav', require('./components/nav/nav.vue'))
 Vue.component('zzi-wait', require('./components/modals/waitModal.vue'))
 Vue.component('zzi-calendar-entry-modal', require('./pages/calendar/CalendarEventModal.vue'))
+Vue.component('zzi-nav-keys', require('./components/keyCommands/dashboardKeyCommands.vue'))
+
 // Vue.component('zzi-calendar-entry-modal2', require('./components/modals/vueBootstrapModal.vue'))
 
  new Vue({

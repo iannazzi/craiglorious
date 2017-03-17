@@ -42,12 +42,9 @@
         },
         methods: {
             show(){
-                this.show = true;
-                ;
                 $('#wait_modal').modal('show')
             },
             hide(){
-                this.show = false;
                 $('#wait_modal').modal('hide');
             }
         }

@@ -63,50 +63,15 @@ export class DataTableEvents extends TableEvents{
         let self = controller;
         view.headerClicked.attach(
             function (sender, args) {
-                //coming in from click the header
-                //set the uri and stored uri
-                let uri = new JsUri(window.location.href)
-                let event = args[0];
-                let th = args[1];
-                //this code is the tri-selector: switches between none, asc, and desc
-                self.sort_array = ['none', 'asc', 'desc'];
-                let i = th.sort;
-                i = ++i % self.sort_array.length;
-                th.sort = i;
+                console.log('uri sort array :' )
+                console.log('view sort array')
+                console.log(self.uri.sort_array)
+                console.log(self.view.sort_array)
+                self.uri.onSort(args,self.view.header_elements_array);
 
-                let name = th.col_def.db_field
-
-                if (!event.shiftKey) {
-                    self.removeSortFromUri(uri, th)
-                    self.view.header_array.forEach(th_element => {
-                        if (th != th_element) {
-                            self.removeSortFromSavedArray(th_element.col_def.db_field);
-                        }
-                    })
-                }
-
-                switch (self.sort_array[i]) {
-                    case 'none':
-                        uri.deleteQueryParam(name + '_sort')
-                        self.removeSortFromSavedArray(name);
-                        break;
-                    case 'asc':
-                        self.addSortToSavedArray(name, 'asc')
-                        uri.addQueryParam(name + '_sort', 'asc')
-                        break;
-                    case 'desc':
-                        uri.deleteQueryParam(name + '_sort')
-                        uri.addQueryParam(name + '_sort', 'desc')
-                        self.removeSortFromSavedArray(name)
-                        self.addSortToSavedArray(name, 'desc')
-                        break;
-                }
                 self.view.updateHeaderSortView();
-                sessionStorage[self.saved_sort] = JSON.stringify(self.view.saved_sort_array);
-                self.pushState(uri);
-                self.model.sortData(self.view.saved_sort_array)
+                self.model.sortData(this.view.sort)
                 self.view.updateTable();
-
             }
         )
         controller.view.addColumnClicked.attach(

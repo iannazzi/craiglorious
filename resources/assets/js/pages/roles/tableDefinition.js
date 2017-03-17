@@ -15,23 +15,7 @@ export default function(data,page){
             "properties": [],
             "word_wrap": true,
             "post": true
-        },
-        {
-            "db_field": "parent_id",
-            "caption": "Parent Role Id",
-            "type": "tree_select",
-            "select_values": data.roles,
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": 80,
-            "events": [],
-            "search": "LIKE ANY BETWEEN EXACT",
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        }, {
+        },{
             "db_field": "name",
             "caption": "Name",
             "type": "text",
@@ -41,6 +25,22 @@ export default function(data,page){
             "show_on_create": true,
             "td_tags": "",
             "class": "",
+            "events": [],
+            "search": "LIKE ANY BETWEEN EXACT",
+            "properties": [],
+            "word_wrap": true,
+            "post": true
+        },
+        {
+            "db_field": "parent_id",
+            "caption": "Parent Role",
+            "type": "tree_select",
+            "select_values": data.roles,
+            "show_on_list": true,
+            "show_on_view": true,
+            "show_on_edit": true,
+            "show_on_create": true,
+            "th_width": 80,
             "events": [],
             "search": "LIKE ANY BETWEEN EXACT",
             "properties": [],
@@ -217,7 +217,7 @@ export default function(data,page){
             "word_wrap": true,
         },];
     let table_definition = {
-        "name": "table",
+        "name": "roles",
         "access": "READ",
         "record_table_buttons": ['edit'],
         "dynamic_table_buttons": ['addRow', 'deleteRow', 'deleteAllRows', 'moveRows', 'copyRows', 'edit'],

@@ -1,7 +1,7 @@
 import {TableEvent} from './TableEvent'
 
 export class SearchTableEvents {
-    constructor(controller){
+    constructor(controller) {
 
         controller.searchReturned = new TableEvent(controller)
         controller.searching = new TableEvent(controller)
@@ -12,7 +12,7 @@ export class SearchTableEvents {
 
         controller.view.searchClicked.attach(
             function () {
-                controller.submitSearch()
+                controller.onSearch()
             }
         )
         controller.searching.attach(
@@ -28,32 +28,12 @@ export class SearchTableEvents {
         )
         controller.loadPageEvent.attach(
             function () {
-                console.log('loading page')
-                //is there a search on the uri?
-                if (controller.checkForUriSearch()) {
-                    console.log('loading search from uri')
-                    controller.populateSearchValuesFromUri()
-                    controller.loadSortArrayFromUri()
-                    controller.view.searchClicked.notify()
-                }
-                else {
-                    if (controller.checkStorageForSearch()) {
-                        console.log('loading search from storage')
-                        controller.populateSearchValuesFromStorage()
-                        controller.loadSortArrayFromSessionStorage()
-                        controller.view.searchClicked.notify()
-                    }
-                    else {
-                        console.log('no search present.. loading if results are < ' + controller.show_records_autmatically_below)
-                        //controller.populateSearchValuesFromDefaultValues()
-                        controller.loadInitialData();
-                    }
-                }
+                controller.onLoadPage();
             }
         )
         controller.view.resetClicked.attach(
             function () {
-                controller.resetSearch()
+                controller.onReset()
             }
         )
     }

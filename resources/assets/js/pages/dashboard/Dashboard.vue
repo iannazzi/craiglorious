@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!--<zzi-nav></zzi-nav>-->
+        <zzi-nav-keys></zzi-nav-keys>
         <zzi-calendar></zzi-calendar>
         <zzi-views></zzi-views>
     </div>

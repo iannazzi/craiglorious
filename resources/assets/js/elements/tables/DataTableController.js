@@ -3,6 +3,7 @@
  */
 import {TableController} from './TableController';
 import {DataTableEvents} from './DataTableEvents'
+import {UriController} from './UriController';
 
 
 export class DataTableController extends TableController {
@@ -11,69 +12,20 @@ export class DataTableController extends TableController {
         this.view = view;
         this.cdo = this.model.cdo;
 
+        //what is the sort name?
+        this.uri = new UriController(this.model.td.name);
+
+        this.uri.sort = this.view.sort;
+
+
+
 
         this.dataTableEvents = new DataTableEvents(this);
 
     }
 
 
-    removeSortFromSavedArray(name) {
-        this.view.saved_sort_array = this.view.saved_sort_array.filter(function (el) {
-            let keys = Object.keys(el);
-            return keys[0] !== name;
-        });
-    }
 
-    addSortToSavedArray(name, value) {
-        let save = {};
-        save[name] = value;
-        this.view.saved_sort_array.push(save);
-    }
-
-    changeSortSavedArray(name, value) {
-        //have not tried this...
-        this.view.saved_sort_array = this.view.saved_sort_array.filter(function (el) {
-            let keys = Object.keys(el);
-            console.log('keys ' + keys[0])
-            if (keys[0] == name) {
-                let save = {};
-                save[keys[0]] = value;
-                return save;
-            }
-        });
-    }
-
-    removeSortFromUri(uri, th = false) {
-        this.view.header_array.forEach(th_element => {
-            if (th != th_element) {
-                let name = th_element.col_def.db_field;
-
-                uri.deleteQueryParam(name + '_sort')
-            }
-        })
-    }
-
-    loadSortArrayFromUri() {
-        //go through the params in order....
-        let uri = new JsUri(window.location.href);
-        let params = uri.queryPairs
-        let self = this;
-        params.forEach(param => {
-            let name = param[0];
-            if (name.includes('_sort')) {
-                name = name.replace('_sort', '')
-                let value = param[1];
-                //remove sort
-                self.addSortToSavedArray(name, value);
-            }
-        })
-    }
-
-    loadSortArrayFromSessionStorage() {
-        if(sessionStorage[this.saved_sort]){
-            this.view.saved_sort_array = JSON.parse(sessionStorage[this.saved_sort]);
-        }
-    }
 
     addRow() {
         this.copyTable();
@@ -141,6 +93,7 @@ export class DataTableController extends TableController {
     }
 
     deleteAllRows() {
+
         if (confirm("Confirm Delete All Rows")) {
             this.model.DeleteAllRows();
         }
@@ -162,8 +115,6 @@ export class DataTableController extends TableController {
         }
         return checked_rows;
     }
-
-
 
     copyTable() {
 
@@ -227,6 +178,8 @@ export class DataTableController extends TableController {
             }
         });
     }
+
+
 
     //everything below this line should be deleted after i get posting complete
 

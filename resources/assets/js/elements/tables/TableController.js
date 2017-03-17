@@ -92,9 +92,6 @@ export class TableController {
         });
         return postData;
     }
-    pushState(uri) {
-        let stateObj = {url: uri.toString(), innerhtml: document.body.innerHTML};
-        window.history.pushState(stateObj, uri.toString(), uri.toString());
-    }
+
 
 }

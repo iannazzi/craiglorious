@@ -1,5 +1,6 @@
 <template>
     <div>
+        <zzi-nav-keys></zzi-nav-keys>
         <div id="calendar"></div>
         <zzi-calendar-entry-modal></zzi-calendar-entry-modal>
 
@@ -81,6 +82,11 @@
                         //console.log(event);
                         //bus.$emit('save_event', event);
                     },
+                    eventRender: function(event, element) {
+                        element.bind('dblclick', function() {
+                            bus.$emit('edit_calendar_entry', event)
+                        });
+                    },
 
                     eventDrop(event, delta, revertFunc, jsEvent, ui, view) {
 //                        console.log(event);
@@ -148,7 +154,7 @@
 
                     },
                     eventClick: function (event, jsEvent, view) {
-                        bus.$emit('edit_calendar_entry', event)
+//                        bus.$emit('edit_calendar_entry', event)
                     },
                     scrollTime: '14:00:00',
 //                    minTime:'05:00:00',

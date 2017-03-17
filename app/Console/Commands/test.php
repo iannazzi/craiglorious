@@ -38,8 +38,11 @@ class test extends Command
      */
     public function handle()
     {
-        $faker = \Faker\Factory::create();
-        dd($faker->word);
+        $system = System::first();
+        $system->createTenantConnection();
+
+        $role = \App\Models\Tenant\Role::find(6);
+        dd($role->getSelectableParents());;
 
 
 

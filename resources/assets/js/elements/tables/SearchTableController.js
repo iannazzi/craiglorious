@@ -7,7 +7,6 @@ export class SearchTableController extends DataTableController {
         super(model, view)
         let self = this;
         this.show_records_autmatically_below = 50;
-        this.saved_search = this.model.td.name + '_saved_search';
         this.number_of_records_available = model.options.number_of_records_available;
 
         this.searchTableEvents = new SearchTableEvents(this);
@@ -16,21 +15,38 @@ export class SearchTableController extends DataTableController {
         //when using the back button the url says the right thing, but page will not reload
         //adding this code will allow the back button to work once.
 
-        window.onpopstate = function (event) {
-            window.location.href = window.location.href;
-        };
+        // window.onpopstate = function (event) {
+        //     window.location.href = window.location.href;
+        // };
+    }
+    onLoadPage(){
+
+        console.log('loading page')
+        //is there a search on the uri?
+        if (this.uri.checkUri(this.view.search_elements)) {
+            this.uri.loadFromUri(this.view.search_elements)
+            this.view.searchClicked.notify()
+        }
+        else {
+            if (this.uri.checkStorage()) {
+                this.uri.loadFromStorage(this.view.search_elements)
+                this.view.searchClicked.notify()
+            }
+            else {
+                console.log('no search present.. loading if results are < ' + this.show_records_autmatically_below)
+                //this.populateSearchValuesFromDefaultValues()
+                this.loadInitialData();
+            }
+        }
+
     }
 
-    setFocusToFirstInputOfSearch() {
-        this.view.search_elements[0].focus();
-        this.view.search_elements[0].select();
-    }
     loadData(data){
         // console.log(data)
         let ret_data = data.data;
         this.number_of_records_available = ret_data.length;
         this.model.loadData(ret_data)
-        this.model.sortData(this.view.saved_sort_array)
+        this.model.sortData(this.view.sort)
         this.model.original_data = ret_data;
         this.loadInitialData();
     }
@@ -57,7 +73,6 @@ export class SearchTableController extends DataTableController {
 
         }
     }
-
     populateSearchValuesFromDefaultValues()
     {
         this.model.cdo.forEach(col_def => {
@@ -74,9 +89,9 @@ export class SearchTableController extends DataTableController {
         })
     }
 
-    submitSearch() {
+    onSearch() {
         this.searching.notify();
-        this.saveSearch()
+        this.uri.onSearch(this.view.search_elements, this.getSearchFormValues(),this.view.header_elements_array);
         let post_data = {};
         post_data['search_fields'] = {};
         post_data['table_name'] = this.view.name;
@@ -96,18 +111,8 @@ export class SearchTableController extends DataTableController {
             });
 
     }
-    saveSearch(){
-        let uri = new JsUri(window.location.href)
-        this.addSearchToUri(uri)
-        this.removeSortFromUri(uri)
-        this.pushState(uri);
-        this.resetStoredSort();
-        this.storeSearch();
-    }
-    resetStoredSort(){
-        this.saved_sort_array = [];
-    }
-    resetSearch() {
+
+    onReset() {
         this.view.search_elements.forEach(element => {
             switch (element.type) {
                 case 'tree_select':
@@ -121,60 +126,11 @@ export class SearchTableController extends DataTableController {
         })
         this.setFocusToFirstInputOfSearch()
         this.view.addMessageInsteadOfTable(`Press search to display results`)
-
-        let uri = new JsUri(window.location.href)
-        this.deleteValuesFromUri(uri);
-        this.removeSortFromUri(uri);
-        console.log(uri.toString())
-        this.pushState(uri);
-
-        delete sessionStorage[this.saved_search];
-        delete sessionStorage[this.saved_sort];
-        this.resetStoredSort();
-    }
-
-    checkForUriSearch() {
-        let uri = new JsUri(window.location.href)
-        for (let i = 0; i < this.view.search_elements.length; i++) {
-            if (uri.getQueryParamValue(this.view.search_elements[i].name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    checkStorageForSearch() {
-        console.log('this saved search ' + this.saved_search);
-        return sessionStorage[this.saved_search]
+        this.uri.onReset(this.view.search_elements, this.view.header_elements_array);
 
     }
 
-    populateSearchValuesFromUri() {
-        let uri = new JsUri(window.location.href)
-        this.view.search_elements.forEach(element => {
-            if (uri.getQueryParamValue(element.name)) {
-                element.value = uri.getQueryParamValue(element.name)
-            }
-        })
-    }
-
-    populateSearchValuesFromStorage() {
-        console.log('loading search values from storage')
-        console.log(sessionStorage[this.saved_search])
-        let stored_values = this.retrieveSearch();
-        this.view.search_elements.forEach(element => {
-            if (stored_values[element.name]) {
-                element.value = stored_values[element.name]
-            }
-        })
-        //now add the elements to the uri
-        let uri = new JsUri(window.location.href)
-        this.addSearchToUri(uri);
-        // ? this.pushState(uri)
-
-    }
-
-    getSearchValues() {
+    getSearchFormValues() {
         let search_values = {};
         let name = this.view.name + '_search';
         //search_values[name] = 'true';
@@ -203,42 +159,12 @@ export class SearchTableController extends DataTableController {
         return search_values;
 
     }
-
-    deleteValuesFromUri(uri) {
-        this.view.search_elements.forEach(element => {
-            uri.deleteQueryParam(element.name)
-        })
+    setFocusToFirstInputOfSearch() {
+        this.view.search_elements[0].focus();
+        this.view.search_elements[0].select();
     }
 
 
-    addSearchToUri(uri) {
-
-        //load the cuurent url using the jsuri library
-        this.view.search_elements.forEach(element => {
-            uri.deleteQueryParam(element.name)
-        })
-        //additionally remove the search set flag so it will
-        // not duplicate
-        //uri.deleteQueryParam(this.view.name + '_search', 'true')
-        // if(uri.getQueryParamValue()){
-        //     uri.addQueryParam(this.view.name + '_search', 'true')
-        // }
-        let search_values = this.getSearchValues();
-        for (let i in search_values) {
-            uri.addQueryParam(i, search_values[i])
-        }
-
-    }
-
-
-
-    storeSearch() {
-        sessionStorage[this.saved_search] = JSON.stringify(this.getSearchValues());
-    }
-
-    retrieveSearch() {
-        return JSON.parse(sessionStorage[this.saved_search]);
-    }
 
 
 }

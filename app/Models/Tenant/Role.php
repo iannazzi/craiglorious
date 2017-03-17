@@ -114,14 +114,16 @@ class Role extends BaseModel
 
     function getRoleChildrenIds()
     {
-        if($this->isAdmin())
+        if ($this->isAdmin())
         {
             return $this->all()->pluck('id')->toArray();
         }
         $roles = $this->all();
         $ids = $this->findChildrenIds($roles, $this->id, 1);
+
         return $ids;
     }
+
     function findChildrenIds($roles, $parent_id, $level)
     {
         $cat_array = [];
@@ -132,9 +134,10 @@ class Role extends BaseModel
                 $child_id = $roles[ $c ]->id;
                 $cat_array[] = $child_id;
                 $children_array = $this->findChildrenIds($roles, $child_id, $level + 1);
-                $cat_array = array_merge($cat_array,$children_array);
+                $cat_array = array_merge($cat_array, $children_array);
             }
         }
+
         return $cat_array;
     }
 
@@ -144,7 +147,8 @@ class Role extends BaseModel
         //with exception of the admin
         //find all roles below users current role
         $roles = $this->all();
-        if(\Auth::user()->isAdmin()){
+        if (\Auth::user()->isAdmin())
+        {
             return [[
                 'name' => $this->name,
                 'value' => $this->id,
@@ -152,10 +156,12 @@ class Role extends BaseModel
             ]];
 
         }
+
         return $this->findChildren($roles, $this->id, 1);
 
 
     }
+
     function findChildren($roles, $parent_id, $level)
     {
         $cat_array = array();
@@ -167,13 +173,71 @@ class Role extends BaseModel
                 $ret_array['value'] = $roles[ $c ]->id;
                 $ret_array['name'] = $roles[ $c ]->name;
                 $children = $this->findChildren($roles, $roles[ $c ]->id, $level + 1);
-                if (sizeof($children) > 0){
+                if (sizeof($children) > 0)
+                {
                     $ret_array['children'] = $children;
                 }
                 $cat_array[] = $ret_array;
             }
         }
+
         return $cat_array;
+    }
+
+    function getSelectableParents()
+    {
+        //take the tree array and delete the node where the id is....
+        $roles = $this->all();
+        $tree = $this->findChildren($roles, 0, 1);
+
+        //recursively go trough the array and delete....
+
+
+        $trimmed_tree = $this->removeTreeNode($tree, $this->id);
+        return $trimmed_tree;
+
+
+
+
+    }
+
+    function removeTreeNode($tree, $id)
+    {
+        $cat_array = array();
+//        var_export($tree);
+        for ($c = 0; $c < sizeof($tree); $c ++)
+        {
+            if ($tree[ $c ]["value"] == $id)
+            {
+//                var_export($tree);
+                //kill this node
+                //return false;
+            }
+            else{
+//                dd($tree[$c]);
+                $ret_array = [];
+                $ret_array['value'] = $tree[ $c ]['value'];
+                $ret_array['name'] = $tree[ $c ]['name'];
+
+
+                if (isset($tree[$c]['children']))
+                {
+                   $tmp = $this->removeTreeNode($tree[$c]['children'], $id);
+                   if($tmp){
+                       $ret_array['children'] = $tmp;
+                   }
+                }
+                //dd($ret_array);
+                $cat_array[] = $ret_array;
+
+            }
+            return $cat_array;
+        }
+
+
+
+
+
     }
 
 
