@@ -192,7 +192,6 @@ class Role extends BaseModel
 
         //recursively go trough the array and delete....
 
-
         $trimmed_tree = $this->removeTreeNode($tree, $this->id);
         return $trimmed_tree;
 
@@ -204,12 +203,10 @@ class Role extends BaseModel
     function removeTreeNode($tree, $id)
     {
         $cat_array = array();
-//        var_export($tree);
         for ($c = 0; $c < sizeof($tree); $c ++)
         {
             if ($tree[ $c ]["value"] == $id)
             {
-//                var_export($tree);
                 //kill this node
                 //return false;
             }
@@ -231,9 +228,9 @@ class Role extends BaseModel
                 $cat_array[] = $ret_array;
 
             }
-            return $cat_array;
-        }
 
+        }
+        return $cat_array;
 
 
 

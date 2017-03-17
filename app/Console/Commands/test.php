@@ -41,7 +41,7 @@ class test extends Command
         $system = System::first();
         $system->createTenantConnection();
 
-        $role = \App\Models\Tenant\Role::find(6);
+        $role = \App\Models\Tenant\Role::find(2);
         dd($role->getSelectableParents());;
 
 

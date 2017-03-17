@@ -22,8 +22,8 @@
                 alt_key = event.altKey;
                 ctrl_key = event.ctrlKey;
                 modifier1 = (event.which == 32); //space bar
-                modifier1 = event.ctrlKey;
-                modifier2 = event.altKey;
+                modifier1 = event.metaKey;
+                modifier2 = true;
 
                 //console.log(event.which);
                 //console.log('modifier 1 ' + modifier1)
@@ -35,7 +35,10 @@
 
                 switch (event.which) {
                     case 68:
-                        if (modifier1 && modifier2) self.$router.push('/');
+                        if (modifier1 && modifier2){
+                            event.preventDefault();
+                            self.$router.push('/');
+                        }
                         break;
                     case 67:
                         if (modifier1 && modifier2) self.$router.push('/calendar');

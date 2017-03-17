@@ -49,6 +49,8 @@ class RoleController extends Controller
     {
 
         $role = Role::findOrFail($id);
+
+
         $return_data['role'] = [$role]; //let js handle the data through ajax
         $return_data['views'] = \Auth::user()->role->systemViews();
 
@@ -59,7 +61,7 @@ class RoleController extends Controller
         //sales manager can be a child of admin or owner or accountant..
         // basically anything but children or grand children...
 
-        $return_data['roles'] = \Auth::user()->role->getSelectableParents();
+        $return_data['roles'] = $role->getSelectableParents();
 
         return response()->json([
             'success' => true,
@@ -81,10 +83,8 @@ class RoleController extends Controller
 
 
 
-
         $return_data['roles'] = $user->role->getRoleSelectTree();
         $return_data['views'] = $user->role->systemViews();
-
 
         return response()->json([
             'success' => true,
