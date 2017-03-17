@@ -63,14 +63,13 @@ export class DataTableEvents extends TableEvents{
         let self = controller;
         view.headerClicked.attach(
             function (sender, args) {
-                console.log('uri sort array :' )
+
+                self.uri.onSort(args);
                 console.log('view sort array')
-                console.log(self.uri.sort_array)
-                console.log(self.view.sort_array)
-                self.uri.onSort(args,self.view.header_elements_array);
+                console.log(self.view.sort)
 
                 self.view.updateHeaderSortView();
-                self.model.sortData(this.view.sort)
+                self.model.sortData(self.view.sort)
                 self.view.updateTable();
             }
         )

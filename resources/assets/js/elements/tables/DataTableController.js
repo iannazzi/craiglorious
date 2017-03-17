@@ -12,13 +12,7 @@ export class DataTableController extends TableController {
         this.view = view;
         this.cdo = this.model.cdo;
 
-        //what is the sort name?
-        this.uri = new UriController(this.model.td.name);
-
-        this.uri.sort = this.view.sort;
-
-
-
+        this.uri = new UriController(this);
 
         this.dataTableEvents = new DataTableEvents(this);
 

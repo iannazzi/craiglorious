@@ -220,7 +220,7 @@ export default function(data,page){
         "name": "roles",
         "access": "READ",
         "record_table_buttons": ['edit'],
-        "dynamic_table_buttons": ['addRow', 'deleteRow', 'deleteAllRows', 'moveRows', 'copyRows', 'edit'],
+        "dynamic_table_buttons": [],
         "table_type": page,
         "route": "/roles",
         "footer": [],

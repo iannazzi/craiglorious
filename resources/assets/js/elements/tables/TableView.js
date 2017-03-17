@@ -492,6 +492,7 @@ export class TableView {
         else
         {
             let value =  this.findTreeSelectValue(col_def.select_values,data);
+            if(!value) value = '';
             return document.createTextNode(value);
         }
     }

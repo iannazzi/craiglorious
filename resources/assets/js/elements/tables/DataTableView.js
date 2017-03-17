@@ -150,8 +150,7 @@ export class DataTableView extends TableView {
             //should be db_field : asc or desc
             let keys = Object.keys(sort_value);
             let db_field = keys[0];
-            console.log('sort value')
-            console.log(sort_value)
+
             let th = self.header_elements[db_field];
 
             switch (sort_value[db_field]) {

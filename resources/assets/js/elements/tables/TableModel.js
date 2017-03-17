@@ -62,7 +62,6 @@ export class TableModel {
     }
 
     sortData(sort_array) {
-    console.log(sort_array)
         //TODO fix sort it kinda works but not really....
 
 

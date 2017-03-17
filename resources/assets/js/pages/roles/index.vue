@@ -1,7 +1,6 @@
 <template>
     <div>
         <zzi-wait></zzi-wait>
-        <zzi-nav-keys></zzi-nav-keys>
         <div v-if="dataReady" id="data_table_view">
             <button class="btn-new" @click="$router.push('/roles/create')"><i class="fa fa-plus" aria-hidden="true"></i>New
                 Role</button>

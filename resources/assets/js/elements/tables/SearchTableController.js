@@ -21,10 +21,8 @@ export class SearchTableController extends DataTableController {
     }
     onLoadPage(){
 
-        console.log('loading page')
-        //is there a search on the uri?
-        if (this.uri.checkUri(this.view.search_elements)) {
-            this.uri.loadFromUri(this.view.search_elements)
+        if (this.uri.checkUri()) {
+            this.uri.loadFromUri()
             this.view.searchClicked.notify()
         }
         else {
@@ -46,6 +44,8 @@ export class SearchTableController extends DataTableController {
         let ret_data = data.data;
         this.number_of_records_available = ret_data.length;
         this.model.loadData(ret_data)
+        console.log('sort data');
+        console.log(this.view.sort);
         this.model.sortData(this.view.sort)
         this.model.original_data = ret_data;
         this.loadInitialData();
@@ -91,7 +91,7 @@ export class SearchTableController extends DataTableController {
 
     onSearch() {
         this.searching.notify();
-        this.uri.onSearch(this.view.search_elements, this.getSearchFormValues(),this.view.header_elements_array);
+        this.uri.onSearch();
         let post_data = {};
         post_data['search_fields'] = {};
         post_data['table_name'] = this.view.name;
@@ -126,7 +126,7 @@ export class SearchTableController extends DataTableController {
         })
         this.setFocusToFirstInputOfSearch()
         this.view.addMessageInsteadOfTable(`Press search to display results`)
-        this.uri.onReset(this.view.search_elements, this.view.header_elements_array);
+        this.uri.onReset();
 
     }
 
