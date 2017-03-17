@@ -27,7 +27,7 @@ export class SearchTableController extends DataTableController {
         }
         else {
             if (this.uri.checkStorage()) {
-                this.uri.loadFromStorage(this.view.search_elements)
+                this.uri.loadFromStorage()
                 this.view.searchClicked.notify()
             }
             else {
@@ -39,15 +39,11 @@ export class SearchTableController extends DataTableController {
 
     }
 
-    loadData(data){
+    onSearchReturned(data){
         // console.log(data)
         let ret_data = data.data;
         this.number_of_records_available = ret_data.length;
         this.model.loadData(ret_data)
-        console.log('sort data');
-        console.log(this.view.sort);
-        this.model.sortData(this.view.sort)
-        this.model.original_data = ret_data;
         this.loadInitialData();
     }
     loadInitialData() {
@@ -88,6 +84,7 @@ export class SearchTableController extends DataTableController {
             }
         })
     }
+
 
     onSearch() {
         this.searching.notify();

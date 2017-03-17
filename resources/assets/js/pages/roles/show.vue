@@ -112,10 +112,15 @@
                     type: 'record',
                     data: this.data.role,
                     table_definition: td,
+                    modal:true,//edit and create
                     deleteSuccess(){
                         //back to roles
                         self.$router.push('/roles');
                     },
+                    onCreate(id){
+                        //back to roles
+                        self.$router.push('/roles/'+id);
+                    }
 
                 })
                 roleTable.addTo('awesome_table_div');

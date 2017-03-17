@@ -14,9 +14,14 @@ class RoleController extends Controller
         $search = $data['search_fields'];
         $name = $search[ $table_name . 'name' ];
         $id = $search[ $table_name . 'id' ];
+        $parent = $search[ $table_name . 'parent_id' ];
+
 
         $q = Role::where('name', 'LIKE', "%{$name}%")
             ->where('id', 'LIKE', "%{$id}%");
+        if($parent!='null'){
+            $q->where('parent_id', '=', $parent);
+        }
 
         $return_data = $q->get();
         return response()->json([

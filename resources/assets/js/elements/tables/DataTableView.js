@@ -12,7 +12,6 @@ export class DataTableView extends TableView {
         //use these to set and track sorting
         this.header_elements_array = []; //array of th's
         this.header_elements = {}; //th's by name
-        this.sort = []; //[{name:'asc'},{name:'desc'}....]
 
     }
 
@@ -146,7 +145,7 @@ export class DataTableView extends TableView {
             th.sort = 0;
         })
         //now based on the sort set the format
-        this.sort.forEach(sort_value => {
+        this.model.sort.forEach(sort_value => {
             //should be db_field : asc or desc
             let keys = Object.keys(sort_value);
             let db_field = keys[0];

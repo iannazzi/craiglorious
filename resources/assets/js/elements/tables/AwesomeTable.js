@@ -5,6 +5,7 @@ import {DataTableController}  from './DataTableController';
 import {TableModel}  from './TableModel';
 import {SearchTableView}  from '../../elements/tables/SearchTableView';
 import {SearchTableController}  from '../../elements/tables/SearchTableController';
+import {FormModal}  from '../../elements/modal/FormModal';
 
 
 export class AwesomeTable {
@@ -12,6 +13,7 @@ export class AwesomeTable {
 
         //table types: record, collection,
         //record table_type create edit show  i.e. read write
+        this.formModal = new FormModal(options.table_definition.name + '_formModal')
 
         this.options = options;
         switch (this.options.type) {
@@ -35,12 +37,25 @@ export class AwesomeTable {
     addTo(div_id){
         let self = this;
         $(function () {
-            let div = document.getElementById(div_id);
-            div.appendChild(self.render());
-            self.controller.loadPageEvent.notify();
+            if(self.options.modal){
+                self.options.table_definition.access = "write";
+                let div = document.getElementById(div_id);
+                div.appendChild(self.formModal.create());
+                self.formModal.add(self.render());
+
+                self.formModal.show();
+            }
+            else
+            {
+                let div = document.getElementById(div_id);
+                div.appendChild(self.render());
+                self.controller.loadPageEvent.notify();
+            }
+
 
         });
     }
+
 
     render() {
         switch (this.options.type) {

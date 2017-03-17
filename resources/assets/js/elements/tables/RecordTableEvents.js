@@ -76,7 +76,7 @@ export class RecordTableEvents extends TableEvents {
         view.saveClicked = new TableEvent(view);
         controller.view.saveClicked.attach(
             function () {
-                controller.submitSave();
+                controller.onSave();
             }
         );
         view.deleteClicked = new TableEvent(view);

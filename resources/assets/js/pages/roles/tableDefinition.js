@@ -213,7 +213,6 @@ export default function(data,page){
             "show_on_view": true,
             "show_on_edit": true,
             "show_on_create": true,
-            "search": "LIKE ANY BETWEEN EXACT",
             "word_wrap": true,
         },];
     let table_definition = {

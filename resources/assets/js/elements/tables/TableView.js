@@ -8,6 +8,8 @@ import {myParseFloat, round2, isNumber} from './math';
 import {isValueInArray} from '../../lib/array_help';
 import { TableEvents } from './TableEvent';
 import {ErrorModal} from '../modal/ErrorModal'
+import {FormModal} from '../modal/FormModal'
+
 
 
 export class TableView {
@@ -599,11 +601,11 @@ export class TableView {
         this.errorModal.hide();
     }
     showErrorModal(message){
-        console.log('show error modal');
         this.errorModal.addErrorMessage(message);
         this.errorModal.show();
         // $(this.errorModal).modal('show');
     }
+
 
 
 

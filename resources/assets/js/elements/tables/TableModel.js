@@ -18,6 +18,8 @@ export class TableModel {
         this.tdo = [];
         this.rdo = {};
         this.cdo = this.td.column_definition;
+        this.sort = []; //[{name:'asc'},{name:'desc'}....]
+
 
         this.modelChanged = new TableEvent(this);
         this.newRow = new TableEvent(this);
@@ -36,7 +38,6 @@ export class TableModel {
     loadOriginalData() {
         this.loadData(this.original_data);
     }
-
     loadData(data) {
         this.tdo = [];
         this.data = data;
@@ -46,6 +47,9 @@ export class TableModel {
             this.addDataRow(data[i]);
         }
         //this.modelChanged.notify();
+        console.log(this.sort);
+        this.sortData();
+        this.original_data = data;
     }
 
 
@@ -61,7 +65,7 @@ export class TableModel {
         }
     }
 
-    sortData(sort_array) {
+    sortData() {
         //TODO fix sort it kinda works but not really....
 
 
@@ -86,7 +90,7 @@ export class TableModel {
 
 
         let sort_stack = firstBy(function (v1, v2) { return 0 });
-        sort_array.forEach(sort => {
+        this.sort.forEach(sort => {
             let keys = Object.keys(sort);
             let name = keys[0];
             if(sort[keys[0]] =='asc')

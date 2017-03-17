@@ -38,7 +38,7 @@ export class RecordTableController extends TableController {
         })
     }
 
-    submitSave() {
+    onSave() {
         this.view.showWaitModal(true);
         let post_data = this.getPostData();
         //post_data = post_data[0];
@@ -53,14 +53,23 @@ export class RecordTableController extends TableController {
             success: function (result) {
                 console.log(result);
                 self.view.setViewShow();
+                self.view.showWaitModal(false);
                 switch (self.model.td.table_type) {
                     case 'create':
-                        window.location.href = self.model.td.route + '/' + result.id;
+
+                        if(typeof self.model.options.onCreate == "function")
+                        {
+                            self.model.options.onCreate(result.id);
+                        }
+                        else{
+                            alert ('add onCreate to table options');
+                        }
+                        //window.location.href = self.model.td.route + '/' + result.id;
                         break;
                     case 'edit':
                         //set the original data to the new data
                         self.model.original_data = self.getPostData();
-                        self.view.showWaitModal(false);
+
                         break;
                 }
 

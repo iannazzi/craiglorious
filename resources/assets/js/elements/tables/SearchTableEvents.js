@@ -23,7 +23,7 @@ export class SearchTableEvents {
         )
         controller.searchReturned.attach(
             function (sender, results) {
-                controller.loadData(results);
+                controller.onSearchReturned(results);
             }
         )
         controller.loadPageEvent.attach(
