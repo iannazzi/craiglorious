@@ -14,10 +14,10 @@ export class TableModel {
 
         this.original_data = options.data;
         this.options = options;
-        this.td = this.table_definition = options.table_definition;
+        this.td = this.table_definition = options;
         this.tdo = [];
         this.rdo = {};
-        this.cdo = this.td.column_definition;
+        this.cdo = this.options.column_definition;
         this.sort = []; //[{name:'asc'},{name:'desc'}....]
 
 

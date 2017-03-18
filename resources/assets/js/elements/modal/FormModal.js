@@ -4,7 +4,9 @@ export class FormModal {
         this.id = id;
         this.form_div = this.id +'_body';
     }
-    create() {
+    create(modal_body_html) {
+
+
         let body= this.id+'_body';
         //this one needs bootstrap
         let div = document.createElement('div');
@@ -15,7 +17,7 @@ export class FormModal {
     <div class="modal-content">
       
       <div id="${this.form_div}" class="modal-body">
-         
+         ${modal_body_html}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary btn-lg" id="confirmTrue" data-dismiss="modal">OK</button>
@@ -32,13 +34,6 @@ export class FormModal {
         });
         this.modal_div = return_div;
         return return_div;
-    }
-    add(html){
-        console.log(html)
-        let div = document.createElement('div');
-        div.appendChild(html);
-        $('#' + this.form_div).html(div);
-        //return div;
     }
     show()
     {

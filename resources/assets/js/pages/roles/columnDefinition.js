@@ -1,4 +1,4 @@
-export default function(data,page){
+export default function(data){
     let column_definition = [
         {
             "db_field": "id",
@@ -215,16 +215,5 @@ export default function(data,page){
             "show_on_create": true,
             "word_wrap": true,
         },];
-    let table_definition = {
-        "name": "roles",
-        "access": "READ",
-        "record_table_buttons": ['edit'],
-        "dynamic_table_buttons": [],
-        "table_type": page,
-        "route": "/roles",
-        "footer": [],
-        "header": [],
-        "column_definition": column_definition,
-    };
-    return table_definition;
+    return column_definition;
 }

@@ -424,7 +424,7 @@ export class DataTableView extends TableView {
         let self = this;
         let element;
 
-        let buttons = this.model.td.dynamic_table_buttons;
+        let buttons = this.model.td.table_buttons;
 
         if (buttons.includes('addRow')) {
             element = document.createElement('button');

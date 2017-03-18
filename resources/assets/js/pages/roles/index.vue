@@ -3,7 +3,8 @@
         <zzi-wait></zzi-wait>
         <div v-if="dataReady" id="data_table_view">
             <button class="btn-new" @click="$router.push('/roles/create')"><i class="fa fa-plus" aria-hidden="true"></i>New
-                Role</button>
+                Role
+            </button>
 
         </div>
     </div>
@@ -13,7 +14,7 @@
 
 <script>
 
-    import tableDefinition from './tableDefinition'
+    import columnDefinition from './columnDefinition'
     import {AwesomeTable} from '../../elements/tables/AwesomeTable';
 
 
@@ -22,7 +23,7 @@
             return {
                 data: {},
                 dataReady: false,
-        }
+            }
         },
         props: ['page'],
         mounted: function () {
@@ -45,14 +46,21 @@
             renderTable(){
                 let self = this;
                 let searchableTable = new AwesomeTable({
+
+                    name: "roles",
+                    access: "READ",
+                    table_buttons: [],
+                    table_type: self.page,
+                    route: "/roles",
+                    footer: [],
+                    header: [],
+                    column_definition: columnDefinition(self.data),
                     type: 'searchable',
-                    data: this.data,
-                    table_definition: tableDefinition(self.data, self.page),
-                    number_of_records_available:self.data.number_of_records_available,
+                    data: self.data,
+                    number_of_records_available: self.data.number_of_records_available,
                 })
 
                 searchableTable.addTo('data_table_view')
-
 
 
             }

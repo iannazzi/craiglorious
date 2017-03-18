@@ -13,9 +13,19 @@ export class AwesomeTable {
 
         //table types: record, collection,
         //record table_type create edit show  i.e. read write
-        this.formModal = new FormModal(options.table_definition.name + '_formModal')
+
 
         this.options = options;
+
+        let self = this;
+        // $(function () {
+        //     self.controller.loadPageEvent.notify();
+        // });
+    }
+
+    addTo(div_id) {
+        console.log(div_id)
+        this.div = document.getElementById(div_id);
         switch (this.options.type) {
             case 'record':
                 this.recordTable();
@@ -27,65 +37,80 @@ export class AwesomeTable {
                 this.searchableTable();
                 break;
             default:
-                console.log('missed the type');
+                console.log('missed the type in the table definition');
         }
-        let self = this;
-        // $(function () {
-        //     self.controller.loadPageEvent.notify();
-        // });
     }
-    addTo(div_id){
-        let self = this;
-        $(function () {
-            if(self.options.modal){
-                self.options.table_definition.access = "write";
-                let div = document.getElementById(div_id);
-                div.appendChild(self.formModal.create());
-                self.formModal.add(self.render());
 
-                self.formModal.show();
-            }
-            else
-            {
-                let div = document.getElementById(div_id);
-                div.appendChild(self.render());
-                self.controller.loadPageEvent.notify();
-            }
+
+    recordTable() {
+        console.log(this.div)
+        let model = new TableModel(this.options),
+            view = new RecordTableView(model),
+            controller = new RecordTableController(model, view),
+            self = this;
+
+
+        if (typeof this.options.edit_display === undefined) {
+            this.options.edit_display = 'on_page';
+        }
+        switch (this.options.edit_display) {
+            case 'on_page':
+                this.div.appendChild(view.recordTable());
+                break;
+            case 'modal':
+                let view2 = new RecordTableView(model),
+                    controller2 = new RecordTableController(model, view2),
+                    formModal = new FormModal(this.options.name + '_formModal');
+
+                let table1 = view.recordTable();
+                let table2 = view2.recordTable();
+                this.div.appendChild(table1);
+                this.div.appendChild(formModal.create(table2));
+
+                this.options.onEditClicked = function () {
+                    formModal.show();
+                }
+                this.options.onSaveSuccess = function () {
+                    formModal.hide();
+                }
+                break;
+
+            case 'modal_only':
+                let table = view.recordTable();
+                this.div.appendChild(formModal.create(table));
+                this.formModal = formModal;
+
+        }
+
+
+        $(function () {
+
 
 
         });
-    }
 
 
-    render() {
-        switch (this.options.type) {
-            case 'record':
-                return this.view.recordTable();
-            case 'collection':
-                return this.view.dataTable();
-            case 'searchable':
-                return this.view.searchTable();
-            default:
-                console.log('missed the return buddy');
-        }
 
     }
-
-    recordTable() {
-        this.model = new TableModel(this.options);
-        this.view = new RecordTableView(this.model);
-        this.controller = new RecordTableController(this.model, this.view);
+    showModal(){
+        this.formModal.show();
     }
-
     collectionTable() {
         this.model = new TableModel(this.options);
         this.view = new DataTableView(this.model);
         this.controller = new DataTableController(this.model, this.view);
+
+
+        // return this.view.dataTable();
+
     }
 
     searchableTable() {
         this.model = new TableModel(this.options);
         this.view = new SearchTableView(this.model);
         this.controller = new SearchTableController(this.model, this.view);
+
+        // return this.view.searchTable();
+
     }
 }

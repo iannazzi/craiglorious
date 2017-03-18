@@ -15,21 +15,10 @@ export class RecordTableEvents extends TableEvents {
 
                 console.log('load page event...')
 
-                switch (controller.model.td.table_type) {
-                    case 'create':
-                        //show save/cancel
-                        controller.model.td.access = 'write';
-                        controller.view.setViewCreate()
-                        controller.setFocusToFirstInput();
-                        break;
-                    case 'edit':
-                        controller.model.td.access = 'write';
-                        controller.view.setViewEdit()
-                        break;
-                    case 'show':
-                        controller.view.setViewShow()
-                        break;
-                }
+
+                //view.updateTable();
+
+
             }
         );
         view.inputChanged = new TableEvent(view);
@@ -50,9 +39,17 @@ export class RecordTableEvents extends TableEvents {
         view.editClicked = new TableEvent(view);
         controller.view.editClicked.attach(
             function () {
-                controller.model.td.table_type = 'edit';
-                controller.view.setViewEdit();
-                controller.setFocusToFirstInput();
+                if(typeof controller.model.options.onEdit == 'function'){
+
+                }
+                else
+                {
+                    controller.model.td.table_type = 'edit';
+                    controller.view.setViewEdit();
+                    controller.setFocusToFirstInput();
+                }
+
+
 
             }
         );

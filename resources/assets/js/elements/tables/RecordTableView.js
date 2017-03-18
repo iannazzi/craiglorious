@@ -31,26 +31,26 @@ export class RecordTableView extends TableView {
         return this.recordTableDiv;
     }
 
+
     createButtons() {
+
         let div = document.createElement('div');
         div.id = this.id + '_buttons';
         div.className = 'record_table_buttons';
 
-        if (this.model.td.record_table_buttons.includes('edit')) {
-            div.appendChild(this.createEditButton());
+        if(this.model.td.access == 'read'){
+            if (this.model.td.table_buttons.includes('edit')) {
+                div.appendChild(this.createEditButton());
+            }
+            if (this.model.td.table_buttons.includes('delete')) {
+                div.appendChild(this.createDeleteButton());
+            }
+        }
+        else {
             div.appendChild(this.createCancelButton());
             div.appendChild(this.createSaveButton());
-            let self = this;
-            let deleteButton = document.createElement('button');
-            deleteButton.innerHTML = 'Delete';
-            deleteButton.onclick = function () {
-                self.deleteClicked.notify();
-            }
-            deleteButton.className = 'delete';
-            this.deleteButton = deleteButton;
-            div.appendChild(deleteButton);
-
         }
+
         return div
 
     }
@@ -127,34 +127,6 @@ export class RecordTableView extends TableView {
             cell.appendChild(element);
         }
 
-    }
-
-    setViewCreate() {
-        this.model.td.access = 'write';
-        console.log(this.model.tdo)
-        $(this.editButton).hide();
-        $(this.deleteButton).hide();
-        $(this.saveButton).show();
-        $(this.cancelButton).show();
-        this.updateTable();
-    }
-
-    setViewEdit() {
-        this.model.td.access = 'write';
-        $(this.editButton).hide();
-        $(this.deleteButton).hide();
-        $(this.saveButton).show();
-        $(this.cancelButton).show();
-        this.updateTable();
-    }
-
-    setViewShow() {
-        this.model.td.access = 'read';
-        $(this.editButton).show();
-        $(this.deleteButton).show();
-        $(this.saveButton).hide();
-        $(this.cancelButton).hide();
-        this.updateTable();
     }
 
 }

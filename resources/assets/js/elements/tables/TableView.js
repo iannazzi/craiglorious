@@ -554,6 +554,17 @@ export class TableView {
         this.cancelButton = cancelButton;
         return cancelButton;
     }
+    createDeleteButton(){
+        let self = this;
+        let deleteButton = document.createElement('button');
+        deleteButton.innerHTML = 'Delete';
+        deleteButton.onclick = function () {
+            self.deleteClicked.notify();
+        }
+        deleteButton.className = 'delete';
+        this.deleteButton = deleteButton;
+        return deleteButton;
+    }
     createSaveButton(){
         let saveButton = document.createElement('button');
         saveButton.innerHTML = 'Save';

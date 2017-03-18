@@ -8,6 +8,11 @@
 </style>
 <script>
 
+
+    $.get( "http://api.openweathermap.org/data/2.5/forecast/city?id=524901&APPID=3e9e6d434403d69e58e548cd7464db2e", function( data ) {
+        console.log('weather feed: ');
+        console.log(data);
+    });
     export default {
         data() {
             return {}
@@ -22,7 +27,6 @@
                     height: 100,
                     header:false,
                     events: '/calendar',
-
                     eventClick:  function(event, jsEvent, view) {
                         window.location='/dashboard#/calendar?event='+event.id;
 //                        $('#modalTitle').html(event.title);

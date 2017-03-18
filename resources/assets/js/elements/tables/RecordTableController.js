@@ -121,7 +121,7 @@ export class RecordTableController extends TableController {
         });
     }
     setFocusToFirstInput() {
-
+        if(this.checkRead()) return;
         let elements = this.view.elements_array;
         for (let i = 0; i < elements.length; i++) {
 
@@ -147,9 +147,16 @@ export class RecordTableController extends TableController {
 
 
         }
-
-
-
+    }
+    checkWrite()
+    {
+        let write = false;
+        if(this.model.td.access.toUpperCase() == "WRITE") write = true;
+        return write;
+    }
+    checkRead()
+    {
+        return ! this.checkWrite();
     }
 
 
