@@ -17,11 +17,8 @@ export class FormModal {
     <div class="modal-content">
       
       <div id="${this.form_div}" class="modal-body">
-      <p>vo vo </p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-lg" id="confirmTrue" data-dismiss="modal">OK</button>
-      </div>
+      
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

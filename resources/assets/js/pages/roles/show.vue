@@ -68,14 +68,22 @@
         },
         methods: {
             showModalTable(){
-                let roleTable = this.roleTable();
-                roleTable.options.table_view = 'edit';
-                roleTable.options.edit_display = 'modal_only';
-                roleTable.options.access = 'write';
-                roleTable.addTo('awesome_table_div');
-                roleTable.showModal();
+                let self = this;
+                let roleTableModal = this.createRoleTable();
+                roleTableModal.options.table_view = 'edit';
+                roleTableModal.options.edit_display = 'modal_only';
+                roleTableModal.options.access = 'write';
+                self.roleTableModal = roleTableModal;
+                roleTableModal.options.onSaveSuccess = function(){
+                    self.roleTable.model.tdo = self.roleTableModal.modelModal.tdo;
+                    self.roleTable.view.updateTable();
+                    roleTableModal.hideModal();
+                }
+                roleTableModal.addTo('awesome_table_div');
+                roleTableModal.showModal();
+
             },
-            roleTable(){
+            createRoleTable(){
                 let self = this;
                 let access,edit_display;
                 let onEditClick =function (id) {};
@@ -156,7 +164,8 @@
 
                 let self = this;
 
-                let roleTable = this.roleTable();
+                let roleTable = this.createRoleTable();
+                self.roleTable = roleTable;
 
                 let access_table_column_definition = [
                     {

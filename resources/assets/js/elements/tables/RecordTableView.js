@@ -104,7 +104,6 @@ export class RecordTableView extends TableView {
         this.tbody = tbody;
         this.cdo.forEach((col_def) => {
 
-
             switch (this.model.td.table_view) {
                 case 'create':
                     if (col_def['show_on_create']) {

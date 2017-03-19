@@ -8,7 +8,7 @@ export class RecordTableEvents extends TableEvents {
         super(controller);
         let view = controller.view;
 
-
+        //##################    LOAD PAGE
         controller.loadPageEvent = new TableEvent(controller);
         controller.loadPageEvent.attach(
             function () {
@@ -21,6 +21,8 @@ export class RecordTableEvents extends TableEvents {
 
             }
         );
+
+        //##################   INPUT CHANGED
         view.inputChanged = new TableEvent(view);
         controller.view.inputChanged.attach(
             function () {
@@ -36,6 +38,8 @@ export class RecordTableEvents extends TableEvents {
                 //controller.view.updateIndividualSelectOptions();
             }
         );
+
+        //##################   EDIT CLICKED
         view.editClicked = new TableEvent(view);
         controller.view.editClicked.attach(
             function () {
@@ -58,6 +62,8 @@ export class RecordTableEvents extends TableEvents {
 
             }
         );
+
+        //##################   CANCEL CLICKED
         view.cancelClicked = new TableEvent(view);
         view.cancelClicked.attach(
             function () {
@@ -98,6 +104,8 @@ export class RecordTableEvents extends TableEvents {
 
             }
         );
+
+        //##################   SAVE CLICKED
         view.onSaveClick = new TableEvent(view);
         controller.view.onSaveClick.attach(
             function () {
@@ -105,32 +113,37 @@ export class RecordTableEvents extends TableEvents {
                 let post_data = controller.getPostData();
                 //post_data = post_data[0];
                 let data = {data: post_data, _method: 'put'};
+                console.log('POST data needed for testing')
                 console.log(JSON.stringify(data))
-                let self = controller;
+                console.log(JSON.stringify(controller.getPostData()))
+
                 $.ajax({
-                    url: self.model.td.route,
+                    url: controller.model.td.route,
                     // type: 'PATCH',
                     type: 'post',
                     data: data,
                     success: function (result) {
-                        self.onSaveSuccess.notify(result);
+                        console.log(JSON.stringify(controller.getPostData()))
+
+                        view.showWaitModal(false);
+                        controller.onSaveSuccess.notify(result);
                     },
                     error: function (response) {
                         console.log(response)
-                        self.view.showWaitModal(false);
-                        console.log(self.view.errorModal);
-                        self.view.showErrorModal(response.responseJSON.message);
+                        view.showWaitModal(false);
+                        view.showErrorModal(response.responseJSON.message);
                     }
                 });
             }
         );
 
+        //##################   SAVE SUCCESS
         controller.onSaveSuccess = new TableEvent(controller);
-
         controller.onSaveSuccess.attach(
             function (sender, result) {
-                console.log(controller.model.td.table_view);
-                controller.view.showWaitModal(false);
+
+
+
                 switch (controller.model.td.table_view) {
                     case 'create':
                         if (typeof controller.model.options.onCreateSaved === "function") {
@@ -154,6 +167,16 @@ export class RecordTableEvents extends TableEvents {
 
                         }
                         else if (controller.model.options.edit_display == 'modal_only') {
+
+                            console.log(result);
+                            console.log(JSON.stringify(controller.getPostData()))
+                            console.log(controller.model.td.table_view);
+                            console.log(controller.model.td.edit_display);
+
+
+                            console.log(JSON.stringify(controller.model.tdo))
+
+
                             console.log(result.id)
                             controller.model.options.onSaveSuccess(result.id);
 
@@ -169,9 +192,13 @@ export class RecordTableEvents extends TableEvents {
 
             }
         )
+
+        //##################   SAVE COMPLETE
         controller.saveComplete = new TableEvent(controller);
+
+        //##################   DELETE CLICKED
         view.onDeleteClick = new TableEvent(view);
-        controller.view.onDeleteClick.attach(
+        view.onDeleteClick.attach(
             function () {
                 controller.getConfirm('Are you sure about that delete?', function (result) {
                     if (result) {

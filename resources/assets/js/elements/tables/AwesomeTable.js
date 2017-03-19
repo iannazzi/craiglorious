@@ -84,25 +84,27 @@ export class AwesomeTable {
 
 
                 this.modelModal.options.onEditClicked = function () {
-                    self.modelModal.options.table_view = 'edit';
                     alert('why is there an edit button on the modal')
                 }
                 this.modelModal.options.onCancelClicked = function () {
                     self.viewModal.hideModalTable();
-
                 }
-                this.modelModal.options.onSaveSuccess = function () {
-
-
-                    console.log('save success');
-                    console.log(self.modelModal.data);
-                    self.model.data = self.modelModal.data;
-                    self.viewModal.hideModalTable();
-
-                    self.view.updateTable();
-
-
-                }
+                // this.modelModal.options.onSaveSuccess = function () {
+                //
+                //
+                //     console.log('save success');
+                //     console.log(JSON.stringify(self.modelModal.tdo));
+                //     console.log(JSON.stringify(self.model.tdo));
+                //     self.model.tdo = self.modelModal.tdo;
+                //     console.log(JSON.stringify(self.model.tdo));
+                //
+                //     self.viewModal.hideModalTable();
+                //
+                //     //i never drew this table.....
+                //     self.view.updateTable();
+                //
+                //
+                // }
                 this.div.appendChild(this.viewModal.createModalTable());
 
 

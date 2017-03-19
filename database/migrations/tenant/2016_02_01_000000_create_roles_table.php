@@ -35,7 +35,7 @@ class CreateRolesTable extends Migration
             $table->integer('po_max_open_past_cancel');
             $table->integer('po_max_received_not_invoiced');
             $table->boolean('active');
-            $table->text('comments')->nullable();
+            $table->text('comments');
             $table->timestamps();
         });
     }
