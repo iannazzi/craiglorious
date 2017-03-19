@@ -119,7 +119,7 @@ variable column
         "access": "Write",
         "dynamic_table_buttons": ['addRow','deleteRow','deleteAllRows', 'moveRows','copyRows', 'addColumn', 'deleteColumn', 'edit'],
 
-        "table_type": "KEY_VALUE INDEX",
+        "table_view": "KEY_VALUE INDEX",
         "post_url": "test",
         "footer": [],
         "header": [],

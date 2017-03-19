@@ -26,7 +26,7 @@ Individual create edit view
         "name": name,
         "access": "Write",
         "record_table_buttons": ['edit'],
-        "table_type": "show",
+        "table_view": "show",
         "post_url": "test",
         "footer": [],
         "header": [],
@@ -39,7 +39,7 @@ Individual create edit view
         view = new RecordTableView(model),
         controller = new RecordTableController(model, view);
 
-    div2.appendChild(view.recordTable());
+    div2.appendChild(view.createTable());
     $(function () {
         controller.loadPageEvent.notify();
     });

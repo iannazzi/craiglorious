@@ -4,7 +4,7 @@ export class FormModal {
         this.id = id;
         this.form_div = this.id +'_body';
     }
-    create(modal_body_html) {
+    create(modal_body) {
 
 
         let body= this.id+'_body';
@@ -17,7 +17,7 @@ export class FormModal {
     <div class="modal-content">
       
       <div id="${this.form_div}" class="modal-body">
-         ${modal_body_html}
+      <p>vo vo </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary btn-lg" id="confirmTrue" data-dismiss="modal">OK</button>
@@ -27,6 +27,7 @@ export class FormModal {
 </div><!-- /.modal -->
 `
         div.innerHTML = template;
+        $(div).find('#'+this.form_div).html(modal_body);
         let return_div = div.children[0];
         $(return_div).keypress(function (e) {
             if (e.which == 13) {

@@ -71,8 +71,9 @@
                 copyKey = false;
             });
             $(document).ready(function () {
+                let cal = $( "#calendar" );
 
-                $('#calendar').fullCalendar({
+                cal.fullCalendar({
                     //height: 650,
                     events: '/calendar',
                     selectable:true,
@@ -145,8 +146,8 @@
                     navLinks: true,
                     dayClick: function (date, jsEvent, view) {
                         if (view.name == 'month') {
-                            $('#calendar').fullCalendar('gotoDate', date);
-                            $('#calendar').fullCalendar('changeView', 'agendaWeek')
+                            cal.fullCalendar('gotoDate', date);
+                            cal.fullCalendar('changeView', 'agendaWeek')
                         }
                         else {
                             bus.$emit('add_calendar_entry', date)

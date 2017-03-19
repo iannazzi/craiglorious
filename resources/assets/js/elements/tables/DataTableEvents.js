@@ -27,7 +27,7 @@ export class DataTableEvents extends TableEvents{
         view.headerClicked = new TableEvent(view);
         view.editClicked = new TableEvent(view);
         view.cancelClicked = new TableEvent(view);
-        view.saveClicked = new TableEvent(view);
+        view.onSaveClick = new TableEvent(view);
 
         controller.createTableEvent.attach(
             function () {
@@ -54,7 +54,7 @@ export class DataTableEvents extends TableEvents{
 
             }
         );
-        controller.view.saveClicked.attach(
+        controller.view.onSaveClick.attach(
             function () {
                 controller.submitSave();
             }

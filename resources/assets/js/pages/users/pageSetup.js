@@ -174,7 +174,7 @@ export function pageSetup(server_response_data) {
         "access": "READ",
         "record_table_buttons": ['edit'],
         "dynamic_table_buttons": ['addRow', 'deleteRow', 'deleteAllRows', 'moveRows', 'copyRows', 'edit'],
-        "table_type": "KEY_VALUE INDEX",
+        "table_view": "KEY_VALUE INDEX",
         "route": "/users",
         "footer": [],
         "column_definition": column_definition,
@@ -182,19 +182,19 @@ export function pageSetup(server_response_data) {
 
     switch (server_response_data.page) {
         case 'show':
-            table_definition.table_type = 'show';
+            table_definition.table_view = 'show';
             return show(table_definition, server_response_data);
             break;
         case 'create' :
-            table_definition.table_type = 'create';
+            table_definition.table_view = 'create';
             return show(table_definition, server_response_data);
             break;
         case 'edit' :
-            table_definition.table_type = 'edit';
+            table_definition.table_view = 'edit';
             return show(table_definition, server_response_data);
             break;
         case 'index':
-            table_definition.table_type = 'index';
+            table_definition.table_view = 'index';
             return search(table_definition, server_response_data)
 
             break;

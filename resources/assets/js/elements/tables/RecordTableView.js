@@ -11,11 +11,19 @@ export class RecordTableView extends TableView {
         super(model);
     }
 
-
-    recordTable() {
+    createModalTable(){
+        return this.formModal.create(this.createTable())
+    }
+    showModalTable(){
+        this.formModal.show();
+    }
+    hideModalTable(){
+        this.formModal.hide();
+    }
+    createTable() {
         console.log('creating table.....');
         this.recordTableDiv = this.createRecordTableDiv();
-        this.table = this.createTable();
+        this.table = this.createTableElement();
         this.updateTable();
         this.recordTableDiv.appendChild(this.table);
         this.recordTableDiv.appendChild(this.createButtons());
@@ -37,21 +45,29 @@ export class RecordTableView extends TableView {
         let div = document.createElement('div');
         div.id = this.id + '_buttons';
         div.className = 'record_table_buttons';
+        this.button_div = div;
+        this.updateButtons(div);
+        return div;
 
-        if(this.model.td.access == 'read'){
+
+    }
+
+    updateButtons() {
+
+        this.button_div.innerHTML = '';
+        if (this.model.td.access == 'read') {
             if (this.model.td.table_buttons.includes('edit')) {
-                div.appendChild(this.createEditButton());
+                this.button_div.appendChild(this.createEditButton());
             }
             if (this.model.td.table_buttons.includes('delete')) {
-                div.appendChild(this.createDeleteButton());
+                this.button_div.appendChild(this.createDeleteButton());
             }
         }
         else {
-            div.appendChild(this.createCancelButton());
-            div.appendChild(this.createSaveButton());
+            this.button_div.appendChild(this.createCancelButton());
+            this.button_div.appendChild(this.createSaveButton());
         }
 
-        return div
 
     }
 
@@ -67,7 +83,7 @@ export class RecordTableView extends TableView {
         return div;
     }
 
-    createTable() {
+    createTableElement() {
 
         let tbl = document.createElement('table');
         tbl.id = this.id;
@@ -88,20 +104,21 @@ export class RecordTableView extends TableView {
         this.tbody = tbody;
         this.cdo.forEach((col_def) => {
 
-            switch (this.model.td.table_type) {
+
+            switch (this.model.td.table_view) {
                 case 'create':
-                    if (col_def['show_on_create']){
-                        this.addRow(tbody,col_def);
+                    if (col_def['show_on_create']) {
+                        this.addRow(tbody, col_def);
                     }
                     break;
                 case 'edit':
-                    if (col_def['show_on_edit']){
-                        this.addRow(tbody,col_def);
+                    if (col_def['show_on_edit']) {
+                        this.addRow(tbody, col_def);
                     }
                     break;
                 case 'show':
-                    if (col_def['show_on_view']){
-                        this.addRow(tbody,col_def);
+                    if (col_def['show_on_view']) {
+                        this.addRow(tbody, col_def);
                     }
                     break;
                 default:
@@ -109,8 +126,9 @@ export class RecordTableView extends TableView {
             }
         })
     }
-    addRow(tbody, col_def){
-        if(col_def.type != 'row_checkbox' && col_def.type != 'row_number'){
+
+    addRow(tbody, col_def) {
+        if (col_def.type != 'row_checkbox' && col_def.type != 'row_number') {
             let tr = tbody.insertRow();
             let th = document.createElement('th');
             let caption = col_def.db_field;
@@ -129,4 +147,10 @@ export class RecordTableView extends TableView {
 
     }
 
+    setViewToShow() {
+        this.model.td.table_view = 'show';
+        this.model.td.access = 'read';
+        this.updateTable();
+        this.updateButtons();
+    }
 }

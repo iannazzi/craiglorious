@@ -9,7 +9,7 @@ export function show(table_definition, server_response_data) {
     let list_message = 'Back To List Of Users';
     let new_user_message = 'New User';
     let message;
-    switch(table_definition.table_type){
+    switch(table_definition.table_view){
         case 'show':
         case 'edit':
             message = 'User ' + server_response_data.data[0].username;
@@ -45,7 +45,7 @@ export function show(table_definition, server_response_data) {
     h.innerHTML = message;
 
     div.appendChild(h);
-    div.appendChild(view.recordTable());
+    div.appendChild(view.createTable());
     $(function () {
         controller.loadPageEvent.notify();
     });

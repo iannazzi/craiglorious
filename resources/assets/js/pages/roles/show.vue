@@ -68,8 +68,8 @@
         },
         methods: {
             showModalTable(){
-
                 let roleTable = this.roleTable();
+                roleTable.options.table_view = 'edit';
                 roleTable.options.edit_display = 'modal_only';
                 roleTable.options.access = 'write';
                 roleTable.addTo('awesome_table_div');
@@ -77,20 +77,23 @@
             },
             roleTable(){
                 let self = this;
-                let access,edit;
+                let access,edit_display;
                 let onEditClick =function (id) {};
                 switch(this.page){
                     case 'create':
                         access = 'write';
-                        edit = 'on_page';
+                        edit_display = 'on_page';
                         break;
                     case 'edit':
                         access = 'write';
-                        edit = 'on_page';
+                        edit_display = 'on_page';
+                        onEditClick = function (id) {
+                            self.$router.push('/roles/'+id+'/edit');
+                        };
                         break;
                     case 'show':
                         access = 'read';
-                        edit = 'on_page';
+                        edit_display = 'on_page';
                         onEditClick = function (id) {
                             self.$router.push('/roles/'+id+'/edit');
                         };
@@ -102,29 +105,25 @@
                     route: "/roles",
                     column_definition: columnDefinition(self.data),
                     table_buttons: ['edit','delete'],
+
+
                     type: 'record', //awesome table record, collection or searchable
-
-                    //this needs to be killed....
-                    table_type: self.page, //router comes back to the view with create edit or show
-
-
+                    table_view: self.page, //create, edit, and show pages: columns respond differnetly to
                     //this works for all tables:
-                    access: access, //useless attribute? not really....
+                    access: access, //read vs write
 
-                    edit_display: edit,
+                    edit_display: edit_display,
                     // on_page add one table
                     // modal add table + table in modal
                     // modal_only add modal table
                     // new_page ..... nope just call onEdit
 
 
-                    onDeleteSuccess(){
-                        //back to roles
-                        self.$router.push('/roles');
-                    },
+
                     onEditClick:onEditClick,
                     onSaveClick(id){
                         //first save the table.
+                        console.log('ehhh')
                         this.save();
                         // opt 1 close the modal
                         this.modal.hide();
@@ -134,16 +133,19 @@
                         //option 2 go somewhere
 
                     },
-                    onSaveSuccess(){
-                        //default to close modal if present
-                        //reload draw table
-                        //self.$router.push('/roles/'+id);
+
+                    onDeleteSuccess(){
+                        //back to roles
+                        self.$router.push('/roles');
                     },
-                    onCreateClick(id){
+                    onCreateSaved(id){
                         //pop up a modal
                         // this.create() //check the display
                         //back to roles
                         self.$router.push('/roles/'+id);
+                    },
+                    onCancelCreateClick(){
+                        self.$router.push('/roles');
                     }
 
                 })
@@ -182,7 +184,7 @@
                     access: "READ",
 
                     table_buttons: ['edit'],
-                    table_type: "index",//record
+                    table_view: "index",//record
                     type: 'collection',
 
                     route: "/roles",

@@ -5,14 +5,13 @@ import {DataTableController}  from './DataTableController';
 import {TableModel}  from './TableModel';
 import {SearchTableView}  from '../../elements/tables/SearchTableView';
 import {SearchTableController}  from '../../elements/tables/SearchTableController';
-import {FormModal}  from '../../elements/modal/FormModal';
 
 
 export class AwesomeTable {
     constructor(options) {
 
         //table types: record, collection,
-        //record table_type create edit show  i.e. read write
+        //record table_view create edit show  i.e. read write
 
 
         this.options = options;
@@ -43,11 +42,15 @@ export class AwesomeTable {
 
 
     recordTable() {
-        console.log(this.div)
-        let model = new TableModel(this.options),
-            view = new RecordTableView(model),
-            controller = new RecordTableController(model, view),
-            self = this;
+        this.model = new TableModel(this.options);
+        this.view = new RecordTableView(this.model);
+        this.controller = new RecordTableController(this.model, this.view);
+
+        this.modelModal = new TableModel(this.options);
+        this.viewModal = new RecordTableView(this.modelModal);
+        this.controllerModal = new RecordTableController(this.modelModal, this.viewModal);
+
+        let self = this;
 
 
         if (typeof this.options.edit_display === undefined) {
@@ -55,30 +58,53 @@ export class AwesomeTable {
         }
         switch (this.options.edit_display) {
             case 'on_page':
-                this.div.appendChild(view.recordTable());
+                this.div.appendChild(this.view.createTable());
                 break;
             case 'modal':
-                let view2 = new RecordTableView(model),
-                    controller2 = new RecordTableController(model, view2),
-                    formModal = new FormModal(this.options.name + '_formModal');
 
-                let table1 = view.recordTable();
-                let table2 = view2.recordTable();
-                this.div.appendChild(table1);
-                this.div.appendChild(formModal.create(table2));
+                this.div.appendChild(this.view.createTable());
+                this.div.appendChild(this.viewModal.createModalTable());
 
-                this.options.onEditClicked = function () {
-                    formModal.show();
+                this.modelModal.options.onEditClicked = function () {
+                    self.viewModal.showModalTable();
                 }
-                this.options.onSaveSuccess = function () {
-                    formModal.hide();
+                this.modelModal.options.onSaveSuccess = function () {
+                    console.log('save success');
+                    console.log(self.modelModal.data);
+                    self.model.data = self.modelModal.data;
+                    self.viewModal.hideModalTable();
+                    self.view.updateTable();
+                }
+                this.modelModal.options.onCancelClicked = function () {
+                    self.viewModal.hideModalTable();
                 }
                 break;
 
             case 'modal_only':
-                let table = view.recordTable();
-                this.div.appendChild(formModal.create(table));
-                this.formModal = formModal;
+
+
+                this.modelModal.options.onEditClicked = function () {
+                    self.modelModal.options.table_view = 'edit';
+                    alert('why is there an edit button on the modal')
+                }
+                this.modelModal.options.onCancelClicked = function () {
+                    self.viewModal.hideModalTable();
+
+                }
+                this.modelModal.options.onSaveSuccess = function () {
+
+
+                    console.log('save success');
+                    console.log(self.modelModal.data);
+                    self.model.data = self.modelModal.data;
+                    self.viewModal.hideModalTable();
+
+                    self.view.updateTable();
+
+
+                }
+                this.div.appendChild(this.viewModal.createModalTable());
+
 
         }
 
@@ -86,15 +112,18 @@ export class AwesomeTable {
         $(function () {
 
 
-
         });
 
 
+    }
 
+    showModal() {
+        this.viewModal.showModalTable();
     }
-    showModal(){
-        this.formModal.show();
+    hideModal() {
+        this.viewModal.hideModalTable();
     }
+
     collectionTable() {
         this.model = new TableModel(this.options);
         this.view = new DataTableView(this.model);

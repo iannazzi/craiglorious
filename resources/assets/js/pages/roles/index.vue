@@ -50,7 +50,7 @@
                     name: "roles",
                     access: "READ",
                     table_buttons: [],
-                    table_type: self.page,
+                    table_view: self.page,
                     route: "/roles",
                     footer: [],
                     header: [],

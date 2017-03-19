@@ -23,7 +23,7 @@ export class RecordTableController extends TableController {
     copyTable() {
         this.cdo.forEach((col_def) => {
             let element = this.view.elements[col_def.db_field];
-            switch (this.model.td.table_type) {
+            switch (this.model.td.table_view) {
                 case 'create':
                     if (col_def['show_on_create']){
                         this.copyElementValueToModel(element, col_def, 0);
@@ -39,50 +39,7 @@ export class RecordTableController extends TableController {
     }
 
     onSave() {
-        this.view.showWaitModal(true);
-        let post_data = this.getPostData();
-        //post_data = post_data[0];
-        let data = {data: post_data, _method: 'put'};
-        console.log(JSON.stringify(data))
-        let self = this;
-        $.ajax({
-            url: self.model.td.route,
-            // type: 'PATCH',
-            type: 'post',
-            data: data,
-            success: function (result) {
-                console.log(result);
-                self.view.setViewShow();
-                self.view.showWaitModal(false);
-                switch (self.model.td.table_type) {
-                    case 'create':
 
-                        if(typeof self.model.options.onCreate == "function")
-                        {
-                            self.model.options.onCreate(result.id);
-                        }
-                        else{
-                            alert ('add onCreate to table options');
-                        }
-                        //window.location.href = self.model.td.route + '/' + result.id;
-                        break;
-                    case 'edit':
-                        //set the original data to the new data
-                        self.model.original_data = self.getPostData();
-
-                        break;
-                }
-
-                self.saveComplete.notify();
-                //switch the uri to the new id....
-            },
-            error: function (response) {
-                console.log(response)
-                self.view.showWaitModal(false);
-                console.log(self.view.errorModal);
-                self.view.showErrorModal(response.responseJSON.message);
-            }
-        });
     }
 
     getConfirm(confirmMessage, callback) {
@@ -102,24 +59,7 @@ export class RecordTableController extends TableController {
         });
     }
 
-    delete() {
-        let self = this;
-        self.view.showWaitModal(true);
-        //let self2 = self;
-        let data = {_method: 'delete', data: {id: self.model.tdo[0]['id']['data']}};
-        //console.log(JSON.stringify(data));
-        $.ajax({
-            url: self.model.td.route,
-            type: 'post',
-            data: data,
-            success: function (result) {
-                //self.view.showWaitModal(false);
-                if(self.model.options.deleteSuccess){
-                    self.model.options.deleteSuccess();
-                }
-            }
-        });
-    }
+
     setFocusToFirstInput() {
         if(this.checkRead()) return;
         let elements = this.view.elements_array;

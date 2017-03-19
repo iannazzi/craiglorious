@@ -8,7 +8,7 @@ export default class TableDefinition {
             "name": "name",
             "access": "READ WRITE",
             "buttons": ['addRow','deleteRow','deleteAllRows', 'moveRows','copyRows', 'addColumn', 'deleteColumn', 'edit'],
-            "table_type": "index show create edit",
+            "table_view": "index show create edit",
             "route": "vendors  routes: vendor post is search, vendor put vendor patch vendor delete ",
             "footer": [],
             "header": [],

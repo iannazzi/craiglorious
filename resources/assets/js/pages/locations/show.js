@@ -13,7 +13,7 @@ export function show(table_definition, server_response_data) {
 
     let list_message = 'Back To List Of Locations';
     let message;
-    switch(table_definition.table_type){
+    switch(table_definition.table_view){
         case 'show':
         case 'edit':
             message = 'Location: ' + server_response_data.data[0].name;
@@ -38,7 +38,7 @@ export function show(table_definition, server_response_data) {
     let h = document.createElement('h2');
    h.innerHTML = message;
     div.appendChild(h);
-    div.appendChild(view.recordTable());
+    div.appendChild(view.createTable());
     $(function () {
         controller.loadPageEvent.notify();
     });

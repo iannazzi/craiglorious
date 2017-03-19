@@ -16,7 +16,7 @@ export function DataTableTest(column_definition, data) {
         "name": name,
         "access": "edit",
         "dynamic_table_buttons": ['addRow','deleteRow','moveRows','deleteAllRows','copyRows','edit'],
-        "table_type": "KEY_VALUE INDEX",
+        "table_view": "KEY_VALUE INDEX",
         "post_url": "test",
         "footer": [],
         "header": [],

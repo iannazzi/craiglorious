@@ -13,11 +13,14 @@ import {FormModal} from '../modal/FormModal'
 
 
 export class TableView {
+
+
     constructor(model){
         this.model = model;
         this.cdo = model.td.column_definition;
         this.id = this.model.td.name;
         this.errorModal = new ErrorModal(this.model.td.name + '_errorModal');
+        this.formModal = new FormModal(this.model.td.name + '_formModal');
         this.name = this.id;
     }
     checkWrite()
@@ -26,6 +29,7 @@ export class TableView {
         if(this.model.td.access.toUpperCase() == "WRITE") write = true;
         return write;
     }
+
     createElement(data, col_def, active_cell) {
 
         let db_field = col_def['db_field'];
@@ -296,7 +300,7 @@ export class TableView {
 
     }
     createLink(col_def,data) {
-        if(this.model.td.table_type == 'index')
+        if(this.model.td.table_view == 'index')
         {
             let a = document.createElement('a');
             a.href =   'dashboard#/' + col_def['route'] + '/'  + data;
@@ -559,7 +563,7 @@ export class TableView {
         let deleteButton = document.createElement('button');
         deleteButton.innerHTML = 'Delete';
         deleteButton.onclick = function () {
-            self.deleteClicked.notify();
+            self.onDeleteClick.notify();
         }
         deleteButton.className = 'delete';
         this.deleteButton = deleteButton;
@@ -571,7 +575,7 @@ export class TableView {
         saveButton.className = 'save';
         let self = this;
         saveButton.onclick = function () {
-            self.saveClicked.notify();
+            self.onSaveClick.notify();
         }
         this.saveButton = saveButton;
         return saveButton;
