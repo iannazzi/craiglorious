@@ -39,3 +39,27 @@
  {
    background-color: $magic-yellow;
  }
+
+.data_table_edit_buttons button {
+  @extend .btn ;
+  @extend .btn-default;
+  @extend .btn-lg;
+  margin: 5px 5px 5px 0px;
+
+}
+.data_table_edit_buttons .edit {
+  @extend .btn-primary;
+  margin: 5px 5px 5px 0px;
+}
+.data_table_edit_buttons .save {
+  @extend .btn-primary;
+  margin: 5px 5px 5px 0px;
+}
+.data_table_edit_buttons .cancel {
+  @extend .btn-danger-light;
+  margin: 5px 5px 5px 0px;
+}
+.data_table_edit_buttons .delete {
+  @extend .btn-danger-light;
+  margin: 5px 5px 5px 0px;
+}

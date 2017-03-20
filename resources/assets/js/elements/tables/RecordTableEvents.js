@@ -44,6 +44,7 @@ export class RecordTableEvents extends TableEvents {
         controller.view.editClicked.attach(
             function () {
                 if (typeof controller.model.options.onEditClicked == 'function') {
+
                     controller.model.options.onEditClicked();
                     console.log('using custom onEditClicked')
                     console.log(controller.model.options)
@@ -142,8 +143,7 @@ export class RecordTableEvents extends TableEvents {
         controller.onSaveSuccess.attach(
             function (sender, result) {
 
-
-
+                console.log('freag')
                 switch (controller.model.td.table_view) {
                     case 'create':
                         if (typeof controller.model.options.onCreateSaved === "function") {

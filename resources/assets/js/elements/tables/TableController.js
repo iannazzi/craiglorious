@@ -65,7 +65,6 @@ export class TableController {
                 if(array === false)
                 {
                     this.model.tdo[r][col_def['db_field']]['data'] = element.value;
-                    console.log(element.value)
                 }
                 else
                 {

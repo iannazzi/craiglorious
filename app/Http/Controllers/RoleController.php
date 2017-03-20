@@ -158,6 +158,19 @@ class RoleController extends Controller
 
     }
 
+    public function updateRights(Request $request){
+
+        $data = $request->data;
+        $id = $request['additional_post_values']['id'];
+
+        $role = Role::findOrFail($id);
+
+        //now update
+
+
+
+    }
+
     public function destroy(Request $request)
     {
         $data = $request->data;

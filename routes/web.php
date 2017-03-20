@@ -30,6 +30,8 @@ Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
 
 
     CIRoutes::addRoutes('roles');
+    Route::put('roles/rights', 'RoleController@updateRights');
+
     CIRoutes::addRoutes('users');
     Route::get('user/', 'UserController@getPreferences');
     Route::post('user/', 'UserController@postPreferences');

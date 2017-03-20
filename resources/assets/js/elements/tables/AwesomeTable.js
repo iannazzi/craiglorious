@@ -23,8 +23,8 @@ export class AwesomeTable {
     }
 
     addTo(div_id) {
-        console.log(div_id)
         this.div = document.getElementById(div_id);
+        this.options.name = div_id;
         switch (this.options.type) {
             case 'record':
                 this.recordTable();
@@ -42,6 +42,7 @@ export class AwesomeTable {
 
 
     recordTable() {
+
         this.model = new TableModel(this.options);
         this.view = new RecordTableView(this.model);
         this.controller = new RecordTableController(this.model, this.view);
@@ -58,21 +59,35 @@ export class AwesomeTable {
         }
         switch (this.options.edit_display) {
             case 'on_page':
-                this.div.appendChild(this.view.createTable());
+                this.div.appendChild(this.view.createRecordTable());
                 break;
             case 'modal':
 
-                this.div.appendChild(this.view.createTable());
+                this.div.appendChild(this.view.createRecordTable());
                 this.div.appendChild(this.viewModal.createModalTable());
+                $('#role_form_modal').on('shown.bs.modal', function () {
+                    $('#role_form_modal :input:first').focus();
+                    $('#role_form_modal :input:first').select();
+                })
 
                 this.modelModal.options.onEditClicked = function () {
+
+
+                    self.modelModal.td.access = "write";
+                    self.modelModal.td.table_view = "edit";
                     self.viewModal.showModalTable();
+                    self.viewModal.updateTable();
+                    self.viewModal.updateButtons();
+                    self.controllerModal.setFocusToFirstInput();
                 }
                 this.modelModal.options.onSaveSuccess = function () {
                     console.log('save success');
+                    // self.modelModal.td.access = "write";
+                    // self.modelModal.td.edit_display = "edit";
                     console.log(self.modelModal.data);
                     self.model.data = self.modelModal.data;
                     self.viewModal.hideModalTable();
+                    self.model.tdo = self.modelModal.tdo;
                     self.view.updateTable();
                 }
                 this.modelModal.options.onCancelClicked = function () {
@@ -89,22 +104,7 @@ export class AwesomeTable {
                 this.modelModal.options.onCancelClicked = function () {
                     self.viewModal.hideModalTable();
                 }
-                // this.modelModal.options.onSaveSuccess = function () {
-                //
-                //
-                //     console.log('save success');
-                //     console.log(JSON.stringify(self.modelModal.tdo));
-                //     console.log(JSON.stringify(self.model.tdo));
-                //     self.model.tdo = self.modelModal.tdo;
-                //     console.log(JSON.stringify(self.model.tdo));
-                //
-                //     self.viewModal.hideModalTable();
-                //
-                //     //i never drew this table.....
-                //     self.view.updateTable();
-                //
-                //
-                // }
+
                 this.div.appendChild(this.viewModal.createModalTable());
 
 
@@ -130,6 +130,7 @@ export class AwesomeTable {
         this.model = new TableModel(this.options);
         this.view = new DataTableView(this.model);
         this.controller = new DataTableController(this.model, this.view);
+        this.div.appendChild(this.view.createCollectionTable());
 
 
         // return this.view.dataTable();
@@ -140,6 +141,7 @@ export class AwesomeTable {
         this.model = new TableModel(this.options);
         this.view = new SearchTableView(this.model);
         this.controller = new SearchTableController(this.model, this.view);
+        this.div.appendChild(this.view.createSearchTable());
 
         // return this.view.searchTable();
 

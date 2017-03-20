@@ -152,11 +152,23 @@ export class DataTableController extends TableController {
     }
 
     submitSave() {
-        this.view.showWaitModal(true);
+
+        //ahh i need additional data! custom...
         let post_data = this.getPostData();
         let data = {data: post_data, _method: 'put'};
+        console.log(this.model.td.additionalPostValues)
+        if(typeof this.model.td.additionalPostValues !== 'undefined'){
+            data['additional_post_values'] = this.model.td.additionalPostValues;
+        }
+
+
+        this.view.showWaitModal(true);
+
         console.log(JSON.stringify(data))
         let self = this;
+
+
+
         $.ajax({
             url: self.model.td.route,
             type: 'post',

@@ -61,7 +61,7 @@ export class RecordTableController extends TableController {
 
 
     setFocusToFirstInput() {
-        if(this.checkRead()) return;
+        // if(this.checkRead()) return;
         let elements = this.view.elements_array;
         for (let i = 0; i < elements.length; i++) {
 
@@ -71,8 +71,12 @@ export class RecordTableController extends TableController {
                 || elements[i].type == 'date'
 
             ) {
-                elements[i].focus();
-                elements[i].select();
+                console.log('setting focus to')
+                console.log(elements[i]);
+                $(elements[i]).focus();
+
+//                elements[i].focus();
+//                 elements[i].select();
                 break;
             }
 
@@ -80,7 +84,7 @@ export class RecordTableController extends TableController {
                 || elements[i].type == 'select-multi'
 
             ) {
-                elements[i].focus();
+                $(elements[i]).focus();
                 // elements[i].select();
                 break;
             }

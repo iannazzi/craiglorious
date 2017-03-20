@@ -15,7 +15,7 @@ export class DataTableView extends TableView {
 
     }
 
-    dataTable() {
+    createCollectionTable() {
         this.dataTableDiv = this.createDataTableDiv();
         this.table = this.createTable();
         this.dataTableDiv.appendChild(this.table);

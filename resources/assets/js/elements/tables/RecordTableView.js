@@ -12,7 +12,22 @@ export class RecordTableView extends TableView {
     }
 
     createModalTable(){
-        return this.formModal.create(this.createTable())
+
+
+        if (this.model.options.edit_display == 'modal') {
+
+
+        }
+        else if (this.model.options.edit_display == 'modal_only') {
+
+
+        }
+        this.formModal.setBody(this.createRecordTable());
+        let div = document.createElement('div');
+        div.appendChild(this.createSaveButton());
+        div.appendChild(this.createCancelButton());
+        this.formModal.setFooter(div);
+        return this.formModal.get();
     }
     showModalTable(){
         this.formModal.show();
@@ -20,13 +35,14 @@ export class RecordTableView extends TableView {
     hideModalTable(){
         this.formModal.hide();
     }
-    createTable() {
-        console.log('creating table.....');
+    createRecordTable() {
         this.recordTableDiv = this.createRecordTableDiv();
         this.table = this.createTableElement();
         this.updateTable();
         this.recordTableDiv.appendChild(this.table);
+
         this.recordTableDiv.appendChild(this.createButtons());
+
         this.waitModal = createWaitModal();
         this.recordTableDiv.appendChild(this.waitModal);
         this.confirmModal = createConfirmModal();
@@ -64,8 +80,30 @@ export class RecordTableView extends TableView {
             }
         }
         else {
-            this.button_div.appendChild(this.createCancelButton());
-            this.button_div.appendChild(this.createSaveButton());
+
+            if (this.model.options.edit_display == 'on_page') {
+                this.button_div.appendChild(this.createSaveButton());
+                this.button_div.appendChild(this.createCancelButton());
+            }
+            else if (this.model.options.edit_display == 'modal') {
+                // let div = document.createElement('div');
+                // div.appendChild(this.createSaveButton());
+                // div.appendChild(this.createCancelButton());
+                // this.formModal.footer(div);
+
+            }
+            else if (this.model.options.edit_display == 'modal_only') {
+                //the buttons are not applied until the form is shown...
+
+                // let div = document.createElement('div');
+                // div.appendChild(this.createSaveButton());
+                // div.appendChild(this.createCancelButton());
+                // this.formModal.footer(div);
+
+            }
+
+
+
         }
 
 
@@ -74,6 +112,9 @@ export class RecordTableView extends TableView {
 
     createRecordTableDiv() {
         let div = document.createElement('div');
+        div.className = 'record_table_div';
+        div.id = this.name + '_table_div';
+
         // div.addEventListener('keyup', function (event) {
         //     if (event.which == 13) {
         //         console.log('enter pressed')

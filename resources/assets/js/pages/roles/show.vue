@@ -11,15 +11,18 @@
                 Role
             </button>
 
-            <div id="awesome_table_div" class="recordTableView">
+            <div id="role" class="recordTableView">
                 <h2 v-if="page==='create'">New Role</h2>
                 <h2 v-else-if="data.role[0].id==1">Admin Role - No Editing is possible</h2>
                 <h2 v-else-if="page==='edit'">Edit Role {{data.role[0].name}} </h2>
                 <h2 v-else-if="page==='show'">Role {{data.role[0].name}}</h2>
             </div>
+            <div id="role_modal"></div>
+            <button @click="showModalTable">pop up modal table</button>
+            <div id="rights" ></div>
 
         </div>
-        <button @click="showModalTable">pop up modal table</button>
+
     </div>
 </template>
 
@@ -79,8 +82,12 @@
                     self.roleTable.view.updateTable();
                     roleTableModal.hideModal();
                 }
-                roleTableModal.addTo('awesome_table_div');
+                roleTableModal.addTo('role_modal');
                 roleTableModal.showModal();
+                $('#role_modal_form_modal').on('shown.bs.modal', function () {
+                    $('#role_modal_form_modal :input:first').focus();
+                    $('#role_modal_form_modal :input:first').select();
+                })
 
             },
             createRoleTable(){
@@ -101,22 +108,21 @@
                         break;
                     case 'show':
                         access = 'read';
-                        edit_display = 'on_page';
+                        edit_display = 'modal';
                         onEditClick = function (id) {
                             self.$router.push('/roles/'+id+'/edit');
                         };
                         break;
                 }
                 let roleTable = new AwesomeTable({
-                    name: "role",
+                    //name: "role",
                     data: self.data.role,
                     route: "/roles",
                     column_definition: columnDefinition(self.data),
                     table_buttons: ['edit','delete'],
 
-
                     type: 'record', //awesome table record, collection or searchable
-                    table_view: self.page, //create, edit, and show pages: columns respond differnetly to
+                    table_view: self.page, //index, create, edit, and show pages: columns respond differnetly to
                     //this works for all tables:
                     access: access, //read vs write
 
@@ -166,7 +172,8 @@
 
                 let roleTable = this.createRoleTable();
                 self.roleTable = roleTable;
-
+                console.log('role id');
+                console.log(self.data.role[0].id)
                 let access_table_column_definition = [
                     {
                         "db_field": "name",
@@ -188,15 +195,20 @@
                     },];
                 let accessTable = new AwesomeTable({
                     data: this.data.views,
-                    name: "views_table",
+                    //name: "views_table",
+                    additionalPostValues:{
+                            id: self.data.role[0].id
+                    },
+                    //tuck read/write away?
+                    //show: read
+                    //edit: write
+                    //create: write
 
-                    access: "READ",
-
+                    access: "read",
                     table_buttons: ['edit'],
                     table_view: "index",//record
                     type: 'collection',
-
-                    route: "/roles",
+                    route: "/roles/rights",
                     column_definition: access_table_column_definition,
                 })
 
@@ -206,10 +218,9 @@
                     accessTable.table_buttons = [];
                 }
                 $(function(){
-                    roleTable.addTo('awesome_table_div');
-                    accessTable.addTo('awesome_table_div');
+                    roleTable.addTo('role');
+                    accessTable.addTo('rights');
                     bus.$emit('zzwaitoverevent');
-
                 })
 
 
@@ -219,3 +230,9 @@
     }
 
 </script>
+
+<style>
+    #role_form_modal_dialog{
+        width: 650px;
+    }
+</style>

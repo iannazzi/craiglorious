@@ -47,7 +47,6 @@ export class TableModel {
             this.addDataRow(data[i]);
         }
         //this.modelChanged.notify();
-        console.log(this.sort);
         this.sortData();
         this.original_data = data;
     }

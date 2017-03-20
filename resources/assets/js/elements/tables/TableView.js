@@ -19,8 +19,8 @@ export class TableView {
         this.model = model;
         this.cdo = model.td.column_definition;
         this.id = this.model.td.name;
-        this.errorModal = new ErrorModal(this.model.td.name + '_errorModal');
-        this.formModal = new FormModal(this.model.td.name + '_formModal');
+        this.errorModal = new ErrorModal(this.model.td.name + '_error_modal');
+        this.formModal = new FormModal(this.model.td.name + '_form_modal');
         this.name = this.id;
     }
     checkWrite()

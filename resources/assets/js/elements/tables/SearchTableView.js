@@ -5,7 +5,7 @@ export class SearchTableView extends DataTableView {
         super(model);
 
     }
-    searchTable() {
+    createSearchTable() {
         this.searchDiv = this.createSearchDiv();
         this.searchTable = this.createSearchTable();
         this.searchDiv.appendChild(this.searchTable);
