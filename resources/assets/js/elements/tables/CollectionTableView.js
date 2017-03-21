@@ -4,7 +4,7 @@
 import {TableView} from './TableView';
 
 import {myParseFloat, round2} from './math';
-export class DataTableView extends TableView {
+export class CollectionTableView extends TableView {
     constructor(model) {
 
         super(model);

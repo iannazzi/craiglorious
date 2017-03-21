@@ -1,18 +1,18 @@
-import {DataTableView} from './DataTableView'
+import {CollectionTableView} from './CollectionTableView'
 
-export class SearchTableView extends DataTableView {
+export class SearchTableView extends CollectionTableView {
     constructor(model){
         super(model);
 
     }
     createSearchTable() {
         this.searchDiv = this.createSearchDiv();
-        this.searchTable = this.createSearchTable();
-        this.searchDiv.appendChild(this.searchTable);
+        this.searchTableElement = this.createSearchTableElement();
+        this.searchDiv.appendChild(this.searchTableElement);
         this.searchThead = this.createSearchThead();
-        this.searchTable.appendChild(this.searchThead);
+        this.searchTableElement.appendChild(this.searchThead);
         this.searchTbody = this.createSearchTbody();
-        this.searchTable.appendChild(this.searchTbody);
+        this.searchTableElement.appendChild(this.searchTbody);
         this.updateSearchTable();
         this.searchDiv.appendChild(this.createSearchButtons())
         this.searchDataTableDiv = this.createDataTableDiv();
@@ -59,7 +59,7 @@ createSearchButtons(){
         return div;
     }
 
-    createSearchTable() {
+    createSearchTableElement() {
 
         let tbl = document.createElement('table');
         tbl.id = this.id + '_search';
@@ -214,7 +214,7 @@ createSearchButtons(){
     addDataTable()
     {
         this.searchDataTableDiv.innerHTML = '';
-        this.searchDataTableDiv.appendChild(this.dataTable())
+        this.searchDataTableDiv.appendChild(this.createCollectionTable())
     }
     searching()
     {

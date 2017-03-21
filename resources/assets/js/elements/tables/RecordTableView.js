@@ -11,30 +11,8 @@ export class RecordTableView extends TableView {
         super(model);
     }
 
-    createModalTable(){
 
 
-        if (this.model.options.edit_display == 'modal') {
-
-
-        }
-        else if (this.model.options.edit_display == 'modal_only') {
-
-
-        }
-        this.formModal.setBody(this.createRecordTable());
-        let div = document.createElement('div');
-        div.appendChild(this.createSaveButton());
-        div.appendChild(this.createCancelButton());
-        this.formModal.setFooter(div);
-        return this.formModal.get();
-    }
-    showModalTable(){
-        this.formModal.show();
-    }
-    hideModalTable(){
-        this.formModal.hide();
-    }
     createRecordTable() {
         this.recordTableDiv = this.createRecordTableDiv();
         this.table = this.createTableElement();

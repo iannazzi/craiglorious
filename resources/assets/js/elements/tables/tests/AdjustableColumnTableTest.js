@@ -1,5 +1,5 @@
-import {DataTableView} from '../DataTableView';
-import {DataTableController} from '../DataTableController';
+import {CollectionTableView} from '../CollectionTableView';
+import {CollectionTableController} from '../CollectionTableController';
 import {TableModel} from '../TableModel';
 import {TableEvent} from '../TableEvent'
 import * as math from '../math'
@@ -196,8 +196,8 @@ variable column
     ];
 
     let model = new TableModel(table_definition, data);
-    let view = new DataTableView(model, buttons);
-    let controller = new DataTableController(model, view);
+    let view = new CollectionTableView(model, buttons);
+    let controller = new CollectionTableController(model, view);
 
 
     view.updateQuantity = new TableEvent(view);

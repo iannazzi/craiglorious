@@ -5,7 +5,7 @@
             <button class="btn-new" @click="$router.push('/roles/create')"><i class="fa fa-plus" aria-hidden="true"></i>New
                 Role
             </button>
-
+            <div id="roles"></div>
         </div>
     </div>
 
@@ -51,6 +51,7 @@
                     access: "READ",
                     table_buttons: [],
                     table_view: self.page,
+                    edit_display: 'on_page',
                     route: "/roles",
                     footer: [],
                     header: [],
@@ -59,8 +60,9 @@
                     data: self.data,
                     number_of_records_available: self.data.number_of_records_available,
                 })
-
-                searchableTable.addTo('data_table_view')
+                $(function(){
+                    searchableTable.addTo('roles')
+                })
 
 
             }

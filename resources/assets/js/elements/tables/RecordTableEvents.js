@@ -40,18 +40,17 @@ export class RecordTableEvents extends TableEvents {
         );
 
         //##################   EDIT CLICKED
-        view.editClicked = new TableEvent(view);
-        controller.view.editClicked.attach(
+        view.onEditClick = new TableEvent(view);
+        controller.view.onEditClick.attach(
             function () {
-                if (typeof controller.model.options.onEditClicked == 'function') {
+                if (typeof controller.model.options.onEditClick == 'function') {
 
-                    controller.model.options.onEditClicked();
+                    controller.model.options.onEditClick();
                     console.log('using custom onEditClicked')
                     console.log(controller.model.options)
 
                 }
                 else {
-                    console.log('using default onEditClicked')
 
                     controller.model.td.table_view = 'edit';
                     controller.model.td.access = 'write';
@@ -65,8 +64,8 @@ export class RecordTableEvents extends TableEvents {
         );
 
         //##################   CANCEL CLICKED
-        view.cancelClicked = new TableEvent(view);
-        view.cancelClicked.attach(
+        view.onCancelClick = new TableEvent(view);
+        view.onCancelClick.attach(
             function () {
 
                 //cancel was clicked
@@ -83,10 +82,10 @@ export class RecordTableEvents extends TableEvents {
 
                         }
                         else if (controller.model.options.edit_display == 'modal') {
-                            controller.model.options.onCancelClicked();
+                            controller.model.options.onCancelClick();
                         }
                         else if (controller.model.options.edit_display == 'modal_only') {
-                            controller.model.options.onCancelClicked();
+                            controller.model.options.onCancelClick();
                         }
 
                         break;

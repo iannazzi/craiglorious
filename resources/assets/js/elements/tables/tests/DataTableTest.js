@@ -1,8 +1,8 @@
 /**
  * Created by embrasse-moi on 1/23/17.
  */
-import {DataTableView}  from '../DataTableView';
-import {DataTableController}  from '../DataTableController';
+import {CollectionTableView}  from '../CollectionTableView';
+import {CollectionTableController}  from '../CollectionTableController';
 import {TableModel}  from '../TableModel';
 import * as math from '../math'
 import {TableEvent} from '../TableEvent';
@@ -25,8 +25,8 @@ export function DataTableTest(column_definition, data) {
 
 
     let model = new TableModel(table_definition, data);
-    let view = new DataTableView(model);
-    let controller = new DataTableController(model, view);
+    let view = new CollectionTableView(model);
+    let controller = new CollectionTableController(model, view);
 
     let div2 = document.createElement('div');
     let h = document.createElement('h2');

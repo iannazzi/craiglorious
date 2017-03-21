@@ -2,11 +2,11 @@
  * Created by embrasse-moi on 1/19/17.
  */
 import {TableController} from './TableController';
-import {DataTableEvents} from './DataTableEvents'
+import {CollectionTableEvents} from './CollectionTableEvents'
 import {UriController} from './UriController';
 
 
-export class DataTableController extends TableController {
+export class CollectionTableController extends TableController {
     constructor(model, view) {
         super(model);
         this.view = view;
@@ -14,7 +14,7 @@ export class DataTableController extends TableController {
 
         this.uri = new UriController(this);
 
-        this.dataTableEvents = new DataTableEvents(this);
+        this.collectionTableEvents = new CollectionTableEvents(this);
 
     }
 

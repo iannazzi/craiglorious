@@ -1,8 +1,8 @@
-import {DataTableController} from './DataTableController'
+import {CollectionTableController} from './CollectionTableController'
 import {parseQuery} from '../../lib/url'
 import {SearchTableEvents} from './SearchTableEvents';
 
-export class SearchTableController extends DataTableController {
+export class SearchTableController extends CollectionTableController {
     constructor(model, view) {
         super(model, view)
         let self = this;

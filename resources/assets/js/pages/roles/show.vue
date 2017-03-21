@@ -42,7 +42,7 @@
 
             let self = this;
             self.dataReady = false;
-            bus.$emit('zzwaitevent');
+            //bus.$emit('zzwaitevent');
             switch (self.page) {
                 case 'show':
                 case 'edit':
@@ -66,6 +66,9 @@
                     break;
             }
 
+
+        },
+        created(){
 
 
         },
@@ -203,7 +206,7 @@
                     //show: read
                     //edit: write
                     //create: write
-
+                    edit_display:'modal',
                     access: "read",
                     table_buttons: ['edit'],
                     table_view: "index",//record
@@ -232,6 +235,9 @@
 </script>
 
 <style>
+    #rights{
+        width:40%;
+    }
     #role_form_modal_dialog{
         width: 650px;
     }

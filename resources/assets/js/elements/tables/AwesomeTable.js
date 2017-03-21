@@ -1,7 +1,7 @@
 import {RecordTableView}  from './RecordTableView';
 import {RecordTableController}  from './RecordTableController';
-import {DataTableView}  from './DataTableView';
-import {DataTableController}  from './DataTableController';
+import {CollectionTableView}  from './CollectionTableView';
+import {CollectionTableController}  from './CollectionTableController';
 import {TableModel}  from './TableModel';
 import {SearchTableView}  from '../../elements/tables/SearchTableView';
 import {SearchTableController}  from '../../elements/tables/SearchTableController';
@@ -64,12 +64,7 @@ export class AwesomeTable {
             case 'modal':
 
                 this.div.appendChild(this.view.createRecordTable());
-                this.div.appendChild(this.viewModal.createModalTable());
-                $('#role_form_modal').on('shown.bs.modal', function () {
-                    $('#role_form_modal :input:first').focus();
-                    $('#role_form_modal :input:first').select();
-                })
-
+                this.div.appendChild(this.viewModal.createModalTable(this.viewModal.createRecordTable()));
                 this.modelModal.options.onEditClicked = function () {
 
 
@@ -90,7 +85,7 @@ export class AwesomeTable {
                     self.model.tdo = self.modelModal.tdo;
                     self.view.updateTable();
                 }
-                this.modelModal.options.onCancelClicked = function () {
+                this.modelModal.options.onCancelClick = function () {
                     self.viewModal.hideModalTable();
                 }
                 break;
@@ -98,10 +93,10 @@ export class AwesomeTable {
             case 'modal_only':
 
 
-                this.modelModal.options.onEditClicked = function () {
+                this.modelModal.options.onEditClick = function () {
                     alert('why is there an edit button on the modal')
                 }
-                this.modelModal.options.onCancelClicked = function () {
+                this.modelModal.options.onCancelClick = function () {
                     self.viewModal.hideModalTable();
                 }
 
@@ -128,9 +123,68 @@ export class AwesomeTable {
 
     collectionTable() {
         this.model = new TableModel(this.options);
-        this.view = new DataTableView(this.model);
-        this.controller = new DataTableController(this.model, this.view);
-        this.div.appendChild(this.view.createCollectionTable());
+        this.view = new CollectionTableView(this.model);
+        this.controller = new CollectionTableController(this.model, this.view);
+
+        this.modelModal = new TableModel(this.options);
+        this.viewModal = new CollectionTableView(this.modelModal);
+        this.controllerModal = new CollectionTableController(this.modelModal, this.viewModal);
+
+        if (typeof this.options.edit_display === undefined) {
+            this.options.edit_display = 'on_page';
+        }
+        let self = this;
+        switch (this.options.edit_display) {
+            case 'on_page':
+                this.div.appendChild(this.view.createCollectionTable());
+                break;
+            case 'modal':
+                console.log(this.options.edit_display)
+
+                this.div.appendChild(this.view.createCollectionTable());
+                this.div.appendChild(this.viewModal.createModalTable(this.viewModal.createCollectionTable()));
+
+                this.modelModal.options.onEditClick = function () {
+
+                    //self.modelModal.td.access = "write";
+                    //self.modelModal.td.table_view = "edit";
+                    self.viewModal.showModalTable();
+                    self.viewModal.updateTable();
+                    self.viewModal.updateButtons();
+                    self.controllerModal.setFocusToFirstInput();
+                }
+                this.modelModal.options.onSaveSuccess = function () {
+                    console.log('save success');
+                    // self.modelModal.td.access = "write";
+                    // self.modelModal.td.edit_display = "edit";
+                    console.log(self.modelModal.data);
+                    self.model.data = self.modelModal.data;
+                    self.viewModal.hideModalTable();
+                    self.model.tdo = self.modelModal.tdo;
+                    self.view.updateTable();
+                }
+                this.modelModal.options.onCancelClick = function () {
+                    self.viewModal.hideModalTable();
+                }
+                break;
+
+            case 'modal_only':
+
+
+                this.modelModal.options.onEditClick = function () {
+                    alert('why is there an edit button on the modal')
+                }
+                this.modelModal.options.onCancelClick = function () {
+                    self.viewModal.hideModalTable();
+                }
+
+                this.div.appendChild(this.viewModal.createModalTable());
+
+
+
+        }
+
+
 
 
         // return this.view.dataTable();
@@ -138,10 +192,12 @@ export class AwesomeTable {
     }
 
     searchableTable() {
+
         this.model = new TableModel(this.options);
         this.view = new SearchTableView(this.model);
         this.controller = new SearchTableController(this.model, this.view);
-        this.div.appendChild(this.view.createSearchTable());
+        let searchTable = this.view.createSearchTable();
+        this.div.appendChild(searchTable);
 
         // return this.view.searchTable();
 

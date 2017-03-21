@@ -2,7 +2,7 @@ import {TableEvent} from './TableEvent'
 import {TableEvents} from './TableEvents'
 
 
-export class DataTableEvents extends TableEvents{
+export class CollectionTableEvents extends TableEvents{
 
     constructor(controller) {
         super(controller);
@@ -24,9 +24,9 @@ export class DataTableEvents extends TableEvents{
         view.inputChanged = new TableEvent(view);
         view.individualSelectChanged = new TableEvent(view);
         view.dataTableChanged = new TableEvent(view);
-        view.headerClicked = new TableEvent(view);
-        view.editClicked = new TableEvent(view);
-        view.cancelClicked = new TableEvent(view);
+        view.onHeaderClick = new TableEvent(view);
+        view.onEditClick = new TableEvent(view);
+        view.onCancelClick = new TableEvent(view);
         view.onSaveClick = new TableEvent(view);
 
         controller.createTableEvent.attach(
@@ -36,15 +36,21 @@ export class DataTableEvents extends TableEvents{
             }
         );
 
-        controller.view.editClicked.attach(
+        controller.view.onEditClick.attach(
             function () {
-                model.td.access = 'write';
-                view.setViewWrite();
-                view.updateTable();
+                if (typeof controller.model.options.onEditClick === 'function'){
+                    controller.model.options.onEditClick();
+                }
+                else{
+                    model.td.access = 'write';
+                    view.setViewWrite();
+                    view.updateTable();
+                }
+
             }
         );
 
-        controller.view.cancelClicked.attach(
+        controller.view.onCancelClick.attach(
             function () {
 
                 model.td.access = 'read';
@@ -61,7 +67,7 @@ export class DataTableEvents extends TableEvents{
         );
 
         let self = controller;
-        view.headerClicked.attach(
+        view.onHeaderClick.attach(
             function (sender, args) {
                 self.onSort(args);
             }

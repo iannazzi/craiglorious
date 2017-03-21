@@ -30,6 +30,31 @@ export class TableView {
         return write;
     }
 
+    createModalTable(table_dom_object){
+
+
+        if (this.model.options.edit_display == 'modal') {
+
+
+        }
+        else if (this.model.options.edit_display == 'modal_only') {
+
+
+        }
+        this.formModal.setBody(table_dom_object);
+        let div = document.createElement('div');
+        div.appendChild(this.createSaveButton());
+        div.appendChild(this.createCancelButton());
+        this.formModal.setFooter(div);
+        return this.formModal.get();
+    }
+    showModalTable(){
+        this.formModal.show();
+    }
+    hideModalTable(){
+        this.formModal.hide();
+    }
+
     createElement(data, col_def, active_cell) {
 
         let db_field = col_def['db_field'];
@@ -541,7 +566,7 @@ export class TableView {
         editButton.innerHTML = 'Edit';
         editButton.className = 'edit';
         editButton.onclick = function () {
-            self.editClicked.notify();
+            self.onEditClick.notify();
         }
         this.editButton = editButton;
         return editButton;
@@ -553,7 +578,7 @@ export class TableView {
         cancelButton.className = 'cancel';
 
         cancelButton.onclick = function () {
-            self.cancelClicked.notify();
+            self.onCancelClick.notify();
         }
         this.cancelButton = cancelButton;
         return cancelButton;
