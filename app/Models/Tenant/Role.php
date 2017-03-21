@@ -99,6 +99,14 @@ class Role extends BaseModel
         return $this->hasMany('App\Models\Tenant\User');
     }
 
+    public function views()
+    {
+        $cg = new \App\Models\Craiglorious\View;
+        $database = $cg->getConnection()->getDatabaseName();
+        return $this->hasMany('App\Models\Craiglorious\View', $database.'.views', 'role_id','view_id');
+        //can not do this as the system // or should i?
+        //return $this->hasMany('App\Models\Craiglorious\View');
+    }
     //each category might have one parent
     public function parent()
     {

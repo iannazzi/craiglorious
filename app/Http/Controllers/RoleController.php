@@ -19,11 +19,13 @@ class RoleController extends Controller
 
         $q = Role::where('name', 'LIKE', "%{$name}%")
             ->where('id', 'LIKE', "%{$id}%");
-        if($parent!='null'){
+        if ($parent != 'null')
+        {
             $q->where('parent_id', '=', $parent);
         }
 
         $return_data = $q->get();
+
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -45,7 +47,6 @@ class RoleController extends Controller
             'message' => 'index returned',
             'data' => $return_data,
         ], 200);
-
 
 
     }
@@ -75,17 +76,18 @@ class RoleController extends Controller
         ], 200);
 
     }
+
     public function views()
     {
 
         return \Auth::user()->views();
 
     }
+
     public function create()
     {
         $user = \Auth::user();
         $return_data['role'] = [];
-
 
 
         $return_data['roles'] = $user->role->getRoleSelectTree();
@@ -110,18 +112,18 @@ class RoleController extends Controller
 
         $id = $data['id'];
 
-        if($id != '')
+        if ($id != '')
         {
             $role = Role::findOrFail($id);
             $children = $role->children()->pluck('id')->toArray();
             array_push($children, $id);
             $rules = array(
                 'name' => 'required|unique:roles,name,' . $id,
-                'parent_id' => 'required|not_in:' .implode(',',$children),
+                'parent_id' => 'required|not_in:' . implode(',', $children),
             );
 
-        }
-        else{
+        } else
+        {
             $rules = array(
                 'name' => 'required|unique:roles,name,' . $id,
                 'parent_id' => 'required',
@@ -132,7 +134,7 @@ class RoleController extends Controller
         $messages = [
             'parent_id.not_in' => 'The parent role can neither be the same nor a child as the current role. ',
         ];
-        $validation = \Validator::make($data, $rules,$messages);
+        $validation = \Validator::make($data, $rules, $messages);
         if ($validation->passes())
         {
             $update = Role::firstOrNew(['id' => $id]);
@@ -158,15 +160,32 @@ class RoleController extends Controller
 
     }
 
-    public function updateRights(Request $request){
-
-        $data = $request->data;
+    public function updateRights(Request $request)
+    {
         $id = $request['additional_post_values']['id'];
+        $data = $request->data;
 
-        $role = Role::findOrFail($id);
 
-        //now update
+//        $role = Role::find($id);
+//        foreach ($role->views as $view) {
+//            echo $view->pivot->access;
+//        }
+//
+//        Role::find($id)->updateExistingPivot($data);
+//
+//        return response()->json([
+//            'success' => true,
+//            'message' => ''
+//        ], 200);
 
+        foreach ($data as $row)
+        {
+            $format = ['access' => $row['access']];
+            \DB::table('role_view')->
+            where('role_id', $id)->
+            where('view_id', $row['view_id'])->
+            update($format);
+        }
 
 
     }
@@ -175,30 +194,24 @@ class RoleController extends Controller
     {
         $data = $request->data;
         $id = $data['id'];
-        if($id==1)
+        if ($id == 1)
         {
             return response()->json([
                 'success' => false,
                 'message' => 'Can not delete the admin role',
             ], 422);
-        }
-        else{
+        } else
+        {
             $role = Role::findOrFail($id);
             $role['active'] = 0;
             $role->save();
+
 //            Role::destroy($id);
             return response()->json([
                 'success' => true,
                 'message' => 'Success',
             ], 200);
         }
-
-
-
-
-
-
-
 
 
     }

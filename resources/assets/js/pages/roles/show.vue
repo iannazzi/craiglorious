@@ -124,11 +124,9 @@
                     column_definition: columnDefinition(self.data),
                     table_buttons: ['edit','delete'],
 
-                    type: 'record', //awesome table record, collection or searchable
+                    type: 'record', //record, collection or searchable
                     table_view: self.page, //index, create, edit, and show pages: columns respond differnetly to
-                    //this works for all tables:
                     access: access, //read vs write
-
                     edit_display: edit_display,
                     // on_page add one table
                     // modal add table + table in modal
@@ -179,11 +177,19 @@
                 console.log(self.data.role[0].id)
                 let access_table_column_definition = [
                     {
+                        "db_field": "view_id",
+                        "caption": "view_id",
+                        "type": "html",
+                        "show_on_list": false,
+                        "th_width": 80,
+                    },
+                    {
                         "db_field": "name",
                         "caption": "View",
                         "type": "html",
                         "show_on_list": true,
                         "th_width": 80,
+                        'post':false,
                     }, {
                         "db_field": "access",
                         "caption": "Access",
@@ -206,11 +212,12 @@
                     //show: read
                     //edit: write
                     //create: write
-                    edit_display:'modal',
-                    access: "read",
+
+                    type: 'collection', //record, collection or searchable
+                    //table_view: 'index', //index, edit,show,create used for column_definition show_on_index, show_on_create show_on_edit
+                    edit_display:'modal', //how to edit the data on_page (default, confusing if there are multiple tables) modal_only modal
+
                     table_buttons: ['edit'],
-                    table_view: "index",//record
-                    type: 'collection',
                     route: "/roles/rights",
                     column_definition: access_table_column_definition,
                 })
@@ -241,4 +248,5 @@
     #role_form_modal_dialog{
         width: 650px;
     }
+
 </style>

@@ -39,53 +39,13 @@ export class RecordTableView extends TableView {
         let div = document.createElement('div');
         div.id = this.id + '_buttons';
         div.className = 'record_table_buttons';
-        this.button_div = div;
+        this.edit_button_div = div;
         this.updateButtons(div);
         return div;
 
-
     }
 
-    updateButtons() {
 
-        this.button_div.innerHTML = '';
-        if (this.model.td.access == 'read') {
-            if (this.model.td.table_buttons.includes('edit')) {
-                this.button_div.appendChild(this.createEditButton());
-            }
-            if (this.model.td.table_buttons.includes('delete')) {
-                this.button_div.appendChild(this.createDeleteButton());
-            }
-        }
-        else {
-
-            if (this.model.options.edit_display == 'on_page') {
-                this.button_div.appendChild(this.createSaveButton());
-                this.button_div.appendChild(this.createCancelButton());
-            }
-            else if (this.model.options.edit_display == 'modal') {
-                // let div = document.createElement('div');
-                // div.appendChild(this.createSaveButton());
-                // div.appendChild(this.createCancelButton());
-                // this.formModal.footer(div);
-
-            }
-            else if (this.model.options.edit_display == 'modal_only') {
-                //the buttons are not applied until the form is shown...
-
-                // let div = document.createElement('div');
-                // div.appendChild(this.createSaveButton());
-                // div.appendChild(this.createCancelButton());
-                // this.formModal.footer(div);
-
-            }
-
-
-
-        }
-
-
-    }
 
 
     createRecordTableDiv() {

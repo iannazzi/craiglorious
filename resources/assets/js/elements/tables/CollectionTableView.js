@@ -412,14 +412,16 @@ export class CollectionTableView extends TableView {
         let div = document.createElement('div');
         div.id = this.id + '_buttons';
         div.className = 'data_table_buttons';
+
         let table_modify_div = document.createElement('div');
         table_modify_div.className = 'data_table_modify_buttons';
         this.table_modify_div = table_modify_div;
-
         div.appendChild(table_modify_div);
-        let table_edit_div = document.createElement('div');
-        table_edit_div.className = 'data_table_edit_buttons';
-        div.appendChild(table_edit_div);
+
+        let edit_button_div = document.createElement('div');
+        edit_button_div.className = 'data_table_edit_buttons';
+        div.appendChild(edit_button_div);
+        this.edit_button_div = edit_button_div;
 
         let self = this;
         let element;
@@ -489,15 +491,10 @@ export class CollectionTableView extends TableView {
             });
             table_modify_div.appendChild(element);
         }
-        if (buttons.includes('edit')) {
 
-            table_edit_div.appendChild(this.createEditButton());
-            table_edit_div.appendChild(this.createCancelButton());
-            table_edit_div.appendChild(this.createSaveButton());
-
-        }
 
         return div
+
     }
 
 

@@ -13,13 +13,21 @@ export class AwesomeTable {
         //table types: record, collection,
         //record table_view create edit show  i.e. read write
 
+         let und = function (key, value) {
+             if(typeof options[key] === 'undefined'){
+                 options[key] = value;
+             }
+        }
+
+        //some defaults
+        und('access', 'read');
+        und('edit_display', 'on_page')
+
+
 
         this.options = options;
-
         let self = this;
-        // $(function () {
-        //     self.controller.loadPageEvent.notify();
-        // });
+
     }
 
     addTo(div_id) {
@@ -40,7 +48,6 @@ export class AwesomeTable {
         }
     }
 
-
     recordTable() {
 
         this.model = new TableModel(this.options);
@@ -54,9 +61,6 @@ export class AwesomeTable {
         let self = this;
 
 
-        if (typeof this.options.edit_display === undefined) {
-            this.options.edit_display = 'on_page';
-        }
         switch (this.options.edit_display) {
             case 'on_page':
                 this.div.appendChild(this.view.createRecordTable());
@@ -65,23 +69,22 @@ export class AwesomeTable {
 
                 this.div.appendChild(this.view.createRecordTable());
                 this.div.appendChild(this.viewModal.createModalTable(this.viewModal.createRecordTable()));
-                this.modelModal.options.onEditClicked = function () {
-
-
-                    self.modelModal.td.access = "write";
-                    self.modelModal.td.table_view = "edit";
-                    self.viewModal.showModalTable();
-                    self.viewModal.updateTable();
-                    self.viewModal.updateButtons();
-                    self.controllerModal.setFocusToFirstInput();
-                }
+                // this.modelModal.options.onEditClicked = function () {
+                //
+                //
+                //     self.modelModal.td.access = "write";
+                //     self.modelModal.td.table_view = "edit";
+                //     self.viewModal.showModalTable();
+                //     self.viewModal.updateTable();
+                //     self.viewModal.updateButtons();
+                //     self.controllerModal.setFocusToFirstInput();
+                // }
                 this.modelModal.options.onSaveSuccess = function () {
-                    console.log('save success');
                     // self.modelModal.td.access = "write";
                     // self.modelModal.td.edit_display = "edit";
-                    console.log(self.modelModal.data);
-                    self.model.data = self.modelModal.data;
+                    // self.model.data = self.modelModal.data;
                     self.viewModal.hideModalTable();
+                    //update the table data object
                     self.model.tdo = self.modelModal.tdo;
                     self.view.updateTable();
                 }
@@ -114,13 +117,6 @@ export class AwesomeTable {
 
     }
 
-    showModal() {
-        this.viewModal.showModalTable();
-    }
-    hideModal() {
-        this.viewModal.hideModalTable();
-    }
-
     collectionTable() {
         this.model = new TableModel(this.options);
         this.view = new CollectionTableView(this.model);
@@ -130,9 +126,7 @@ export class AwesomeTable {
         this.viewModal = new CollectionTableView(this.modelModal);
         this.controllerModal = new CollectionTableController(this.modelModal, this.viewModal);
 
-        if (typeof this.options.edit_display === undefined) {
-            this.options.edit_display = 'on_page';
-        }
+
         let self = this;
         switch (this.options.edit_display) {
             case 'on_page':
@@ -144,15 +138,6 @@ export class AwesomeTable {
                 this.div.appendChild(this.view.createCollectionTable());
                 this.div.appendChild(this.viewModal.createModalTable(this.viewModal.createCollectionTable()));
 
-                this.modelModal.options.onEditClick = function () {
-
-                    //self.modelModal.td.access = "write";
-                    //self.modelModal.td.table_view = "edit";
-                    self.viewModal.showModalTable();
-                    self.viewModal.updateTable();
-                    self.viewModal.updateButtons();
-                    self.controllerModal.setFocusToFirstInput();
-                }
                 this.modelModal.options.onSaveSuccess = function () {
                     console.log('save success');
                     // self.modelModal.td.access = "write";
@@ -192,14 +177,25 @@ export class AwesomeTable {
     }
 
     searchableTable() {
-
         this.model = new TableModel(this.options);
         this.view = new SearchTableView(this.model);
         this.controller = new SearchTableController(this.model, this.view);
         let searchTable = this.view.createSearchTable();
         this.div.appendChild(searchTable);
-
-        // return this.view.searchTable();
-
+        $(function () {
+            self.controller.loadPageEvent.notify();
+        });
     }
+
+    showModal() {
+        this.viewModal.showModalTable();
+    }
+
+    hideModal() {
+        this.viewModal.hideModalTable();
+    }
+
+
+
+
 }

@@ -55,6 +55,51 @@ export class TableView {
         this.formModal.hide();
     }
 
+    updateButtons() {
+
+        this.edit_button_div.innerHTML = '';
+        if (this.model.td.access == 'read') {
+            if (this.model.td.table_buttons.includes('edit')) {
+                this.edit_button_div.appendChild(this.createEditButton());
+            }
+            if (this.model.td.table_buttons.includes('delete')) {
+                this.edit_button_div.appendChild(this.createDeleteButton());
+            }
+        }
+        else {
+
+            if (this.model.options.edit_display == 'on_page') {
+                this.edit_button_div.appendChild(this.createSaveButton());
+                this.edit_button_div.appendChild(this.createCancelButton());
+            }
+            else if (this.model.options.edit_display == 'modal') {
+                // let div = document.createElement('div');
+                // div.appendChild(this.createSaveButton());
+                // div.appendChild(this.createCancelButton());
+                // this.formModal.footer(div);
+
+            }
+            else if (this.model.options.edit_display == 'modal_only') {
+                //the buttons are not applied until the form is shown...
+
+                // let div = document.createElement('div');
+                // div.appendChild(this.createSaveButton());
+                // div.appendChild(this.createCancelButton());
+                // this.formModal.footer(div);
+
+            }
+
+
+
+        }
+
+
+    }
+
+
+    //all this needs to go!!!!
+
+
     createElement(data, col_def, active_cell) {
 
         let db_field = col_def['db_field'];
