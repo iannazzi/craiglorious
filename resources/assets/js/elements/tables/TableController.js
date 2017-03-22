@@ -86,6 +86,7 @@ export class TableController {
                     //post no
                 }
                 else {
+
                     postData[r][col['db_field']] = row[col['db_field']]['data'];
                 }
             });

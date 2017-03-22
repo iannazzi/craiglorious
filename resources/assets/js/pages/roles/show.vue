@@ -37,9 +37,9 @@
                 dataReady: false
             }
         },
-        props: ['page'],
+        props: ['page','justcreated'],
         mounted: function () {
-
+            console.log(this.justcreated);
             let self = this;
             self.dataReady = false;
             //bus.$emit('zzwaitevent');
@@ -87,10 +87,7 @@
                 }
                 roleTableModal.addTo('role_modal');
                 roleTableModal.showModal();
-                $('#role_modal_form_modal').on('shown.bs.modal', function () {
-                    $('#role_modal_form_modal :input:first').focus();
-                    $('#role_modal_form_modal :input:first').select();
-                })
+
 
             },
             createRoleTable(){
@@ -135,19 +132,19 @@
 
 
 
-                    onEditClick:onEditClick,
-                    onSaveClick(id){
-                        //first save the table.
-                        console.log('ehhh')
-                        this.save();
-                        // opt 1 close the modal
-                        this.modal.hide();
-
-                        //opt 2 set access back to write
-
-                        //option 2 go somewhere
-
-                    },
+                    //onEditClick:onEditClick,
+//                    onSaveClick(id){
+//                        //first save the table.
+//                        console.log('ehhh')
+//                        this.save();
+//                        // opt 1 close the modal
+//                        this.modal.hide();
+//
+//                        //opt 2 set access back to write
+//
+//                        //option 2 go somewhere
+//
+//                    },
 
                     onDeleteSuccess(){
                         //back to roles
@@ -157,7 +154,7 @@
                         //pop up a modal
                         // this.create() //check the display
                         //back to roles
-                        self.$router.push('/roles/'+id);
+                        self.$router.push({path: '/roles/'+id, props : { justcreated: 'true' }});
                     },
                     onCancelCreateClick(){
                         self.$router.push('/roles');
@@ -173,63 +170,74 @@
 
                 let roleTable = this.createRoleTable();
                 self.roleTable = roleTable;
-                console.log('role id');
-                console.log(self.data.role[0].id)
-                let access_table_column_definition = [
-                    {
-                        "db_field": "view_id",
-                        "caption": "view_id",
-                        "type": "html",
-                        "show_on_list": false,
-                        "th_width": 80,
-                    },
-                    {
-                        "db_field": "name",
-                        "caption": "View",
-                        "type": "html",
-                        "show_on_list": true,
-                        "th_width": 80,
-                        'post':false,
-                    }, {
-                        "db_field": "access",
-                        "caption": "Access",
-                        "type": "select",
-                        "select_names": ['Write', 'Read', 'None'],
-                        "select_values": [{'value': 'write', 'name': 'Write'}, {
-                            'value': 'read',
-                            'name': 'Read'
-                        }, {'value': 'none', 'name': 'None'}],
 
-                        "show_on_list": true,
-                    },];
-                let accessTable = new AwesomeTable({
-                    data: this.data.views,
-                    //name: "views_table",
-                    additionalPostValues:{
-                            id: self.data.role[0].id
-                    },
-                    //tuck read/write away?
-                    //show: read
-                    //edit: write
-                    //create: write
-
-                    type: 'collection', //record, collection or searchable
-                    //table_view: 'index', //index, edit,show,create used for column_definition show_on_index, show_on_create show_on_edit
-                    edit_display:'modal', //how to edit the data on_page (default, confusing if there are multiple tables) modal_only modal
-
-                    table_buttons: ['edit'],
-                    route: "/roles/rights",
-                    column_definition: access_table_column_definition,
-                })
 
                 //No editing if the admin role
-                if (this.page != 'create' && this.data.role[0].id == 1) {
-                    roleTable.table_buttons = [];
-                    accessTable.table_buttons = [];
+                console.log(self.page);
+                if (self.page == 'show'){
+
+                    if(self.data.role[0].id == 1) {
+                        roleTable.options.table_buttons = [];
+                    }
                 }
                 $(function(){
+
                     roleTable.addTo('role');
-                    accessTable.addTo('rights');
+                    if(self.page == 'show'){
+                        let access_table_column_definition = [
+                            {
+                                "db_field": "view_id",
+                                "caption": "view_id",
+                                "type": "html",
+                                "show_on_list": false,
+                                "th_width": 80,
+                            },
+                            {
+                                "db_field": "name",
+                                "caption": "View",
+                                "type": "html",
+                                "show_on_list": true,
+                                "th_width": 80,
+                                'post':false,
+                            }, {
+                                "db_field": "access",
+                                "caption": "Access",
+                                "type": "select",
+                                "select_names": ['Write', 'Read', 'None'],
+                                "select_values": [{'value': 'write', 'name': 'Write'}, {
+                                    'value': 'read',
+                                    'name': 'Read'
+                                }, {'value': 'none', 'name': 'None'}],
+
+                                "show_on_list": true,
+                            },];
+                        let accessTable = new AwesomeTable({
+                            data: self.data.views,
+                            //name: "views_table",
+                            additionalPostValues:{
+                                id: self.data.role[0].id
+                            },
+                            //tuck read/write away?
+                            //show: read
+                            //edit: write
+                            //create: write
+
+                            type: 'collection', //record, collection or searchable
+                            //table_view: 'index', //index, edit,show,create used for column_definition show_on_index, show_on_create show_on_edit
+                            edit_display:'modal', //how to edit the data on_page (default, confusing if there are multiple tables) modal_only modal
+
+                            table_buttons: ['edit'],
+                            route: "/roles/rights",
+                            column_definition: access_table_column_definition,
+                        })
+                        if(self.data.role[0].id == 1) {
+                            accessTable.options.table_buttons = [];
+                        }
+                        accessTable.addTo('rights');
+
+
+
+                    }
                     bus.$emit('zzwaitoverevent');
                 })
 

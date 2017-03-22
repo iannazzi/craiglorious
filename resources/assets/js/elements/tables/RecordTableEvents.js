@@ -46,12 +46,12 @@ export class RecordTableEvents extends TableEvents {
                 if (typeof controller.model.options.onEditClick == 'function') {
 
                     controller.model.options.onEditClick();
-                    console.log('using custom onEditClicked')
+                    console.log('using custom onEditClick')
                     console.log(controller.model.options)
 
                 }
                 else {
-
+                    console.log('using reg onEditClick')
                     controller.model.td.table_view = 'edit';
                     controller.model.td.access = 'write';
                     view.updateTable();
@@ -71,13 +71,15 @@ export class RecordTableEvents extends TableEvents {
                 //cancel was clicked
                 //hide the modal
                 //or set view to read
-
                 switch (controller.model.td.table_view) {
                     case 'edit':
                         controller.model.loadOriginalData();
 
                         if (controller.model.options.edit_display == 'on_page') {
-                            view.setViewToShow();
+
+                            controller.model.td.table_view = 'show';
+                            controller.model.td.access = 'read';
+                            view.updateTable();
                             //set the original data to the new data
 
                         }
@@ -115,7 +117,6 @@ export class RecordTableEvents extends TableEvents {
                 let data = {data: post_data, _method: 'put'};
                 console.log('POST data needed for testing')
                 console.log(JSON.stringify(data))
-                console.log(JSON.stringify(controller.getPostData()))
 
                 $.ajax({
                     url: controller.model.td.route,
@@ -124,7 +125,6 @@ export class RecordTableEvents extends TableEvents {
                     data: data,
                     success: function (result) {
                         console.log(JSON.stringify(controller.getPostData()))
-
                         view.showWaitModal(false);
                         controller.onSaveSuccess.notify(result);
                     },
@@ -142,7 +142,8 @@ export class RecordTableEvents extends TableEvents {
         controller.onSaveSuccess.attach(
             function (sender, result) {
 
-                console.log('freag')
+                console.log(controller.model.td.table_view);
+
                 switch (controller.model.td.table_view) {
                     case 'create':
                         if (typeof controller.model.options.onCreateSaved === "function") {
@@ -157,11 +158,16 @@ export class RecordTableEvents extends TableEvents {
                         //modal or not
                         if (controller.model.options.edit_display == 'on_page') {
                             console.log(result);
-                            view.setViewToShow();
+
+                            controller.model.td.table_view = 'show';
+                            controller.model.td.access = 'read';
                             //set the original data to the new data
                             controller.model.original_data = controller.getPostData();
+                            view.updateTable();
+
                         }
                         else if (controller.model.options.edit_display == 'modal') {
+
                             controller.model.options.onSaveSuccess(result.id);
 
                         }

@@ -58,7 +58,7 @@ class RoleController extends Controller
 
 
         $return_data['role'] = [$role]; //let js handle the data through ajax
-        $return_data['views'] = \Auth::user()->role->systemViews();
+        $return_data['views'] = $role->systemViews();
 
 
         //the selectable roles can only be parents or siblings...
@@ -110,6 +110,7 @@ class RoleController extends Controller
 
         $data = $request->data[0];
 
+        if ($data['comments'] == null) $data['comments'] = '';
         $id = $data['id'];
 
         if ($id != '')
@@ -142,6 +143,17 @@ class RoleController extends Controller
             $update->fill($data);
             if ($update->save())
             {
+
+
+                if($id ==''){
+                    //set rights
+                    $update->createDefaultViews();
+
+                }
+
+
+
+
                 return response()->json([
                     'success' => true,
                     'message' => 'record updated',
@@ -173,20 +185,19 @@ class RoleController extends Controller
 //
 //        Role::find($id)->updateExistingPivot($data);
 //
-//        return response()->json([
-//            'success' => true,
-//            'message' => ''
-//        ], 200);
-
         foreach ($data as $row)
         {
-            $format = ['access' => $row['access']];
+
             \DB::table('role_view')->
             where('role_id', $id)->
             where('view_id', $row['view_id'])->
-            update($format);
+            update(['access' => $row['access']]);
         }
 
+        return response()->json([
+            'success' => true,
+            'message' => ''
+        ], 200);
 
     }
 

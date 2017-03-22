@@ -93,6 +93,17 @@ class Role extends BaseModel
 
 
     }
+    public function createDefaultViews(){
+        $system_id = session('system');
+        $system = System::find($system_id);
+        //all of the possible views
+        $views = $system->views();
+
+
+        foreach ($views as $view){
+            \DB::table('role_view')->insert(['view_id' => $view->id, 'role_id' => $this->id, 'access'=> 'write']);
+        }
+    }
 
     public function users()
     {
@@ -101,9 +112,9 @@ class Role extends BaseModel
 
     public function views()
     {
-        $cg = new \App\Models\Craiglorious\View;
-        $database = $cg->getConnection()->getDatabaseName();
-        return $this->hasMany('App\Models\Craiglorious\View', $database.'.views', 'role_id','view_id');
+//        $cg = new \App\Models\Craiglorious\View;
+//        $database = $cg->getConnection()->getDatabaseName();
+//        return $this->hasMany('App\Models\Craiglorious\View', $database.'.views', 'role_id','view_id');
         //can not do this as the system // or should i?
         //return $this->hasMany('App\Models\Craiglorious\View');
     }

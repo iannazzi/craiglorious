@@ -35,62 +35,148 @@ export class CollectionTableEvents extends TableEvents{
 
             }
         );
+        //##################   EDIT
 
         controller.view.onEditClick.attach(
             function () {
+                console.log(controller.model.options)
                 if (typeof controller.model.options.onEditClick === 'function'){
+                    console.log('hi thiere')
                     controller.model.options.onEditClick();
                 }
                 else{
-                    model.td.access = 'write';
-                    view.setViewWrite();
+                    console.log('hi thiereeerer ')
+
+                    controller.model.td.access = 'write';
                     view.updateTable();
+                    view.updateButtons();
+
                 }
 
             }
         );
+        //##################   CANCEL
 
         controller.view.onCancelClick.attach(
             function () {
 
-                model.td.access = 'read';
-                model.loadOriginalData();
-                view.setViewReadOnly();
-                view.updateTable();
+                controller.model.loadOriginalData();
+
+                if (controller.model.options.edit_display == 'on_page') {
+                    controller.model.td.access = 'read';
+                    view.updateTable();
+
+                }
+                else if (controller.model.options.edit_display == 'modal') {
+                    controller.model.options.onCancelClick();
+                }
+                else if (controller.model.options.edit_display == 'modal_only') {
+                    controller.model.options.onCancelClick();
+                }
+
+
+
+
+
 
             }
         );
+        //##################   SAVE
+
         controller.view.onSaveClick.attach(
             function () {
-                controller.submitSave();
+
+                let post_data = controller.getPostData();
+                let data = {data: post_data, _method: 'put'};
+                console.log(controller.model.td.additionalPostValues)
+
+                if(typeof controller.model.td.additionalPostValues !== 'undefined'){
+                    data['additional_post_values'] = controller.model.td.additionalPostValues;
+                }
+
+                view.showWaitModal(true);
+
+                console.log(JSON.stringify(data))
+
+
+
+                $.ajax({
+                    url: controller.model.td.route,
+                    type: 'post',
+                    data: data,
+                    success: function (result) {
+                        console.log(result);
+                        //controller.view.setViewShow();
+                        //set the original data to the new data
+                        controller.model.original_data = controller.getPostData();
+                        controller.view.showWaitModal(false);
+                        controller.onSaveSuccess.notify(result);
+                        //switch the uri to the new id....
+                    },
+                    error: function (response) {
+                        console.log(response)
+                        controller.view.showWaitModal(false);
+
+                        controller.view.showErrorModal(response.responseJSON.message);
+
+                    }
+                });
             }
         );
+        //##################   SAVE SUCCESS
+        controller.onSaveSuccess = new TableEvent(controller);
+        controller.onSaveSuccess.attach(
+            function (sender, result) {
+
+                if (controller.model.options.edit_display == 'on_page') {
+                    controller.model.td.access = 'read';
+                    view.updateTable();
+                    controller.model.original_data = controller.getPostData();
+                }
+                else if (controller.model.options.edit_display == 'modal') {
+                    controller.model.options.onSaveSuccess(result.id);
+
+                }
+                else if (controller.model.options.edit_display == 'modal_only') {
+
+                    console.log(result);
+                    console.log(JSON.stringify(controller.getPostData()))
+                    console.log(controller.model.td.table_view);
+                    console.log(controller.model.td.edit_display);
+                    console.log(JSON.stringify(controller.model.tdo))
+                    console.log(result.id)
+
+                    controller.model.options.onSaveSuccess(result.id);
+                }
+            }
+        )
+
 
         let self = controller;
         view.onHeaderClick.attach(
             function (sender, args) {
-                self.onSort(args);
+                controller.onSort(args);
             }
         )
         controller.view.addColumnClicked.attach(
             function () {
-                self.model.addColumnToArray(self.view.array_col);
-                self.view.updateTable();
+                controller.model.addColumnToArray(controller.view.array_col);
+                controller.view.updateTable();
             }
         )
         controller.view.deleteColumnClicked.attach(
             function () {
-                self.model.deleteColumnFromArray(self.view.array_col);
-                self.view.updateTable();
+                controller.model.deleteColumnFromArray(controller.view.array_col);
+                controller.view.updateTable();
             }
         )
         controller.view.addRowClicked.attach(
             function () {
                 //adds a row to the table model
-                self.addRow()
+                controller.addRow()
                 //table model notifies that it has changed
                 //at controller point we can perform calculation directly on the model so that it will render
-                self.view.updateTable();
+                controller.view.updateTable();
 
             }
         );

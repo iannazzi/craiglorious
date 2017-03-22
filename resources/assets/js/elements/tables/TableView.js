@@ -9,6 +9,8 @@ import {isValueInArray} from '../../lib/array_help';
 import { TableEvents } from './TableEvent';
 import {ErrorModal} from '../modal/ErrorModal'
 import {FormModal} from '../modal/FormModal'
+import {createWaitModal} from '../modal/waitModal'
+import {createConfirmModal} from '../modal/confirmModal'
 
 
 
@@ -21,6 +23,9 @@ export class TableView {
         this.id = this.model.td.name;
         this.errorModal = new ErrorModal(this.model.td.name + '_error_modal');
         this.formModal = new FormModal(this.model.td.name + '_form_modal');
+        this.waitModal = createWaitModal();
+        this.confirmModal = createConfirmModal();
+
         this.name = this.id;
     }
     checkWrite()
@@ -73,19 +78,10 @@ export class TableView {
                 this.edit_button_div.appendChild(this.createCancelButton());
             }
             else if (this.model.options.edit_display == 'modal') {
-                // let div = document.createElement('div');
-                // div.appendChild(this.createSaveButton());
-                // div.appendChild(this.createCancelButton());
-                // this.formModal.footer(div);
+            //differnet instantiation
 
             }
             else if (this.model.options.edit_display == 'modal_only') {
-                //the buttons are not applied until the form is shown...
-
-                // let div = document.createElement('div');
-                // div.appendChild(this.createSaveButton());
-                // div.appendChild(this.createCancelButton());
-                // this.formModal.footer(div);
 
             }
 
@@ -661,6 +657,7 @@ export class TableView {
         return button;
     }
     showWaitModal(show = true){
+        console.log(this.waitModal)
         if(show){
             $(this.waitModal).modal('show');
         }

@@ -38,9 +38,7 @@ export class RecordTableController extends TableController {
         })
     }
 
-    onSave() {
 
-    }
 
     getConfirm(confirmMessage, callback) {
         confirmMessage = confirmMessage || '';

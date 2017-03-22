@@ -1,5 +1,7 @@
+export default class global_library{
+
 //Needed for page navigation, site functionality
-function modifyURL(url_string)
+ modifyURL(url_string)
 {
 	//now the bullshit begins...
 	//create this element to access the url 
@@ -22,11 +24,7 @@ function modifyURL(url_string)
 	var title = document.title;
 	window.history.pushState('object or string', title, filename + url_string);
 }
-function open_win(url)
-{
-	window.location = url;
-}
-function tellmeyourname(control)
+ tellmeyourname(control)
 {
 		
 	alert("you are: " + control.id + "\n" +
@@ -41,7 +39,7 @@ function tellmeyourname(control)
 	
 
 }
-function wait(msecs)
+ wait(msecs)
 {
 	var start = new Date().getTime();
 	var cur = start
@@ -51,8 +49,8 @@ function wait(msecs)
 	}
 }
 // ***** Session Timeout Warning and Redirect mReschke 2010-09-29 ***** //
-//need to turn this into AJAX function
-function InitSessionTimer() 
+//need to turn this into AJAX
+ InitSessionTimer()
 {
     /* mReschke 2010-09-29 */
     warn_sec = 12* 59 * 60 * 1000;             //Warning time in milliseconds
@@ -61,7 +59,7 @@ function InitSessionTimer()
     start_time = new Date().getTime();
     CheckSessionStatus();
 }
-function CheckSessionStatus()
+ CheckSessionStatus()
 {
     //Check for session warning
     current_time = new Date().getTime();
@@ -95,4 +93,6 @@ function CheckSessionStatus()
     }
 }
 
+
+}
 

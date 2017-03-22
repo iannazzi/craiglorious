@@ -151,45 +151,6 @@ export class CollectionTableController extends TableController {
         }
     }
 
-    submitSave() {
-
-        //ahh i need additional data! custom...
-        let post_data = this.getPostData();
-        let data = {data: post_data, _method: 'put'};
-        console.log(this.model.td.additionalPostValues)
-        if(typeof this.model.td.additionalPostValues !== 'undefined'){
-            data['additional_post_values'] = this.model.td.additionalPostValues;
-        }
-
-
-        this.view.showWaitModal(true);
-
-        console.log(JSON.stringify(data))
-        let self = this;
-
-
-
-        $.ajax({
-            url: self.model.td.route,
-            type: 'post',
-            data: data,
-            success: function (result) {
-                console.log(result);
-                //self.view.setViewShow();
-                //set the original data to the new data
-                self.model.original_data = self.getPostData();
-                self.view.showWaitModal(false);
-                //switch the uri to the new id....
-            },
-            error: function (response) {
-                console.log(response)
-                self.view.showWaitModal(false);
-
-                self.view.showErrorModal(response.responseJSON.message);
-
-            }
-        });
-    }
 
 
 

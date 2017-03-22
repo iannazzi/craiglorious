@@ -1,7 +1,11 @@
 import './bootstrap';
 import router from './routes'
 require('./server_connection.js');
-window.bus = new Vue();
+//not fucking working... trying to get clib.clone....
+// require('./lib/global_library');
+// window.cilib = new global_library();
+
+    window.bus = new Vue();
 window.Event = new class {
     constructor() {
         this.vue = new Vue();

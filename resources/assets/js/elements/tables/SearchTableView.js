@@ -18,6 +18,8 @@ export class SearchTableView extends CollectionTableView {
         this.searchDataTableDiv = this.createDataTableDiv();
         this.searchDiv.appendChild(this.searchDataTableDiv);
 
+
+
         return this.searchDiv;
     }
 createSearchButtons(){

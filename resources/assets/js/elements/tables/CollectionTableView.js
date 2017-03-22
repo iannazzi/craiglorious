@@ -16,26 +16,24 @@ export class CollectionTableView extends TableView {
     }
 
     createCollectionTable() {
-        this.dataTableDiv = this.createDataTableDiv();
+        this.collectionTableDiv = this.createCollectionTableDiv();
         this.table = this.createTable();
-        this.dataTableDiv.appendChild(this.table);
-        this.dataTableDiv.appendChild(this.createTableModifyButtons());
-        //set the buttons based on table read or write
-        if(this.checkWrite())
-        {
-            this.setViewWrite();
-        }
-        else
-        {
-            this.setViewReadOnly();
-        }
+        this.collectionTableDiv.appendChild(this.table);
+        this.table_modify_div = this.createTableModifyButtons()
+        this.collectionTableDiv.appendChild(this.table_modify_div);
+        this.edit_button_div = this.createEditButtonDiv();
+        this.collectionTableDiv.appendChild(this.edit_button_div);
+        this.collectionTableDiv.appendChild(this.waitModal);
+        this.collectionTableDiv.appendChild(this.confirmModal);
+        this.collectionTableDiv.appendChild(this.errorModal.createErrorModal());
+
+        this.updateButtons();
         this.updateTable();
-        return this.dataTableDiv;
+        return this.collectionTableDiv;
     }
 
-    createDataTableDiv() {
+    createCollectionTableDiv() {
         let div = document.createElement('div');
-        this.dataTableDiv = div;
         let self = this;
         div.addEventListener('keyup', function (event) {
             if (event.which == 13) {
@@ -401,8 +399,9 @@ export class CollectionTableView extends TableView {
 
         this.updateThead();
         this.updateTBody();
-        this.dataTableChanged.notify();
+        //this.dataTableChanged.notify();
         this.updateTotalsBody();
+        this.updateButtons();
 
 
     }
@@ -415,13 +414,9 @@ export class CollectionTableView extends TableView {
 
         let table_modify_div = document.createElement('div');
         table_modify_div.className = 'data_table_modify_buttons';
-        this.table_modify_div = table_modify_div;
         div.appendChild(table_modify_div);
 
-        let edit_button_div = document.createElement('div');
-        edit_button_div.className = 'data_table_edit_buttons';
-        div.appendChild(edit_button_div);
-        this.edit_button_div = edit_button_div;
+
 
         let self = this;
         let element;
@@ -495,6 +490,11 @@ export class CollectionTableView extends TableView {
 
         return div
 
+    }
+    createEditButtonDiv(){
+        let edit_button_div = document.createElement('div');
+        edit_button_div.className = 'data_table_edit_buttons';
+        return edit_button_div;
     }
 
 

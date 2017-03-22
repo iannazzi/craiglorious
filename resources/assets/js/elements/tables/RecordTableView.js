@@ -2,8 +2,7 @@
  * Created by embrasse-moi on 1/18/17.
  */
 import {TableView} from './TableView';
-import {createWaitModal} from '../modal/waitModal'
-import {createConfirmModal} from '../modal/confirmModal'
+
 
 
 export class RecordTableView extends TableView {
@@ -16,20 +15,21 @@ export class RecordTableView extends TableView {
     createRecordTable() {
         this.recordTableDiv = this.createRecordTableDiv();
         this.table = this.createTableElement();
-        this.updateTable();
+
         this.recordTableDiv.appendChild(this.table);
 
         this.recordTableDiv.appendChild(this.createButtons());
 
-        this.waitModal = createWaitModal();
+
         this.recordTableDiv.appendChild(this.waitModal);
-        this.confirmModal = createConfirmModal();
         this.recordTableDiv.appendChild(this.confirmModal);
         this.recordTableDiv.appendChild(this.errorModal.createErrorModal());
 
         // if (this.checkWrite()) {
         //     this.setFocusToFirstInput();
         // }
+        this.updateTable();
+
         return this.recordTableDiv;
     }
 
@@ -40,7 +40,6 @@ export class RecordTableView extends TableView {
         div.id = this.id + '_buttons';
         div.className = 'record_table_buttons';
         this.edit_button_div = div;
-        this.updateButtons(div);
         return div;
 
     }
@@ -103,6 +102,8 @@ export class RecordTableView extends TableView {
                     console.log('error in the column definition');
             }
         })
+        this.updateButtons();
+
     }
 
     addRow(tbody, col_def) {
@@ -125,10 +126,5 @@ export class RecordTableView extends TableView {
 
     }
 
-    setViewToShow() {
-        this.model.td.table_view = 'show';
-        this.model.td.access = 'read';
-        this.updateTable();
-        this.updateButtons();
-    }
+
 }
