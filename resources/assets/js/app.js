@@ -5,7 +5,11 @@ require('./server_connection.js');
 // require('./lib/global_library');
 // window.cilib = new global_library();
 
-    window.bus = new Vue();
+
+import {AwesomeTable} from './elements/tables/AwesomeTable';
+
+window.AwesomeTable = AwesomeTable;
+window.bus = new Vue();
 window.Event = new class {
     constructor() {
         this.vue = new Vue();

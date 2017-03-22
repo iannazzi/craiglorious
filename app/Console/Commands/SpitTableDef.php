@@ -46,17 +46,20 @@ class SpitTableDef extends Command
         $system = System::first();
         $system->createTenantConnection();
         $table_definition = [
-        "name" => "vendor_table",
-        "access" => "READ",
-        "record_table_buttons" => ['edit'],
-        "dynamic_table_buttons" => ['addRow','deleteRow','deleteAllRows', 'moveRows','copyRows','edit'],
-        "table_type" => "KEY_VALUE INDEX",
-        "route" => "/" . $table,
+            "route" => "/" . $table,
+            "data" => "self.data",
+        "access" => "read write",
+            "type"=> "record collection searchable",
+        "table_view" => "edit show create", //column def show_on_edit show_on_view show_on_create etc..
+        "table_buttons" => ['edit', 'delete','addRow','deleteRow','deleteAllRows', 'moveRows','copyRows'],
+        "edit display" => "on_page modal modal_only",
+            "callbacks" => "onDeleteClick onEditClick onCancelClick onSaveClick onSaveSuccess onCreateCancelClick onCreateSaveClick",
+            "onCreateSaveClick" => 'self.$router.push({path: \'/roles/\' + id, props: {justcreated: \'true\'}});',
         "footer" => [],
         "header" => [],
         "column_definition" => "insert Column Def here",
     ];
-        $this->info(json_encode($return));
+        $this->info(json_encode($table_definition));
 //        $this->info(json_encode($results));
 
     }

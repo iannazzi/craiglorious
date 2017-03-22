@@ -10,7 +10,7 @@ let routes = [
     },
     {
         path: '/roles',
-        component: require('./pages/roles/roles.vue'),
+        component: require('./pages/roles/pageSetup.vue'),
         props: {  },
         children: [
             {
@@ -44,16 +44,47 @@ let routes = [
         ]
     },
     {
+        path: '/users',
+        component: require('./pages/users/pageSetup.vue'),
+        props: {  },
+        children: [
+            {
+                path:'',
+                component: require('./pages/users/index.vue'),
+                props: { page: 'index' },
+            },
+            {
+                path: 'create',
+                component: require('./pages/users/show.vue'),
+                props: { page: 'create' }
+            },
+            {
+                path: ':id',
+                component:{template: '<router-view></router-view>'},
+                children: [
+                    {
+                        path: '',
+                        component: require('./pages/users/show.vue'),
+                        props: { page: 'show' }
+                    },
+                    {
+                        path: 'edit',
+                        component: require('./pages/users/show.vue'),
+                        props: { page: 'edit' }
+                    }
+
+                ],
+            },
+
+        ]
+    },
+    {
         path: '/calendar',
         component: require('./pages/calendar/calendarPage.vue')
     },
     {
         path: '/vendors',
         component: require('./pages/vendors/vendors.vue')
-    },
-    {
-        path: '/users',
-        component: require('./pages/users/users.vue')
     },
     {
         path: '/user',

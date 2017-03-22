@@ -79,7 +79,14 @@ class VendorController extends Controller
         $vendor = Vendor::findOrFail($id);
         $return_data['page'] = 'show';
         $return_data['data'] = [$vendor]; //let js handle the data through ajax
-        return \View::make('pages/vendors/vendors', ['json' => json_encode($return_data)]);
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data
+        ], 200);
+
+
+
 
     }
 

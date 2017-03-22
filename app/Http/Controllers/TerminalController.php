@@ -47,14 +47,26 @@ class TerminalController extends Controller
         $data = Terminal::findOrFail($id);
         $return_data['page'] = 'show';
         $return_data['data'] = [$data]; //let js handle the data through ajax
-        return \View::make($this->page, ['json' => json_encode($return_data)]);
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data
+        ], 200);
+
+
 
     }
     public function create()
     {
         $return_data['page'] = 'create';
         $return_data['data'] = []; //let js handle the data through ajax
-        return \View::make($this->page, ['json' => json_encode($return_data)]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data
+        ], 200);
+
 
     }
 

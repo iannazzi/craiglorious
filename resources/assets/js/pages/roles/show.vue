@@ -18,7 +18,7 @@
                 <h2 v-else-if="page==='show'">Role {{data.role[0].name}}</h2>
             </div>
             <div id="role_modal"></div>
-            <button @click="showModalTable">pop up modal table</button>
+            <!--<button @click="showModalTable">pop up modal table</button>-->
             <div id="rights" ></div>
 
         </div>
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-    import {AwesomeTable} from '../../elements/tables/AwesomeTable';
     import columnDefinition from './columnDefinition'
 
     export default {
@@ -43,78 +42,62 @@
             let self = this;
             self.dataReady = false;
             //bus.$emit('zzwaitevent');
-            switch (self.page) {
-                case 'show':
-                case 'edit':
-                    $.get('/roles/' + this.$route.params.id, function (response) {
-                        console.log(response);
-                        self.data = response.data;
-                        self.dataReady = true;
-                        self.renderTable();
 
-                    });
-                    break;
-                case 'create':
-                    //how do I get the select options here?
-                    $.get('/roles/create', function (response) {
-                        console.log(response);
-                        self.data = response.data;
-                        self.dataReady = true;
-                        self.renderTable();
-
-                    });
-                    break;
+            if (self.page == 'create') {
+                self.getData('/roles/create');
             }
-
-
+            else {
+                self.getData('/roles/' + this.$route.params.id);
+            }
         },
         created(){
 
 
         },
         methods: {
-            showModalTable(){
+
+            getData(url)
+            {
                 let self = this;
-                let roleTableModal = this.createRoleTable();
-                roleTableModal.options.table_view = 'edit';
-                roleTableModal.options.edit_display = 'modal_only';
-                roleTableModal.options.access = 'write';
-                self.roleTableModal = roleTableModal;
-                roleTableModal.options.onSaveSuccess = function(){
-                    self.roleTable.model.tdo = self.roleTableModal.modelModal.tdo;
-                    self.roleTable.view.updateTable();
-                    roleTableModal.hideModal();
-                }
-                roleTableModal.addTo('role_modal');
-                roleTableModal.showModal();
-
-
+                $.get(url, function (response) {
+                    console.log(response);
+                    self.data = response.data;
+                    self.dataReady = true;
+                    self.renderTable();
+                });
             },
+//            showModalTable(){
+//                let self = this;
+//                let roleTableModal = this.createRoleTable();
+//                roleTableModal.options.table_view = 'edit';
+//                roleTableModal.options.edit_display = 'modal_only';
+//                roleTableModal.options.access = 'write';
+//                self.roleTableModal = roleTableModal;
+//                roleTableModal.options.onSaveSuccess = function(){
+//                    self.roleTable.model.tdo = self.roleTableModal.modelModal.tdo;
+//                    self.roleTable.view.updateTable();
+//                    roleTableModal.hideModal();
+//                }
+//                roleTableModal.addTo('role_modal');
+//                roleTableModal.showModal();
+//
+//
+//            },
             createRoleTable(){
                 let self = this;
                 let access,edit_display;
-                let onEditClick =function (id) {};
-                switch(this.page){
-                    case 'create':
-                        access = 'write';
-                        edit_display = 'on_page';
-                        break;
-                    case 'edit':
-                        access = 'write';
-                        edit_display = 'on_page';
-                        onEditClick = function (id) {
-                            self.$router.push('/roles/'+id+'/edit');
-                        };
-                        break;
-                    case 'show':
-                        access = 'read';
-                        edit_display = 'modal';
-                        onEditClick = function (id) {
-                            self.$router.push('/roles/'+id+'/edit');
-                        };
-                        break;
+                if(this.page == 'show'){
+                    access = 'read';
+                    edit_display = 'modal';
+
                 }
-                let roleTable = new AwesomeTable({
+                else{
+                    access = 'write';
+                    edit_display = 'on_page';
+
+                }
+
+                return new AwesomeTable({
                     //name: "role",
                     data: self.data.role,
                     route: "/roles",
@@ -125,26 +108,6 @@
                     table_view: self.page, //index, create, edit, and show pages: columns respond differnetly to
                     access: access, //read vs write
                     edit_display: edit_display,
-                    // on_page add one table
-                    // modal add table + table in modal
-                    // modal_only add modal table
-                    // new_page ..... nope just call onEdit
-
-
-
-                    //onEditClick:onEditClick,
-//                    onSaveClick(id){
-//                        //first save the table.
-//                        console.log('ehhh')
-//                        this.save();
-//                        // opt 1 close the modal
-//                        this.modal.hide();
-//
-//                        //opt 2 set access back to write
-//
-//                        //option 2 go somewhere
-//
-//                    },
 
                     onDeleteSuccess(){
                         //back to roles
@@ -161,7 +124,6 @@
                     }
 
                 })
-                return roleTable;
             },
             renderTable(){
 

@@ -74,8 +74,12 @@ class UserController extends Controller
         $return_data['data'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
 
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data,
+        ], 200);
 
-        return \View::make('pages/users/users', ['json' => json_encode($return_data)]);
         //
     }
 
@@ -98,8 +102,16 @@ class UserController extends Controller
 
 
         $return_data['page'] = 'show';
-        $return_data['data'] = [$user]; //let js handle the data through ajax
-        return \View::make('pages/users/users', ['json' => json_encode($return_data)]);
+        $return_data['user'] = [$user]; //let js handle the data through ajax
+
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data,
+        ], 200);
+
+
+
 
     }
 
