@@ -10,8 +10,6 @@ export class CollectionTableEvents extends TableEvents{
         let view = controller.view;
         let model = controller.model;
         controller.loadPageEvent= new TableEvent(controller);
-        controller.createTableEvent = new TableEvent(view);
-        view.addColumnClicked = new TableEvent(view);
         view.deleteColumnClicked = new TableEvent(view);
         view.addRowClicked = new TableEvent(view);
         view.deleteRowClicked = new TableEvent(view);
@@ -24,19 +22,10 @@ export class CollectionTableEvents extends TableEvents{
         view.inputChanged = new TableEvent(view);
         view.individualSelectChanged = new TableEvent(view);
         view.dataTableChanged = new TableEvent(view);
-        view.onHeaderClick = new TableEvent(view);
-        view.onEditClick = new TableEvent(view);
-        view.onCancelClick = new TableEvent(view);
-        view.onSaveClick = new TableEvent(view);
-
-        controller.createTableEvent.attach(
-            function () {
 
 
-            }
-        );
         //##################   EDIT
-
+        view.onEditClick = new TableEvent(view);
         controller.view.onEditClick.attach(
             function () {
                 console.log(controller.model.options)
@@ -55,8 +44,9 @@ export class CollectionTableEvents extends TableEvents{
 
             }
         );
-        //##################   CANCEL
 
+        //##################   CANCEL
+        view.onCancelClick = new TableEvent(view);
         controller.view.onCancelClick.attach(
             function () {
 
@@ -81,8 +71,9 @@ export class CollectionTableEvents extends TableEvents{
 
             }
         );
-        //##################   SAVE
 
+        //##################   SAVE
+        view.onSaveClick = new TableEvent(view);
         controller.view.onSaveClick.attach(
             function () {
 
@@ -153,11 +144,15 @@ export class CollectionTableEvents extends TableEvents{
 
 
         let self = controller;
+        view.onHeaderClick = new TableEvent(view);
+
         view.onHeaderClick.attach(
             function (sender, args) {
                 controller.onSort(args);
             }
         )
+
+        view.addColumnClicked = new TableEvent(view);
         controller.view.addColumnClicked.attach(
             function () {
                 controller.model.addColumnToArray(controller.view.array_col);

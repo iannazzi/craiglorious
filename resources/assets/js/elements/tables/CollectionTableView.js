@@ -101,7 +101,7 @@ export class CollectionTableView extends TableView {
                         th.id = col_def.db_field + '_header';
                         th.sort = 0;
                         th.addEventListener("click", function (e) {
-                            self.headerClicked.notify([e, th])
+                            self.onHeaderClick.notify([e, th])
                         });
                         let p = document.createElement('p');
                         p.innerHTML = caption;
@@ -498,20 +498,5 @@ export class CollectionTableView extends TableView {
     }
 
 
-    setViewReadOnly() {
-        $(this.editButton).show();
-        $(this.saveButton).hide();
-        $(this.cancelButton).hide();
-        $(this.table_modify_div).hide();
-    }
-
-    setViewWrite() {
-        this.model.td.access = 'write';
-        $(this.editButton).hide();
-        $(this.saveButton).show();
-        $(this.cancelButton).show();
-        $(this.table_modify_div).show();
-        this.updateTable();
-    }
 
 }

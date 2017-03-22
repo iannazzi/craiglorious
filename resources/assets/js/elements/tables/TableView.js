@@ -35,6 +35,11 @@ export class TableView {
         return write;
     }
 
+    checkRead()
+    {
+        return ! this.checkWrite();
+    }
+
     createModalTable(table_dom_object){
 
 
@@ -63,7 +68,7 @@ export class TableView {
     updateButtons() {
 
         this.edit_button_div.innerHTML = '';
-        if (this.model.td.access == 'read') {
+        if (this.checkRead()) {
             if (this.model.td.table_buttons.includes('edit')) {
                 this.edit_button_div.appendChild(this.createEditButton());
             }

@@ -48,7 +48,7 @@
                 let searchableTable = new AwesomeTable({
 
                     name: "roles",
-                    access: "READ",
+                    access: "read",
                     table_buttons: [],
                     table_view: self.page,
                     edit_display: 'on_page',
