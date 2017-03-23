@@ -39,55 +39,68 @@
     </div>
 </template>
 <script>
-    views.forEach(function (entry) {
-        entry.show = true
-    });
-    let rooms = [
-        {
-            name: 'Sales',
-            key: 'Customer Counter',
-            icon: 'fa fa-door',
-            show: true,
-            active: false,
-            class: 'customer_counter',
-        },
-        {
-            name: 'Operations',
-            key: 'Back Room',
-            icon: 'fa fa-door',
-            show: true,
-            active: false,
-            class: 'back-room',
-        },
-        {
-            name: 'Accounting',
-            key: 'Office',
-            icon: 'fa fa-door',
-            show: true,
-            active: false,
-            class: 'office',
-        },
-        {
-            name: 'Systems',
-            key: 'System',
-            icon: 'fa fa-door',
-            show: true,
-            active: false,
-            class: 'system',
-        }
 
-    ]
     export default {
         data() {
             return {
                 query: '',
-                views: views,
-                rooms: rooms,
+                views:[],
+                rooms: [],
             }
         },
+
         mounted: function () {
+            let self = this;
+            bus.$on('viewsDownloadedFromServer', function(views){
+                self.views = views;
+                self.views.forEach(function (entry) {
+                    entry.show = true
+                });
+            })
+
+            this.views.forEach(function (entry) {
+                entry.show = true
+            });
+            this.rooms = [
+                {
+                    name: 'Sales',
+                    key: 'Customer Counter',
+                    icon: 'fa fa-door',
+                    show: true,
+                    active: false,
+                    class: 'customer_counter',
+                },
+                {
+                    name: 'Operations',
+                    key: 'Back Room',
+                    icon: 'fa fa-door',
+                    show: true,
+                    active: false,
+                    class: 'back-room',
+                },
+                {
+                    name: 'Accounting',
+                    key: 'Office',
+                    icon: 'fa fa-door',
+                    show: true,
+                    active: false,
+                    class: 'office',
+                },
+                {
+                    name: 'Systems',
+                    key: 'System',
+                    icon: 'fa fa-door',
+                    show: true,
+                    active: false,
+                    class: 'system',
+                }
+
+            ]
             $('#search_input').focus()
-            console.log(this.query)
+
+            $(function(){
+            })
+
         },
         methods: {
             loadIcons: function () {
@@ -151,7 +164,7 @@
                 this.query = ''
                 selected_room.active = !selected_room.active
                 //deactivate other rooms
-                rooms.forEach(function (room) {
+                this.rooms.forEach(function (room) {
                     if (room.name != selected_room.name) {
                         room.active = false
                     }

@@ -22,10 +22,11 @@ class Role extends BaseModel
     //waht views can the user access
     public function userViews()
     {
+        $system = \Config::get('tenant_system');
         //$system = \Auth::user()->system;
         //all of the possible views
-        $system_id = session('system');
-        $system = System::find($system_id);
+//        $system_id = session('system');
+//        $system = System::find($system_id);
         $views = $system->views();
 
         //Views for the role - limited results

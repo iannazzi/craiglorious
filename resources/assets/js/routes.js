@@ -5,6 +5,34 @@ let routes = [
     {
         path: '',
         // component: require('./pages/dashboard/entry')
+        component: require('./pages/home.vue')
+
+    },
+    {
+        path: '/auth',
+        component: require('./pages/auth/auth.vue'),
+        children: [
+            {
+                path: 'login',
+                component: require('./pages/auth/login.vue'),
+            },
+            {
+                path: 'register',
+                component: require('./pages/auth/register.vue'),
+            },
+            {
+                path: 'profile',
+                component: require('./pages/auth/profile.vue'),
+            },
+            {
+                path: 'logout',
+                component: require('./pages/auth/logout.vue'),
+            }
+        ]
+    },
+    {
+        path: '/dashboard',
+        // component: require('./pages/dashboard/entry')
         component: require('./pages/dashboard/dashboard.vue')
 
     },
@@ -14,35 +42,35 @@ let routes = [
     },
     {
         path: '/roles',
-        component: require('./pages/roles/pageSetup.vue'),
-        props: {  },
+        component: require('./pages/layout.vue'),
+        props: {},
         children: [
             {
-                path:'',
+                path: '',
                 component: require('./pages/roles/index.vue'),
-                props: { page: 'index' },
+                props: {page: 'index'},
             },
             {
                 path: 'create',
                 component: require('./pages/roles/show.vue'),
-                props: { page: 'create' }
+                props: {page: 'create'}
             },
             {
                 path: ':id',
-                component:{template: '<router-view></router-view>'},
+                component: {template: '<router-view></router-view>'},
                 children: [
                     {
                         path: '',
                         component: require('./pages/roles/show.vue'),
-                        props: { page: 'show' }
+                        props: {page: 'show'}
                     },
                     {
                         path: 'edit',
                         component: require('./pages/roles/show.vue'),
-                        props: { page: 'edit' }
+                        props: {page: 'edit'}
                     }
 
-                    ],
+                ],
             },
 
         ]
@@ -50,31 +78,31 @@ let routes = [
     {
         path: '/users',
         component: require('./pages/users/pageSetup.vue'),
-        props: {  },
+        props: {},
         children: [
             {
-                path:'',
+                path: '',
                 component: require('./pages/users/index.vue'),
-                props: { page: 'index' },
+                props: {page: 'index'},
             },
             {
                 path: 'create',
                 component: require('./pages/users/show.vue'),
-                props: { page: 'create' }
+                props: {page: 'create'}
             },
             {
                 path: ':id',
-                component:{template: '<router-view></router-view>'},
+                component: {template: '<router-view></router-view>'},
                 children: [
                     {
                         path: '',
                         component: require('./pages/users/show.vue'),
-                        props: { page: 'show' }
+                        props: {page: 'show'}
                     },
                     {
                         path: 'edit',
                         component: require('./pages/users/show.vue'),
-                        props: { page: 'edit' }
+                        props: {page: 'edit'}
                     }
 
                 ],
@@ -89,31 +117,31 @@ let routes = [
     {
         path: '/locations',
         component: require('./pages/locations/pageSetup.vue'),
-        props: {  },
+        props: {},
         children: [
             {
-                path:'',
+                path: '',
                 component: require('./pages/locations/index.vue'),
-                props: { page: 'index' },
+                props: {page: 'index'},
             },
             {
                 path: 'create',
                 component: require('./pages/locations/show.vue'),
-                props: { page: 'create' }
+                props: {page: 'create'}
             },
             {
                 path: ':id',
-                component:{template: '<router-view></router-view>'},
+                component: {template: '<router-view></router-view>'},
                 children: [
                     {
                         path: '',
                         component: require('./pages/locations/show.vue'),
-                        props: { page: 'show' }
+                        props: {page: 'show'}
                     },
                     {
                         path: 'edit',
                         component: require('./pages/locations/show.vue'),
-                        props: { page: 'edit' }
+                        props: {page: 'edit'}
                     }
 
                 ],
@@ -124,31 +152,31 @@ let routes = [
     {
         path: '/terminals',
         component: require('./pages/terminals/pageSetup.vue'),
-        props: {  },
+        props: {},
         children: [
             {
-                path:'',
+                path: '',
                 component: require('./pages/terminals/index.vue'),
-                props: { page: 'index' },
+                props: {page: 'index'},
             },
             {
                 path: 'create',
                 component: require('./pages/terminals/show.vue'),
-                props: { page: 'create' }
+                props: {page: 'create'}
             },
             {
                 path: ':id',
-                component:{template: '<router-view></router-view>'},
+                component: {template: '<router-view></router-view>'},
                 children: [
                     {
                         path: '',
                         component: require('./pages/terminals/show.vue'),
-                        props: { page: 'show' }
+                        props: {page: 'show'}
                     },
                     {
                         path: 'edit',
                         component: require('./pages/terminals/show.vue'),
-                        props: { page: 'edit' }
+                        props: {page: 'edit'}
                     }
 
                 ],
@@ -159,31 +187,31 @@ let routes = [
     {
         path: '/printers',
         component: require('./pages/printers/pageSetup.vue'),
-        props: {  },
+        props: {},
         children: [
             {
-                path:'',
+                path: '',
                 component: require('./pages/printers/index.vue'),
-                props: { page: 'index' },
+                props: {page: 'index'},
             },
             {
                 path: 'create',
                 component: require('./pages/printers/show.vue'),
-                props: { page: 'create' }
+                props: {page: 'create'}
             },
             {
                 path: ':id',
-                component:{template: '<router-view></router-view>'},
+                component: {template: '<router-view></router-view>'},
                 children: [
                     {
                         path: '',
                         component: require('./pages/printers/show.vue'),
-                        props: { page: 'show' }
+                        props: {page: 'show'}
                     },
                     {
                         path: 'edit',
                         component: require('./pages/printers/show.vue'),
-                        props: { page: 'edit' }
+                        props: {page: 'edit'}
                     }
 
                 ],
@@ -194,31 +222,31 @@ let routes = [
     {
         path: '/vendors',
         component: require('./pages/vendors/pageSetup.vue'),
-        props: {  },
+        props: {},
         children: [
             {
-                path:'',
+                path: '',
                 component: require('./pages/vendors/index.vue'),
-                props: { page: 'index' },
+                props: {page: 'index'},
             },
             {
                 path: 'create',
                 component: require('./pages/vendors/show.vue'),
-                props: { page: 'create' }
+                props: {page: 'create'}
             },
             {
                 path: ':id',
-                component:{template: '<router-view></router-view>'},
+                component: {template: '<router-view></router-view>'},
                 children: [
                     {
                         path: '',
                         component: require('./pages/vendors/show.vue'),
-                        props: { page: 'show' }
+                        props: {page: 'show'}
                     },
                     {
                         path: 'edit',
                         component: require('./pages/vendors/show.vue'),
-                        props: { page: 'edit' }
+                        props: {page: 'edit'}
                     }
 
                 ],
@@ -226,11 +254,6 @@ let routes = [
 
         ]
     },
-
-
-
-
-
     {
         path: '/browser_tests',
         component: require('./pages/tests/browser_tests.vue')

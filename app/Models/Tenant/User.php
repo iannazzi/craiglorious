@@ -34,7 +34,7 @@ class User extends BaseTenantModel implements AuthenticatableContract,
      * @var array
      */
     protected $fillable = ['username', 'password', 'passcode', 'role_id', 'active', 'employee_id'];
-
+    protected $hidden = ['password','passcode'];
 
     public function system()
     {

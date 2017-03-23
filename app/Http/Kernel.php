@@ -18,6 +18,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+       \Barryvdh\Cors\HandleCors::class,
+
     ];
 
     /**
@@ -39,6 +41,8 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+
+
         ],
     ];
 
@@ -56,11 +60,14 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-
+        'ApiDashboardAuthenticate' =>\App\Http\Middleware\ApiDashboardAuthenticate::class,
+        'CheckCompany' =>\App\Http\Middleware\CheckCompany::class,
         'DashboardAuthenticate' =>\App\Http\Middleware\DashboardAuthenticate::class,
         'Logout' =>\App\Http\Middleware\Logout::class,
         'LoginAuthenticate' => \App\Http\Middleware\LoginAuthenticate::class,
         'CheckSession' => \App\Http\Middleware\CheckSession::class,
+        'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
 
 
     ];

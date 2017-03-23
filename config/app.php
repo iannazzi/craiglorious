@@ -163,11 +163,13 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
-
+        Dingo\Api\Provider\LaravelServiceProvider::class,
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         /*
          * Application Service Providers...
          */
@@ -176,6 +178,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        Barryvdh\Cors\ServiceProvider::class
+
 
     ],
 
@@ -225,6 +230,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'APIRoute'  => Dingo\Api\Facade\Route::class,
+        'API'       => Dingo\Api\Facade\API::class,
+        'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
 
     ],
 

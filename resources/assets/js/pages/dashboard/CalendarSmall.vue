@@ -9,15 +9,20 @@
 <script>
 
 
-    $.get( "http://api.openweathermap.org/data/2.5/forecast/city?id=524901&APPID=3e9e6d434403d69e58e548cd7464db2e", function( data ) {
-        console.log('weather feed: ');
-        console.log(data);
-    });
     export default {
         data() {
             return {}
         },
         mounted: function () {
+//            $.get( "http://api.openweathermap.org/data/2.5/forecast/city?id=524901&APPID=3e9e6d434403d69e58e548cd7464db2e", function( data ) {
+//                console.log('weather feed: ');
+//                console.log(data);
+//            });
+
+
+
+
+
             console.log('calendar coming')
             $(document).ready(function () {
 
@@ -26,7 +31,7 @@
                 $('#calendar').fullCalendar({
                     height: 100,
                     header:false,
-                    events: '/calendar',
+                    events: '/api/calendar',
                     eventClick:  function(event, jsEvent, view) {
                         window.location='/dashboard#/calendar?event='+event.id;
 //                        $('#modalTitle').html(event.title);

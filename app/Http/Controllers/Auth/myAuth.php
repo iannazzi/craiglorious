@@ -1,11 +1,16 @@
 <?php namespace App\Http\Controllers\Auth;
 
 use  App\Models\Craiglorious\System;
-use Redirect, Session, Log;
+use Illuminate\Http\Request;
+use  Redirect, Session, Log;
 use Illuminate\Support\Facades\Auth;
+
+
 
 class myAuth
 {
+
+
     public static function navCheck(){
         if( ! self::loadSystem()) {return false;}
         if(! Auth::check())
@@ -97,11 +102,22 @@ class myAuth
         \DB::insert('insert into user_hits (user_id, time, url, ip_address, browser) values (?, ?, ?, ?, ?)', [$user->id, $time, $route, $ip, $browser]);
 
     }
-    public static function logoutUser($id){
+    public static function logoutUserFromOtherClients($id){
         \DB::delete(
             "DELETE FROM users_logged_in WHERE user_id = ?",
             [$id]
         );
+    }
+    public static function addUserLogin($request){
+        $user = \Auth::user();
+        self::logoutUserFromOtherClients($user->id);
+        $unique_id = uniqid();
+        $ip = $request->ip();
+        $browser = $request->header('User-Agent');
+        $time =  \Carbon\Carbon::now()->toDateTimeString();
+        //log the user ip address, browser, etc
+        \DB::insert('insert into users_logged_in (user_id, last_accessed, url, ip_address, http_user_agent, unique_id) values (?, ?, ?, ?, ?,?)', [$user->id, $time, 'dashboard', $ip, $browser, $unique_id]);
+
     }
 
 }

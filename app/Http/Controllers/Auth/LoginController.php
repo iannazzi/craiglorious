@@ -9,7 +9,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
-
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 use DB, Auth, Session, Redirect;
 use Cookie;
@@ -72,6 +73,86 @@ class LoginController extends Controller
                 $this->loginUsername() => $this->getFailedLoginMessage(),
             ]);
     }
+    public function authenticatedUser(Request $request)
+    {
+//        die(var_dump($request->header()));
+//        $token = JWTAuth::getToken();
+//        dd('token' . $token);
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
+            }
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json(['token_expired'], $e->getStatusCode());
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json(['token_invalid'], $e->getStatusCode());
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json(['token_absent'], $e->getStatusCode());
+        }
+        // the token is valid and we have found the user via the sub claim
+        return response()->json(compact('user'));
+    }
+    public function me(Request $request)
+    {
+        $payload = JWTAuth::parseToken()->getPayload();
+        $system = System::where('company', '=', $payload['company'])->first();
+        if(!$system)
+        {
+            return response()->json(['error' => 'invalid_credentials'], 401);
+        }
+        $system->createTenantConnection();
+
+        return JWTAuth::parseToken()->authenticate();
+    }
+    public function jwtTest(Request $request){
+
+
+        $token = JWTAuth::getToken();
+        echo 'token: ' . $token; //no token
+
+        JWTAuth::setRequest($request);
+        echo 'token: ' . $token; //no token
+
+        $header_token = $request->header('Authorization');
+        $form_token = $request->token;
+
+        JWTAuth::setToken($header_token);
+
+        $token = JWTAuth::getToken();
+        echo 'token: ' . $token; //works for both header and form;
+    }
+    public function jwtAuthenticate(Request $request)
+    {
+        // grab credentials from the request
+        // will it be username or email?
+        $credentials = $request->only('username', 'password');
+        $company = $request->only('company');
+        $system = System::where('company', '=', $company['company'])->first();
+
+        if(!$system)
+        {
+            return response()->json(['error' => 'invalid_credentials'], 401);
+        }
+
+        $system->createTenantConnection();
+        $customClaims = ['company' => $company['company'], 'system' => $system->id];
+
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (! $token = JWTAuth::attempt($credentials, $customClaims)) {
+                return response()->json(['error' => 'invalid_credentials'], 401);
+            }
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            return response()->json(['error' => 'could_not_create_token'], 500);
+        }
+
+
+        $user = \Auth::user()->toArray();
+        myAuth::addUserLogin($request);
+
+        return response()->json(compact('user','token'));
+    }
 
     public function loginPath()
     {
@@ -83,17 +164,12 @@ class LoginController extends Controller
     {
 
 
-        $unique_id = uniqid();
-        Session::put('unique_id', $unique_id);
-        Cookie::queue(Cookie::forever('unique_id', $unique_id));
+
+//        Session::put('unique_id', $unique_id);
+//        Cookie::queue(Cookie::forever('unique_id', $unique_id));
 
 
-        $user = \Auth::user();
-        $ip = $request->ip();
-        $browser = $request->header('User-Agent');
-        $time =  \Carbon\Carbon::now()->toDateTimeString();
-
-        myAuth::logoutUser($user->id);
+        //myAuth::logoutUserFromOtherClients($user->id);
 
 
 //        if(! $user->canAccessFromIPAddress())
@@ -113,13 +189,9 @@ class LoginController extends Controller
 //                ]);
 //        }
 
-        Session::put('current_page_accessed', 'dashboard');
-        Session::put('last_page_accessed', 'auth/login');
-        Session::put('last_accessed', time());
-
-
-        //log the user ip address, browser, etc
-        \DB::insert('insert into users_logged_in (user_id, last_accessed, url, ip_address, http_user_agent, unique_id) values (?, ?, ?, ?, ?,?)', [$user->id, $time, 'dashboard', $ip, $browser, $unique_id]);
+//        Session::put('current_page_accessed', 'dashboard');
+//        Session::put('last_page_accessed', 'auth/login');
+//        Session::put('last_accessed', time());
 
 
 

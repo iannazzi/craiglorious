@@ -19,12 +19,7 @@
 
 
     export default {
-        data() {
-            return {
-                data: {},
-                dataReady: false,
-            }
-        },
+
         props: ['page'],
         mounted: function () {
             this.dataReady = false;
@@ -32,13 +27,30 @@
             let self = this;
 
             bus.$emit('zzwaitevent');
-            $.get('/locations', function (response) {
-                console.log(response);
-                self.data = response.data;
-                self.dataReady = true;
-                self.renderTable();
-                bus.$emit('zzwaitoverevent');
-            });
+
+            client({ path: '/locations' }).then(
+                function (response) {
+                  console.log(response);
+                    self.data = response.data;
+                       self.dataReady = true;
+                    self.renderTable();
+                    bus.$emit('zzwaitoverevent');
+                },
+                function (response, status) {
+                    console.log(response);
+
+                    if (_.contains([401, 500], status)) {
+                    }
+                });
+
+//
+//            $.get('/locations', function (response) {
+//                console.log(response);
+//                self.data = response.data;
+//                self.dataReady = true;
+//                self.renderTable();
+//                bus.$emit('zzwaitoverevent');
+//            });
         },
         methods: {
             renderTable(){
