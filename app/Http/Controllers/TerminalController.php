@@ -36,9 +36,13 @@ class TerminalController extends Controller
     {
         $number_of_records_available = Terminal::all()->count();
         $return_data['page'] = 'index';
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
-        return \View::make($this->page, ['json' => json_encode($return_data)]);
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data
+        ], 200);
 
     }
 
@@ -46,7 +50,7 @@ class TerminalController extends Controller
     {
         $data = Terminal::findOrFail($id);
         $return_data['page'] = 'show';
-        $return_data['data'] = [$data]; //let js handle the data through ajax
+        $return_data['records'] = [$data]; //let js handle the data through ajax
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -59,7 +63,7 @@ class TerminalController extends Controller
     public function create()
     {
         $return_data['page'] = 'create';
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
 
         return response()->json([
             'success' => true,

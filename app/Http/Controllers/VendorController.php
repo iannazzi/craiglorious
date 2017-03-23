@@ -63,7 +63,7 @@ class VendorController extends Controller
             $data = [];
         }
         $return_data['page'] = 'index';
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
         return response()->json([
             'success' => true,
@@ -78,7 +78,7 @@ class VendorController extends Controller
     {
         $vendor = Vendor::findOrFail($id);
         $return_data['page'] = 'show';
-        $return_data['data'] = [$vendor]; //let js handle the data through ajax
+        $return_data['records'] = [$vendor]; //let js handle the data through ajax
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -93,8 +93,12 @@ class VendorController extends Controller
     public function create()
     {
         $return_data['page'] = 'create';
-        $return_data['data'] = []; //let js handle the data through ajax
-        return \View::make('pages/vendors/vendors', ['json' => json_encode($return_data)]);
+        $return_data['records'] = []; //let js handle the data through ajax
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data
+        ], 200);
 
     }
 

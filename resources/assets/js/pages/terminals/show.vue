@@ -4,18 +4,18 @@
         <zzi-wait></zzi-wait>
         <div v-if="dataReady">
 
-            <button class="btn-back" @click="$router.push('/users')"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
-                To User List
+            <button class="btn-back" @click="$router.push('/terminals')"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
+                To Terminal List
             </button>
-            <button v-if="page!='create'" class="btn-new" @click="$router.push('/users/create')"><i class="fa fa-plus"
+            <button v-if="page!='create'" class="btn-new" @click="$router.push('/terminals/create')"><i class="fa fa-plus"
                                                                                                     aria-hidden="true"></i>New
-                User
+                Terminal
             </button>
 
             <div id="user" class="recordTableView">
-                <h2 v-if="page==='create'">New User</h2>
-                <h2 v-else-if="page==='edit'">Edit user {{data.user[0].username}} </h2>
-                <h2 v-else-if="page==='show'">User {{data.user[0].username}}</h2>
+                <h2 v-if="page==='create'">New Terminal</h2>
+                <h2 v-else-if="page==='edit'">Edit Terminal {{data.records[0].name}} </h2>
+                <h2 v-else-if="page==='show'">Terminal {{data.records[0].name}}</h2>
             </div>
 
         </div>
@@ -45,10 +45,10 @@
             self.dataReady = false;
             //bus.$emit('zzwaitevent');
             if (self.page == 'create') {
-                self.getData('/users/create');
+                self.getData('/terminals/create');
             }
             else {
-                self.getData('/users/' + this.$route.params.id);
+                self.getData('/terminals/' + this.$route.params.id);
             }
 
         },
@@ -76,9 +76,9 @@
                 access = 'write';
                 edit_display = 'on_page';
             }
-            let route = '/users';
+            let route = '/terminals';
             return new AwesomeTable({
-                data: self.data.user,
+                data: self.data.records,
                 route: route,
                 column_definition: columnDefinition(self.data),
                 table_buttons: ['edit', 'delete'],

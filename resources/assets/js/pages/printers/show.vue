@@ -4,18 +4,18 @@
         <zzi-wait></zzi-wait>
         <div v-if="dataReady">
 
-            <button class="btn-back" @click="$router.push('/users')"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
-                To User List
+            <button class="btn-back" @click="$router.push('/printers')"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
+                To Printer List
             </button>
-            <button v-if="page!='create'" class="btn-new" @click="$router.push('/users/create')"><i class="fa fa-plus"
+            <button v-if="page!='create'" class="btn-new" @click="$router.push('/printers/create')"><i class="fa fa-plus"
                                                                                                     aria-hidden="true"></i>New
-                User
+                Printer
             </button>
 
             <div id="user" class="recordTableView">
-                <h2 v-if="page==='create'">New User</h2>
-                <h2 v-else-if="page==='edit'">Edit user {{data.user[0].username}} </h2>
-                <h2 v-else-if="page==='show'">User {{data.user[0].username}}</h2>
+                <h2 v-if="page==='create'">New Printer</h2>
+                <h2 v-else-if="page==='edit'">Edit Printer {{data.records[0].name}} </h2>
+                <h2 v-else-if="page==='show'">Printer {{data.records[0].name}}</h2>
             </div>
 
         </div>
@@ -45,10 +45,10 @@
             self.dataReady = false;
             //bus.$emit('zzwaitevent');
             if (self.page == 'create') {
-                self.getData('/users/create');
+                self.getData('/printers/create');
             }
             else {
-                self.getData('/users/' + this.$route.params.id);
+                self.getData('/printers/' + this.$route.params.id);
             }
 
         },
@@ -76,9 +76,9 @@
                 access = 'write';
                 edit_display = 'on_page';
             }
-            let route = '/users';
+            let route = '/printers';
             return new AwesomeTable({
-                data: self.data.user,
+                data: self.data.records,
                 route: route,
                 column_definition: columnDefinition(self.data),
                 table_buttons: ['edit', 'delete'],

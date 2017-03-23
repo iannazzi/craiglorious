@@ -49,7 +49,7 @@ class PrinterController extends Controller
         $number_of_records_available = Printer::all()->count();
         $return_data = $this->returnData();
         $return_data['page'] = 'index';
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
 
         return response()->json([
@@ -68,7 +68,7 @@ class PrinterController extends Controller
         $data = Printer::findOrFail($id);
         $return_data = $this->returnData();
         $return_data['page'] = 'show';
-        $return_data['data'] = [$data]; //let js handle the data through ajax
+        $return_data['records'] = [$data]; //let js handle the data through ajax
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -81,7 +81,7 @@ class PrinterController extends Controller
     {
         $return_data = $this->returnData();
         $return_data['page'] = 'create';
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
         return response()->json([
             'success' => true,
             'message' => 'search returned',

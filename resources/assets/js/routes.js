@@ -9,6 +9,10 @@ let routes = [
 
     },
     {
+        path: '/calendar',
+        component: require('./pages/calendar/calendarPage.vue')
+    },
+    {
         path: '/roles',
         component: require('./pages/roles/pageSetup.vue'),
         props: {  },
@@ -79,29 +83,154 @@ let routes = [
         ]
     },
     {
-        path: '/calendar',
-        component: require('./pages/calendar/calendarPage.vue')
-    },
-    {
-        path: '/vendors',
-        component: require('./pages/vendors/vendors.vue')
-    },
-    {
         path: '/user',
         component: require('./pages/user/user.vue')
     },
     {
         path: '/locations',
-        component: require('./pages/locations/locations.vue')
+        component: require('./pages/locations/pageSetup.vue'),
+        props: {  },
+        children: [
+            {
+                path:'',
+                component: require('./pages/locations/index.vue'),
+                props: { page: 'index' },
+            },
+            {
+                path: 'create',
+                component: require('./pages/locations/show.vue'),
+                props: { page: 'create' }
+            },
+            {
+                path: ':id',
+                component:{template: '<router-view></router-view>'},
+                children: [
+                    {
+                        path: '',
+                        component: require('./pages/locations/show.vue'),
+                        props: { page: 'show' }
+                    },
+                    {
+                        path: 'edit',
+                        component: require('./pages/locations/show.vue'),
+                        props: { page: 'edit' }
+                    }
+
+                ],
+            },
+
+        ]
     },
     {
         path: '/terminals',
-        component: require('./pages/terminals/terminals.vue')
+        component: require('./pages/terminals/pageSetup.vue'),
+        props: {  },
+        children: [
+            {
+                path:'',
+                component: require('./pages/terminals/index.vue'),
+                props: { page: 'index' },
+            },
+            {
+                path: 'create',
+                component: require('./pages/terminals/show.vue'),
+                props: { page: 'create' }
+            },
+            {
+                path: ':id',
+                component:{template: '<router-view></router-view>'},
+                children: [
+                    {
+                        path: '',
+                        component: require('./pages/terminals/show.vue'),
+                        props: { page: 'show' }
+                    },
+                    {
+                        path: 'edit',
+                        component: require('./pages/terminals/show.vue'),
+                        props: { page: 'edit' }
+                    }
+
+                ],
+            },
+
+        ]
     },
     {
         path: '/printers',
-        component: require('./pages/printers/printers.vue')
+        component: require('./pages/printers/pageSetup.vue'),
+        props: {  },
+        children: [
+            {
+                path:'',
+                component: require('./pages/printers/index.vue'),
+                props: { page: 'index' },
+            },
+            {
+                path: 'create',
+                component: require('./pages/printers/show.vue'),
+                props: { page: 'create' }
+            },
+            {
+                path: ':id',
+                component:{template: '<router-view></router-view>'},
+                children: [
+                    {
+                        path: '',
+                        component: require('./pages/printers/show.vue'),
+                        props: { page: 'show' }
+                    },
+                    {
+                        path: 'edit',
+                        component: require('./pages/printers/show.vue'),
+                        props: { page: 'edit' }
+                    }
+
+                ],
+            },
+
+        ]
     },
+    {
+        path: '/vendors',
+        component: require('./pages/vendors/pageSetup.vue'),
+        props: {  },
+        children: [
+            {
+                path:'',
+                component: require('./pages/vendors/index.vue'),
+                props: { page: 'index' },
+            },
+            {
+                path: 'create',
+                component: require('./pages/vendors/show.vue'),
+                props: { page: 'create' }
+            },
+            {
+                path: ':id',
+                component:{template: '<router-view></router-view>'},
+                children: [
+                    {
+                        path: '',
+                        component: require('./pages/vendors/show.vue'),
+                        props: { page: 'show' }
+                    },
+                    {
+                        path: 'edit',
+                        component: require('./pages/vendors/show.vue'),
+                        props: { page: 'edit' }
+                    }
+
+                ],
+            },
+
+        ]
+    },
+
+
+
+
+
     {
         path: '/browser_tests',
         component: require('./pages/tests/browser_tests.vue')

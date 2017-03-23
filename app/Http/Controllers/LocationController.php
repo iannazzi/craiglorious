@@ -46,7 +46,7 @@ class LocationController extends Controller
         $number_of_records_available = Location::all()->count();
         $return_data = $this->returnData();
         $return_data['page'] = 'index';
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
         return response()->json([
             'success' => true,
@@ -62,7 +62,7 @@ class LocationController extends Controller
         $data = Location::findOrFail($id);
         $return_data = $this->returnData();
         $return_data['page'] = 'show';
-        $return_data['data'] = [$data]; //let js handle the data through ajax
+        $return_data['records'] = [$data]; //let js handle the data through ajax
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -75,7 +75,7 @@ class LocationController extends Controller
     {
         $return_data = $this->returnData();
         $return_data['page'] = 'create';
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
         return response()->json([
             'success' => true,
             'message' => 'search returned',

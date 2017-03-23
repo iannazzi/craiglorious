@@ -1,8 +1,4 @@
-import {search} from './search';
-import {show} from './show';
-
-export function pageSetup(server_response_data) {
-
+export default function(data){
     let column_definition = [
         {
             "db_field": "id",
@@ -27,7 +23,7 @@ export function pageSetup(server_response_data) {
             "caption": "Parent Location",
             "type": "select",
 
-            "select_values": server_response_data.locations,
+            "select_values": data.locations,
             "show_on_list": true,
             "show_on_view": true,
             "show_on_edit": true,
@@ -111,41 +107,6 @@ export function pageSetup(server_response_data) {
             "word_wrap": true,
             "post": true
         }];
-    let table_definition = {
-        "name": "locations_table",
-        "access": "READ",
-        "record_table_buttons": ['edit'],
-        "dynamic_table_buttons": ['addRow', 'deleteRow', 'deleteAllRows', 'moveRows', 'copyRows', 'edit'],
-        "table_view": "KEY_VALUE INDEX",
-        "route": "/locations",
-        "footer": [],
-        "header": [],
-        "column_definition": column_definition,
-    };
 
-    switch (server_response_data.page) {
-        case 'show':
-            table_definition.table_view = 'show';
-            return show(table_definition, server_response_data);
-            break;
-        case 'create' :
-            table_definition.table_view = 'create';
-            return show(table_definition, server_response_data);
-            break;
-        case 'edit' :
-            table_definition.table_view = 'edit';
-            return show(table_definition, server_response_data);
-            break;
-        case 'index':
-            table_definition.table_view = 'index';
-            return search(table_definition, server_response_data)
-
-            break;
-        default:
-            return document.createTextNode('Wrong page sent in ... ' + data.page);
-    }
+    return column_definition;
 }
-
-
-
-
