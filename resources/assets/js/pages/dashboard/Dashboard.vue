@@ -1,9 +1,9 @@
 <template>
-    <div >
+    <div>
         <nav-component></nav-component>
         <zzi-nav-keys></zzi-nav-keys>
         <zzi-calendar></zzi-calendar>
-        <zzi-views ></zzi-views>
+        <zzi-views></zzi-views>
         <footer-component></footer-component>
     </div>
 </template>
@@ -12,18 +12,15 @@
     export default {
         components: {
             'zzi-views': require('./views.vue'),
-           'zzi-calendar': require('./CalendarSmall.vue')
+            'zzi-calendar': require('./CalendarSmall.vue')
         },
         data(){
             return {
-                viewsLoaded : false
+                viewsLoaded: false
             }
         },
         mounted: function () {
             let self = this;
-
-
-
 
 
         },

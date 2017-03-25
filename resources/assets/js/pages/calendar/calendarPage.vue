@@ -1,29 +1,37 @@
 <template>
     <div>
+        <nav-component></nav-component>
         <zzi-nav-keys></zzi-nav-keys>
-        <div id="calendar"></div>
-        <zzi-calendar-entry-modal></zzi-calendar-entry-modal>
+        <div v-show="loaded">
+            <div id="calendar"></div>
+            <zzi-calendar-entry-modal></zzi-calendar-entry-modal>
+            <div class="container hidden-print">
+                <div class="jumbotron">
+                    <h1>Help is here</h1>
+                    <p></p>
+                </div>
+                <div class="panel ">
+                    <h2>I added keyboard commands to make your life easier</h2>
+                    <table class="table table-bordered table-hover">
+                        <tr>
+                            <th>Action</th>
+                            <th>Keyboard Shortcut</th>
+                        </tr>
+                        <tr>
+                            <td>Copy Event</td>
+                            <td>command + click and drag</td>
+                        </tr>
+                    </table>
+                </div>
 
-        <div class="container hidden-print">
-            <div class="jumbotron">
-                <h1>Help is here</h1>
-                <p></p>
             </div>
-            <div class="panel ">
-                <h2>I added keyboard commands to make your life easier</h2>
-                <table class="table table-bordered table-hover">
-                    <tr>
-                        <th>Action</th>
-                        <th>Keyboard Shortcut</th>
-                    </tr>
-                    <tr>
-                        <td>Copy Event</td>
-                        <td>command + click and drag</td>
-                    </tr>
-                </table>
-            </div>
-
         </div>
+        <div v-show="false">
+            <zzi-matrix></zzi-matrix>
+        </div>
+
+
+        <footer-component></footer-component>
 
 
     </div>
@@ -32,174 +40,147 @@
     #calendar {
         padding: 20px;
     }
-    @media print{@page {size: landscape}}
+
+    @media print {
+        @page {
+            size: landscape
+        }
+    }
 </style>
 <script>
     export default {
         data() {
-            return {}
+            return {
+                loaded: false
+            }
         },
         mounted: function () {
 
+            //cached page data...
+            console.log(this.$root.cached_page_data);
+            console.log(cached_page_data);
+
+
             let self = this;
-            client({ path: '/calendar'}).then(
+
+            self.renderCal();
+            this.loaded = true;
+            client({path: '/calendar'}).then(
                 function (response) {
-                    response.entity.event_types;
-                    $("#calendar").fullCalendar( 'addEventSource', response.entity.events )
-//                    $('#calendar').fullCalendar({events: {
-//                        data: response.entity,
-//                    cache: true
-//                    }});
-                },
-                function (response, status) {
-                    console.log(response);
-//                    if (_.contains([401, 500], status)) {
-//                    }
+                    bus.$emit('addCalendarEventTypes', response.entity.event_types)
+                    self.loaded = true;
+                    $("#calendar").fullCalendar('addEventSource', response.entity.events)
                 });
 
 
-            bus.$on('add_event', function(event){
+            bus.$on('add_event', function (event) {
                 console.log('add event');
-                $('#calendar').fullCalendar('renderEvent', self.clone(event));
+                console.log(event);
+                $('#calendar').fullCalendar('renderEvent', event);
+                //$('#calendar').fullCalendar('renderEvent', self.clone(event));
             });
-            bus.$on('refetchEvents', function(){
+            bus.$on('refetchEvents', function () {
                 console.log('refetchEvents');
-                $('#calendar').fullCalendar( 'refetchEvents' )
+                $('#calendar').fullCalendar('refetchEvents')
             })
 
-            //we are going to need some data from the server...
-            this.event_types = [];
-
-            var copyKey = false;
-            //keep track of the shift key for copy event
-            //e.ctrlKey
-            //e.altKey
-            //e.shiftKey
-            $(window).keydown(function (e) {
-//                if (e.ctrlKey) alert("control");
-//                if (e.altKey) alert("alt");
-//                if (e.metaKey) alert("meta");
-//                if (e.shiftKey) alert("shift");
-
-            });
-            $(document).keydown(function (e) {
-                copyKey = e.metaKey;
-            }).keyup(function () {
-                copyKey = false;
-            });
-            $(document).ready(function () {
-                let cal = $( "#calendar" );
-
-                cal.fullCalendar({
-                    //height: 650,
-                    events: '/calendar',
-                    selectable:true,
-                    eventDragStart: function (event, jsEvent, ui, view) {
-                    },
-                    eventDragStop: function (event, jsEvent, ui, view) {
-                        //console.log(event);
-                        //bus.$emit('save_event', event);
-                    },
-                    eventRender: function(event, element) {
-                        element.bind('dblclick', function() {
-                            bus.$emit('edit_calendar_entry', event)
-                        });
-                    },
-
-                    eventDrop(event, delta, revertFunc, jsEvent, ui, view) {
-//                        console.log(event);
-//                        console.log(delta);
-//                        console.log(copyKey);
-                        if (copyKey) {
-                            //$('#calendar').fullCalendar('renderEvent', event);
-                            console.log('copy');
-                            //bus.$emit('drag_copy_event', event);
-
-                            console.log(event.start.toString());
-                            console.log(delta);
-
-                            let new_event = self.clone(event);
-                            new_event.id='';
-//                            console.log(new_event.start.toString())
-                            new_event.start.subtract(delta);
-                            new_event.end.subtract(delta);
-//                            console.log(new_event.start.toString())
-                            self.save(new_event);
 
 
-                            $('#calendar').fullCalendar('renderEvent', new_event);
-//                            bus.$emit('add_event', new_event);
-                            //event.start = event.start.add(delta);
-                            //bus.$emit('add_event', event);
-                            //revertFunc();
-                        }
-                        else {
-                            console.log('save');
-                            //bus.$emit('move_event', event);
-                            self.save(event);
-                        }
+        },
+        methods: {
+            renderCal(){
+                let self = this;
+                $(document).ready(function () {
 
-                    },
-                    eventResize: function (event, delta, revertFunc, jsEvent, ui, view) {
-                        //bus.$emit('resize_event', event);
-                        self.save(event);
-                    },
-                    updateEvent: function (event) {
-                        console.log('send in update');
-                    },
-                    customButtons: {
-                        myCustomButton: {
-                            text: 'custom!',
-                            click: function () {
-                                alert('clicked the custom button!');
+
+                    let copyKey;
+                    $(document).keydown(function (e) {
+                        copyKey = e.metaKey;
+                    }).keyup(function () {
+                        copyKey = false;
+                    });
+
+                    let cal = $("#calendar");
+
+                    cal.fullCalendar({
+                        //height: 650,
+                        selectable: true,
+                        eventRender: function (event, element) {
+                            element.bind('dblclick', function () {
+                                bus.$emit('edit_calendar_entry', event)
+                            });
+                        },
+
+                        eventDrop(event, delta, revertFunc, jsEvent, ui, view) {
+
+                            if (copyKey) {
+                                console.log('save');
+                                self.save(event);
+                                let original_event = self.clone(event);
+                                original_event.id = '';
+                                original_event.start.subtract(delta);
+                                original_event.end.subtract(delta);
+                                self.save(original_event);
+
+
+                                $('#calendar').fullCalendar('renderEvent', original_event);
+
                             }
-                        }
-                    },
-                    header: {
-                        left: 'prev,next today myCustomButton',
-                        center: 'title',
-                        right: 'month,agendaWeek,listWeek,agendaDay'
-                    },
-                    navLinks: true,
-                    dayClick: function (date, jsEvent, view) {
-                        if (view.name == 'month') {
-                            cal.fullCalendar('gotoDate', date);
-                            cal.fullCalendar('changeView', 'agendaWeek')
-                        }
-                        else {
-                            bus.$emit('add_calendar_entry', date)
-                        }
+                            else {
+                                console.log('save');
+                                //bus.$emit('move_event', event);
+                                self.save(event);
+                            }
 
-                    },
-                    eventClick: function (event, jsEvent, view) {
+                        },
+                        eventResize: function (event, delta, revertFunc, jsEvent, ui, view) {
+                            //bus.$emit('resize_event', event);
+                            self.save(event);
+                        },
+                        header: {
+                            left: 'prev,next today myCustomButton',
+                            center: 'title',
+                            right: 'month,agendaWeek,listWeek,agendaDay'
+                        },
+                        navLinks: true,
+                        dayClick: function (date, jsEvent, view) {
+                            if (view.name == 'month') {
+                                cal.fullCalendar('gotoDate', date);
+                                cal.fullCalendar('changeView', 'agendaWeek')
+                            }
+                            else {
+                                bus.$emit('add_calendar_entry', date)
+                            }
+
+                        },
+                        eventClick: function (event, jsEvent, view) {
 //                        bus.$emit('edit_calendar_entry', event)
-                    },
-                    scrollTime: '14:00:00',
+                        },
+                        scrollTime: '14:00:00',
 //                    minTime:'05:00:00',
 //                    maxTime:'22:00:00',
-                    businessHours: [ // specify an array instead
-                        {
-                            dow: [1, 2, 3, 4, 5], // Monday, Tuesday, WednesdayThursday, Friday
-                            start: '10:00', // 8am
-                            end: '19:00' // 6pm
-                        },
-                        {
-                            dow: [6], //
-                            start: '10:00', // 10am
-                            end: '18:00' // 4pm
-                        },
-                        {
-                            dow: [0], //
-                            start: '12:00', // 10am
-                            end: '17:00' // 4pm
-                        }
-                    ],
-                })
+                        businessHours: [ // specify an array instead
+                            {
+                                dow: [1, 2, 3, 4, 5], // Monday, Tuesday, WednesdayThursday, Friday
+                                start: '10:00', // 8am
+                                end: '19:00' // 6pm
+                            },
+                            {
+                                dow: [6], //
+                                start: '10:00', // 10am
+                                end: '18:00' // 4pm
+                            },
+                            {
+                                dow: [0], //
+                                start: '12:00', // 10am
+                                end: '17:00' // 4pm
+                            }
+                        ],
+                    })
 
+                });
 
-            });
-        },
-        methods:{
+            },
             save(event){
 
                 let post_data = {
@@ -215,18 +196,15 @@
                     resource_editable: 1,
                 }
                 let data = {data: post_data, _method: 'put'};
-                $.ajax({
-                    url: '/calendar',
-                    type: 'POST',
-                    data: data,
-                    success: function (response) {
-                        console.log('event_saved_from_main calendar');
-                    },
 
-                });
+                client({path: '/calendar', entity: data}).then(
+                    function (response) {
+                        console.log('event_saved_from_main calendar');
+                    });
+
             },
             clone(event){
-                return  {
+                return {
                     id: '',
                     title: event.title,
 //                    start: event.start.format('YYYY-MM-DD HH:MM:SS'),

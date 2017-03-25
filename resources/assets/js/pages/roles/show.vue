@@ -1,6 +1,5 @@
 <template>
     <div>
-        <zzi-wait></zzi-wait>
         <div v-if="dataReady">
 
             <button class="btn-back" @click="$router.push('/roles')"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
@@ -21,6 +20,9 @@
             <!--<button @click="showModalTable">pop up modal table</button>-->
             <div id="rights" ></div>
 
+        </div>
+        <div v-else>
+            <zzi-matrix></zzi-matrix>
         </div>
 
     </div>
@@ -44,10 +46,10 @@
             //bus.$emit('zzwaitevent');
 
             if (self.page == 'create') {
-                self.getData('/roles/create');
+                getData(self, '/roles/create');
             }
             else {
-                self.getData('/roles/' + this.$route.params.id);
+                getData(self, '/roles/' + this.$route.params.id);
             }
         },
         created(){
@@ -56,16 +58,17 @@
         },
         methods: {
 
-            getData(url)
-            {
-                let self = this;
-                $.get(url, function (response) {
-                    console.log(response);
-                    self.data = response.data;
-                    self.dataReady = true;
-                    self.renderTable();
-                });
-            },
+//            getData(route)
+//            {
+//                let self = this;
+//                client({path: route}).then(
+//                    function (response) {
+//                        console.log(response);
+//                        self.data = response.data;
+//                        self.dataReady = true;
+//                        self.renderTable();
+//                    });
+//            },
 //            showModalTable(){
 //                let self = this;
 //                let roleTableModal = this.createRoleTable();

@@ -22,15 +22,15 @@ class DashboardController extends Controller
 
 
     }
-    public function pageData(Request $request){
+    public function cachedPageData(Request $request){
         //this should give me a bunch of stuff needed for all pages to speed up loading.....?
-        $dashboard_page_data = [
+        $cached_page_data = [
             'calendar'=> [
                 'event_types' => CalendarEntry::getEventTypes(),
             ]
         ];
         return  [
-            'page_data' => $dashboard_page_data,
+            'cached_page_data' => $cached_page_data,
         ];
     }
 

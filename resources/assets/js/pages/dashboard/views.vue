@@ -38,9 +38,6 @@
         </div>
         <div v-else class = "row">
             <zzi-matrix></zzi-matrix>
-            <div class="col-md-4 col-md-offset-4 wait">
-
-            </div>
         </div>
     </div>
 </template>
@@ -57,22 +54,39 @@
         },
 
         mounted: function () {
+            this.query = '';
+
             let self = this;
 
-            client({ path: '/dashboard'}).then(
-                function (response) {
+            if( ! cached_page_data.views)
+            {
+                if (1) ml('no cached_page_data got to go and get some')
+                client({ path: '/dashboard'}).then(
+                    function (response) {
 
-                    self.views = response.entity.views;
-                    self.views.forEach(function (entry) {
-                        entry.show = true
-                    });
-                    self.loaded = true;
-                },
-                function (response, status) {
-                    console.log(response);
+                        self.views = response.entity.views;
+
+
+                        self.views.forEach(function (entry) {
+                            entry.show = true
+                        });
+                        self.loaded = true;
+                        cached_page_data['views'] = self.views;
+                        self.$root.cached_page_data['views'] = self.views;
+                    },
+                    function (response, status) {
+                        console.log(response);
 //                    if (_.contains([401, 500], status)) {
 //                    }
-                });
+                    });
+
+            }
+            else{
+                if (1) ml('using cached data')
+                self.views = cached_page_data['views'];
+                self.loaded = true;
+                self.loadIcons();
+            }
 
             this.rooms = [
                 {

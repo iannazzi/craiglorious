@@ -8,6 +8,7 @@ import router from './routes'
 
 import {AwesomeTable} from './elements/tables/AwesomeTable';
 
+//some globals please.....
 window.AwesomeTable = AwesomeTable;
 window.bus = new Vue();
 window.Event = new class {
@@ -24,6 +25,21 @@ window.Event = new class {
     listen(event, callback) {
         this.vue.$on(event, callback);
     }
+}
+window.myUser = {
+    authenticated: false,
+    admin: false
+}
+window.cached_page_data = {};
+window.getData = function(component, route){
+        client({path: route}).then(
+            function (response) {
+                console.log(response);
+                component.data = response.entity.data;
+                component.dataReady = true;
+                component.renderTable();
+                bus.$emit('zzwaitoverevent');
+            });
 }
 
 
@@ -58,10 +74,6 @@ Vue.component('zzi-matrix', require('./components/wait/matrix.vue'))
 
 
 // Vue.component('zzi-calendar-entry-modal2', require('./components/modals/vueBootstrapModal.vue'))
-window.myUser = {
-    authenticated: false,
-    admin: false
-}
 
 // router.beforeEach(function (transition) {
 //     if (transition.to.guarded && ! MyUser.authenticated) {
@@ -79,7 +91,7 @@ new Vue({
             token: null,
             authenticated: false,
             admin: false,
-            dashboard_page_data: null,
+            cached_page_data: {},
             appLoaded: false,
 
         }
@@ -103,7 +115,7 @@ new Vue({
             bus.$emit('authenticated')
         },
         destroyLogin: function (user) {
-            if (1) ml('Login with our token failed, do some cleanup and redirect if we\'re on an authenticated route');
+            if (1) ml('Login with our token failed, do some cleanup');
             this.user = null
             this.token = null
             this.authenticated = false
@@ -111,13 +123,12 @@ new Vue({
             myUser.authenticated = false;
             myUser.admin = false;
             localStorage.removeItem('jwt-token')
-            if (1) ml('this.$route.guarded');
-            if (1) ml(this.$route);
 
             if (this.$route.meta.guarded) {
                 if (1) ml('app reloaded, login failed on a guarded route, going to login page');
                 this.$router.push('/auth/login')
             }
+            if (1) ml('not a guarded route so there is no redirect');
 
 
         },
@@ -134,25 +145,27 @@ new Vue({
 
                         self.setLogin(response.entity.user)
                         self.appLoaded = true;
+
                     },
                     function (response) {
                         if (1) ml('we have a bad token')
-
                         self.destroyLogin()
+                        self.appLoaded = true;
                     }
                 )
             }
             else {
-                if (1) ml('token is null')
+                if (1) ml('validate token after refresh is null')
+                self.appLoaded = true;
 
             }
         },
         getPageData(){
             //how about grabbing site wide data?
             let self = this;
-            client({path: '/dashboard/page_data'}).then(
+            client({path: '/dashboard/cached_page_data'}).then(
                 function (response) {
-                    self.dashboard_page_data = response.entity.dashboard_page_data;
+                    self.cached_page_data = response.entity.cached_page_data;
                 },
                 function (response) {
 
@@ -186,7 +199,7 @@ new Vue({
                         console.log(response);
                         self.destroyLogin();
                     })
-            }, 10000); // every 10 seconds
+            }, 100000); // every 100 seconds
         });
 
 

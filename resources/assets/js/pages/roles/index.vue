@@ -1,11 +1,16 @@
 <template>
     <div>
-        <zzi-wait></zzi-wait>
-        <div v-if="dataReady" id="data_table_view">
-            <button class="btn-new" @click="$router.push('/roles/create')"><i class="fa fa-plus" aria-hidden="true"></i>New
-                Role
-            </button>
-            <div id="roles"></div>
+        <div v-if="dataReady">
+            <div id="data_table_view">
+                <button class="btn-new" @click="$router.push('/roles/create')"><i class="fa fa-plus"
+                                                                                  aria-hidden="true"></i>New
+                    Role
+                </button>
+                <div id="roles"></div>
+            </div>
+        </div>
+        <div v-else>
+            <zzi-matrix></zzi-matrix>
         </div>
     </div>
 
@@ -33,14 +38,18 @@
 
 
             bus.$emit('zzwaitevent');
-            $.get('/roles', function (response) {
-                // if session was expired
-//                console.log(response);
-                self.data = response.data;
-                self.dataReady = true;
-                self.renderTable();
-                bus.$emit('zzwaitoverevent');
-            });
+
+            getData(self, '/roles');
+//            client({path: '/roles'}).then(
+//                function (response) {
+//                    console.log(response);
+//                    self.data = response.data;
+//                    self.dataReady = true;
+//                    self.renderTable();
+//                    cached_page_data['roles'] = self.data;
+//                    bus.$emit('zzwaitoverevent');
+//                });
+
         },
         methods: {
             renderTable(){
@@ -52,7 +61,7 @@
                     table_buttons: [],
                     table_view: self.page,
                     edit_display: 'on_page',
-                    route: "/roles",
+                    route: "/api/roles",
                     footer: [],
                     header: [],
                     column_definition: columnDefinition(self.data),
@@ -60,7 +69,7 @@
                     data: self.data,
                     number_of_records_available: self.data.number_of_records_available,
                 })
-                $(function(){
+                $(function () {
                     searchableTable.addTo('roles')
                 })
 

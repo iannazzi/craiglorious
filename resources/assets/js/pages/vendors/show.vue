@@ -53,16 +53,19 @@
 
         },
     methods: {
-        getData(url)
+        getData(route)
         {
             let self = this;
-            $.get(url, function (response) {
-                console.log(response);
-                self.data = response.data;
-                self.dataReady = true;
-                self.renderTable();
-                bus.$emit('zzwaitoverevent');
-            });
+
+            client({path: route}).then(
+                function (response) {
+                    console.log(response);
+                    self.data = response.data;
+                    self.dataReady = true;
+                    self.renderTable();
+                    bus.$emit('zzwaitoverevent');
+
+                });
         },
         createTable()
         {

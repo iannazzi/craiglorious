@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Classes\Routes\CIRoutes;
 
 
 
@@ -20,7 +21,7 @@ $api->version('v1', function ($api)
 
             $api->get('validate_token', 'Auth\LoginController@validateToken');
             $api->get('dashboard', 'DashboardController@index');
-            $api->get('dashboard/page_data', 'DashboardController@pageData');
+            $api->get('dashboard/cached_page_data', 'DashboardController@cachedPageData');
 
 
             $api->get('calendar', 'CalendarController@getEvents');
@@ -29,6 +30,25 @@ $api->version('v1', function ($api)
             $api->post('calendar/search', 'CalendarController@search');
             $api->put('calendar', 'CalendarController@update');
             $api->delete('calendar', 'CalendarController@destroy');
+
+            CIRoutes::addRoutes($api, 'roles');
+            $api->put('roles/rights', 'RoleController@updateRights');
+
+
+
+            $api->resource('tests', 'TestController');
+
+
+            $api->get('user/', 'UserController@getPreferences');
+            $api->post('user/', 'UserController@postPreferences');
+            CIRoutes::addRoutes($api, 'users');
+            CIRoutes::addRoutes($api, 'locations');
+            CIRoutes::addRoutes($api, 'terminals');
+            CIRoutes::addRoutes($api, 'printers');
+            CIRoutes::addRoutes($api, 'vendors');
+            CIRoutes::addRoutes($api, 'employees');
+
+
 
 
 

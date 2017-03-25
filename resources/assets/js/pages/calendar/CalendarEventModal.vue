@@ -209,7 +209,7 @@
                 id: '',
                 errors: new Errors(),
                 show: false,
-                eventTypes: this.$root.page_data.calendar.event_types
+                eventTypes: [],
 //                eventTypes:[
 //                    {
 //                        'value': 'null',
@@ -280,8 +280,12 @@
             }
         },
         mounted(){
+
             let self = this;
 
+            bus.$on('addCalendarEventTypes', function (event_types) {
+                self.eventTypes = event_types;
+            })
             bus.$on('add_calendar_entry', function (date) {
                 self.add_edit = true;
                 self.addEvent(date);
@@ -444,21 +448,14 @@
                 let data = {data: post_data, _method: 'put'};
                 let self = this;
 //                console.log(JSON.stringify(data))
-
-                $.ajax({
-                    url: '/calendar',
-                    type: 'POST',
-                    data: data,
-                    success: function (response) {
+                client({path: '/calendar', entity: data}).then(
+                    function (response) {
                         console.log('event_saved');
                         if(self.add_edit) {
                             bus.$emit('event_saved');
                         }
-                    },
-                    error(response){
-                        bus.$emit('event_save_error', response);
-                    }
-                });
+                    });
+
             },
             getStartDateTime(){
                 return  this.start_date + ' ' + this.start_time + ':00'

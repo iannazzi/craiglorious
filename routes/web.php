@@ -27,23 +27,9 @@ Route::group([], function(){
 
 Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
 
-    Route::get('/dashboard', [ 'as' => 'dashboard', 'uses' => 'DashboardController@getIndex']);
-
-    Route::resource('tests', 'TestController');
+//    Route::get('/dashboard', [ 'as' => 'dashboard', 'uses' => 'DashboardController@getIndex']);
 
 
-    CIRoutes::addRoutes('roles');
-    Route::put('roles/rights', 'RoleController@updateRights');
-
-    CIRoutes::addRoutes('users');
-    Route::get('user/', 'UserController@getPreferences');
-    Route::post('user/', 'UserController@postPreferences');
-
-    CIRoutes::addRoutes('locations');
-    CIRoutes::addRoutes('terminals');
-    CIRoutes::addRoutes('printers');
-    CIRoutes::addRoutes('vendors');
-    CIRoutes::addRoutes('employees');
 
 
 });

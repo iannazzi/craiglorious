@@ -91,7 +91,10 @@ class LoginController extends Controller
             return response()->json(['error' => 'invalid_credentials'], 401);
         }
         $system->createTenantConnection();
-        return JWTAuth::parseToken()->authenticate();
+        $user =JWTAuth::parseToken()->authenticate();
+        //dd($user);
+        //todo: logout user if they log in elsewhere check the database to see if the user has logged in elsewhere....
+        return $user;
     }
 
     public function jwtTest(Request $request){

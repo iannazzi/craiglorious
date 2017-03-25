@@ -30,14 +30,16 @@
             //we need to get some data
             let self = this;
 
-            bus.$emit('zzwaitevent');
-            $.get('/terminals', function (response) {
-                console.log(response);
-                self.data = response.data;
-                self.dataReady = true;
-                self.renderTable();
-                bus.$emit('zzwaitoverevent');
-            });
+
+            client({path: '/terminals'}).then(
+                function (response) {
+                    console.log(response);
+                    self.data = response.data;
+                    self.dataReady = true;
+                    self.renderTable();
+                });
+
+
         },
         methods: {
             renderTable(){
