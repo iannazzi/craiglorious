@@ -18,12 +18,22 @@
 //                console.log('weather feed: ');
 //                console.log(data);
 //            });
+            let self = this;
+            client({ path: '/calendar'}).then(
+                function (response) {
 
+                    $("#calendar").fullCalendar( 'addEventSource', response.entity.events )
+//                    $('#calendar').fullCalendar({events: {
+//                        data: response.entity,
+//                    cache: true
+//                    }});
+                },
+                function (response, status) {
+                    console.log(response);
+//                    if (_.contains([401, 500], status)) {
+//                    }
+                });
 
-
-
-
-            console.log('calendar coming')
             $(document).ready(function () {
 
                 // page is now ready, initialize the calendar...
@@ -31,9 +41,11 @@
                 $('#calendar').fullCalendar({
                     height: 100,
                     header:false,
-                    events: '/api/calendar',
+
                     eventClick:  function(event, jsEvent, view) {
-                        window.location='/dashboard#/calendar?event='+event.id;
+
+                        self.$router.push({path: '/calendar', query: { event: event.id }});
+
 //                        $('#modalTitle').html(event.title);
 //                        $('#modalBody').html(event.description);
 //                        $('#eventUrl').attr('href',event.url);
@@ -41,7 +53,7 @@
                     },
                     navLinks: false,
                     dayClick: function(date, jsEvent, view) {
-                        window.location='/dashboard#/calendar?day='+date.format('YYYY-MM-DD');
+                        self.$router.push({path: '/calendar', query: { day: date.format('YYYY-MM-DD') }});
 
 
                     },

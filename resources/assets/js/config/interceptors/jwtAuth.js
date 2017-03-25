@@ -18,7 +18,7 @@
 		return interceptor({
 			request: function (request, config) {
 
-				console.log(request);
+				// console.log(request);
 				var token, headers;
 
 				token = localStorage.getItem('jwt-token');
@@ -32,20 +32,22 @@
 			},
 			response: function (response) {
 
-                console.log(response);
 
+                // console.log(response);
 
                 if (response.status && response.status.code == 401) {
 					localStorage.removeItem('jwt-token');
 				}
 				if (response.headers && response.headers.Authorization) {
-                    console.log('set item')
+                    console.log('set token from header')
 
                     localStorage.setItem('jwt-token', response.headers.Authorization)
 				}
 				if (response.entity && response.entity.token && response.entity.token.length > 10) {
-					console.log('set item')
-                	localStorage.setItem('jwt-token', 'Bearer ' + response.entity.token);
+
+                	console.log('set token from response')
+
+					localStorage.setItem('jwt-token', 'Bearer ' + response.entity.token);
 				}
 				return response;
 			}

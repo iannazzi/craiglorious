@@ -7,7 +7,6 @@ Route::get('/', function () {
     //return view('pages.home');
 });
 
-Route::get('/api2/logint', ['middleware' => 'LoginAuthenticate', 'as' => 'login', 'uses' => 'Auth\LoginController@me']);
 
 //tenant auth routes... login, logout, and check session
 Route::group([], function(){
@@ -46,12 +45,6 @@ Route::group(['middleware' => ['DashboardAuthenticate'],],  function () {
     CIRoutes::addRoutes('vendors');
     CIRoutes::addRoutes('employees');
 
-    Route::get('calendar', 'CalendarController@getEvents');
-    Route::get('calendar/event_types', 'CalendarController@getEventTypes');
-//    Route::post('calendar', 'CalendarController@postEvents');
-    Route::post('calendar/search', 'CalendarController@search');
-    Route::put('calendar', 'CalendarController@update');
-    Route::delete('calendar', 'CalendarController@destroy');
 
 });
 

@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 let routes = [
     {
         path: '',
+        name: 'home',
+        meta: { guarded: false },
         // component: require('./pages/dashboard/entry')
         component: require('./pages/home.vue')
 
@@ -14,35 +16,47 @@ let routes = [
         children: [
             {
                 path: 'login',
+                name: 'login',
+
+                meta: { guarded: false },
                 component: require('./pages/auth/login.vue'),
             },
             {
                 path: 'register',
+                meta: { guarded: false },
                 component: require('./pages/auth/register.vue'),
             },
             {
                 path: 'profile',
+                meta: { guarded: false },
                 component: require('./pages/auth/profile.vue'),
             },
             {
                 path: 'logout',
+                name: 'logout',
+                meta: { guarded: false },
                 component: require('./pages/auth/logout.vue'),
             }
         ]
     },
     {
         path: '/dashboard',
+        name: 'dashboard',
+        auth: true,
+        meta: { guarded: true },
         // component: require('./pages/dashboard/entry')
         component: require('./pages/dashboard/dashboard.vue')
 
     },
     {
         path: '/calendar',
+        meta: { guarded: true },
         component: require('./pages/calendar/calendarPage.vue')
     },
     {
         path: '/roles',
         component: require('./pages/layout.vue'),
+        meta: { guarded: true },
         props: {},
         children: [
             {
@@ -77,6 +91,7 @@ let routes = [
     },
     {
         path: '/users',
+        meta: { guarded: true },
         component: require('./pages/users/pageSetup.vue'),
         props: {},
         children: [
@@ -112,10 +127,12 @@ let routes = [
     },
     {
         path: '/user',
+        meta: { guarded: true },
         component: require('./pages/user/user.vue')
     },
     {
         path: '/locations',
+        meta: { guarded: true },
         component: require('./pages/locations/pageSetup.vue'),
         props: {},
         children: [
@@ -151,6 +168,7 @@ let routes = [
     },
     {
         path: '/terminals',
+        meta: { guarded: true },
         component: require('./pages/terminals/pageSetup.vue'),
         props: {},
         children: [
@@ -186,6 +204,7 @@ let routes = [
     },
     {
         path: '/printers',
+        meta: { guarded: true },
         component: require('./pages/printers/pageSetup.vue'),
         props: {},
         children: [
@@ -221,6 +240,7 @@ let routes = [
     },
     {
         path: '/vendors',
+        meta: { guarded: true },
         component: require('./pages/vendors/pageSetup.vue'),
         props: {},
         children: [
@@ -256,13 +276,28 @@ let routes = [
     },
     {
         path: '/browser_tests',
+        meta: { guarded: false },
         component: require('./pages/tests/browser_tests.vue')
     },
 
 ]
 
-export default new VueRouter({
+
+let router =  new VueRouter({
 
     routes
 
 })
+
+router.beforeEach((to, from, next) => {
+
+    let token = localStorage.getItem('jwt-token')
+    if (to.meta.guarded) {
+        if (!token || token === null) {
+            next({path: '/auth/logout'});
+        }
+    }
+    next()
+})
+
+export default router

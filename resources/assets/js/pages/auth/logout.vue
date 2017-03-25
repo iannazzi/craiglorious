@@ -1,14 +1,16 @@
+<template></template>
 <script>
-    module.exports = {
+    export default {
+        mounted(){
+            this.$root.destroyLogin();
+            this.$router.push('/auth/login');
 
+
+        },
         route: {
             activate: function (transition) {
-                this.$root.authenticated = false
-                this.$root.user = null
-                localStorage.removeItem('user')
-                localStorage.removeItem('jwt-token')
 
-                transition.redirect('login')
+                //transition.redirect('login')
             }
         }
 

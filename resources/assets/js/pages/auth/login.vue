@@ -66,7 +66,7 @@
                 e.preventDefault()
                 bus.$emit('zzwaitevent');
                 var self = this
-                //self.loggingIn = true
+                self.loggingIn = true
                 //client is from rest + mime https://github.com/cujojs/rest
                 client({ path: 'login', entity: this.user }).then(
                     function (response) {
@@ -75,6 +75,7 @@
                        //let data = JSON.parse(response.entity);
                         localStorage.setItem('jwt-token', response.entity.token);
                         self.$emit('userHasLoggedIn', response.entity.user);
+                        bus.$emit('userHasLoggedIn', response.entity.user);
                         bus.$emit('zzwaiteventover');
                         //localStorage.setItem('jobs', JSON.stringify(response.entity.jobs) )
                         //self.$emit('userHasFetchedToken', response.entity.token)

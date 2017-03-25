@@ -37,12 +37,12 @@
                     case 68:
                         if (modifier1 && modifier2){
                             event.preventDefault();
-                            self.$router.push('/');
+                            self.$router.push('/dashboard');
                         }
                         break;
-                    case 67:
-                        if (modifier1 && modifier2) self.$router.push('/calendar');
-                        break;
+//                    case 67:
+//                        if (modifier1 && modifier2) self.$router.push('/calendar');
+//                        break;
                     default:
                 }
 

@@ -14,7 +14,9 @@ class CalendarController extends Controller
     public function getEvents(Request $request)
     {
         $entries = CalendarEntry::all();
-        $return_data = [];
+        $return_data['events'] = [];
+        $return_data['event_types'] = CalendarEntry::getEventTypes();
+
         foreach ($entries as $entry)
         {
             $tmp = [
@@ -29,15 +31,15 @@ class CalendarController extends Controller
                 'resourceEditable' => $entry->resource_editable,
                 'allDay' => $entry->all_day,
             ];
-            $return_data[] = $tmp;
+            $return_data['events'][] = $tmp;
 
 
         }
 
         return response()->json($return_data);
 
-
     }
+
     public function getEventTypes(){
 
         return response()->json( CalendarEntry::getEventTypes());

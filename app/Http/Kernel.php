@@ -67,7 +67,8 @@ class Kernel extends HttpKernel
         'LoginAuthenticate' => \App\Http\Middleware\LoginAuthenticate::class,
         'CheckSession' => \App\Http\Middleware\CheckSession::class,
         'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        //busted 'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+        'JwtRefresh' => \App\Http\Middleware\JwtRefresh::class,
 
 
     ];

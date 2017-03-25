@@ -12,20 +12,26 @@ class DashboardController extends Controller
     {
 
         $user = \Auth::user();
-        $page_data = [
-            'calendar'=> [
-                'event_types' => CalendarEntry::getEventTypes(),
-            ]
-        ];
+
         $return = [
             'views'=> $user->views(),
-            'page_data' => $page_data,
         ];
         return $return;
         //return View::make('dashboard/vue');
         //return View::make('pages/dashboard',['server_data' => json_encode($return)]);
 
 
+    }
+    public function pageData(Request $request){
+        //this should give me a bunch of stuff needed for all pages to speed up loading.....?
+        $dashboard_page_data = [
+            'calendar'=> [
+                'event_types' => CalendarEntry::getEventTypes(),
+            ]
+        ];
+        return  [
+            'page_data' => $dashboard_page_data,
+        ];
     }
 
 

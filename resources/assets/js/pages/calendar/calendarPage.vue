@@ -40,7 +40,24 @@
             return {}
         },
         mounted: function () {
+
             let self = this;
+            client({ path: '/calendar'}).then(
+                function (response) {
+                    response.entity.event_types;
+                    $("#calendar").fullCalendar( 'addEventSource', response.entity.events )
+//                    $('#calendar').fullCalendar({events: {
+//                        data: response.entity,
+//                    cache: true
+//                    }});
+                },
+                function (response, status) {
+                    console.log(response);
+//                    if (_.contains([401, 500], status)) {
+//                    }
+                });
+
+
             bus.$on('add_event', function(event){
                 console.log('add event');
                 $('#calendar').fullCalendar('renderEvent', self.clone(event));

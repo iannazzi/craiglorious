@@ -25,7 +25,7 @@
 
 
         </div>
-        <div class="views_div row">
+        <div v-if="loaded" class="views_div row">
             <div v-for="view in views" v-show="view.show" class="dashbtn">
                 <router-link :to="view.route">
 
@@ -34,6 +34,12 @@
                     <div id="dashbtnname">{{ view.name }}</div>
 
                 </router-link>
+            </div>
+        </div>
+        <div v-else class = "row">
+            <zzi-matrix></zzi-matrix>
+            <div class="col-md-4 col-md-offset-4 wait">
+
             </div>
         </div>
     </div>
@@ -46,21 +52,28 @@
                 query: '',
                 views:[],
                 rooms: [],
+                loaded: false,
             }
         },
 
         mounted: function () {
             let self = this;
-            bus.$on('viewsDownloadedFromServer', function(views){
-                self.views = views;
-                self.views.forEach(function (entry) {
-                    entry.show = true
-                });
-            })
 
-            this.views.forEach(function (entry) {
-                entry.show = true
-            });
+            client({ path: '/dashboard'}).then(
+                function (response) {
+
+                    self.views = response.entity.views;
+                    self.views.forEach(function (entry) {
+                        entry.show = true
+                    });
+                    self.loaded = true;
+                },
+                function (response, status) {
+                    console.log(response);
+//                    if (_.contains([401, 500], status)) {
+//                    }
+                });
+
             this.rooms = [
                 {
                     name: 'Sales',
@@ -116,7 +129,6 @@
                 })
                 //if the search has a string display that
                 if (this.query != '') {
-                    console.log('this.query !=')
                     this.views.forEach(function (view) {
                         if (view.name.toLowerCase().indexOf(that.query.toLowerCase()) >= 0) {
                             view.show = true
@@ -140,14 +152,14 @@
                     })
                 }
                 else {
-                    console.log('no active room or search qiuery display all')
-                    views.forEach(function (view) {
+//                    console.log('no active room or search qiuery display all')
+                    this.views.forEach(function (view) {
                         view.show = true
                     })
                 }
             },
             searchKeyUp: function () {
-                rooms.forEach(function (room) {
+                this.rooms.forEach(function (room) {
                     room.active = false
                 });
                 this.loadIcons()
@@ -174,3 +186,16 @@
         }
     }
 </script>
+<style>
+
+    .wait i {
+        font-size: 500px;
+
+    }
+    .wait-text {
+        display: table-cell;padding-left:30px;
+    }
+    .confirmModalDiv {
+
+    }
+</style>

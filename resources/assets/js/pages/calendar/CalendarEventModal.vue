@@ -209,7 +209,7 @@
                 id: '',
                 errors: new Errors(),
                 show: false,
-                eventTypes: server_data.page_data.calendar.event_types
+                eventTypes: this.$root.page_data.calendar.event_types
 //                eventTypes:[
 //                    {
 //                        'value': 'null',
