@@ -39,7 +39,7 @@ class RoleController extends Controller
         //return response($request->user());
         $number_of_records_available = Role::all()->count();
         $return_data['roles'] = \Auth::user()->role->getRoleSelectTree();
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
 
         return response()->json([
@@ -57,7 +57,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
 
 
-        $return_data['role'] = [$role]; //let js handle the data through ajax
+        $return_data['records'] = [$role]; //let js handle the data through ajax
         $return_data['views'] = $role->systemViews();
 
 
@@ -87,7 +87,7 @@ class RoleController extends Controller
     public function create()
     {
         $user = \Auth::user();
-        $return_data['role'] = [];
+        $return_data['records'] = [];
 
 
         $return_data['roles'] = $user->role->getRoleSelectTree();
@@ -134,6 +134,7 @@ class RoleController extends Controller
 
         $messages = [
             'parent_id.not_in' => 'The parent role can neither be the same nor a child as the current role. ',
+            'parent_id.required' => 'A parent role is required'
         ];
         $validation = \Validator::make($data, $rules, $messages);
         if ($validation->passes())

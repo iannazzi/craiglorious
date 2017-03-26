@@ -31,16 +31,38 @@ window.myUser = {
     admin: false
 }
 window.cached_page_data = {};
-window.getData = function(component, route){
-        client({path: route}).then(
+//wrap ajax calls in case i need to swap out rest for axios
+window.getData = function(method, path, entity, callback){
+
+        client({path, entity, method,}).then(
             function (response) {
-                console.log(response);
-                component.data = response.entity.data;
-                component.dataReady = true;
-                component.renderTable();
-                bus.$emit('zzwaitoverevent');
+                //success
+                callback(response.entity);
+            },
+            function (response){
+                //error
+                callback(response.entity);
             });
 }
+//most pages with tables need to get data then display it
+window.loadPageWithAwesomeTable = function(component) {
+    return function(response){
+        console.log('loadPageWithAwsomeTable')
+        console.log(response);
+        component.data = response.data;
+        component.dataReady = true;
+        component.renderTable();
+        bus.$emit('zzwaitoverevent');
+        if(typeof component.cachePageData === 'function')
+        {
+            component.cachePageData(response)
+        }
+
+
+    }
+
+}
+
 
 
 let isDebug = true // toggle this to turn on / off for global controll

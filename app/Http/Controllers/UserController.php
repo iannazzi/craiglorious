@@ -71,7 +71,7 @@ class UserController extends Controller
         $return_data = \App\Classes\Views\CIResponse::response();
         $return_data['roles'] = $user->role->getRoleSelectTree();
         $return_data['page'] = 'index';
-        $return_data['data'] = []; //let js handle the data through ajax
+        $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
 
         return response()->json([
@@ -102,7 +102,7 @@ class UserController extends Controller
 
 
         $return_data['page'] = 'show';
-        $return_data['user'] = [$user]; //let js handle the data through ajax
+        $return_data['records'] = [$user]; //let js handle the data through ajax
 
         return response()->json([
             'success' => true,
@@ -200,7 +200,7 @@ class UserController extends Controller
         $role = $user->role;
         $return_data['roles'] = $role->getRoleSelectTree();
         $return_data['page'] = 'create';
-        $return_data['data'] = [
+        $return_data['password_suggestions'] = [
             [
                 'password' => $password,
                 'password_confirmation' => $password,

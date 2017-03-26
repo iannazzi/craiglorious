@@ -36,22 +36,14 @@
             //we need to get some data
             let self = this;
 
-
             bus.$emit('zzwaitevent');
-
-            getData(self, '/roles');
-//            client({path: '/roles'}).then(
-//                function (response) {
-//                    console.log(response);
-//                    self.data = response.data;
-//                    self.dataReady = true;
-//                    self.renderTable();
-//                    cached_page_data['roles'] = self.data;
-//                    bus.$emit('zzwaitoverevent');
-//                });
+            getData('get', '/roles', false , loadPageWithAwesomeTable(self));
 
         },
         methods: {
+            cachePageData(response){
+              cached_page_data['roles'] = response.data.roles;
+            },
             renderTable(){
                 let self = this;
                 let searchableTable = new AwesomeTable({

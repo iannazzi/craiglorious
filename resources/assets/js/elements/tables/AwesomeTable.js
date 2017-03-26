@@ -121,7 +121,7 @@ export class AwesomeTable {
                         },
                         function (response) {
                             view.showWaitModal(false);
-                            view.showErrorModal(response.entity.responseJSON.message);
+                            view.showErrorModal(response.entity.message);
                         });
                 }
                 break;

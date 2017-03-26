@@ -28,7 +28,7 @@
                                     </li>
                                     <li class="divider"></li>
                                     <li role="menuitem">
-                                        <router-link to="user">User Preferences</router-link>
+                                        <router-link to="/user">User Preferences</router-link>
                                     </li>
                                 </ul>
                             </li>

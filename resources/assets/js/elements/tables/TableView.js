@@ -673,7 +673,6 @@ export class TableView {
         return button;
     }
     showWaitModal(show = true){
-        console.log(this.waitModal)
         if(show){
             $(this.waitModal).modal('show');
         }

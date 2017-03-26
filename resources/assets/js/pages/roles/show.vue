@@ -12,9 +12,9 @@
 
             <div id="role" class="recordTableView">
                 <h2 v-if="page==='create'">New Role</h2>
-                <h2 v-else-if="data.role[0].id==1">Admin Role - No Editing is possible</h2>
-                <h2 v-else-if="page==='edit'">Edit Role {{data.role[0].name}} </h2>
-                <h2 v-else-if="page==='show'">Role {{data.role[0].name}}</h2>
+                <h2 v-else-if="data.records[0].id==1">Admin Role - No Editing is possible</h2>
+                <h2 v-else-if="page==='edit'">Edit Role {{data.records[0].name}} </h2>
+                <h2 v-else-if="page==='show'">Role {{data.records[0].name}}</h2>
             </div>
             <div id="role_modal"></div>
             <!--<button @click="showModalTable">pop up modal table</button>-->
@@ -40,53 +40,31 @@
         },
         props: ['page','justcreated'],
         mounted: function () {
-            console.log(this.justcreated);
             let self = this;
             self.dataReady = false;
             //bus.$emit('zzwaitevent');
 
+            //getting data is page specific... no refactor here
             if (self.page == 'create') {
-                getData(self, '/roles/create');
+                if ( typeof cached_page_data.roles !== 'undefined'){
+                    self.data.roles = cached_page_data.roles;
+                    self.data.records = [];
+                    self.dataReady = true;
+                    self.renderTable();
+                }
+                else{
+                    getData('get', '/roles/create', false , loadPageWithAwesomeTable(self));
+                }
             }
             else {
-                getData(self, '/roles/' + this.$route.params.id);
+                getData('get', '/roles/' + this.$route.params.id, false , loadPageWithAwesomeTable(self));
             }
-        },
-        created(){
-
-
         },
         methods: {
 
-//            getData(route)
-//            {
-//                let self = this;
-//                client({path: route}).then(
-//                    function (response) {
-//                        console.log(response);
-//                        self.data = response.data;
-//                        self.dataReady = true;
-//                        self.renderTable();
-//                    });
-//            },
-//            showModalTable(){
-//                let self = this;
-//                let roleTableModal = this.createRoleTable();
-//                roleTableModal.options.table_view = 'edit';
-//                roleTableModal.options.edit_display = 'modal_only';
-//                roleTableModal.options.access = 'write';
-//                self.roleTableModal = roleTableModal;
-//                roleTableModal.options.onSaveSuccess = function(){
-//                    self.roleTable.model.tdo = self.roleTableModal.modelModal.tdo;
-//                    self.roleTable.view.updateTable();
-//                    roleTableModal.hideModal();
-//                }
-//                roleTableModal.addTo('role_modal');
-//                roleTableModal.showModal();
-//
-//
-//            },
             createRoleTable(){
+
+                // it looks like this can be refactored...
                 let self = this;
                 let access,edit_display;
                 if(this.page == 'show'){
@@ -97,12 +75,11 @@
                 else{
                     access = 'write';
                     edit_display = 'on_page';
-
                 }
 
                 return new AwesomeTable({
                     //name: "role",
-                    data: self.data.role,
+                    data: self.data.records,
                     route: "/roles",
                     column_definition: columnDefinition(self),
                     table_buttons: ['edit','delete'],
@@ -120,7 +97,10 @@
                         //pop up a modal
                         // this.create() //check the display
                         //back to roles
+                        console.log('saving....')
+                        self.dataReady = false;
                         self.$router.push({path: '/roles/'+id, props : { justcreated: 'true' }});
+
                     },
                     onCancelCreateClick(){
                         self.$router.push('/roles');
@@ -141,7 +121,7 @@
                 console.log(self.page);
                 if (self.page == 'show'){
 
-                    if(self.data.role[0].id == 1) {
+                    if(self.data.records[0].id == 1) {
                         roleTable.options.table_buttons = [];
                     }
                 }
@@ -180,7 +160,7 @@
                             data: self.data.views,
                             //name: "views_table",
                             additionalPostValues:{
-                                id: self.data.role[0].id
+                                id: self.data.records[0].id
                             },
                             //tuck read/write away?
                             //show: read
@@ -195,7 +175,7 @@
                             route: "/roles/rights",
                             column_definition: access_table_column_definition,
                         })
-                        if(self.data.role[0].id == 1) {
+                        if(self.data.records[0].id == 1) {
                             accessTable.options.table_buttons = [];
                         }
                         accessTable.addTo('rights');

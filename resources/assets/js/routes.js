@@ -62,11 +62,13 @@ let routes = [
             {
                 path: '',
                 component: require('./pages/roles/index.vue'),
+                meta: { guarded: true },
                 props: {page: 'index'},
             },
             {
                 path: 'create',
                 component: require('./pages/roles/show.vue'),
+                meta: { guarded: true },
                 props: {page: 'create'}
             },
             {
@@ -76,11 +78,13 @@ let routes = [
                     {
                         path: '',
                         component: require('./pages/roles/show.vue'),
+                        meta: { guarded: true },
                         props: {page: 'show'}
                     },
                     {
                         path: 'edit',
                         component: require('./pages/roles/show.vue'),
+                        meta: { guarded: true },
                         props: {page: 'edit'}
                     }
 
@@ -128,7 +132,14 @@ let routes = [
     {
         path: '/user',
         meta: { guarded: true },
-        component: require('./pages/user/user.vue')
+        component: require('./pages/layout.vue'),
+        children:[
+            {
+            path: '',
+            meta: { guarded: true },
+            component: require('./pages/user/user.vue')
+        }
+        ]
     },
     {
         path: '/locations',

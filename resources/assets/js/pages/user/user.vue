@@ -72,11 +72,12 @@
         mounted: function () {
             //we need to get some data
             let self = this;
-            $.get('/user', function(data) {
-                console.log(data);
-                self.passcode = data.data.code;
-                self.password = data.data.pass;
-            });
+
+            getData('get', '/user', false, function(response){
+                console.log(response);
+                self.passcode = response.data.code;
+                self.password = response.data.pass;
+            })
 
         },
         methods: {

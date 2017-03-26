@@ -61,24 +61,20 @@
             if( ! cached_page_data.views)
             {
                 if (1) ml('no cached_page_data got to go and get some')
-                client({ path: '/dashboard'}).then(
-                    function (response) {
-
-                        self.views = response.entity.views;
 
 
-                        self.views.forEach(function (entry) {
-                            entry.show = true
-                        });
-                        self.loaded = true;
-                        cached_page_data['views'] = self.views;
-                        self.$root.cached_page_data['views'] = self.views;
-                    },
-                    function (response, status) {
-                        console.log(response);
-//                    if (_.contains([401, 500], status)) {
-//                    }
+                getData('get', '/dashboard', false , function (response) {
+
+                    self.views = response.views;
+                    self.views.forEach(function (entry) {
+                        entry.show = true
                     });
+                    self.loaded = true;
+                    cached_page_data['views'] = self.views;
+                    self.$root.cached_page_data['views'] = self.views;
+                },);
+
+
 
             }
             else{
