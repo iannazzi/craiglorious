@@ -47,6 +47,7 @@ class SpitTableDef extends Command
         $system->createTenantConnection();
         $table_definition = [
             "route" => "/" . $table,
+            'additionalPostValues' => 'object',
             "data" => "self.data",
         "access" => "read write",
             "type"=> "record collection searchable",

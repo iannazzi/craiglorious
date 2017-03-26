@@ -87,25 +87,7 @@ export class SearchTableController extends CollectionTableController {
 
 
     onSearch() {
-        this.searching.notify();
-        this.uri.onSearch();
-        let post_data = {};
-        post_data['search_fields'] = {};
-        post_data['table_name'] = this.view.name;
-        this.view.search_elements.forEach(element => {
-            post_data.search_fields[element.name] = element.value;
-        })
-        // $('#' + this.table_name + '_search_results').html('');
-        // $('#' + this.table_name + '_search_buttons').hide();
-        // $('#' + this.table_name + '_search_loading_image').show();
-        console.log('I need this for testing.... search post data');
-        // console.log(post_data);
-        console.log(JSON.stringify(post_data))
-        let self = this;
-        $.post(this.model.td.route + '/search', post_data,
-            function (response) {
-                self.searchReturned.notify(response)
-            });
+
 
     }
 

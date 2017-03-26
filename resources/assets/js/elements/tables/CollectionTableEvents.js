@@ -76,42 +76,10 @@ export class CollectionTableEvents extends TableEvents{
         view.onSaveClick = new TableEvent(view);
         controller.view.onSaveClick.attach(
             function () {
-
-                let post_data = controller.getPostData();
-                let data = {data: post_data, _method: 'put'};
-                console.log(controller.model.td.additionalPostValues)
-
-                if(typeof controller.model.td.additionalPostValues !== 'undefined'){
-                    data['additional_post_values'] = controller.model.td.additionalPostValues;
+                if(typeof controller.model.options.onSaveClick === 'function'){
+                    controller.model.options.onSaveClick();
                 }
 
-                view.showWaitModal(true);
-
-                console.log(JSON.stringify(data))
-
-
-
-                $.ajax({
-                    url: controller.model.td.route,
-                    type: 'post',
-                    data: data,
-                    success: function (result) {
-                        console.log(result);
-                        //controller.view.setViewShow();
-                        //set the original data to the new data
-                        controller.model.original_data = controller.getPostData();
-                        controller.view.showWaitModal(false);
-                        controller.onSaveSuccess.notify(result);
-                        //switch the uri to the new id....
-                    },
-                    error: function (response) {
-                        console.log(response)
-                        controller.view.showWaitModal(false);
-
-                        controller.view.showErrorModal(response.responseJSON.message);
-
-                    }
-                });
             }
         );
         //##################   SAVE SUCCESS
@@ -125,7 +93,10 @@ export class CollectionTableEvents extends TableEvents{
                     controller.model.original_data = controller.getPostData();
                 }
                 else if (controller.model.options.edit_display == 'modal') {
-                    controller.model.options.onSaveSuccess(result.id);
+                    if(typeof controller.model.options.onSaveSuccess === 'function'){
+                        controller.model.options.onSaveSuccess(result.id);
+
+                    }
 
                 }
                 else if (controller.model.options.edit_display == 'modal_only') {

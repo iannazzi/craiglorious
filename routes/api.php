@@ -33,6 +33,7 @@ $api->version('v1', function ($api)
 
             CIRoutes::addRoutes($api, 'roles');
             $api->put('roles/rights', 'RoleController@updateRights');
+//            $api->post('roles/search', 'RoleController@search');
 
 
 
@@ -41,6 +42,7 @@ $api->version('v1', function ($api)
 
             $api->get('user/', 'UserController@getPreferences');
             $api->post('user/', 'UserController@postPreferences');
+
             CIRoutes::addRoutes($api, 'users');
             CIRoutes::addRoutes($api, 'locations');
             CIRoutes::addRoutes($api, 'terminals');

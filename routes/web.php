@@ -10,15 +10,15 @@ Route::get('/', function () {
 
 //tenant auth routes... login, logout, and check session
 Route::group([], function(){
-    Route::get('check-session', ['middleware' => 'CheckSession' , 'uses' => 'Auth\LoginController@checkSession']);
-    Route::get('/auth/login', ['middleware' => 'LoginAuthenticate', 'as' => 'login', 'uses' => 'Auth\LoginController@getLogin']);
-
-    Route::post('/auth/login', ['middleware' => 'LoginAuthenticate', 'as' => 'login', 'uses' => 'Auth\LoginController@postLogin']);
-
-
-    Route::post('/auth/logout', ['middleware' => 'Logout', 'as'=>'logout', 'uses' =>    'Auth\LogoutController@postLogout']);
-    Route::get('/auth/logout', ['middleware' => 'Logout', 'as'=>'logout', 'uses' =>    'Auth\LogoutController@getLogout']);
-
+//    Route::get('check-session', ['middleware' => 'CheckSession' , 'uses' => 'Auth\LoginController@checkSession']);
+//    Route::get('/auth/login', ['middleware' => 'LoginAuthenticate', 'as' => 'login', 'uses' => 'Auth\LoginController@getLogin']);
+//
+//    Route::post('/auth/login', ['middleware' => 'LoginAuthenticate', 'as' => 'login', 'uses' => 'Auth\LoginController@postLogin']);
+//
+//
+//    Route::post('/auth/logout', ['middleware' => 'Logout', 'as'=>'logout', 'uses' =>    'Auth\LogoutController@postLogout']);
+//    Route::get('/auth/logout', ['middleware' => 'Logout', 'as'=>'logout', 'uses' =>    'Auth\LogoutController@getLogout']);
+//
 
 
 });

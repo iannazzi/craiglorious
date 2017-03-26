@@ -67,8 +67,10 @@ class Role extends BaseModel
     {
 
         //$system = \Auth::user()->system;
-        $system_id = session('system');
-        $system = System::find($system_id);
+//        $system_id = session('system');
+//        $system = System::find($system_id);
+        $system = \Config::get('tenant_system');
+
         //all of the possible views
         $views = $system->views();
 
@@ -95,8 +97,7 @@ class Role extends BaseModel
 
     }
     public function createDefaultViews(){
-        $system_id = session('system');
-        $system = System::find($system_id);
+        $system = \Config::get('tenant_system');
         //all of the possible views
         $views = $system->views();
 

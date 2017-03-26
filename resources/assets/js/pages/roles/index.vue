@@ -61,14 +61,17 @@
                     table_buttons: [],
                     table_view: self.page,
                     edit_display: 'on_page',
-                    route: "/api/roles",
+                    route: "/roles", //so far this needs replacement
                     footer: [],
                     header: [],
-                    column_definition: columnDefinition(self.data),
+                    column_definition: columnDefinition(self),
                     type: 'searchable',
                     data: self.data,
                     number_of_records_available: self.data.number_of_records_available,
                 })
+
+
+
                 $(function () {
                     searchableTable.addTo('roles')
                 })

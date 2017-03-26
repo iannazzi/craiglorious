@@ -111,29 +111,12 @@ export class RecordTableEvents extends TableEvents {
         view.onSaveClick = new TableEvent(view);
         controller.view.onSaveClick.attach(
             function () {
-                view.showWaitModal(true);
-                let post_data = controller.getPostData();
-                //post_data = post_data[0];
-                let data = {data: post_data, _method: 'put'};
-                console.log('POST data needed for testing')
-                console.log(JSON.stringify(data))
+                console.log('save clicked...');
+                console.log(controller.model.options);
+                if(typeof controller.model.options.onSaveClick === 'function'){
+                    controller.model.options.onSaveClick();
+                }
 
-                $.ajax({
-                    url: controller.model.td.route,
-                    // type: 'PATCH',
-                    type: 'post',
-                    data: data,
-                    success: function (result) {
-                        console.log(JSON.stringify(controller.getPostData()))
-                        view.showWaitModal(false);
-                        controller.onSaveSuccess.notify(result);
-                    },
-                    error: function (response) {
-                        console.log(response)
-                        view.showWaitModal(false);
-                        view.showErrorModal(response.responseJSON.message);
-                    }
-                });
             }
         );
 

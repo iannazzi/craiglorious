@@ -12,7 +12,10 @@ export class SearchTableEvents {
 
         controller.view.searchClicked.attach(
             function () {
-                controller.onSearch()
+                console.log('search clicked');
+                if (typeof controller.model.td.onSearchClicked === 'function') {
+                    controller.model.td.onSearchClicked();
+                }
             }
         )
         controller.searching.attach(

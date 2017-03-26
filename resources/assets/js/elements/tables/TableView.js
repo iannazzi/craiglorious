@@ -374,11 +374,22 @@ export class TableView {
         if(this.model.td.table_view == 'index')
         {
             let a = document.createElement('a');
-            a.href =   'dashboard#/' + col_def['route'] + '/'  + data;
-
             let c = document.createTextNode(data);
             a.appendChild(c);
+
+
+            if(typeof col_def.onClick === 'function'){
+
+                a.addEventListener("click", function(){
+                    col_def.onClick(data);
+                });
+            }
+            else{
+
+            }
+
             return a;
+
         }
         else
         {

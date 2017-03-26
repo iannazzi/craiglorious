@@ -104,7 +104,7 @@
                     //name: "role",
                     data: self.data.role,
                     route: "/roles",
-                    column_definition: columnDefinition(self.data),
+                    column_definition: columnDefinition(self),
                     table_buttons: ['edit','delete'],
 
                     type: 'record', //record, collection or searchable

@@ -13,10 +13,10 @@ export class AwesomeTable {
         //table types: record, collection,
         //record table_view create edit show  i.e. read write
 
-         let und = function (key, value) {
-             if(typeof options[key] === 'undefined'){
-                 options[key] = value;
-             }
+        let und = function (key, value) {
+            if (typeof options[key] === 'undefined') {
+                options[key] = value;
+            }
         }
 
         //some defaults
@@ -24,11 +24,11 @@ export class AwesomeTable {
         und('edit_display', 'on_page')
 
 
-
         this.options = options;
         let self = this;
 
     }
+
     clone(obj) {
         var copy;
 
@@ -83,60 +83,104 @@ export class AwesomeTable {
 
     recordTable() {
 
-        this.model = new TableModel(this.options);
-        this.view = new RecordTableView(this.model);
-        this.controller = new RecordTableController(this.model, this.view);
+        let model = new TableModel(this.options);
+        let view = new RecordTableView(model);
+        let controller = new RecordTableController(model, view);
 
-
-        this.modelModal = new TableModel(this.clone(this.options));
-        this.viewModal = new RecordTableView(this.modelModal);
-        this.controllerModal = new RecordTableController(this.modelModal, this.viewModal);
+        //modal is used for a pop up 'edit_display
+        let modelModal = new TableModel(this.clone(this.options));
+        let viewModal = new RecordTableView(modelModal);
+        let controllerModal = new RecordTableController(modelModal, viewModal);
 
         let self = this;
-        $(this.viewModal.formModal.modal_div).on('shown.bs.modal', function () {
-            let q = $( self.viewModal.formModal.modal_div ).find( ":input:first" );
+        //this nonsense is to set the focus to the first input..
+        $(viewModal.formModal.modal_div).on('shown.bs.modal', function () {
+            let q = $(viewModal.formModal.modal_div).find(":input:first");
             q.focus();
             q.select();
         })
 
         switch (this.options.edit_display) {
             case 'on_page':
-                this.div.appendChild(this.view.createRecordTable());
+                this.div.appendChild(view.createRecordTable());
+                model.options.onSaveClick = function () {
+                    //we need ajax here....
+                    let post_data = {data: controller.getPostData(), _method: 'put'};
+
+                    if (typeof modelModal.options.additionalPostValues !== 'undefined') {
+                        post_data['additional_post_values'] = modelModal.options.additionalPostValues;
+                    }
+                    view.showWaitModal(true);
+                    console.log(JSON.stringify(post_data))
+
+                    client({path: controller.model.td.route, entity: post_data}).then(
+                        function (response) {
+                            model.original_data = controller.getPostData();
+                            view.showWaitModal(false);
+                            controller.onSaveSuccess.notify(response.entity);
+                        },
+                        function (response) {
+                            view.showWaitModal(false);
+                            view.showErrorModal(response.entity.responseJSON.message);
+                        });
+                }
                 break;
             case 'modal':
 
-                this.viewModal.inputChanged.attach(
+                viewModal.inputChanged.attach(
                     function () {
-                        self.model.tdo = self.modelModal.tdo;
-                        self.view.updateTable();
+                        model.tdo = modelModal.tdo;
+                        view.updateTable();
                     }
                 );
 
-                this.div.appendChild(this.view.createRecordTable());
+                this.div.appendChild(view.createRecordTable());
 
-                this.div.appendChild(this.viewModal.createModalTable(this.viewModal.createRecordTable()));
+                this.div.appendChild(viewModal.createModalTable(viewModal.createRecordTable()));
 
-                this.model.options.onEditClick = function () {
-                    self.modelModal.td.access = "write";
-                    self.modelModal.td.table_view = "edit";
+                model.options.onEditClick = function () {
+                    modelModal.td.access = "write";
+                    modelModal.td.table_view = "edit";
 
-                    self.viewModal.showModalTable();
-                    self.viewModal.updateTable();
+                    viewModal.showModalTable();
+                    viewModal.updateTable();
                 }
-                this.modelModal.options.onSaveSuccess = function () {
+                modelModal.options.onSaveClick = function () {
+                    //we need ajax here....
+                    let post_data = {data: controller.getPostData(), _method: 'put'};
+
+                    if (typeof modelModal.options.additionalPostValues !== 'undefined') {
+                        post_data['additional_post_values'] = modelModal.options.additionalPostValues;
+                    }
+                    viewModal.showWaitModal(true);
+                    console.log(JSON.stringify(post_data))
+
+                    client({path: controller.model.td.route, entity: post_data}).then(
+                        function (response) {
+                            model.original_data = controller.getPostData();
+                            viewModal.showWaitModal(false);
+                            viewModal.hideModalTable();
+                            controller.onSaveSuccess.notify(response.entity);
+                        },
+                    function (response) {
+                        viewModal.showWaitModal(false);
+                        view.showErrorModal(response.entity.responseJSON.message);
+                    });
+                }
+                modelModal.options.onSaveSuccess = function () {
                     // self.model.td.access = "read";
                     // self.model.td.table_view = "show";
-                    self.viewModal.hideModalTable();
+                    viewModal.hideModalTable();
                     //update the table data object
-                    self.model.tdo = self.modelModal.tdo;
-                    self.view.updateTable();
+                    model.tdo = modelModal.tdo;
+                    view.updateTable();
                 }
-                this.modelModal.options.onCancelClick = function () {
+                modelModal.options.onCancelClick = function () {
                     // self.model.td.access = "read";
                     // self.model.td.table_view = "show";
-                    self.model.loadOriginalData();
-                    self.view.updateTable();
-                    self.viewModal.hideModalTable();
+                    model.loadOriginalData();
+                    view.updateTable();
+                    viewModal.hideModalTable();
                 }
                 break;
 
@@ -165,76 +209,115 @@ export class AwesomeTable {
     }
 
     collectionTable() {
-        let self = this;
 
-        this.model = new TableModel(this.options);
-        this.view = new CollectionTableView(this.model);
-        this.controller = new CollectionTableController(this.model, this.view);
+        let model = new TableModel(this.options);
+        let view = new CollectionTableView(model);
+        let controller = new CollectionTableController(model, view);
 
-        this.modelModal = new TableModel(this.clone(this.options));
-        this.viewModal = new CollectionTableView(this.modelModal);
-        this.controllerModal = new CollectionTableController(this.modelModal, this.viewModal);
+        let modelModal = new TableModel(this.clone(this.options));
+        let viewModal = new CollectionTableView(modelModal);
+        let controllerModal = new CollectionTableController(modelModal, viewModal);
 
-        $(this.viewModal.formModal.modal_div).on('shown.bs.modal', function () {
-            let q = $( self.viewModal.formModal.modal_div ).find( ":input:first" );
+        $(viewModal.formModal.modal_div).on('shown.bs.modal', function () {
+            let q = $(viewModal.formModal.modal_div).find(":input:first");
             q.focus();
             q.select();
         })
 
 
-        this.viewModal.inputChanged.attach(
+        viewModal.inputChanged.attach(
             function () {
-                self.model.tdo = self.modelModal.tdo;
-                self.view.updateTable();
+                model.tdo = modelModal.tdo;
+                view.updateTable();
             }
         );
         switch (this.options.edit_display) {
             case 'on_page':
                 this.div.appendChild(this.view.createCollectionTable());
+                model.options.onSaveClick = function () {
+                    //we need ajax here....
+                    let post_data = {data: controller.getPostData(), _method: 'put'};
+
+                    if (typeof modelModal.options.additionalPostValues !== 'undefined') {
+                        post_data['additional_post_values'] = modelModal.options.additionalPostValues;
+                    }
+                    view.showWaitModal(true);
+                    console.log(JSON.stringify(post_data))
+
+                    client({path: controller.model.td.route, entity: post_data}).then(
+                        function (response) {
+                            model.original_data = controller.getPostData();
+                            view.showWaitModal(false);
+                            controller.onSaveSuccess.notify(response.entity);
+                        },
+                        function (response) {
+                            view.showWaitModal(false);
+                            view.showErrorModal(response.entity.responseJSON.message);
+                        });
+                }
                 break;
             case 'modal':
 
-                this.div.appendChild(this.view.createCollectionTable());
-                this.div.appendChild(this.viewModal.createModalTable(this.viewModal.createCollectionTable()));
-                this.model.options.onEditClick = function () {
+                this.div.appendChild(view.createCollectionTable());
+                this.div.appendChild(viewModal.createModalTable(viewModal.createCollectionTable()));
+                modelModal.options.onSaveClick = function () {
+                    //we need ajax here....
+                    let post_data = {data: controller.getPostData(), _method: 'put'};
 
-                    self.modelModal.td.access = "write";
-                    self.modelModal.td.table_view = "edit";
-                    self.viewModal.showModalTable();
-                    self.viewModal.updateTable();
+                    if (typeof modelModal.options.additionalPostValues !== 'undefined') {
+                        post_data['additional_post_values'] = modelModal.options.additionalPostValues;
+                    }
+                    viewModal.showWaitModal(true);
+                    console.log(JSON.stringify(post_data))
+
+                    client({path: controller.model.td.route, entity: post_data}).then(
+                        function (response) {
+                            model.original_data = controller.getPostData();
+                            viewModal.showWaitModal(false);
+                            viewModal.hideModalTable();
+                            controller.onSaveSuccess.notify(response.entity);
+                        },
+                        function (response) {
+                            viewModal.showWaitModal(false);
+                            view.showErrorModal(response.entity.responseJSON.message);
+                        });
+                }
+                model.options.onEditClick = function () {
+
+                    modelModal.td.access = "write";
+                    modelModal.td.table_view = "edit";
+                    viewModal.showModalTable();
+                    viewModal.updateTable();
                 }
 
-                this.modelModal.options.onSaveSuccess = function () {
+                modelModal.options.onSaveSuccess = function () {
                     // self.model.td.access = "read";
                     // self.model.td.table_view = "show";
-                    self.viewModal.hideModalTable();
-                    self.model.tdo = self.modelModal.tdo;
-                    self.view.updateTable();
+                    viewModal.hideModalTable();
+                    model.tdo = modelModal.tdo;
+                    view.updateTable();
                 }
-                this.modelModal.options.onCancelClick = function () {
-                    self.model.loadOriginalData();
-                    self.view.updateTable();
-                    self.viewModal.hideModalTable();
+                modelModal.options.onCancelClick = function () {
+                    model.loadOriginalData();
+                    view.updateTable();
+                    viewModal.hideModalTable();
                 }
                 break;
 
             case 'modal_only':
 
 
-                this.modelModal.options.onEditClick = function () {
+                modelModal.options.onEditClick = function () {
                     alert('why is there an edit button on the modal')
                 }
-                this.modelModal.options.onCancelClick = function () {
-                    self.viewModal.hideModalTable();
+                modelModal.options.onCancelClick = function () {
+                    viewModal.hideModalTable();
                 }
 
-                this.div.appendChild(this.viewModal.createModalTable());
-
+                this.div.appendChild(viewModal.createModalTable());
 
 
         }
-
-
 
 
         // return this.view.dataTable();
@@ -242,26 +325,41 @@ export class AwesomeTable {
     }
 
     searchableTable() {
-        this.model = new TableModel(this.options);
-        this.view = new SearchTableView(this.model);
-        this.controller = new SearchTableController(this.model, this.view);
-        let searchTable = this.view.createSearchTable();
+        let model = new TableModel(this.options);
+        let view = new SearchTableView(model);
+        let controller = new SearchTableController(model, view);
+        this.options.onSearchClicked = function () {
+            controller.searching.notify();
+            controller.uri.onSearch();
+            let post_data = {};
+            post_data['search_fields'] = {};
+            post_data['table_name'] = controller.view.name;
+            controller.view.search_elements.forEach(element => {
+                post_data.search_fields[element.name] = element.value;
+            })
+            console.log('I need controller for testing.... search post data');
+            console.log(JSON.stringify(post_data))
+
+            client({path: controller.model.td.route + '/search', entity: post_data}).then(
+                function (response) {
+                    controller.searchReturned.notify(response.entity)
+                });
+        };
+
+        let searchTable = view.createSearchTable();
         this.div.appendChild(searchTable);
-        let self = this;
         $(function () {
-            self.controller.loadPageEvent.notify();
+            controller.loadPageEvent.notify();
         });
     }
 
-    showModal() {
-        this.viewModal.showModalTable();
-    }
-
-    hideModal() {
-        this.viewModal.hideModalTable();
-    }
-
-
+    // showModal() {
+    //     this.viewModal.showModalTable();
+    // }
+    //
+    // hideModal() {
+    //     this.viewModal.hideModalTable();
+    // }
 
 
 }
