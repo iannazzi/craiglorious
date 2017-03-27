@@ -10,7 +10,7 @@
                 Role
             </button>
 
-            <div id="role" class="recordTableView">
+            <div id="record_table" class="recordTableView">
                 <h2 v-if="page==='create'">New Role</h2>
                 <h2 v-else-if="data.records[0].id==1">Admin Role - No Editing is possible</h2>
                 <h2 v-else-if="page==='edit'">Edit Role {{data.records[0].name}} </h2>
@@ -35,99 +35,30 @@
         data() {
             return {
                 data: {},
-                dataReady: false
+                dataReady: false,
+                route: 'roles'
             }
         },
         props: ['page','justcreated'],
         mounted: function () {
-            let self = this;
-            self.dataReady = false;
-            //bus.$emit('zzwaitevent');
 
-            //getting data is page specific... no refactor here
-            if (self.page == 'create') {
-                if ( typeof cached_page_data.roles !== 'undefined'){
-                    self.data.roles = cached_page_data.roles;
-                    self.data.records = [];
-                    self.dataReady = true;
-                    self.renderTable();
-                }
-                else{
-                    getData('get', '/roles/create', false , loadPageWithAwesomeTable(self));
-                }
-            }
-            else {
-                getData('get', '/roles/' + this.$route.params.id, false , loadPageWithAwesomeTable(self));
-            }
+            AwesomeTableBuilder.loadRecordTableDataThenCallRenderTable(this)
+
         },
         methods: {
-
-            createRoleTable(){
-
-                // it looks like this can be refactored...
-                let self = this;
-                let access,edit_display;
-                if(this.page == 'show'){
-                    access = 'read';
-                    edit_display = 'modal';
-
-                }
-                else{
-                    access = 'write';
-                    edit_display = 'on_page';
-                }
-
-                return new AwesomeTable({
-                    //name: "role",
-                    data: self.data.records,
-                    route: "/roles",
-                    column_definition: columnDefinition(self),
-                    table_buttons: ['edit','delete'],
-
-                    type: 'record', //record, collection or searchable
-                    table_view: self.page, //index, create, edit, and show pages: columns respond differnetly to
-                    access: access, //read vs write
-                    edit_display: edit_display,
-
-                    onDeleteSuccess(){
-                        //back to roles
-                        self.$router.push('/roles');
-                    },
-                    onCreateSaved(id){
-                        //pop up a modal
-                        // this.create() //check the display
-                        //back to roles
-                        console.log('saving....')
-                        self.dataReady = false;
-                        self.$router.push({path: '/roles/'+id, props : { justcreated: 'true' }});
-
-                    },
-                    onCancelCreateClick(){
-                        self.$router.push('/roles');
-                    }
-
-                })
-            },
             renderTable(){
-
-
                 let self = this;
-
-                let roleTable = this.createRoleTable();
-                self.roleTable = roleTable;
-
+                this.column_definition = columnDefinition(this);
+                let recordTable = AwesomeTableBuilder.createShowEditOrCreateRecordTable(this);
 
                 //No editing if the admin role
-                console.log(self.page);
                 if (self.page == 'show'){
-
                     if(self.data.records[0].id == 1) {
-                        roleTable.options.table_buttons = [];
+                        recordTable.options.table_buttons = [];
                     }
                 }
                 $(function(){
-
-                    roleTable.addTo('role');
+                    recordTable.addTo('record_table');
                     if(self.page == 'show'){
                         let access_table_column_definition = [
                             {
@@ -174,6 +105,7 @@
                             table_buttons: ['edit'],
                             route: "/roles/rights",
                             column_definition: access_table_column_definition,
+                            getData:getData
                         })
                         if(self.data.records[0].id == 1) {
                             accessTable.options.table_buttons = [];
@@ -185,9 +117,6 @@
                     }
                     bus.$emit('zzwaitoverevent');
                 })
-
-
-
             }
         }
     }

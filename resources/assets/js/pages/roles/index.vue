@@ -6,7 +6,7 @@
                                                                                   aria-hidden="true"></i>New
                     Role
                 </button>
-                <div id="roles"></div>
+                <div id="searchableTable"></div>
             </div>
         </div>
         <div v-else>
@@ -20,7 +20,7 @@
 <script>
 
     import columnDefinition from './columnDefinition'
-    import {AwesomeTable} from '../../elements/tables/AwesomeTable';
+//    import {AwesomeTable} from '../../elements/tables/AwesomeTable';
 
 
     export default {
@@ -28,44 +28,25 @@
             return {
                 data: {},
                 dataReady: false,
+                route: 'roles'
             }
         },
         props: ['page'],
         mounted: function () {
             this.dataReady = false;
             //we need to get some data
-            let self = this;
-
-            bus.$emit('zzwaitevent');
-            getData('get', '/roles', false , loadPageWithAwesomeTable(self));
+            console.log(AwesomeTableBuilder)
+            AwesomeTableBuilder.getDataThenRenderTable(this);
 
         },
         methods: {
-            cachePageData(response){
-              cached_page_data['roles'] = response.data.roles;
-            },
+
             renderTable(){
-                let self = this;
-                let searchableTable = new AwesomeTable({
-
-                    name: "roles",
-                    access: "read",
-                    table_buttons: [],
-                    table_view: self.page,
-                    edit_display: 'on_page',
-                    route: "/roles", //so far this needs replacement
-                    footer: [],
-                    header: [],
-                    column_definition: columnDefinition(self),
-                    type: 'searchable',
-                    data: self.data,
-                    number_of_records_available: self.data.number_of_records_available,
-                })
-
-
+                this.column_definition = columnDefinition(this);
+                let searchableTable = AwesomeTableBuilder.createSearchableCollectionTable(this);
 
                 $(function () {
-                    searchableTable.addTo('roles')
+                    searchableTable.addTo('searchableTable')
                 })
 
 

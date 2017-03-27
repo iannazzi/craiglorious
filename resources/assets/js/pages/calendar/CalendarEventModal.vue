@@ -329,7 +329,7 @@
             bus.$on('event_save_error', function(response){
                 self.loading = false;
                 console.log('event_save_error bus');
-                self.errors.record(response.responseJSON.message);
+                self.errors.record(response.message);
             })
 
 
@@ -448,13 +448,24 @@
                 let data = {data: post_data, _method: 'put'};
                 let self = this;
 //                console.log(JSON.stringify(data))
-                client({path: '/calendar', entity: data}).then(
-                    function (response) {
+
+                getData( {
+                    method: 'post',
+                    url: '/calendar',
+                    entity: data,
+                    onSuccess(response) {
                         console.log('event_saved');
                         if(self.add_edit) {
                             bus.$emit('event_saved');
                         }
-                    });
+                    },
+                    onError(response){
+                        console.log(response);
+                        bus.$emit('event_save_error', response);
+                    }
+                })
+
+
 
             },
             getStartDateTime(){

@@ -65,12 +65,18 @@
 
             self.renderCal();
             this.loaded = true;
-            client({path: '/calendar'}).then(
-                function (response) {
-                    bus.$emit('addCalendarEventTypes', response.entity.event_types)
+            getData( {
+                method: 'get',
+                url: '/calendar',
+                entity: false,
+                onSuccess(response) {
+                    bus.$emit('addCalendarEventTypes', response.event_types)
                     self.loaded = true;
-                    $("#calendar").fullCalendar('addEventSource', response.entity.events)
-                });
+                    $("#calendar").fullCalendar('addEventSource', response.events)
+                },
+            })
+
+
 
 
             bus.$on('add_event', function (event) {
@@ -197,10 +203,15 @@
                 }
                 let data = {data: post_data, _method: 'put'};
 
-                client({path: '/calendar', entity: data}).then(
-                    function (response) {
+                getData( {
+                    method: 'post',
+                    url: '/calendar',
+                    entity: data,
+                    onSuccess(response) {
                         console.log('event_saved_from_main calendar');
-                    });
+                    },
+                })
+
 
             },
             clone(event){

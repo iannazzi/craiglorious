@@ -19,20 +19,16 @@
 //                console.log(data);
 //            });
             let self = this;
-            client({ path: '/calendar'}).then(
-                function (response) {
 
-                    $("#calendar").fullCalendar( 'addEventSource', response.entity.events )
-//                    $('#calendar').fullCalendar({events: {
-//                        data: response.entity,
-//                    cache: true
-//                    }});
+            getData( {
+                method: 'get',
+                url: '/calendar',
+                entity: false,
+                onSuccess(response) {
+                    $("#calendar").fullCalendar( 'addEventSource', response.events )
                 },
-                function (response, status) {
-                    console.log(response);
-//                    if (_.contains([401, 500], status)) {
-//                    }
-                });
+            })
+
 
             $(document).ready(function () {
 

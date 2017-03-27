@@ -144,32 +144,42 @@ let routes = [
     {
         path: '/locations',
         meta: { guarded: true },
-        component: require('./pages/locations/pageSetup.vue'),
+        component: require('./pages/layout.vue'),
         props: {},
         children: [
             {
                 path: '',
                 component: require('./pages/locations/index.vue'),
                 props: {page: 'index'},
+                meta: { guarded: true },
+
             },
             {
                 path: 'create',
                 component: require('./pages/locations/show.vue'),
-                props: {page: 'create'}
+                props: {page: 'create'},
+                meta: { guarded: true },
+
             },
             {
                 path: ':id',
                 component: {template: '<router-view></router-view>'},
+                meta: { guarded: true },
+
                 children: [
                     {
                         path: '',
                         component: require('./pages/locations/show.vue'),
-                        props: {page: 'show'}
+                        props: {page: 'show'},
+                        meta: { guarded: true },
+
                     },
                     {
                         path: 'edit',
                         component: require('./pages/locations/show.vue'),
-                        props: {page: 'edit'}
+                        props: {page: 'edit'},
+                        meta: { guarded: true },
+
                     }
 
                 ],

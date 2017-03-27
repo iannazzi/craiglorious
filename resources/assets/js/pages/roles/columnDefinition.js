@@ -1,11 +1,11 @@
-export default function(vueInstance){
+export default function(component){
     let column_definition = [
         {
             "db_field": "id",
             "caption": "Id",
             "type": "link",
             "onClick":  function(id){
-                vueInstance.$router.push('roles/' + id)
+                component.$router.push(component.route + '/' + id)
             },
             "route": "roles",
             "show_on_list": true,
@@ -38,7 +38,7 @@ export default function(vueInstance){
             "db_field": "parent_id",
             "caption": "Parent Role",
             "type": "tree_select",
-            "select_values": vueInstance.data.roles,
+            "select_values": component.data.roles,
             "show_on_list": true,
             "show_on_view": true,
             "show_on_edit": true,

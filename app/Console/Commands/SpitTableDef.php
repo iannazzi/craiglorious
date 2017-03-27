@@ -51,7 +51,7 @@ class SpitTableDef extends Command
             "data" => "self.data",
         "access" => "read write",
             "type"=> "record collection searchable",
-        "table_view" => "edit show create", //column def show_on_edit show_on_view show_on_create etc..
+        "table_view" => "index edit show create", //column def show_on_edit show_on_view show_on_create etc..
         "table_buttons" => ['edit', 'delete','addRow','deleteRow','deleteAllRows', 'moveRows','copyRows'],
         "edit display" => "on_page modal modal_only",
             "callbacks" => "onDeleteClick onEditClick onCancelClick onSaveClick onSaveSuccess onCreateCancelClick onCreateSaveClick",
@@ -59,6 +59,7 @@ class SpitTableDef extends Command
         "footer" => [],
         "header" => [],
         "column_definition" => "insert Column Def here",
+            "getData" => "this is a callback for your ajax, rest, axios, etc"
     ];
         $this->info(json_encode($table_definition));
 //        $this->info(json_encode($results));

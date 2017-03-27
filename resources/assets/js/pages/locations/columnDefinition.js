@@ -1,9 +1,12 @@
-export default function(data){
+export default function(component){
     let column_definition = [
         {
             "db_field": "id",
             "caption": "Id",
             "type": "link",
+            "onClick":  function(id){
+                component.$router.push(component.route + '/' + id)
+            },
             "route": "locations",
             "show_on_list": true,
             "show_on_view": true,
@@ -23,7 +26,7 @@ export default function(data){
             "caption": "Parent Location",
             "type": "select",
 
-            "select_values": data.locations,
+            "select_values": component.data.locations,
             "show_on_list": true,
             "show_on_view": true,
             "show_on_edit": true,

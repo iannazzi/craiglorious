@@ -1,3 +1,4 @@
+
 import {RecordTableView}  from './RecordTableView';
 import {RecordTableController}  from './RecordTableController';
 import {CollectionTableView}  from './CollectionTableView';
@@ -112,17 +113,23 @@ export class AwesomeTable {
                     }
                     view.showWaitModal(true);
                     console.log(JSON.stringify(post_data))
+                    self.options.getData(
+                        {
+                            method: 'post',
+                            url: controller.model.td.route,
+                            entity: post_data,
+                            onSuccess(response) {
+                                model.original_data = controller.getPostData();
+                                view.showWaitModal(false);
+                                controller.onSaveSuccess.notify(response);
+                            },
+                            onError(response){
+                                view.showWaitModal(false);
+                                view.showErrorModal(response.message);
+                            }
+                        }
+                    );
 
-                    client({path: controller.model.td.route, entity: post_data}).then(
-                        function (response) {
-                            model.original_data = controller.getPostData();
-                            view.showWaitModal(false);
-                            controller.onSaveSuccess.notify(response.entity);
-                        },
-                        function (response) {
-                            view.showWaitModal(false);
-                            view.showErrorModal(response.entity.message);
-                        });
                 }
                 break;
             case 'modal':
@@ -155,17 +162,28 @@ export class AwesomeTable {
                     viewModal.showWaitModal(true);
                     console.log(JSON.stringify(post_data))
 
-                    client({path: controller.model.td.route, entity: post_data}).then(
-                        function (response) {
-                            model.original_data = controller.getPostData();
-                            viewModal.showWaitModal(false);
-                            viewModal.hideModalTable();
-                            controller.onSaveSuccess.notify(response.entity);
-                        },
-                    function (response) {
-                        viewModal.showWaitModal(false);
-                        view.showErrorModal(response.entity.responseJSON.message);
-                    });
+                    console.log(self.options)
+
+
+                    self.options.getData(
+                        {
+                            method: 'post',
+                            url: controller.model.td.route,
+                            entity: post_data,
+                            onSuccess(response) {
+                                model.original_data = controller.getPostData();
+                                viewModal.showWaitModal(false);
+                                viewModal.hideModalTable();
+                                controller.onSaveSuccess.notify(response);
+                            },
+                            onError(response){
+                                viewModal.showWaitModal(false);
+                                view.showErrorModal(response.responseJSON.message);
+                            }
+                        }
+                    );
+
+
                 }
                 modelModal.options.onSaveSuccess = function () {
                     // self.model.td.access = "read";
@@ -209,6 +227,7 @@ export class AwesomeTable {
     }
 
     collectionTable() {
+        let self = this;
 
         let model = new TableModel(this.options);
         let view = new CollectionTableView(model);
@@ -244,16 +263,25 @@ export class AwesomeTable {
                     view.showWaitModal(true);
                     console.log(JSON.stringify(post_data))
 
-                    client({path: controller.model.td.route, entity: post_data}).then(
-                        function (response) {
-                            model.original_data = controller.getPostData();
-                            view.showWaitModal(false);
-                            controller.onSaveSuccess.notify(response.entity);
-                        },
-                        function (response) {
-                            view.showWaitModal(false);
-                            view.showErrorModal(response.entity.responseJSON.message);
-                        });
+                    console.log(self.options)
+
+                    self.options.getData(
+                        {
+                            method: 'post',
+                            url: controller.model.td.route,
+                            entity: post_data,
+                            onSuccess(response) {
+                                model.original_data = controller.getPostData();
+                                view.showWaitModal(false);
+                                controller.onSaveSuccess.notify(response);
+                            },
+                            onError(response){
+                                view.showWaitModal(false);
+                                view.showErrorModal(response.responseJSON.message);
+                            }
+                        }
+                    );
+
                 }
                 break;
             case 'modal':
@@ -270,17 +298,26 @@ export class AwesomeTable {
                     viewModal.showWaitModal(true);
                     console.log(JSON.stringify(post_data))
 
-                    client({path: controller.model.td.route, entity: post_data}).then(
-                        function (response) {
-                            model.original_data = controller.getPostData();
-                            viewModal.showWaitModal(false);
-                            viewModal.hideModalTable();
-                            controller.onSaveSuccess.notify(response.entity);
-                        },
-                        function (response) {
-                            viewModal.showWaitModal(false);
-                            view.showErrorModal(response.entity.responseJSON.message);
-                        });
+                    console.log(self);
+
+                    self.options.getData(
+                        {
+                            method: 'post',
+                            url: controller.model.td.route,
+                            entity: post_data,
+                            onSuccess(response) {
+                                model.original_data = controller.getPostData();
+                                viewModal.showWaitModal(false);
+                                viewModal.hideModalTable();
+                                controller.onSaveSuccess.notify(response);
+                            },
+                            onError(response){
+                                viewModal.showWaitModal(false);
+                                view.showErrorModal(response.responseJSON.message);
+                            }
+                        }
+                    );
+
                 }
                 model.options.onEditClick = function () {
 
@@ -328,6 +365,7 @@ export class AwesomeTable {
         let model = new TableModel(this.options);
         let view = new SearchTableView(model);
         let controller = new SearchTableController(model, view);
+        let self = this;
         this.options.onSearchClicked = function () {
             controller.searching.notify();
             controller.uri.onSearch();
@@ -340,10 +378,23 @@ export class AwesomeTable {
             console.log('I need controller for testing.... search post data');
             console.log(JSON.stringify(post_data))
 
-            client({path: controller.model.td.route + '/search', entity: post_data}).then(
-                function (response) {
-                    controller.searchReturned.notify(response.entity)
-                });
+            self.options.getData(
+                {
+                    method: 'post',
+                    url: controller.model.td.route + '/search',
+                    entity: post_data,
+                    onSuccess(response) {
+                        console.log('lets do this');
+                        controller.searchReturned.notify(response)
+                    }
+                }
+            );
+
+
+            // client({path: controller.model.td.route + '/search', entity: post_data}).then(
+            //     function (response) {
+            //         controller.searchReturned.notify(response.entity)
+            //     });
         };
 
         let searchTable = view.createSearchTable();

@@ -1,9 +1,12 @@
-export default function(data){
+export default function(component){
     let column_definition = [
         {
             "db_field": "id",
             "caption": "Id",
             "type": "link",
+            "onClick":  function(id){
+                component.$router.push(component.route + '/' + id)
+            },
             "placeholder": false,
             "route": "printers",
             "show_on_list": true,
@@ -73,7 +76,7 @@ export default function(data){
             "db_field": "media",
             "caption": "Media",
             "type": "select",
-            "select_values": server_response_data.media,
+            "select_values": component.data.media,
             "default_value": "default value is set",
             "show_on_list": true,
             "show_on_view": true,

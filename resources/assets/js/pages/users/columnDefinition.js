@@ -1,10 +1,13 @@
-export default function(data){
+export default function(component){
     let employee_select_values = [];
     let column_definition = [
         {
             "db_field": "id",
             "caption": "Id",
             "type": "link",
+            "onClick":  function(id){
+                component.$router.push(component.route + '/' + id)
+            },
             "route": "/users",
             "show_on_list": true,
             "show_on_view": true,
@@ -19,7 +22,7 @@ export default function(data){
             "db_field": "role_id",
             "caption": "Role",
             "type": "tree_select",
-            "select_values": data.roles,
+            "select_values": component.data.roles,
             "default_value":'null',
             "show_on_list": true,
             "show_on_view": true,

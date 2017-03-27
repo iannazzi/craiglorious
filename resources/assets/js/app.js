@@ -1,15 +1,14 @@
 import './bootstrap';
 import router from './routes'
-//require('./server_connection.js');
-//not fucking working... trying to get clib.clone....
-// require('./lib/global_library');
-// window.cilib = new global_library();
-
-
+import { getData } from './controllers/getData'
 import {AwesomeTable} from './elements/tables/AwesomeTable';
+import { AwesomeTableBuilder } from './controllers/AwesomeTableBuilder'
+
+//99% of page data will be the table......
+window.AwesomeTableBuilder = new AwesomeTableBuilder();
+window.AwesomeTable = AwesomeTable;
 
 //some globals please.....
-window.AwesomeTable = AwesomeTable;
 window.bus = new Vue();
 window.Event = new class {
     constructor() {
@@ -31,38 +30,9 @@ window.myUser = {
     admin: false
 }
 window.cached_page_data = {};
+
 //wrap ajax calls in case i need to swap out rest for axios
-window.getData = function(method, path, entity, callback){
-
-        client({path, entity, method,}).then(
-            function (response) {
-                //success
-                callback(response.entity);
-            },
-            function (response){
-                //error
-                callback(response.entity);
-            });
-}
-//most pages with tables need to get data then display it
-window.loadPageWithAwesomeTable = function(component) {
-    return function(response){
-        console.log('loadPageWithAwsomeTable')
-        console.log(response);
-        component.data = response.data;
-        component.dataReady = true;
-        component.renderTable();
-        bus.$emit('zzwaitoverevent');
-        if(typeof component.cachePageData === 'function')
-        {
-            component.cachePageData(response)
-        }
-
-
-    }
-
-}
-
+window.getData = getData;
 
 
 let isDebug = true // toggle this to turn on / off for global controll
@@ -161,20 +131,26 @@ new Vue({
             let self = this;
             var token = localStorage.getItem('jwt-token')
             if (token !== null && token !== 'undefined') {
-                client({path: '/login/validate'}).then(
-                    function (response) {
+
+
+                getData( {
+                    method: 'get',
+                    url: '/login/validate',
+                    entity: false,
+                    onSuccess(response) {
                         if (1) ml('validated token after refresh')
 
-                        self.setLogin(response.entity.user)
+                        self.setLogin(response.user)
                         self.appLoaded = true;
-
                     },
-                    function (response) {
+                    onError(response){
                         if (1) ml('we have a bad token')
                         self.destroyLogin()
                         self.appLoaded = true;
                     }
-                )
+                })
+
+
             }
             else {
                 if (1) ml('validate token after refresh is null')
@@ -184,15 +160,15 @@ new Vue({
         },
         getPageData(){
             //how about grabbing site wide data?
-            let self = this;
-            client({path: '/dashboard/cached_page_data'}).then(
-                function (response) {
-                    self.cached_page_data = response.entity.cached_page_data;
-                },
-                function (response) {
-
-                }
-            )
+            // let self = this;
+            // client({path: '/dashboard/cached_page_data'}).then(
+            //     function (response) {
+            //         self.cached_page_data = response.entity.cached_page_data;
+            //     },
+            //     function (response) {
+            //
+            //     }
+            // )
         }
     },
 
@@ -211,16 +187,20 @@ new Vue({
 
         $(function () {
             setInterval(function checkSession() {
-
-                client({path: '/validate_token'}).then(
-                    function (response) {
-                        console.log('token validated')
+                getData( {
+                    method: 'get',
+                    url: '/validate_token',
+                    entity: false,
+                    onSuccess(response) {
+                        if (1) ml('token validated')
                     },
-                    function (response, status) {
-                        console.log('error validating token');
+                    onError(response){
+                        if (1) ml('error validating token')
                         console.log(response);
                         self.destroyLogin();
-                    })
+                    }
+                })
+
             }, 100000); // every 100 seconds
         });
 

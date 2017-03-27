@@ -63,16 +63,22 @@
                 if (1) ml('no cached_page_data got to go and get some')
 
 
-                getData('get', '/dashboard', false , function (response) {
+                getData( {
+                    method: 'get',
+                    url: '/dashboard',
+                    entity: false,
+                    onSuccess(response) {
+                        self.views = response.views;
+                        self.views.forEach(function (entry) {
+                            entry.show = true
+                        });
+                        self.loaded = true;
+                        cached_page_data['views'] = self.views;
+                        self.$root.cached_page_data['views'] = self.views;
+                    },
+                })
 
-                    self.views = response.views;
-                    self.views.forEach(function (entry) {
-                        entry.show = true
-                    });
-                    self.loaded = true;
-                    cached_page_data['views'] = self.views;
-                    self.$root.cached_page_data['views'] = self.views;
-                },);
+
 
 
 

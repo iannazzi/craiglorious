@@ -1,9 +1,12 @@
-export default function(data){
+export default function(component){
     let column_definition = [
         {
             "db_field": "id",
             "caption": "Id",
             "type": "link",
+            "onClick":  function(id){
+                component.$router.push(component.route + '/' + id)
+            },
             "placeholder": false,
             "route": "terminals",
             "show_on_list": true,

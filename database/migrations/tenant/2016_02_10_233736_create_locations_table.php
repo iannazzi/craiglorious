@@ -16,9 +16,9 @@ class CreateLocationsTable extends Migration
             $table->increments('id');
             $table->integer('parent_id');
             $table->string('name', 40);
-            $table->string('barcode');
+            $table->string('barcode')->nullable();
             $table->boolean('active');
-            $table->text('comments');
+            $table->text('comments')->nullable();
             $table->unique(['parent_id','name'],'parent_id');
             $table->timestamps();
         });
