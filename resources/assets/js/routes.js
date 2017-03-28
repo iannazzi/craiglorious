@@ -23,11 +23,15 @@ let routes = [
             },
             {
                 path: 'register',
+                name: 'register',
+
                 meta: { guarded: false },
                 component: require('./pages/auth/register.vue'),
             },
             {
                 path: 'profile',
+                name: 'profile',
+
                 meta: { guarded: false },
                 component: require('./pages/auth/profile.vue'),
             },
@@ -50,6 +54,8 @@ let routes = [
     },
     {
         path: '/calendar',
+        name: 'calendar',
+
         meta: { guarded: true },
         component: require('./pages/calendar/calendarPage.vue')
     },
@@ -60,7 +66,7 @@ let routes = [
         props: {},
         children: [
             {
-                path: '',
+                path: '',///:roles_id?/:roles_name?
                 component: require('./pages/roles/index.vue'),
                 meta: { guarded: true },
                 props: {page: 'index'},
@@ -143,6 +149,7 @@ let routes = [
     },
     {
         path: '/locations',
+        name: 'locations',
         meta: { guarded: true },
         component: require('./pages/layout.vue'),
         props: {},
@@ -300,6 +307,16 @@ let routes = [
         meta: { guarded: false },
         component: require('./pages/tests/browser_tests.vue')
     },
+    {
+        path: '/test',
+        meta: { guarded: true },
+        component: require('./pages/tests/test.vue')
+    },
+    {
+        path: '/test2',
+        meta: { guarded: true },
+        component: require('./pages/tests/test2.vue')
+    },
 
 ]
 
@@ -309,9 +326,17 @@ let router =  new VueRouter({
     routes
 
 })
-
+//here is the guard.... super easy.... why is laravel a pain>
 router.beforeEach((to, from, next) => {
 
+    //strip query off?
+    // let uri = new JsUri(window.location.href);
+    // console.log ('might need to take control of the uri query');
+    // let query = uri.query();
+    // uri.queryPairs.forEach(pair => {
+    //     console.log(pair)
+    //     uri.deleteQueryParam(pair[0]);
+    // })
     let token = localStorage.getItem('jwt-token')
     if (to.meta.guarded) {
         if (!token || token === null) {

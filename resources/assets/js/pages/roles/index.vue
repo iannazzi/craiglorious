@@ -7,6 +7,7 @@
                     Role
                 </button>
                 <div id="searchableTable"></div>
+                    <zzi-matrix v-if="searching"></zzi-matrix>
             </div>
         </div>
         <div v-else>
@@ -28,11 +29,15 @@
             return {
                 data: {},
                 dataReady: false,
+                searching: false,
                 route: 'roles'
+
             }
         },
         props: ['page'],
         mounted: function () {
+            console.log('wtf')
+            console.log(this.props)
             this.dataReady = false;
             //we need to get some data
             console.log(AwesomeTableBuilder)

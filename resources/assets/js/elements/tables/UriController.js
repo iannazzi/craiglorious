@@ -43,7 +43,12 @@ export class UriController{
     }
     checkUri() {
         let uri = new JsUri(window.location.href)
+        console.log(window.location.href)
         for (let i = 0; i < this.controller.view.search_elements.length; i++) {
+            console.log(this.controller.view.search_elements[i].name)
+
+            console.log(uri.getQueryParamValue(this.controller.view.search_elements[i].name))
+
             if (uri.getQueryParamValue(this.controller.view.search_elements[i].name)) {
                 return true;
             }

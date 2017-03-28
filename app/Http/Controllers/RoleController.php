@@ -10,6 +10,7 @@ class RoleController extends Controller
     public function search(Request $request)
     {
         $data = $request->all();
+        dd($data);
         $table_name = $data['table_name'] . '_';
         $search = $data['search_fields'];
         $name = $search[ $table_name . 'name' ];

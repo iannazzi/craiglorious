@@ -5,7 +5,8 @@ export default function(component){
             "caption": "Id",
             "type": "link",
             "onClick":  function(id){
-                component.$router.push(component.route + '/' + id)
+                component.$router.push({query:{}})
+                component.$router.push({path: '/' + component.route + '/' + id})
             },
             "route": "roles",
             "show_on_list": true,

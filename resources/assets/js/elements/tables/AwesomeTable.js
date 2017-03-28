@@ -66,7 +66,7 @@ export class AwesomeTable {
 
     addTo(div_id) {
         this.div = document.getElementById(div_id);
-        this.options.name = div_id;
+        //this.options.name = div_id;
         switch (this.options.type) {
             case 'record':
                 this.recordTable();
@@ -366,36 +366,48 @@ export class AwesomeTable {
         let view = new SearchTableView(model);
         let controller = new SearchTableController(model, view);
         let self = this;
-        this.options.onSearchClicked = function () {
-            controller.searching.notify();
-            controller.uri.onSearch();
-            let post_data = {};
-            post_data['search_fields'] = {};
-            post_data['table_name'] = controller.view.name;
-            controller.view.search_elements.forEach(element => {
-                post_data.search_fields[element.name] = element.value;
-            })
-            console.log('I need controller for testing.... search post data');
-            console.log(JSON.stringify(post_data))
 
-            self.options.getData(
-                {
-                    method: 'post',
-                    url: controller.model.td.route + '/search',
-                    entity: post_data,
-                    onSuccess(response) {
-                        console.log('lets do this');
-                        controller.searchReturned.notify(response)
+        this.options.onLoadPage = function(){
+
+            if (controller.uri.checkUri()) {
+                console.log('Get data based on the Uri')
+
+
+                //this loads data to the search table fields
+                //and the sort array
+                controller.uri.loadFromUri()
+                controller.options.getData( {
+                    method: 'get',
+                    url: '/' + controller.model.options.route + '/search',
+                    entity: controller.getSearchPostData(),
+                    onSuccess: function(){
+                        controller.view.addDataTable();
+                        controller.setFocusToFirstInputOfSearch()
                     }
+
+                })
+
+
+                //this.view.searchClicked.notify()
+            }
+            else {
+                if (controller.uri.checkStorage()) {
+                    controller.uri.loadFromStorage();
+                    //this will send you to the if block right above this
+                    controller.options.onSearchClick(controller.getSearchPostData())
+                    //console.log('')
+                    //push w/query
+
                 }
-            );
-
-
-            // client({path: controller.model.td.route + '/search', entity: post_data}).then(
-            //     function (response) {
-            //         controller.searchReturned.notify(response.entity)
-            //     });
-        };
+                else {
+                    // get and
+                    //display the data or the number of records.....
+                    console.log('no search present.. loading if results are < ' + this.show_records_autmatically_below)
+                    //this.populateSearchValuesFromDefaultValues()
+                    //this.loadInitialData();
+                }
+            }
+        }
 
         let searchTable = view.createSearchTable();
         this.div.appendChild(searchTable);

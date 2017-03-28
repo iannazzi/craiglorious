@@ -13,15 +13,17 @@ export class SearchTableEvents {
         controller.view.searchClicked.attach(
             function () {
                 console.log('search clicked');
-                if (typeof controller.model.td.onSearchClicked === 'function') {
-                    controller.model.td.onSearchClicked();
+                if (typeof controller.model.td.onSearchClick === 'function') {
+
+
+                    controller.model.td.onSearchClick(controller.getSearchPostData().search_fields);
                 }
             }
         )
         controller.searching.attach(
             function () {
                 console.log('searching....')
-                controller.view.searching();
+                //controller.view.searching();
             }
         )
         controller.searchReturned.attach(
@@ -31,7 +33,9 @@ export class SearchTableEvents {
         )
         controller.loadPageEvent.attach(
             function () {
-                controller.onLoadPage();
+                if(typeof controller.model.options.onLoadPage === 'function'){
+                    controller.model.options.onLoadPage()
+                }
             }
         )
         controller.view.resetClicked.attach(

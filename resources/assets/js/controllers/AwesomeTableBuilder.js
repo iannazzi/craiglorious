@@ -121,7 +121,7 @@ export class AwesomeTableBuilder
         //i need get data function sent in
         return new this.AwesomeTable({
 
-            //name: "roles",
+            name: component.route,
             access: "read",
             table_buttons: [],
             table_view: 'index', //component.page,
@@ -134,6 +134,41 @@ export class AwesomeTableBuilder
             data: component.data,
             number_of_records_available: component.data.number_of_records_available,
             getData:this.getData,
+            onSearchClick(data){
+                console.log('on search click')
+                //console.log(data);
+                component.$router.push({ path: '/' + component.route , query:data } )
+                //
+                // if(typeof self.options.beforeSearchClicked === 'function'){
+                //     self.options.beforeSearchClicked();
+                // }
+                // controller.searching.notify();
+                // controller.uri.onSearch();
+                //
+                // self.options.getData(
+                //     {
+                //         method: 'post',
+                //         url: controller.model.td.route + '/search',
+                //         entity: post_data,
+                //         onSuccess(response) {
+                //             console.log('lets do this');
+                //             controller.searchReturned.notify(response)
+                //             if(typeof self.options.onSearchSuccess === 'function'){
+                //                 self.options.onSearchSuccess();
+                //             }
+                //         }
+                //     }
+                // );
+            },
+            router(data){
+                component.$router.push({ path: '/' + component.route +'/search', query:{data} } )
+            },
+            onSearchSuccess(){
+                component.searching = false;
+            },
+            beforeSearchClicked(){
+                component.searching = true;
+            }
 
         })
     }

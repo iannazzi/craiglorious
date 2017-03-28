@@ -19,24 +19,17 @@ export class SearchTableController extends CollectionTableController {
         //     window.location.href = window.location.href;
         // };
     }
-    onLoadPage(){
 
-        if (this.uri.checkUri()) {
-            this.uri.loadFromUri()
-            this.view.searchClicked.notify()
-        }
-        else {
-            if (this.uri.checkStorage()) {
-                this.uri.loadFromStorage()
-                this.view.searchClicked.notify()
-            }
-            else {
-                console.log('no search present.. loading if results are < ' + this.show_records_autmatically_below)
-                //this.populateSearchValuesFromDefaultValues()
-                this.loadInitialData();
-            }
-        }
-
+    getSearchPostData(){
+        let post_data = {};
+        post_data['search_fields'] = {};
+        post_data['table_name'] = this.view.name;
+        this.view.search_elements.forEach(element => {
+            post_data.search_fields[element.name] = element.value;
+        })
+        console.log('I need controller for testing.... search post data');
+        console.log(JSON.stringify(post_data))
+        return post_data;
     }
 
     onSearchReturned(data){
@@ -47,6 +40,9 @@ export class SearchTableController extends CollectionTableController {
         this.loadInitialData();
     }
     loadInitialData() {
+
+
+        //bad bad bad function, really confusing. abort..
         if (this.number_of_records_available > 0 && this.model.tdo.length == 0) {
             //if there are only a small amount of records go ahead and grab those....
             if (this.number_of_records_available < this.show_records_autmatically_below) {

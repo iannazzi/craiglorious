@@ -41,7 +41,7 @@
         },
         props: ['page','justcreated'],
         mounted: function () {
-
+            this.$router.push({query:{}})
             AwesomeTableBuilder.loadRecordTableDataThenCallRenderTable(this)
 
         },

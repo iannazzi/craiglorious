@@ -111,8 +111,7 @@ export class RecordTableEvents extends TableEvents {
         view.onSaveClick = new TableEvent(view);
         controller.view.onSaveClick.attach(
             function () {
-                console.log('save clicked...');
-                console.log(controller.model.options);
+
                 if(typeof controller.model.options.onSaveClick === 'function'){
                     controller.model.options.onSaveClick();
                 }

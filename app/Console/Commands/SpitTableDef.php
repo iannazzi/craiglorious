@@ -46,6 +46,7 @@ class SpitTableDef extends Command
         $system = System::first();
         $system->createTenantConnection();
         $table_definition = [
+            "name" => "/" . $table,
             "route" => "/" . $table,
             'additionalPostValues' => 'object',
             "data" => "self.data",
