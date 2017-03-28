@@ -82,10 +82,7 @@ export class SearchTableController extends CollectionTableController {
     }
 
 
-    onSearch() {
 
-
-    }
 
     onReset() {
         this.view.search_elements.forEach(element => {

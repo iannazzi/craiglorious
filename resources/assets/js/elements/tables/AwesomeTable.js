@@ -369,14 +369,16 @@ export class AwesomeTable {
 
         this.options.onLoadPage = function(){
 
-            if (controller.uri.checkUri()) {
+
+            if (controller.uri.checkUri(self.options.search_query)) {
                 console.log('Get data based on the Uri')
 
 
                 //this loads data to the search table fields
                 //and the sort array
-                controller.uri.loadFromUri()
-                controller.options.getData( {
+                controller.uri.loadFromUri();
+                controller.uri.storeSearch();
+                self.options.getData( {
                     method: 'get',
                     url: '/' + controller.model.options.route + '/search',
                     entity: controller.getSearchPostData(),

@@ -41,13 +41,17 @@ export class UriController{
             uri.deleteQueryParam(element.name)
         })
     }
-    checkUri() {
-        let uri = new JsUri(window.location.href)
+    checkUri(search_query) {
+        // this is forcing the uri 'check' at the #, so just the query should be sent in
+        // let uri2 = new JsUri(window.location.href)
+        // let uri1 = new JsUri(uri1.anchor())
+
+        let uri = new JsUri(search_query)
         console.log(window.location.href)
         for (let i = 0; i < this.controller.view.search_elements.length; i++) {
-            console.log(this.controller.view.search_elements[i].name)
-
-            console.log(uri.getQueryParamValue(this.controller.view.search_elements[i].name))
+            // console.log(this.controller.view.search_elements[i].name)
+            //
+            // console.log(uri.getQueryParamValue(this.controller.view.search_elements[i].name))
 
             if (uri.getQueryParamValue(this.controller.view.search_elements[i].name)) {
                 return true;
@@ -210,14 +214,20 @@ export class UriController{
     }
 
     onReset(){
-        let uri = new JsUri(window.location.href)
-        this.deleteSearchValuesFromUri(uri);
-        this.removeSortFromUri(uri);
-        console.log('pushing ' + uri.toString())
-        this.pushState(uri);
+
+        //let uri = new JsUri(window.location.href)
+        //this.deleteSearchValuesFromUri(uri);
+        //this.removeSortFromUri(uri);
+        //console.log('pushing ' + uri.toString())
+        //this.pushState(uri);
         delete sessionStorage[this.stored_search_key];
         delete sessionStorage[this.stored_sort_key];
         this.resetStoredSort();
+
+        //this callback should send it
+        if(typeof this.controller.model.options.onResetClick === 'function'){
+            this.controller.model.options.onResetClick();
+        }
     }
     resetStoredSort(){
         this.controller.model.sort = [];

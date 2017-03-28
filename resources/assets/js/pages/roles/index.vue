@@ -36,7 +36,7 @@
         },
         props: ['page'],
         mounted: function () {
-            console.log('wtf')
+            console.log('props')
             console.log(this.props)
             this.dataReady = false;
             //we need to get some data

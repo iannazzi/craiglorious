@@ -13,10 +13,11 @@ export class SearchTableEvents {
         controller.view.searchClicked.attach(
             function () {
                 console.log('search clicked');
+                //store the search
+                controller.uri.storeSearch();
                 if (typeof controller.model.td.onSearchClick === 'function') {
-
-
-                    controller.model.td.onSearchClick(controller.getSearchPostData().search_fields);
+                    let search_fields = controller.getSearchPostData()
+                    controller.model.td.onSearchClick(search_fields);
                 }
             }
         )
