@@ -8,9 +8,13 @@ import {SearchTableView}  from '../../elements/tables/SearchTableView';
 import {SearchTableController}  from '../../elements/tables/SearchTableController';
 
 
+
+
 export class AwesomeTable {
     constructor(options) {
-
+        //these need to go to awesometable....and should go there
+        window.firstBy = require('thenby');
+        window.JsUri = require('jsuri');
         //table types: record, collection,
         //record table_view create edit show  i.e. read write
 
@@ -365,59 +369,22 @@ export class AwesomeTable {
         let model = new TableModel(this.options);
         let view = new SearchTableView(model);
         let controller = new SearchTableController(model, view);
+        this.searchController = controller;
         let self = this;
-
-        this.options.onLoadPage = function(){
-
-
-            if (controller.uri.checkUri(self.options.search_query)) {
-                console.log('Get data based on the Uri')
-
-
-                //this loads data to the search table fields
-                //and the sort array
-                controller.uri.loadFromUri();
-                controller.uri.storeSearch();
-                self.options.getData( {
-                    method: 'get',
-                    url: '/' + controller.model.options.route + '/search',
-                    entity: controller.getSearchPostData(),
-                    onSuccess: function(){
-                        controller.view.addDataTable();
-                        controller.setFocusToFirstInputOfSearch()
-                    }
-
-                })
-
-
-                //this.view.searchClicked.notify()
-            }
-            else {
-                if (controller.uri.checkStorage()) {
-                    controller.uri.loadFromStorage();
-                    //this will send you to the if block right above this
-                    controller.options.onSearchClick(controller.getSearchPostData())
-                    //console.log('')
-                    //push w/query
-
-                }
-                else {
-                    // get and
-                    //display the data or the number of records.....
-                    console.log('no search present.. loading if results are < ' + this.show_records_autmatically_below)
-                    //this.populateSearchValuesFromDefaultValues()
-                    //this.loadInitialData();
-                }
-            }
-        }
-
         let searchTable = view.createSearchTable();
         this.div.appendChild(searchTable);
+
         $(function () {
             controller.loadPageEvent.notify();
         });
     }
 
+    updateSearchPage(){
+        this.searchController.loadPageEvent.notify();
+    }
+    removeResultsTable(){
+        this.searchController.view.destroyCollectionTable();
+    }
     // showModal() {
     //     this.viewModal.showModalTable();
     // }

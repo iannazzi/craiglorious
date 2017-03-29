@@ -41,15 +41,15 @@
         },
         props: ['page','justcreated'],
         mounted: function () {
-            this.$router.push({query:{}})
-            AwesomeTableBuilder.loadRecordTableDataThenCallRenderTable(this)
+            AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
 
         },
         methods: {
             renderTable(){
                 let self = this;
+                self.dataReady = true;
                 this.column_definition = columnDefinition(this);
-                let recordTable = AwesomeTableBuilder.createShowEditOrCreateRecordTable(this);
+                let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
 
                 //No editing if the admin role
                 if (self.page == 'show'){
@@ -58,6 +58,7 @@
                     }
                 }
                 $(function(){
+
                     recordTable.addTo('record_table');
                     if(self.page == 'show'){
                         let access_table_column_definition = [

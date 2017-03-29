@@ -81,7 +81,24 @@ export class SearchTableController extends CollectionTableController {
         })
     }
 
+    getSearchRecordsAndDisplay(){
+        let controller = this;
+        controller.model.options.getData({
+            method: 'post',
+            url: '/' + controller.model.options.search_route,
+            entity: controller.getSearchPostData(),
+            onSuccess: function (response) {
+                controller.model.loadData(response.data)
+                controller.view.addDataTable();
+                if(typeof controller.model.options.onLoadPageComplete === 'function'){
+                    controller.model.options.onLoadPageComplete();
+                }
+                controller.setFocusToFirstInputOfSearch()
 
+            }
+
+        })
+    }
 
 
     onReset() {

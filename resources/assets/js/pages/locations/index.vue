@@ -38,15 +38,15 @@
         mounted: function () {
             this.dataReady = false;
             //we need to get some data
-            console.log(AwesomeTableBuilder)
-            AwesomeTableBuilder.getDataThenRenderTable(this);
+            console.log(AwesomeTableWrapper)
+            AwesomeTableWrapper.getDataThenRenderTable(this);
 
         },
         methods: {
 
             renderTable(){
                 this.column_definition = columnDefinition(this);
-                let searchableTable = AwesomeTableBuilder.createSearchableCollectionTable(this);
+                let searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(this);
 
                 $(function () {
                     searchableTable.addTo('searchableTable')

@@ -40,14 +40,14 @@
         props: ['page','justcreated'],
         mounted: function () {
 
-            AwesomeTableBuilder.loadRecordTableDataThenCallRenderTable(this)
+            AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
 
         },
         methods: {
             renderTable(){
                 let self = this;
                 this.column_definition = columnDefinition(this);
-                let recordTable = AwesomeTableBuilder.createShowEditOrCreateRecordTable(this);
+                let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
 
 
                 $(function(){

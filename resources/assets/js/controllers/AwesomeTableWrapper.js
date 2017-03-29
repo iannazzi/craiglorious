@@ -2,7 +2,7 @@ import { getData } from './getData'
 import {AwesomeTable} from '../elements/tables/AwesomeTable';
 
 
-export class AwesomeTableBuilder
+export class AwesomeTableWrapper
 {
     constructor() {
         // this.component = component;
@@ -13,10 +13,9 @@ export class AwesomeTableBuilder
     //most pages with tables need to get data then display it
     loadDataAndRenderTable(component) {
         return function (response) {
+            //this is page data.....
             component.data = response.data;
-            component.dataReady = true;
             cached_page_data[component.route] = response.data;
-            //this is part of the callback
             component.renderTable();
 
         }
@@ -103,7 +102,7 @@ export class AwesomeTableBuilder
         }
     }
 
-    getDataThenRenderTable(component){
+    getPageDataThenRenderSearchTable(component){
 
         let self = this;
         this.getData( {
@@ -115,6 +114,7 @@ export class AwesomeTableBuilder
         })
 
     }
+
 
     createSearchableCollectionTable(component){
 
@@ -138,14 +138,27 @@ export class AwesomeTableBuilder
             number_of_records_available: component.data.number_of_records_available,
             getData:this.getData,
             search_query: component.$root.$route.fullPath,
-            onSearchClick(data){
-                console.log('on search click')
-                console.log(data);
-                let url_query = data.search_fields;
-                url_query.table_name = data.table_name;
-                component.$router.push({ path: '/' + component.route , query:url_query } )
-
-
+            search_route: component.route + '/search',
+            onLoadPageStart(){
+                console.log('onLoadPageStart')
+                component.searchingCollection = true;
+            },
+            onLoadPageComplete(){
+                console.log('onLoadPageComplete')
+                component.dataReady = true;
+                component.searchingCollection = false;
+            },
+            onSearchClick(query){
+                console.log('awsome table wrapper on search click query')
+                console.log(query);
+                component.$router.push({ path: '/' + component.route , query:query } )
+            },
+            onSortClick(data){
+                //we need to add to the url
+                console.log(data)
+                console.log('sort click')
+                data['sort']=true;
+                component.$router.push({ path: '/' + component.route , query:data, props:{sort:true}, params:{sort:true},  meta:{sort:true}} )
             },
             onResetClick(){
               //kill storage and push to

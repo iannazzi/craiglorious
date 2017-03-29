@@ -2,10 +2,10 @@ import './bootstrap';
 import router from './routes'
 import { getData } from './controllers/getData'
 import {AwesomeTable} from './elements/tables/AwesomeTable';
-import { AwesomeTableBuilder } from './controllers/AwesomeTableBuilder'
+import { AwesomeTableWrapper } from './controllers/AwesomeTableWrapper'
 
 //99% of page data will be the table......
-window.AwesomeTableBuilder = new AwesomeTableBuilder();
+window.AwesomeTableWrapper = new AwesomeTableWrapper();
 window.AwesomeTable = AwesomeTable;
 
 //some globals please.....
@@ -159,16 +159,18 @@ new Vue({
             }
         },
         getPageData(){
-            //how about grabbing site wide data?
-            // let self = this;
-            // client({path: '/dashboard/cached_page_data'}).then(
-            //     function (response) {
-            //         self.cached_page_data = response.entity.cached_page_data;
-            //     },
-            //     function (response) {
-            //
-            //     }
-            // )
+            //site wide data // kinda a bad idea, pretty complicated additional logic.....
+            let self = this;
+            getData( {
+                method: 'get',
+                url: '/dashboard/cached_page_data',
+                entity: false,
+                onSuccess(response) {
+                    if (1) ml('updated cached page data')
+                    self.cached_page_data = response.cached_page_data;
+                },
+
+            })
         }
     },
 
@@ -181,7 +183,7 @@ new Vue({
             self.destroyLogin()
         })
         bus.$on('userHasLoggedIn', function (user) {
-            self.getPageData();
+            //self.getPageData();
             self.setLogin(user)
         })
 

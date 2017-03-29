@@ -19,13 +19,7 @@ export class CollectionTableController extends TableController {
     }
 
 
-    onSort(args){
-        console.log('data table controller on sort');
-        this.uri.onSort(args);
-        this.model.sortData()
-        this.view.updateHeaderSortView();
-        this.view.updateTable();
-    }
+
 
     addRow() {
         this.copyTable();

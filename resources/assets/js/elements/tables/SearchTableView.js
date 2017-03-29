@@ -206,6 +206,9 @@ createSearchButtons(){
 
     }
 
+
+
+
     addMessageInsteadOfTable(message)
     {
         let div = document.createElement('div');
@@ -217,6 +220,10 @@ createSearchButtons(){
     {
         this.searchDataTableDiv.innerHTML = '';
         this.searchDataTableDiv.appendChild(this.createCollectionTable())
+    }
+
+    destroyCollectionTable(){
+        this.searchDataTableDiv.innerHTML = '';
     }
     searching()
     {

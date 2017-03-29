@@ -5,9 +5,6 @@ window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 
 
-//these need to go to awesometable....and should go there
-window.firstBy = require('thenby');
-window.JsUri = require('jsuri');
 
 
 //these are for full calendar

@@ -119,7 +119,34 @@ export class CollectionTableEvents extends TableEvents{
 
         view.onHeaderClick.attach(
             function (sender, args) {
-                controller.onSort(args);
+                    console.log('collection table controller on sort');
+
+
+                controller.uri.onSort(args);
+
+
+                let uri_array = controller.uri.getUri();
+                console.log('uri array')
+                console.log(uri_array)
+
+                //this will mofify the url....
+                if (typeof controller.model.td.onSortClick === 'function') {
+                    //this callback has router
+                    controller.model.td.onSortClick(controller.uri.getUri());
+                }
+
+
+
+
+
+                    controller.model.sortData()
+                    controller.view.updateHeaderSortView();
+                    controller.view.updateTable();
+
+
+
+
+
             }
         )
 
