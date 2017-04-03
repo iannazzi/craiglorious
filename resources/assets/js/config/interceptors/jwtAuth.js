@@ -18,7 +18,7 @@
 		return interceptor({
 			request: function (request, config) {
 
-				console.log(request);
+				// console.log(request);
 				var token, headers;
 
 				token = localStorage.getItem('jwt-token');
@@ -33,7 +33,7 @@
 			response: function (response) {
 
 
-                console.log(response);
+                // console.log(response);
 
                 if (response.status && response.status.code == 401) {
 					localStorage.removeItem('jwt-token');

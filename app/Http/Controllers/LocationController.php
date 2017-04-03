@@ -32,22 +32,25 @@ class LocationController extends Controller
         {
             $q->where('parent_id', '=', $parent_id);
         }
-        $result = $q->get();
+        $return_data['records'] = $q->get();
         return response()->json([
             'success' => true,
             'message' => 'search returned',
-            'data' => $result,
+            'data' => $return_data,
         ], 200);
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $number_of_records_available = Location::all()->count();
         $return_data = $this->returnData();
         $return_data['page'] = 'index';
         $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
+        if($number_of_records_available<=$request->number_of_records){
+            $return_data['records'] = Location::all(); //let js handle the data through ajax
+        }
         return response()->json([
             'success' => true,
             'message' => 'search returned',

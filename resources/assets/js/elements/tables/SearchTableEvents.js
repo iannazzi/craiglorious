@@ -11,25 +11,12 @@ export class SearchTableEvents {
 
         controller.view.searchClicked.attach(
             function () {
-                console.log('search clicked');
-
-                //store the search
                 controller.uri.storeSearch();
-                //this will set the url
                 let search_fields = controller.uri.getSearchUrlData()
-
                 //push a url change, then watch for the change, then fire page load event
                 if (typeof controller.model.td.onSearchClick === 'function') {
                     controller.model.td.onSearchClick(search_fields);
                 }
-
-                //i was expecting a reload at this point..... but noooooo
-                //could do location .reload.....very obstructive... no reload then...
-                //location.reload();
-                //controller.getSearchRecordsAndDisplay();
-
-
-
             }
         )
         controller.searching.attach(
@@ -49,7 +36,7 @@ export class SearchTableEvents {
             function () {
                 if (controller.uri.checkUri(controller.model.options.search_query)) {
                     //console.log(controller.model.options.search_query)
-                    if(typeof controller.model.options.onLoadPageStart === 'function'){
+                    if (typeof controller.model.options.onLoadPageStart === 'function') {
                         controller.model.options.onLoadPageStart();
                     }
                     console.log('Get data based on the Uri')
@@ -61,31 +48,37 @@ export class SearchTableEvents {
                     controller.getSearchRecordsAndDisplay();
 
 
-
-
                     // if(typeof controller.model.options.onLoadPage === 'function'){
                     //     controller.model.options.onLoadPage()
                     // }
                 }
                 //this.view.searchClicked.notify()
 
-                else {
-                    if (controller.uri.checkStorage()) {
-                        controller.uri.loadFromStorage();
-                        //this will NOT send you to the if block right above this,
-                        // controller.options.onSearchClick(controller.getSearchPostData())
-                        //console.log('')
-                        //push w/query
-                        controller.view.searchClicked.notify();
+                else if (controller.uri.checkStorage()) {
+                    controller.uri.loadFromStorage();
+                    controller.view.searchClicked.notify();
 
+                }
+                else {
+
+                    if(controller.model.options.initial_page_load_data.length>0){
+                        console.log('data from page load is available')
+                        controller.model.loadData(controller.model.options.initial_page_load_data)
+                        controller.view.addDataTable();
+                        // if(typeof controller.model.options.onLoadPageComplete === 'function'){
+                        //     controller.model.options.onLoadPageComplete();
+                        // }
+                        controller.setFocusToFirstInputOfSearch()
                     }
-                    else {
-                        // get and
-                        //display the data or the number of records.....
-                        console.log('no search present.. loading if results are < ' + this.show_records_autmatically_below)
-                        //this.populateSearchValuesFromDefaultValues()
-                        //this.loadInitialData();
+                    else{
+                        console.log(controller.model.options.number_of_records_available)
+                        let message = "There are " + controller.model.options.number_of_records_available + " records available, please search to limit the results.";
+                        controller.view.addMessageInsteadOfTable(message)
                     }
+
+
+
+
                 }
             }
         )

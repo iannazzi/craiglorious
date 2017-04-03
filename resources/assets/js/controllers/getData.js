@@ -31,7 +31,7 @@ export function getData (options) {
 
 
 
-    client({path:options.url, entity:options.entity, method:options.method,}).then(
+    client({path:options.url, entity:options.entity, params:options.params,method:options.method,}).then(
             function (response) {
                 //success
                 //bus.$emit('data_received');

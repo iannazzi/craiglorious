@@ -25,7 +25,7 @@ class RoleController extends Controller
             $q->where('parent_id', '=', $parent);
         }
 
-        $return_data = $q->get();
+        $return_data['records'] = $q->get();
 
         return response()->json([
             'success' => true,
@@ -37,10 +37,14 @@ class RoleController extends Controller
 
     public function index(Request $request)
     {
-        //return response($request->user());
+
         $number_of_records_available = Role::all()->count();
-        $return_data['roles'] = \Auth::user()->role->getRoleSelectTree();
         $return_data['records'] = []; //let js handle the data through ajax
+        if($number_of_records_available<=$request->number_of_records){
+            $return_data['records'] = Role::all(); //let js handle the data through ajax
+        }
+        $return_data['roles'] = \Auth::user()->role->getRoleSelectTree();
+
         $return_data['number_of_records_available'] = $number_of_records_available;
 
         return response()->json([

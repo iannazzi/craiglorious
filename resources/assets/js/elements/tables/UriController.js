@@ -196,12 +196,7 @@ export class UriController{
             }
         })
         return stored_values;
-        //todo wrong::::: now add the elements to the uri
-        //let uri = new JsUri(window.location.href)
-        //this.addSearchToUri(uri,stored_values);
 
-
-        // ? this.pushState(uri)
 
     }
 

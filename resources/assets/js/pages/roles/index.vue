@@ -7,7 +7,7 @@
                     Role
                 </button>
                 <div id="searchableTable"></div>
-                    <zzi-matrix v-if="searchingCollection"></zzi-matrix>
+                    <zzi-matrix v-if="loading"></zzi-matrix>
             </div>
         </div>
         <div v-show="!dataReady">
@@ -21,7 +21,7 @@
 <script>
 
     import columnDefinition from './columnDefinition'
-//    import {AwesomeTable} from '../../elements/tables/AwesomeTable';
+    import searchableTableRouteWatcher from '../../controllers/routeWatcher'
 
 
     export default {
@@ -29,7 +29,7 @@
             return {
                 data: {},
                 dataReady: false,
-                searchingCollection: false,
+                loading: false,
                 route: 'roles',
                 searchableTable:null
 
@@ -39,7 +39,7 @@
         mounted: function () {
 
             this.dataReady = false
-            AwesomeTableWrapper.getPageDataThenRenderSearchTable(this);
+            AwesomeTableWrapper.getPageDataThenRenderSearchTable(this,100);
 
         },
         methods: {
@@ -58,28 +58,8 @@
 
             }
         },
-        watch: {
-            $route () {
-                console.log('route changed')
-                console.log( this.$route.query.sort)
+        watch:searchableTableRouteWatcher
 
-                if(this.$route.query.sort === undefined){
-                    this.searchingCollection = true;
-                    this.searchableTable.removeResultsTable();
-                    this.searchableTable.options.search_query = this.$route.fullPath;
-                    this.searchableTable.updateSearchPage();
-                }
-                else
-                {
-                    //sort change just update the table view
-                }
-
-
-
-
-
-            }
-        }
     }
 
 </script>

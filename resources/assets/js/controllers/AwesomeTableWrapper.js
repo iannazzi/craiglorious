@@ -14,9 +14,12 @@ export class AwesomeTableWrapper
     loadDataAndRenderTable(component) {
         return function (response) {
             //this is page data.....
+            console.log(response)
+            transfomer.removeNull(response.data.records);
             component.data = response.data;
-            cached_page_data[component.route] = response.data;
+            cached_page_data[component.route] = transfomer.removeNull(response.data);
             component.renderTable();
+            component.dataReady = true;
 
         }
 
@@ -45,9 +48,15 @@ export class AwesomeTableWrapper
             access: access, //read vs write
             edit_display: edit_display,
             getData:this.getData,
+            onDelete(){
+                component.loading = true;
+
+            },
             onDeleteSuccess(){
                 //back to roles
-                component.$router.push(component.route);
+                component.loading = false;
+
+                component.$router.push('/' + component.route);
             },
             onCreateSaved(id){
                 //pop up a modal
@@ -102,13 +111,13 @@ export class AwesomeTableWrapper
         }
     }
 
-    getPageDataThenRenderSearchTable(component){
-
+    getPageDataThenRenderSearchTable(component, number_of_records = 100){
+        console.log(number_of_records);
         let self = this;
         this.getData( {
             method: 'get',
             url:  component.route,
-            entity: false,
+            params: {number_of_records:number_of_records},
             onSuccess: self.loadDataAndRenderTable(component)
 
         })
@@ -139,18 +148,32 @@ export class AwesomeTableWrapper
             getData:this.getData,
             search_query: component.$root.$route.fullPath,
             search_route: component.route + '/search',
-            onLoadPageStart(){
+            initial_page_load_data: component.data.records,
+            onUriLoadPageStart(){
+                //we came to a page with a search in the uri
+                //this could have come from the stored search
                 console.log('onLoadPageStart')
-                component.searchingCollection = true;
+                component.loading = true;
             },
             onLoadPageComplete(){
                 console.log('onLoadPageComplete')
                 component.dataReady = true;
-                component.searchingCollection = false;
+                component.loading = false;
+            },
+            onSearching(){
+                console.log('searching')
+
+                component.loading = true;
+
+            },
+            onInitialLoadPage(){
+                //we came into the page with no search stored,
+                //from the server we may have retrieved some data
+
             },
             onSearchClick(query){
                 console.log('awsome table wrapper on search click query')
-                console.log(query);
+                //console.log(query);
                 component.$router.push({ path: '/' + component.route , query:query } )
             },
             onSortClick(data){
@@ -158,10 +181,11 @@ export class AwesomeTableWrapper
                 console.log(data)
                 console.log('sort click')
                 data['sort']=true;
-                component.$router.push({ path: '/' + component.route , query:data, props:{sort:true}, params:{sort:true},  meta:{sort:true}} )
+                component.$router.push({ path: '/' + component.route , query:data})
             },
             onResetClick(){
               //kill storage and push to
+                component.$route.meta['reset'] = true;
                 component.$router.push({ path: '/' + component.route , query:{} } )
             },
             router(data){

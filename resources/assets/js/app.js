@@ -1,10 +1,36 @@
 import './bootstrap';
 import router from './routes'
-import { getData } from './controllers/getData'
+import {getData} from './controllers/getData'
 import {AwesomeTable} from './elements/tables/AwesomeTable';
-import { AwesomeTableWrapper } from './controllers/AwesomeTableWrapper'
+import {AwesomeTableWrapper} from './controllers/AwesomeTableWrapper'
+
+import {transformer} from './helpers/transformer'
+
+
+
+
+
+// define a mixin object
+let myMixin = {
+    created: function () {
+        this.hello()
+    },
+    methods: {
+        hello: function () {
+            console.log('hello from mixin!')
+        }
+    }
+}
+// define a component that uses this mixin
+// var Component = Vue.extend({
+//     mixins: [myMixin]
+// })
+
+
+
 
 //99% of page data will be the table......
+window.transfomer = new transformer;
 window.AwesomeTableWrapper = new AwesomeTableWrapper();
 window.AwesomeTable = AwesomeTable;
 
@@ -33,6 +59,8 @@ window.cached_page_data = {};
 
 //wrap ajax calls in case i need to swap out rest for axios
 window.getData = getData;
+
+//watch for route changes
 
 
 let isDebug = true // toggle this to turn on / off for global controll
@@ -88,8 +116,9 @@ new Vue({
 
         }
     },
-
+    //mixins: [myMixin],
     methods: {
+
         setLogin: function (user) {
             // Save login info in our data and set header in case it's not set already
             this.user = user
@@ -133,7 +162,7 @@ new Vue({
             if (token !== null && token !== 'undefined') {
 
 
-                getData( {
+                getData({
                     method: 'get',
                     url: '/login/validate',
                     entity: false,
@@ -161,7 +190,7 @@ new Vue({
         getPageData(){
             //site wide data // kinda a bad idea, pretty complicated additional logic.....
             let self = this;
-            getData( {
+            getData({
                 method: 'get',
                 url: '/dashboard/cached_page_data',
                 entity: false,
@@ -189,7 +218,7 @@ new Vue({
 
         $(function () {
             setInterval(function checkSession() {
-                getData( {
+                getData({
                     method: 'get',
                     url: '/validate_token',
                     entity: false,

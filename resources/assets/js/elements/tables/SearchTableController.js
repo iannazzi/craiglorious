@@ -83,13 +83,29 @@ export class SearchTableController extends CollectionTableController {
 
     getSearchRecordsAndDisplay(){
         let controller = this;
+        if(typeof controller.model.options.onSearching=== 'function'){
+            controller.model.options.onSearching();
+        }
         controller.model.options.getData({
             method: 'post',
             url: '/' + controller.model.options.search_route,
             entity: controller.getSearchPostData(),
             onSuccess: function (response) {
-                controller.model.loadData(response.data)
-                controller.view.addDataTable();
+
+                console.log(response.data.records)
+
+                controller.model.loadData(response.data.records)
+                if(response.data.records.length>0){
+                    controller.view.addDataTable();
+                    controller.setFocusToFirstInputOfSearch()
+
+                }
+                else{
+                    controller.view.addMessageInsteadOfTable(`There are no search results`)
+                    controller.setFocusToFirstInputOfSearch()
+
+
+                }
                 if(typeof controller.model.options.onLoadPageComplete === 'function'){
                     controller.model.options.onLoadPageComplete();
                 }

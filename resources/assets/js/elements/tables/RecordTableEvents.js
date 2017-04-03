@@ -93,7 +93,6 @@ export class RecordTableEvents extends TableEvents {
                         break;
 
 
-
                     case 'create':
                         if (typeof controller.model.td.onCancelCreateClick === 'function') {
                             controller.model.td.onCancelCreateClick()
@@ -112,7 +111,7 @@ export class RecordTableEvents extends TableEvents {
         controller.view.onSaveClick.attach(
             function () {
 
-                if(typeof controller.model.options.onSaveClick === 'function'){
+                if (typeof controller.model.options.onSaveClick === 'function') {
                     controller.model.options.onSaveClick();
                 }
 
@@ -185,32 +184,39 @@ export class RecordTableEvents extends TableEvents {
 
         //##################   DELETE CLICKED
         view.onDeleteClick = new TableEvent(view);
-        view.onDeleteClick.attach(
-            function () {
-                controller.getConfirm('Are you sure about that delete?', function (result) {
-                    if (result) {
-                        let self = controller;
-                        self.view.showWaitModal(true);
-                        //let self2 = self;
-                        let data = {_method: 'delete', data: {id: self.model.tdo[0]['id']['data']}};
-                        //console.log(JSON.stringify(data));
-                        $.ajax({
-                            url: self.model.td.route,
-                            type: 'post',
-                            data: data,
-                            success: function (result) {
-                                self.view.showWaitModal(false);
-                                if (typeof self.model.options.onDeleteSuccess === 'function') {
-                                    self.model.options.onDeleteSuccess(result);
-                                }
-                            }
-                        });
+        view.onDeleteClick.attach(function () {
+            controller.getConfirm('Are you sure about that delete?', function (result) {
+                if (result) {
+                    let self = controller;
+                    controller.view.showWaitModal(true);
+                    //let self2 = self;
+                    let post_data = {_method: 'delete', data: {id: self.model.tdo[0]['id']['data']}};
+                    //console.log(JSON.stringify(data));
+                    if (typeof controller.model.options.onDeleteClick === 'function') {
+                        controller.model.options.onDeleteClick();
                     }
-                });
-            }
-        );
 
+
+                    controller.model.options.getData(
+                        {
+                            method: 'post',
+                            url: controller.model.td.route,
+                            entity: post_data,
+                            onSuccess(response) {
+                                self.view.showWaitModal(false);
+                                if (typeof controller.model.options.onDeleteSuccess === 'function') {
+                                    controller.model.options.onDeleteSuccess();
+                                }
+                            },
+                            onError(response){
+
+                            }
+                        }
+                    );
+                }
+
+            });
+        });
 
     }
-
 }
