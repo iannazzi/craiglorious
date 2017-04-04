@@ -9,26 +9,6 @@ import {transformer} from './helpers/transformer'
 
 
 
-
-// define a mixin object
-let myMixin = {
-    created: function () {
-        this.hello()
-    },
-    methods: {
-        hello: function () {
-            console.log('hello from mixin!')
-        }
-    }
-}
-// define a component that uses this mixin
-// var Component = Vue.extend({
-//     mixins: [myMixin]
-// })
-
-
-
-
 //99% of page data will be the table......
 window.transfomer = new transformer;
 window.AwesomeTableWrapper = new AwesomeTableWrapper();
@@ -60,7 +40,6 @@ window.cached_page_data = {};
 //wrap ajax calls in case i need to swap out rest for axios
 window.getData = getData;
 
-//watch for route changes
 
 
 let isDebug = true // toggle this to turn on / off for global controll
@@ -82,7 +61,6 @@ window.ml = ml;
 // })
 
 
-//Vue.component('zzi-table', require('./components/table.vue'))
 
 Vue.component('nav-component', require('./pages/nav.vue'))
 Vue.component('footer-component', require('./pages/footer.vue'))
@@ -91,20 +69,22 @@ Vue.component('zzi-wait', require('./components/modals/waitModal.vue'))
 Vue.component('zzi-calendar-entry-modal', require('./pages/calendar/CalendarEventModal.vue'))
 Vue.component('zzi-nav-keys', require('./components/keyCommands/dashboardKeyCommands.vue'))
 Vue.component('zzi-matrix', require('./components/wait/matrix.vue'))
+Vue.component('zzi-matrix2', require('./components/wait/matrix2.vue'))
 
 
-// Vue.component('zzi-calendar-entry-modal2', require('./components/modals/vueBootstrapModal.vue'))
 
-// router.beforeEach(function (transition) {
-//     if (transition.to.guarded && ! MyUser.authenticated) {
-//         transition.redirect('/login');
-//     } else {
-//         transition.next();
-//     }
-// });
 new Vue({
     el: '#app',
     router: router,
+    filters: {
+        modelName (value) {
+
+            if (!value) return ''
+            value = value.toString()
+            let name = value.charAt(0).toUpperCase() + value.slice(1)
+            return name.substr(0,name.length-1);
+        }
+    },
     data(){
         return {
             user: null,
@@ -136,7 +116,7 @@ new Vue({
             bus.$emit('authenticated')
         },
         destroyLogin: function (user) {
-            if (1) ml('Login with our token failed, do some cleanup');
+            if (0) ml('Login with our token failed, do some cleanup');
             this.user = null
             this.token = null
             this.authenticated = false
@@ -146,17 +126,17 @@ new Vue({
             localStorage.removeItem('jwt-token')
 
             if (this.$route.meta.guarded) {
-                if (1) ml('app reloaded, login failed on a guarded route, going to login page');
+                if (0) ml('app reloaded, login failed on a guarded route, going to login page');
                 this.$router.push('/auth/login')
             }
-            if (1) ml('not a guarded route so there is no redirect');
+            if (0) ml('not a guarded route so there is no redirect');
 
 
         },
         validateAuth(){
             // The app has just been initialized, check if we can get the user data with an already existing token
 
-            if (1) ml('lets validate the auth')
+            if (0) ml('lets validate the auth')
             let self = this;
             var token = localStorage.getItem('jwt-token')
             if (token !== null && token !== 'undefined') {
@@ -167,13 +147,13 @@ new Vue({
                     url: '/login/validate',
                     entity: false,
                     onSuccess(response) {
-                        if (1) ml('validated token after refresh')
+                        if (0) ml('validated token after refresh')
 
                         self.setLogin(response.user)
                         self.appLoaded = true;
                     },
                     onError(response){
-                        if (1) ml('we have a bad token')
+                        if (0) ml('we have a bad token')
                         self.destroyLogin()
                         self.appLoaded = true;
                     }
@@ -182,7 +162,7 @@ new Vue({
 
             }
             else {
-                if (1) ml('validate token after refresh is null')
+                if (0) ml('validate token after refresh is null')
                 self.appLoaded = true;
 
             }
@@ -223,10 +203,8 @@ new Vue({
                     url: '/validate_token',
                     entity: false,
                     onSuccess(response) {
-                        if (1) ml('token validated')
                     },
                     onError(response){
-                        if (1) ml('error validating token')
                         console.log(response);
                         self.destroyLogin();
                     }

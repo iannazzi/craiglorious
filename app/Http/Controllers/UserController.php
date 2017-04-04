@@ -41,28 +41,29 @@ class UserController extends Controller
         $role_id = $search[ $table_name . 'role_id' ];
 
 
-        $data = $users->where('username', 'LIKE', "%{$username}%")
+        $q = $users->where('username', 'LIKE', "%{$username}%")
             ->where('id', 'LIKE', "%{$id}%");
         if ($active != 'null')
         {
-            $data->where('active', '=', $active);
+            $q->where('active', '=', $active);
         }
         if ($role_id != 'null')
         {
-            $data->where('role_id', '=', $role_id);
+            $q->where('role_id', '=', $role_id);
         }
-        $result = $data->get();
+        $return_data['records'] = $q->get();
+
 
         return response()->json([
             'success' => true,
             'message' => 'search returned',
-            'data' => $result
+            'data' => $return_data,
         ], 200);
 
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = \Auth::user();
 
@@ -73,7 +74,9 @@ class UserController extends Controller
         $return_data['page'] = 'index';
         $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
-
+        if($number_of_records_available<=$request->number_of_records){
+            $return_data['records'] = User::all(); //let js handle the data through ajax
+        }
         return response()->json([
             'success' => true,
             'message' => 'search returned',

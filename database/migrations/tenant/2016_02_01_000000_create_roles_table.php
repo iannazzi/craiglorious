@@ -37,6 +37,7 @@ class CreateRolesTable extends Migration
             $table->boolean('active');
             $table->text('comments')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

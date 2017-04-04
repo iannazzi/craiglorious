@@ -15,7 +15,6 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('role_id')->unsigned()->index();
-            $table->integer('employee_id');
 //            $table->string('first_name', 24)->default('');
 //            $table->string('last_name', 36)->default('');
             $table->boolean('active')->default(0);
@@ -25,6 +24,7 @@ class CreateUsersTable extends Migration
 
             //            $table->string('email', 64)->default('');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

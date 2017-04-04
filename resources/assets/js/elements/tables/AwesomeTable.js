@@ -30,7 +30,6 @@ export class AwesomeTable {
 
 
         this.options = options;
-        let self = this;
 
     }
 

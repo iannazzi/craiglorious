@@ -2,12 +2,13 @@
     <div>
         <div v-show="dataReady">
             <div id="data_table_view">
-                <button class="btn-new" @click="$router.push('/roles/create')"><i class="fa fa-plus"
+                <button class="btn-new" @click="$router.push('/' + route + '/create')"><i class="fa fa-plus"
                                                                                   aria-hidden="true"></i>New
-                    Role
+                    {{modelName}}
+
                 </button>
                 <div id="searchableTable"></div>
-                    <zzi-matrix v-if="loading"></zzi-matrix>
+                    <zzi-matrix2 v-if="loading"></zzi-matrix2>
             </div>
         </div>
         <div v-show="!dataReady">
@@ -21,32 +22,36 @@
 <script>
 
     import columnDefinition from './columnDefinition'
-    import searchableTableRouteWatcher from '../../controllers/routeWatcher'
+    import searchPageMixins from '../../controllers/searchPageMixins'
 
 
     export default {
+
         data() {
             return {
                 data: {},
                 dataReady: false,
                 loading: false,
-                route: 'roles',
                 searchableTable:null
 
             }
         },
-        props: ['page'],
+        mixins:[searchPageMixins],
+        props: ['page', 'route'],
         mounted: function () {
 
-            this.dataReady = false
-            AwesomeTableWrapper.getPageDataThenRenderSearchTable(this,100);
+            //create table definition
+            //get data... default, uri, storage
+            //update column definition with select values, etc....
+            //render table
+            AwesomeTableWrapper.getPageDataThenRenderSearchTable(this);
 
         },
         methods: {
 
             renderTable(){
                 this.column_definition = columnDefinition(this);
-                this.searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(this);
+                this.searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(this, 100);
 
                 let self = this;
                 $(function () {
@@ -58,7 +63,6 @@
 
             }
         },
-        watch:searchableTableRouteWatcher
 
     }
 

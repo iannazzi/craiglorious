@@ -1,120 +1,62 @@
 <template>
 
     <div>
-        <zzi-wait></zzi-wait>
         <div v-if="dataReady">
 
-            <button class="btn-back" @click="$router.push('/users')"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
-                To User List
+            <button class="btn-back" @click="$router.push('/'+route)"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
+                To {{modelName}} List
             </button>
-            <button v-if="page!='create'" class="btn-new" @click="$router.push('/users/create')"><i class="fa fa-plus"
-                                                                                                    aria-hidden="true"></i>New
-                User
+            <button v-if="page!='create'" class="btn-new" @click="$router.push('/'+ route + '/create')"><i class="fa fa-plus"
+                                                                                                           aria-hidden="true"></i>New
+                {{modelName}}
             </button>
 
-            <div id="user" class="recordTableView">
-                <h2 v-if="page==='create'">New User</h2>
-                <h2 v-else-if="page==='edit'">Edit user {{data.user[0].username}} </h2>
-                <h2 v-else-if="page==='show'">User {{data.user[0].username}}</h2>
+            <div id="record_table" class="recordTableView">
+                <h2 v-if="page==='create'">New {{modelName}}</h2>
+                <h2 v-else-if="page==='edit'">Edit {{modelName}} {{data.records[0].name}} </h2>
+                <h2 v-else-if="page==='show'">{{modelName}} {{data.records[0].name}}</h2>
             </div>
 
         </div>
+        <div v-else>
+            <zzi-matrix></zzi-matrix>
+        </div>
 
     </div>
-
-
-
 </template>
 
 
 <script>
     import columnDefinition from './columnDefinition'
+    import recordPageMixins from '../../controllers/recordPageMixins'
+
+
     export default {
         data() {
             return {
                 data: {},
-                dataReady: false
-
+                dataReady: false,
             }
         },
-        props: ['page', 'justcreated'],
+        props: ['page','justcreated', 'route'],
         mounted: function () {
 
-            console.log(this.justcreated);
-            let self = this;
-            self.dataReady = false;
-            //bus.$emit('zzwaitevent');
-            if (self.page == 'create') {
-                self.getData('/users/create');
-            }
-            else {
-                self.getData('/users/' + this.$route.params.id);
-            }
+            AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
 
         },
-    methods: {
-        getData(route)
-        {
-            let self = this;
+        methods: {
+            renderTable(){
+                let self = this;
+                this.column_definition = columnDefinition(this);
+                let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
 
-            client({path: route}).then(
-                function (response) {
-                    console.log(response);
-                    self.data = response.data;
-                    self.dataReady = true;
-                    self.renderTable();
+
+                $(function(){
+                    recordTable.addTo('record_table');
                     bus.$emit('zzwaitoverevent');
-
-                });
-        },
-        createTable()
-        {
-            let self = this;
-            let access, edit_display;
-            if(this.page == 'show'){
-                access = 'read';
-                edit_display = 'on_page';
+                })
             }
-            else{
-                access = 'write';
-                edit_display = 'on_page';
-            }
-            let route = '/users';
-            return new AwesomeTable({
-                data: self.data.user,
-                route: route,
-                column_definition: columnDefinition(self.data),
-                table_buttons: ['edit', 'delete'],
-
-                type: 'record', //record, collection or searchable
-                table_view: self.page, //index, create, edit, and show pages: columns respond differnetly to
-                access: access, //read vs write
-                edit_display: edit_display,
-
-
-                onDeleteSuccess(){
-                    //back to roles
-                    self.$router.push(route);
-                },
-                onCreateSaved(id){
-                    self.$router.push({path: route+ '/' + id, props: {justcreated: 'true'}});
-                },
-                onCancelCreateClick(){
-                    self.$router.push(route);
-                }
-
-            })
         }
-    ,
-        renderTable()
-        {
-
-            let self= this;
-            $(function () {
-                self.createTable().addTo('user');
-            })
-        }
-    }
     }
 
 </script>

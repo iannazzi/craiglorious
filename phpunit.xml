@@ -38,6 +38,9 @@
         <testsuite name="locations">
             <file>tests/in/LocationTest.php</file>
         </testsuite>
+        <testsuite name="employees">
+            <file>tests/in/EmployeeTest.php</file>
+        </testsuite>
         <testsuite name="calendar">
             <file>tests/in/CalendarEntryTest.php</file>
         </testsuite>

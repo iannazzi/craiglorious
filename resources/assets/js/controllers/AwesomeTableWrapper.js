@@ -17,7 +17,6 @@ export class AwesomeTableWrapper
             console.log(response)
             transfomer.removeNull(response.data.records);
             component.data = response.data;
-            cached_page_data[component.route] = transfomer.removeNull(response.data);
             component.renderTable();
             component.dataReady = true;
 
@@ -48,14 +47,18 @@ export class AwesomeTableWrapper
             access: access, //read vs write
             edit_display: edit_display,
             getData:this.getData,
+            onSaveSuccess(){
+                delete cached_page_data[component.route]
+            },
             onDelete(){
                 component.loading = true;
+
 
             },
             onDeleteSuccess(){
                 //back to roles
                 component.loading = false;
-
+                delete cached_page_data[component.route]
                 component.$router.push('/' + component.route);
             },
             onCreateSaved(id){
@@ -64,6 +67,7 @@ export class AwesomeTableWrapper
                 //back to roles
                 console.log('saving....')
                 component.dataReady = false;
+                delete cached_page_data[component.route]
                 component.$router.push({path: '/' + component.route + '/' + id, props: {justcreated: 'true'}});
 
             },
@@ -76,61 +80,45 @@ export class AwesomeTableWrapper
 
     loadRecordTableDataThenCallRenderTable(component) {
         component.dataReady = false;
-        if (component.page == 'create') {
-            if (typeof cached_page_data[component.route] !== 'undefined') {
-                component.data = cached_page_data[component.route];
-                component.data.records = [];
-                component.dataReady = true;
-                component.renderTable();
-            }
-            else {
-                //this.getData('get', '/' + component.route + '/create', false, this.loadDataAndRenderTable(component));
-
-                let self = this;
-                this.getData( {
-                    method: 'get',
-                    url: '/' + component.route + '/create',
-                    entity: false,
-                    onSuccess: self.loadDataAndRenderTable(component)
-                })
-
-
-            }
+        let  url = '/' + component.route + '/create';
+        if (component.page != 'create') {
+            url = '/' + component.route + '/' + component.$route.params.id;
         }
-        else {
-            let self = this;
-            this.getData( {
-                method: 'get',
-                url: '/' + component.route + '/' + component.$route.params.id,
-                entity: false,
-                onSuccess: self.loadDataAndRenderTable(component)
-
-            })
-
-
-        }
-    }
-
-    getPageDataThenRenderSearchTable(component, number_of_records = 100){
-        console.log(number_of_records);
         let self = this;
         this.getData( {
             method: 'get',
-            url:  component.route,
-            params: {number_of_records:number_of_records},
+            url: url,
+            entity: false,
             onSuccess: self.loadDataAndRenderTable(component)
-
         })
+    }
+
+    getPageDataThenRenderSearchTable(component){
+
+        if(cached_page_data[component.route])
+        {
+            //for components that need no data i can just set the page cache once....
+            console.log('cached page data');
+            component.renderTable();
+            component.dataReady = true;
+        }
+        else
+        {
+            let self = this;
+            this.getData( {
+                method: 'get',
+                url:  component.route,
+    //            params: {number_of_records:number_of_records},
+                onSuccess: self.loadDataAndRenderTable(component)
+
+            })
+        }
+
 
     }
 
 
-    createSearchableCollectionTable(component){
-
-        //i need get data function sent in
-
-
-
+    createSearchableCollectionTable(component, number_of_records_to_automatically_get = 100){
         return new this.AwesomeTable({
 
             name: component.route,
@@ -145,10 +133,11 @@ export class AwesomeTableWrapper
             type: 'searchable',
             data: component.data,
             number_of_records_available: component.data.number_of_records_available,
+            number_of_records_to_automatically_get,
             getData:this.getData,
             search_query: component.$root.$route.fullPath,
             search_route: component.route + '/search',
-            initial_page_load_data: component.data.records,
+            //initial_page_load_data: component.data.records,
             onUriLoadPageStart(){
                 //we came to a page with a search in the uri
                 //this could have come from the stored search
@@ -159,6 +148,10 @@ export class AwesomeTableWrapper
                 console.log('onLoadPageComplete')
                 component.dataReady = true;
                 component.loading = false;
+            },
+            loadPageFromStorage(query){
+                console.log('awsome table wrapper load from storage')
+                component.$router.replace({ path: '/' + component.route , query:query } )
             },
             onSearching(){
                 console.log('searching')

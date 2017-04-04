@@ -22,49 +22,34 @@ class VendorController extends Controller
         $account_number = $search[ $table_name . 'account_number' ];
 
 
-        $vendors = Vendor::where('name', 'LIKE', "%{$name}%")
+        $q = Vendor::where('name', 'LIKE', "%{$name}%")
             ->where('account_number', 'LIKE', "%{$account_number}%")
             ->where('id', 'LIKE', "%{$id}%");
         if ($active != 'null')
         {
-            $vendors->where('active', '=', $active);
+            $q->where('active', '=', $active);
         }
-        $result = $vendors->get();
-
-
-//        $query = \DB::table('vendors');
-//        $query->where('name', 'LIKE', "%{$name}%");
-//        $query->where('account_number', 'LIKE', "%{$account_number}%");
-//        $query->where('id', 'LIKE', "%{$id}%");
-//        if ($active != 'null')
-//        {
-//            $query->where('active', '=', $active);
-//        }
-//        $result = $query->get();
-
+        $return_data['records'] = $q->get();
 
         return response()->json([
             'success' => true,
             'message' => 'search returned',
-            'data' => $result
+            'data' => $return_data
         ], 200);
 
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $number_of_records_available = Vendor::all()->count();
-        if ($number_of_records_available < 100)
-        {
-            //$data = Vendor::all();
-        } else
-        {
-            $data = [];
-        }
+
         $return_data['page'] = 'index';
         $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
+        if($number_of_records_available<=$request->number_of_records){
+            $return_data['records'] = Vendor::all(); //let js handle the data through ajax
+        }
         return response()->json([
             'success' => true,
             'message' => 'index returned',
@@ -119,10 +104,10 @@ class VendorController extends Controller
 
         $data = $request->data[0];
         $id = $data['id'];
-
+        if($data['main_email'] =='') unset($data['main_email']);
         $rules = array(
             'name' => 'required|unique:vendors,name,' . $id,
-            'main_email' => 'email',
+            'main_email' => 'sometimes|email',
         );
 
         $validation = \Validator::make($data, $rules);

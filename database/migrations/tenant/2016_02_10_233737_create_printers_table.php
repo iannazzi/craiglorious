@@ -20,6 +20,7 @@ class CreatePrintersTable extends Migration
             $table->enum('media', array('Memo 5x7 Paper','Letter Paper','Avery 5167','Checks - Quicken Format'));
             $table->boolean('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

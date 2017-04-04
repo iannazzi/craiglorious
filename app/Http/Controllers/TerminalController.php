@@ -23,21 +23,26 @@ class TerminalController extends Controller
         $q = Terminal::where('name', 'LIKE', "%{$name}%")
             ->where('id', 'LIKE', "%{$id}%");
 
-        $result = $q->get();
+        $return_data['records'] = $q->get();
+
         return response()->json([
             'success' => true,
             'message' => 'search returned',
-            'data' => $result,
+            'data' => $return_data,
         ], 200);
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $number_of_records_available = Terminal::all()->count();
         $return_data['page'] = 'index';
         $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
+
+        if($number_of_records_available<=$request->number_of_records){
+            $return_data['records'] = Terminal::all(); //let js handle the data through ajax
+        }
         return response()->json([
             'success' => true,
             'message' => 'search returned',

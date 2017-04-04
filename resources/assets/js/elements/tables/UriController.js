@@ -6,15 +6,6 @@ export class UriController{
         this.stored_sort_key = name + '_sort';
     }
 
-
-    //search from uri
-    //sort from uri
-    //search from storage
-    //sort from storage
-    pushState(uri) {
-        let stateObj = {url: uri.toString(), innerhtml: document.body.innerHTML};
-        window.history.pushState(stateObj, uri.toString(), uri.toString());
-    }
     getUri(){
         let sort_data = this.getSortUri();
         let search_data = this.getSearchUrlData();
@@ -28,48 +19,23 @@ export class UriController{
         url_data['table_name'] = this.controller.view.name;
         return url_data;
     }
-    //uri
-    onSearch(){
 
-        let uri = new JsUri(window.location.href);
-        this.addSearchToUri(uri);
-        // this.removeSortFromUri(uri)
-        this.pushState(uri);
-        // this.resetStoredSort();
-        this.storeSearch();
-    }
-    addSearchToUri(uri) {
-        let search_values = this.controller.getSearchFormValues();
-        this.controller.view.search_elements.forEach(element => {
-            uri.deleteQueryParam(element.name)
-        })
-        for (let i in search_values) {
-            uri.addQueryParam(i, search_values[i])
-        }
 
-    }
-    deleteSearchValuesFromUri(uri, search_elements) {
-        this.controller.view.search_elements.forEach(element => {
-            uri.deleteQueryParam(element.name)
-        })
-    }
+
+
     checkUri(search_query) {
-        // this is forcing the uri 'check' at the #, so just the query should be sent in
-        // let uri2 = new JsUri(window.location.href)
-        // let uri1 = new JsUri(uri1.anchor())
-
         let uri = new JsUri(search_query)
         for (let i = 0; i < this.controller.view.search_elements.length; i++) {
-            // console.log(this.controller.view.search_elements[i].name)
-            //
-            // console.log(uri.getQueryParamValue(this.controller.view.search_elements[i].name))
-
             if (uri.getQueryParamValue(this.controller.view.search_elements[i].name)) {
                 return true;
             }
         }
         return false;
     }
+
+
+
+
     loadFromUri(search_query){
         console.log('loading from uri')
         this.loadSearchValuesFromUri(search_query)
@@ -163,20 +129,18 @@ export class UriController{
         })
 
     }
-
-
     loadFromStorage(){
         console.log('loading search from storage')
-        this.loadSearchFromStorage()
+        let search_values = this.loadSearchFromStorage()
         console.log('loading sort from storage')
-       this.loadSortFromStorage();
+        this.loadSortFromStorage();
+        return search_values;
     }
     checkStorage() {
         // console.log('checkStorageForSearch ' + this.stored_search_key);
         return sessionStorage[this.stored_search_key]
 
     }
-
 
     retrieveSearch() {
         return JSON.parse(sessionStorage[this.stored_search_key]);
@@ -209,14 +173,14 @@ export class UriController{
         // console.log(this.controller.model.sort)
 
     }
-    removeSortFromUri(uri, th = false) {
-        this.controller.view.header_elements_array.forEach(th_element => {
-            if (th != th_element) {
-                let name = th_element.col_def.db_field;
-                uri.deleteQueryParam(name + '_sort')
-            }
-        })
-    }
+    // removeSortFromUri(uri, th = false) {
+    //     this.controller.view.header_elements_array.forEach(th_element => {
+    //         if (th != th_element) {
+    //             let name = th_element.col_def.db_field;
+    //             uri.deleteQueryParam(name + '_sort')
+    //         }
+    //     })
+    // }
     loadSortFromStorage() {
         if(sessionStorage[this.stored_sort_key]){
             this.controller.model.sort = JSON.parse(sessionStorage[this.stored_sort_key]);
@@ -254,7 +218,31 @@ export class UriController{
 
 
 
-
+    //uri
+    // onSearch(){
+    //
+    //     let uri = new JsUri(window.location.href);
+    //     this.addSearchToUri(uri);
+    //     // this.removeSortFromUri(uri)
+    //     this.pushState(uri);
+    //     // this.resetStoredSort();
+    //     this.storeSearch();
+    // }
+    // addSearchToUri(uri) {
+    //     let search_values = this.controller.getSearchFormValues();
+    //     this.controller.view.search_elements.forEach(element => {
+    //         uri.deleteQueryParam(element.name)
+    //     })
+    //     for (let i in search_values) {
+    //         uri.addQueryParam(i, search_values[i])
+    //     }
+    //
+    // }
+    // deleteSearchValuesFromUri(uri, search_elements) {
+    //     this.controller.view.search_elements.forEach(element => {
+    //         uri.deleteQueryParam(element.name)
+    //     })
+    // }
 
 
 

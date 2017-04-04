@@ -4,8 +4,10 @@ use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 
+
 class BaseModel extends Model
 {
+
 
     public function truncateString($column)
     {

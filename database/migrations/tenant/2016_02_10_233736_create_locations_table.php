@@ -21,6 +21,7 @@ class CreateLocationsTable extends Migration
             $table->text('comments')->nullable();
             $table->unique(['parent_id','name'],'parent_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

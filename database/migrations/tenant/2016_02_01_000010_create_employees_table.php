@@ -14,18 +14,27 @@ class CreateEmployeesTable extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('first_name', 24);
-            $table->string('last_name', 36);
-            $table->string('ss', 36);
-            $table->text('address');
-            $table->decimal('pay_rate');
-            $table->integer('withholding_allowance');
+            $table->integer('user_id')->unsigned()->index();
+
+            $table->string('first_name');
+            $table->string('last_name');
+
+            $table->string('ss');
             $table->string('phone');
             $table->string('email', 64)->default('');
-            $table->string('emergency_phone');
-            $table->string('emergency_contact');
-            $table->boolean('active')->default(0);
+
+            $table->string('address1');
+            $table->string('address2');
+            $table->string('city');
+            $table->string('zip');
+            $table->integer('state_id')->unsigned()->index()->nullable();
+
+
+            $table->string('emergency_phone')->nullable();
+            $table->string('emergency_contact')->nullable();
+            $table->boolean('active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

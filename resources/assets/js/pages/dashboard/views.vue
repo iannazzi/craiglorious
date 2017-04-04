@@ -75,6 +75,7 @@
                         self.loaded = true;
                         cached_page_data['views'] = self.views;
                         self.$root.cached_page_data['views'] = self.views;
+                        self.loadIcons();
                     },
                 })
 

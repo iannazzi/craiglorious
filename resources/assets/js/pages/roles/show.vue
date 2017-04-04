@@ -2,21 +2,20 @@
     <div>
         <div v-if="dataReady">
 
-            <button class="btn-back" @click="$router.push('/roles')"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
-                To Role List
+            <button class="btn-back" @click="$router.push('/'+route)"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
+                To {{modelName}} List
             </button>
-            <button v-if="page!='create'" class="btn-new" @click="$router.push('/roles/create')"><i class="fa fa-plus"
+            <button v-if="page!='create'" class="btn-new" @click="$router.push('/'+route +'/create')"><i class="fa fa-plus"
                                                                                                     aria-hidden="true"></i>New
-                Role
+                {{modelName}}
             </button>
 
             <div id="record_table" class="recordTableView">
-                <h2 v-if="page==='create'">New Role</h2>
+                <h2 v-if="page==='create'">New {{modelName}}</h2>
                 <h2 v-else-if="data.records[0].id==1">Admin Role - No Editing is possible</h2>
-                <h2 v-else-if="page==='edit'">Edit Role {{data.records[0].name}} </h2>
-                <h2 v-else-if="page==='show'">Role {{data.records[0].name}}</h2>
+                <h2 v-else-if="page==='edit'">Edit {{modelName}} {{data.records[0].name}} </h2>
+                <h2 v-else-if="page==='show'">{{modelName}} {{data.records[0].name}}</h2>
             </div>
-            <div id="role_modal"></div>
             <!--<button @click="showModalTable">pop up modal table</button>-->
             <div id="rights" ></div>
 
@@ -30,17 +29,20 @@
 
 <script>
     import columnDefinition from './columnDefinition'
+    import recordPageMixins from '../../controllers/recordPageMixins'
+
 
     export default {
         data() {
             return {
                 data: {},
                 dataReady: false,
-                route: 'roles'
             }
         },
-        props: ['page','justcreated'],
+        mixins:[recordPageMixins],
+        props: ['page','justcreated', 'route'],
         mounted: function () {
+            console.log(this.route)
             AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
 
         },
@@ -50,6 +52,10 @@
                 self.dataReady = true;
                 this.column_definition = columnDefinition(this);
                 let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
+                recordTable.options.onSaveSuccess = function (){
+                    //remove cached data as an update o
+
+                }
 
                 //No editing if the admin role
                 if (self.page == 'show'){

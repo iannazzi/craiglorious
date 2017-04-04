@@ -27,6 +27,7 @@ class CreateCalendarEntriesTable extends Migration
             $table->boolean('duration_editable');
             $table->boolean('resource_editable');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

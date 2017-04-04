@@ -47,7 +47,7 @@
             renderTable(){
                 let self = this;
                 this.column_definition = columnDefinition(this);
-                this.searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(this, 100);
+                this.searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(this,100);
 
                 $(function () {
                     self.searchableTable.addTo('searchableTable')
@@ -56,7 +56,6 @@
 
             }
         },
-
     }
 
 

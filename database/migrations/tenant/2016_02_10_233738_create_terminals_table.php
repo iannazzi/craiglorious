@@ -35,6 +35,7 @@ class CreateTerminalsTable extends Migration
             $table->decimal('max_cash_refund', 20, 5)->default(0.00000);
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
