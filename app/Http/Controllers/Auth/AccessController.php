@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use App\Models\Tenant\User;
 
 use App\Models\Craiglorious\System;
@@ -20,16 +21,13 @@ class AccessController extends Controller
 
     public function checkUserIsAuthenticated(Request $request)
     {
+        //at this point, we made it through middle ware so we are all set.....
 
-
-        if ($myAuth->checkUserIsAuthenticated($request))
-        {
-
-
-        }
+        return response()->json([
+            'success' => true,
+        ], 200);
 
     }
-
 
 
 }

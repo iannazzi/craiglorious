@@ -25,8 +25,10 @@ abstract class ApiTester extends TestCase {
         $this->fake = Faker::create();
         $this->faker = Faker::create();
     }
-    public function signIn($data=['username'=>'admin', 'password'=>'secret', 'company'=>'Embrasse-moi'])
+    public function signIn($username= 'admin', $password='secret', $company='Embrasse-moi')
     {
+
+        $data=['username'=>$username, 'password'=>$password, 'company'=>$company];
         $response = $this->post('/api/login', $data);
         $system = $this->getSystem();
 

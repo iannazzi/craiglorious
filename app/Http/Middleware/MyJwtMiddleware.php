@@ -25,11 +25,44 @@ class MyJwtMiddleWare
     {
 
         $myAuth = new myAuth();
-
         if($myAuth->checkUserIsAuthenticated($request)){
+            $route = $request->route()->uri();
+            $route = str_replace('/api/','',$route);
+            //a few routes have special features....
 
+            $api = function ($name){
+                $api_prefix ='api';
+                return $api_prefix . $route;
+            };
+            if($route == 'dashboard'
+                || $route == 'user'
+                || $route == 'auth'
+            )
+            {
+                return $next($request);
+            }
             //check route access here....
-            $myAuth->checkUserRouteAccess($request);
+            //does the user have access to the route?
+            $views = $myAuth->user->views();
+            $ok = false;
+
+
+            //now check user accessable routes
+            foreach($views as $view)
+            {
+                if (strpos($route, $view->route) !== false) {
+                    if($view->access !='none')
+                    {
+                        $ok = true;
+                        break;
+                    }
+                }
+            }
+
+            if(! $ok){
+                return response()->json(['error' => 'Why are you trying to access this route? Admins have been informed.'], 401);
+            }
+
 
             $myAuth->logAuthUserActivity($request);
 

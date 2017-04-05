@@ -56,6 +56,8 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
 
         'MyJwtMiddleWare' => \App\Http\Middleware\MyJwtMiddleWare::class,
+        'ViewAccess' => \App\Http\Middleware\RoleMiddleware::class,
+
 
 
     ];
