@@ -169,7 +169,9 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         Dingo\Api\Provider\LaravelServiceProvider::class,
-        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+//        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+        'Tymon\JWTAuth\Providers\LaravelServiceProvider',
+
         /*
          * Application Service Providers...
          */

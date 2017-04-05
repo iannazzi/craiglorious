@@ -14,6 +14,8 @@ class EmployeeController extends Controller
 
     public function index()
     {
+
+
         $number_of_records_available = Vendor::all()->count();
         if ($number_of_records_available < 100)
         {

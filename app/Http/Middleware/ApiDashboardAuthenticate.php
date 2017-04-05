@@ -26,6 +26,7 @@ class ApiDashboardAuthenticate
      */
     public function handle($request, Closure $next)
     {
+        dd($request);
         $token = false;
         if($request->headers->get('authorization'))
         {

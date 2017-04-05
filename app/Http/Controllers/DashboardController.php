@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
 
-        $user = \Auth::user();
+        $user = \Config::get('user');
 
         $return = [
             'views'=> $user->views(),

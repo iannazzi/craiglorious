@@ -168,7 +168,7 @@ class Role extends BaseModel
         //with exception of the admin
         //find all roles below users current role
         $roles = $this->all();
-        if (\Auth::user()->isAdmin())
+        if (\Config::get('user')->isAdmin())
         {
             return [[
                 'name' => $this->name,

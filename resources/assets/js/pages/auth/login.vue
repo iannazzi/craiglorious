@@ -99,6 +99,7 @@
                     url: 'login',
                     entity: self.user,
                     onSuccess(response) {
+                        console.log(response)
                         localStorage.setItem('jwt-token', response.token);
                         self.$emit('userHasLoggedIn', response.user);
                         bus.$emit('userHasLoggedIn', response.user);

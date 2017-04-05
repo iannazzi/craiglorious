@@ -4,22 +4,21 @@ use Illuminate\Http\Request;
 use App\Classes\Routes\CIRoutes;
 
 
-
 $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', function ($api)
 {
     $api->group(['namespace' => 'App\Http\Controllers', 'middleware' => '\Barryvdh\Cors\HandleCors::class'], function ($api)
     {
-        $api->post('login', 'Auth\LoginController@jwtAuthenticate');
-        $api->get('login/validate', 'Auth\LoginController@validateToken');
+        $api->post('login', 'Auth\LoginController@postLogin');
+        //$api->get('login/validate', 'Auth\LoginController@validateToken');
         //$api->post('logint', 'Auth\LoginController@me');
 
 
-        $api->group(['middleware' => ['CheckCompany', 'jwt.auth']], function ($api)
+        $api->group(['middleware' => ['MyJwtMiddleWare']], function ($api)
         {
 
 
-            $api->get('validate_token', 'Auth\LoginController@validateToken');
+            //$api->get('validate_token', 'Auth\LoginController@validateToken');
             $api->get('dashboard', 'DashboardController@index');
             $api->get('dashboard/cached_page_data', 'DashboardController@cachedPageData');
 
@@ -49,7 +48,6 @@ $api->version('v1', function ($api)
             CIRoutes::addRoutes($api, 'printers');
             CIRoutes::addRoutes($api, 'vendors');
             CIRoutes::addRoutes($api, 'employees');
-
 
 
 

@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\DBColumnsToArray::class,
         Commands\RoleViews::class,
         Commands\test::class,
+        \App\Classes\Auth\JWTGenerateSecretCommand::class,
 
     ];
 

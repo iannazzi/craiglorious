@@ -19,8 +19,8 @@
         <testsuite name="logout">
         <file>tests/in/LogoutTest.php</file>
         </testsuite>
-        <testsuite name="login_not_working">
-            <file>tests/in/LoginTest.php</file>
+        <testsuite name="login">
+            <file>tests/in/ApiLoginTest.php</file>
         </testsuite>
         <testsuite name="register_not_working">
             <file>tests/in/RegisterTest.php</file>

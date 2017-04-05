@@ -196,22 +196,22 @@ new Vue({
             self.setLogin(user)
         })
 
-        $(function () {
-            setInterval(function checkSession() {
-                getData({
-                    method: 'get',
-                    url: '/validate_token',
-                    entity: false,
-                    onSuccess(response) {
-                    },
-                    onError(response){
-                        console.log(response);
-                        self.destroyLogin();
-                    }
-                })
-
-            }, 100000); // every 100 seconds
-        });
+        // $(function () {
+        //     setInterval(function checkSession() {
+        //         getData({
+        //             method: 'get',
+        //             url: '/validate_token',
+        //             entity: false,
+        //             onSuccess(response) {
+        //             },
+        //             onError(response){
+        //                 console.log(response);
+        //                 self.destroyLogin();
+        //             }
+        //         })
+        //
+        //     }, 100000); // every 100 seconds
+        // });
 
 
     },
