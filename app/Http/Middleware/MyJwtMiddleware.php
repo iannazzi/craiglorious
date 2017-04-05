@@ -23,9 +23,16 @@ class MyJwtMiddleWare
      */
     public function handle($request, \Closure $next)
     {
+
         $myAuth = new myAuth();
-        //validate the token....
+
         if($myAuth->checkUserIsAuthenticated($request)){
+
+            //check route access here....
+            $myAuth->checkUserRouteAccess($request);
+
+            $myAuth->logAuthUserActivity($request);
+
             return $next($request);
         }
 

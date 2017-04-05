@@ -41,6 +41,10 @@ abstract class ApiTester extends TestCase {
         $headers['Authorization'] = 'Bearer '.$this->token;
         return $headers;
     }
+    public function api($route){
+        return '/api/' . $route;
+
+    }
 //    protected function headers($user = null)
 //    {
 //        $headers = ['Accept' => 'application/json'];

@@ -12,8 +12,8 @@ class myJwt
     {
         $this->secret_key = base64_decode(env('JWT_SECRET'));
     }
-
-    public function createFirebaseToken($user, $company)
+    //https://www.sitepoint.com/php-authorization-jwt-json-web-tokens/
+    public function createFirebaseToken($user, $company, $unique_id)
     {
         $tokenId = base64_encode(random_bytes(32));
         $issuedAt = time();
@@ -33,17 +33,17 @@ class myJwt
             'data' => [                  // Data related to the signer user
                 'user_id' => $user->id, // userid from the users table
                 'username' => $user->username, // User name
-                'company' => $company
+                'company' => $company,
+                'unique_id' => $unique_id
             ]
         ];
-        $jwt = JWT::encode(
+        $token = JWT::encode(
             $data,      //Data to be encoded in the JWT
             $this->secret_key, // The signing key
             'HS512'     // Algorithm used to sign the token, see https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#section-3
         );
 
-
-        return $jwt;
+        return $token;
 
     }
 
@@ -64,15 +64,22 @@ class myJwt
 
     }
 
+    public function getUniqueId($token){
 
+        $token_data = $this->validateFirebaseToken($token);
+    }
+    public function checkExpiredToken(){
+    }
+
+
+
+//some other stuff not working....
 
     protected function authHeaderResponse()
     {
         // send the refreshed token back to the client
         //$response->headers->set('Authorization', 'Bearer '.$this->auth->refresh());
     }
-
-
     protected function createNamshiToken($user, $company)
     {
 

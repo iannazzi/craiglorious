@@ -54,21 +54,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'ApiDashboardAuthenticate' =>\App\Http\Middleware\ApiDashboardAuthenticate::class,
-        'CheckCompany' =>\App\Http\Middleware\CheckCompany::class,
-        'DashboardAuthenticate' =>\App\Http\Middleware\DashboardAuthenticate::class,
-        'Logout' =>\App\Http\Middleware\Logout::class,
-        'LoginAuthenticate' => \App\Http\Middleware\LoginAuthenticate::class,
-        'CheckSession' => \App\Http\Middleware\CheckSession::class,
-        'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        //busted 'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
-        'JwtRefresh' => \App\Http\Middleware\JwtRefresh::class,
+
         'MyJwtMiddleWare' => \App\Http\Middleware\MyJwtMiddleWare::class,
 
 

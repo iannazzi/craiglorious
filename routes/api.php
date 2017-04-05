@@ -17,8 +17,12 @@ $api->version('v1', function ($api)
         $api->group(['middleware' => ['MyJwtMiddleWare']], function ($api)
         {
 
+//            dd(request());
+            $api->get('auth', 'Auth\AccessController@checkUserIsAuthenticated');
 
-            //$api->get('validate_token', 'Auth\LoginController@validateToken');
+
+
+
             $api->get('dashboard', 'DashboardController@index');
             $api->get('dashboard/cached_page_data', 'DashboardController@cachedPageData');
 
@@ -51,7 +55,7 @@ $api->version('v1', function ($api)
 
 
 
-
+            return response()->json(['error' => 'not found'], 404);
 
 
 

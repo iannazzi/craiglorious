@@ -1,0 +1,74 @@
+<?php
+
+use Tests\ApiTester;
+use App\Models\Tenant\User;
+
+class LoginTest extends ApiTester{
+
+//    /** @test */
+//
+//    public function a_user_logs_in()
+//    {
+//        $this->json('POST', $this->api('login'), ['company' => 'Embrasse-Moi', 'username'=> 'admin',  'password' => 'secret'])
+////            ->dump()
+//            ->assertStatus(200);
+//    }
+//    /** @test */
+//    public function a_user_enters_the_wrong_company_name()
+//    {
+//        $this->json('POST', $this->api('login'), ['company' => 'sdfghsdghjh', 'username'=> 'admin', 'password' => 'secret'])
+//            ->assertStatus(401);
+//    }
+//    /** @test */
+//    public function a_user_enters_the_wrong_username()
+//    {
+//        $this->json('POST', $this->api('login'), ['company' => 'Embrasse-Moi', 'username'=> 'asshole', 'password' => 'secret'])
+//            ->assertStatus(401);
+//    }
+//    /** @test */
+//    public function a_user_enters_the_wrong_password()
+//    {
+//        $this->json('POST', $this->api('login'), ['company' => 'Embrasse-Moi', 'username'=> 'admin',  'password' => 'sdfhsdfh'])
+//            ->assertStatus(401);
+//    }
+//    /** @test */
+//    public function sign_in()
+//    {
+//        $this->signIn();
+//
+//    }
+    /** @test */
+    public function validate_the_token()
+    {
+        $this->signIn();
+        $url = $this->api('auth');
+
+        $this->get($url, $this->headers())
+            ->dump()
+            ->assertStatus(200);
+
+
+    }
+
+//
+//    /** @test */
+//    public function a_user_can_see_the_dashboard()
+//    {
+//        $this->signIn();
+//
+//$url = $this->api('dashboard');
+
+//
+//        // Test unauthenticated access.
+//        $this->get($url)
+//            ->assertStatus(401);
+//
+//        // Test authenticated access.
+//        $this->get($url, $this->headers($user))
+//            ->assertStatus(200);
+//
+//
+//
+//
+//    }
+}

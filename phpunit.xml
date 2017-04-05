@@ -20,7 +20,7 @@
         <file>tests/in/LogoutTest.php</file>
         </testsuite>
         <testsuite name="login">
-            <file>tests/in/ApiLoginTest.php</file>
+            <file>tests/in/LoginTest.php</file>
         </testsuite>
         <testsuite name="register_not_working">
             <file>tests/in/RegisterTest.php</file>

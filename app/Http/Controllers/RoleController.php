@@ -37,7 +37,6 @@ class RoleController extends Controller
 
     public function index(Request $request)
     {
-
         $number_of_records_available = Role::all()->count();
         $return_data['records'] = []; //let js handle the data through ajax
         if($number_of_records_available<=20){
