@@ -9,7 +9,22 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
+        <testsuite name="all">
+            <file>tests/in/CraigloriousDatabaseTest.php</file>
+            <file>tests/in/TenantDatabaseTest.php</file>
+            <file>tests/in/RoleTest.php</file>
+            <file>tests/in/UserTest.php</file>
+            <file>tests/in/LoginTest.php</file>
 
+            <file>tests/in/LocationTest.php</file>
+
+
+
+
+
+
+
+        </testsuite>
         <testsuite name="craiglorious">
             <file>tests/in/CraigloriousDatabaseTest.php</file>
         </testsuite>

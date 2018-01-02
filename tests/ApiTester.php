@@ -15,6 +15,7 @@ abstract class ApiTester extends TestCase {
     protected $fake;
     protected $faker;
     protected $output;
+    protected $token;
 
     /**
      * Initialize
@@ -31,36 +32,20 @@ abstract class ApiTester extends TestCase {
         $data=['username'=>$username, 'password'=>$password, 'company'=>$company];
         $response = $this->post('/api/login', $data);
         $system = $this->getSystem();
-
         $content = json_decode($response->getContent());
-
-        $this->assertObjectHasAttribute('token', $content, 'Token does not exists');
+        //$this->assertObjectHasAttribute('token', $content, 'Token does not exists');
         $this->token = $content->token;
 
         return $this;
     }
     protected function headers(){
-        $headers['Authorization'] = 'Bearer '.$this->token;
+        $headers['Authorization'] = 'Bearer '. $this->token;
         return $headers;
     }
     public function api($route){
         return '/api/' . $route;
 
     }
-//    protected function headers($user = null)
-//    {
-//        $headers = ['Accept' => 'application/json'];
-//        $system = $this->getSystem();
-//        $customClaims = ['company' => $system->company, 'system' => $system->id];
-//
-//        if (!is_null($user)) {
-//            $token = JWTAuth::fromUser($user, $customClaims);
-//            JWTAuth::setToken($token);
-//            $headers['Authorization'] = 'Bearer '.$token;
-//        }
-//
-//        return $headers;
-//    }
     function getSystem()
     {
         $system = System::first();
@@ -68,7 +53,31 @@ abstract class ApiTester extends TestCase {
 //        dd($system->company);
         return $system;
     }
-    
+
+
+    public function searchSuccess($route, $rawContent){
+        $this->signIn();
+        $this->json('POST', $this->api($route . '/search'), json_decode($rawContent, true),$this->headers())
+            ->assertJson(["success"=>'true']);
+    }
+    public function createSuccess($route, $rawContent){
+        $this->signIn();
+        $this->json('PUT', $this->api($route), json_decode($rawContent, true),$this->headers())
+            ->assertJson(["success"=>'true']);
+    }
+    public function updateSuccess($route, $rawContent){
+        $this->signIn();
+        $this->json('PUT', $this->api($route), json_decode($rawContent, true),$this->headers())
+            ->assertJson(["success"=>'true']);
+    }
+    public function deleteSuccess($route, $rawContent){
+        $this->signIn();
+        $this->json('delete', $this->api($route), json_decode($rawContent, true),$this->headers())
+            ->assertJson(["success"=>'true']);
+    }
+
+
+
     public function writeMethod($method_name)
     {
         fwrite(STDOUT, $method_name . "\n");

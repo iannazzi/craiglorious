@@ -1,0 +1,75 @@
+Process
+1) Create server w/docker-machine
+2) Load docker up on the server w/ docker-compose up -d etc
+3) connect to workspace on server
+4) download source from git
+5) composer install, npm install
+6) phpunit --testsuite=all
+7) npm test
+
+
+
+
+
+
+docker tag 7d9495d03763 maryatdocker/docker-whale:latest
+
+
+//todo
+https://code.tutsplus.com/tutorials/setting-up-continuous-integration-continuous-deployment-with-jenkins--cms-21511
+
+
+
+fire up a do docker droplet.....
+https://docs.docker.com/machine/examples/ocean/#step-2-generate-a-personal-access-token
+
+docker-machine create --driver digitalocean --digitalocean-size 1gb --digitalocean-access-token 36a01604e3a5ee4ce35b177fee8ee6f4ea9aca9711b546ac521518e4ad1076e0 docker-sandbox
+//will need to change name...
+
+docker commands
+docker-machine ls
+docker-machine env docker-sb2
+eval $(docker-machine env docker-sb2)
+docker-compose up -d nginx mysql
+
+
+docker-compose exec workspace bash
+git clone https://github.com/iannazzi/craiglorious.git
+composer install
+
+
+hmm node doesnt want to work...
+apt-get update &&
+apt-get install -y nodejs &&
+apt-get install -y npm
+
+
+docker-compose exec laradock_workspace_1 bash
+
+######removing machines containers images
+
+docker-machine stop docker-sb2
+docker-machine rm docker-sb2
+
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker images -f dangling=true
+docker rmi $(docker images -f dangling=true -q)
+
+
+
+swap
+
+fallocate -l 4G /swapfile
+ls -lh /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+
+no work
+
+swap take 2
+dd if=/dev/zero of=/swapfile bs=1024 count=256k
+mkswap /swapfile
+swapon /swapfile

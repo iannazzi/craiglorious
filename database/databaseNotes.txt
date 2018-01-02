@@ -58,3 +58,7 @@ when adding new seed classes need to dump auto load
 composer dumpautoload
 
 csv data is loaded in the migration file
+
+Mysql commands.....
+
+

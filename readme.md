@@ -1,43 +1,64 @@
-## Craiglorious
+#How to get this thing started.....
 
-This is how to get it going from bitbucket
+## Dev
+git clone https://github.com/iannazzi/craiglorious.git craiglorious
+cd craiglorious
 
-## Installation
-
-### Step 1: Clone the repo
-```
-git clone git@bitbucket.org:embrasse/craiglorious-backend.git
-```
-
-### Step 2: Building
-```
-cd docker/laradock -not working
-git submodule init - not working
-git submodule update - not working
-
-copy old laradock folder
+laradock or docker
 cd laradock
 ./up.sh
-./workspace.sh
-composer install
-exit
 
-should run this from a container as well...
+create .env
+from workspace ./workspace.sh
+composer install
 
 npm install
 gulp
 
+check phpunit.xml for test
+phpunit --testsuite=craiglorious
+
+localhost:82
 
 
 
+##Set up staging
+would be nice to use a git hook
 
-```
+git push develop staging
 
-### Step 3: Serve
-```
-cd laradock
-./up.sh
-```
+ssh craig@craiglorious.com
+git clone https://github.com/iannazzi/craiglorious.git 2017-12-30r1
+cd $DATE
+copy /var/www/staging/.env .
+sudo chgrp -R www-data storage bootstrap/cache
+sudo chmod -R ug+rwx storage bootstrap/cache
+composer install
+
+copy the production database?
+create fake data?
+php artisan migrate
+
+phpunit test
+
+npm install
+gulp
+ln -s folder /var/www/craiglorious.com/staging/live
 
 
+## Set up production
+would be nice to 
+
+git push master production
+
+otherwise
+
+shut down site
+cd /var/www/craiglorious.com/production
+cp /var/www/staging/release_folder_name .
+cp /var/www/production/.env ./
+symlink to live
+
+php artisan migrate
+turn on site
 

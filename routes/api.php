@@ -17,6 +17,8 @@ $api->version('v1', function ($api)
             $api->get('auth', 'Auth\AccessController@checkUserIsAuthenticated');
             $api->get('dashboard', 'DashboardController@index');
             $api->get('dashboard/cached_page_data', 'DashboardController@cachedPageData');
+            $api->get('user/', 'UserController@getPreferences');
+            $api->post('user/', 'UserController@postPreferences');
 
             $api->group(['middleware' => ['ViewAccess']], function ($api)
             {
@@ -32,8 +34,7 @@ $api->version('v1', function ($api)
 
                 $api->resource('tests', 'TestController');
 
-                $api->get('user/', 'UserController@getPreferences');
-                $api->post('user/', 'UserController@postPreferences');
+
 
                 CIRoutes::addRoutes($api, 'users');
                 CIRoutes::addRoutes($api, 'locations');

@@ -17,7 +17,6 @@ class LoginController extends Controller
 {
     public function postLogin(Request $request)
     {
-
         $myAuth = new myAuth();
         $myJwt = new myJwt();
 
@@ -50,7 +49,6 @@ class LoginController extends Controller
             $myAuth->addUserLoginToDb($request, $unique_id);
 
             $token = $myJwt->createFirebaseToken($user, $company, $unique_id);
-
             return response()->json(compact('user', 'token'));
 
         }

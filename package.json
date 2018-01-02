@@ -1,6 +1,22 @@
 {
   "private": true,
+  "ava": {
+    "require": [
+      "babel-register",
+      "./resources/assets/js/tests/helpers/setup-browser-env.js"
+    ],
+    "source": [
+      "**/*.js"
+    ],
+    "babel": "inherit"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
   "scripts": {
+    "test": "ava",
     "wp": "node_modules/webpack/bin/webpack.js",
     "dev": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
@@ -9,10 +25,11 @@
     "production": "node node_modules/cross-env/bin/cross-env.js NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
-    "axios": "^0.15.3",
+    "ava": "^0.19.0",
+    "babel-register": "^6.24.0",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
-    "bulma": "^0.3.2",
+    "browser-env": "^2.0.29",
     "font-awesome": "^4.7.0",
     "fullcalendar": "^3.2.0",
     "gulp": "^3.9.1",

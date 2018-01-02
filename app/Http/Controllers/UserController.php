@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Auth\myAuth;
+use App\Classes\Auth\myAuth;
 use App\Models\Tenant\Role;
 use App\Models\Tenant\User;
 use Illuminate\Http\Request;
@@ -27,7 +27,7 @@ class UserController extends Controller
     {
 
         //users can only search for users with roles below theirs
-        $user = \Auth::user();
+        $user = \Config::get('user');
         $role = $user->role;
 
         $users = $user->getOtherUsers();
@@ -65,7 +65,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $user = \Auth::user();
+        $user =  \Config::get('user');
 
         //dd($this->return_data['roles']);
         $number_of_records_available = User::all()->count();
@@ -89,12 +89,12 @@ class UserController extends Controller
     public function show($id)
     {
 
-        $user = \Auth::user();
+        $user =  \Config::get('user');
         $return_data['roles'] = $user->role->getRoleSelectTree();
         $user = User::findOrFail($id);
         if ($user->isAdmin())
         {
-            if (\Auth::user()->isAdmin())
+            if ( \Config::get('user')->isAdmin())
             {
                 //good to continue
             } else
@@ -137,7 +137,7 @@ class UserController extends Controller
 
     public function postPreferences(Request $request)
     {
-        $user = \Auth::user();
+        $user = \Config::get('user');
         $id = $user->id;
         $data = $request->all();
 
@@ -188,7 +188,7 @@ class UserController extends Controller
 //        return ['minlength:5',
 //                'maxlength:10',
 //        ];
-        return [//'required',
+        return [
             'digits_between:5,10',
             'numeric',
             'unique:users,passcode,' . $id,
@@ -199,7 +199,7 @@ class UserController extends Controller
         $passcode = unique_random('users', 'passcode', 5, 'number');
         $password = createPassword();
 
-        $user = \Auth::user();
+        $user =\Config::get('user');
         $role = $user->role;
         $return_data['roles'] = $role->getRoleSelectTree();
         $return_data['page'] = 'create';
@@ -211,7 +211,12 @@ class UserController extends Controller
                 'passcode_confirmation' => $passcode
             ]
         ]; //let js handle the data through ajax
-        return \View::make('pages/users/users', ['json' => json_encode($return_data)]);
+        return response()->json([
+            'success' => true,
+            'message' => 'record updated',
+            'id' => $return_data
+        ], 200);
+        //return \View::make('pages/users/users', ['json' => json_encode($return_data)]);
 
     }
 
@@ -249,7 +254,8 @@ class UserController extends Controller
             if ($update->save())
             {
                 //kill the user login
-                myAuth::logoutUser($id);
+                $myAuth = new myAuth();
+                $myAuth->deleteUserLogin($update);
 
 
                 return response()->json([
