@@ -49,7 +49,7 @@ class LoginController extends Controller
             $myAuth->addUserLoginToDb($request, $unique_id);
 
             $token = $myJwt->createFirebaseToken($user, $company, $unique_id);
-            return response()->json(compact('user', 'token'));
+            return response()->json(compact('user', 'token'),200);
 
         }
 

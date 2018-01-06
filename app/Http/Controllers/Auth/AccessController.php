@@ -22,7 +22,6 @@ class AccessController extends Controller
     public function checkUserIsAuthenticated(Request $request)
     {
         //at this point, we made it through middle ware so we are all set.....
-
         return response()->json([
             'success' => true,
         ], 200);

@@ -23,9 +23,10 @@ class MyJwtMiddleWare
      */
     public function handle($request, \Closure $next)
     {
-
         $myAuth = new myAuth();
         if($myAuth->checkUserIsAuthenticated($request)){
+
+
             $route = $request->route()->uri();
             $route = str_replace('/api/','',$route);
             //a few routes have special features....

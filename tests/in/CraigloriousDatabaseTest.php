@@ -22,7 +22,7 @@ class CraigloriousDatabaseTest extends ApiTester
 
         // we do not use the main connection code - gets specified in .env and phpunit.xml
         // MainDatabaseConnector::createMainConnection();
-        var_dump(Config::get('database'));
+        //var_dump(Config::get('database'));
 
         //DatabaseCSVCreator::createStartupSCVFile('POS', 'pos_tax_jurisdictions');
         $this->writeMethod(__METHOD__);

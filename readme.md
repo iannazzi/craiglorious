@@ -1,30 +1,48 @@
 #How to get this thing started.....
 
-## Dev
+## Get Started in the Development Environment
+###VM
+create a VM - homestead seems to be working
+conect to vm
+cd ~/Homestead && vagrant up && vagrant ssh
+create local_a and testing_a databases
+
 git clone https://github.com/iannazzi/craiglorious.git craiglorious
 cd craiglorious
-
-laradock or docker
-cd laradock
-./up.sh
-
-create .env
-from workspace ./workspace.sh
 composer install
-
+php artisan key:generate
+php artisan jwt:secret
 npm install
-Gulp:
 npm run dev  or npm run watch
 
-#TESTING.....
-create a database testing_databasename (databasename matches .env MAIN_DB_NAME)
-modify .env with host user pass 
+####edit .env
+APP_ENV=local
+APP_DEBUG=true
+APP_LOG_LEVEL=debug
+
+#DB Setup - yes use all of these
+DB_PREFIX=local
+MAIN_DB_NAME=a
+LOCAL_DB_HOST=127.0.0.1
+LOCAL_DB_USERNAME=homestead
+LOCAL_DB_PASSWORD=secret
 TESTING_DB_HOST=127.0.0.1
 TESTING_DB_USERNAME=homestead
 TESTING_DB_PASSWORD=secret
 
-start with 
+
+### now test Database and api
+
+phpunit --testsuite=all
+
+if this fails check 
+phpunit --testsuite=environment
 phpunit --testsuite=craiglorious
+phpunit --testsuite=tenant
+phpunit --testsuite=login
+phpunit --testsuite=vendor
+etc....
+
 if this fails check 
 tests/in/CraigloriousDatabaseTest.php
 uncomment some items to debug.
@@ -32,17 +50,26 @@ check phpunit.xml  -
 <env name="APP_ENV" value="testing"/>
 <env name="DB_PREFIX" value="testing"/>
 
-#checking the web
+
+####setting up the web
 change resources/assets/js/config/development.config.js
 the host needs to be the testing host....
-
+currently homestead.test
 npm run dev
-##configure the main Main dev database
+php artisan jwt:secret
+
+
+####Seed data to local_a
 php artisan zz:dms
 php artisan zz:dst
 
 should be able to check
 http://homestead.test
+and login with admin secret
+
+
+
+
 
 ##Set up staging
 would be nice to use a git hook

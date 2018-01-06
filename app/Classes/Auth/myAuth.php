@@ -25,6 +25,7 @@ class myAuth
         $myAuth = new myAuth();
         $myJwt = new myJwt();
 
+
         $authHeader = $request->headers->get('authorization');
 
         if ($authHeader)
@@ -32,8 +33,10 @@ class myAuth
             $token = str_replace('Bearer ', '', $authHeader);
             if ($token)
             {
+
                 if ($token_data = $this->myJwt->validateFirebaseToken($token))
                 {
+
                     $company = $token_data->data->company;
 
                     $system = System::where('company', $company)->first();

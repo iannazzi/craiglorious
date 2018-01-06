@@ -51,14 +51,35 @@ class myJwt
     {
         try
         {
-            return JWT::decode($token, $this->secret_key, array('HS512'));
+// for debugging, make sure the key works
+//            $key = "example_key";
+//            $token2 = array(
+//                "iss" => "http://example.org",
+//                "aud" => "http://example.com",
+//                "iat" => 1356999524,
+//                "nbf" => 1357000000
+//            );
+//            $jwt = JWT::encode($token2, $key);
+//            $decoded = JWT::decode($jwt, $key, array('HS256'));
+//            print_r($decoded);
+//
+//
+
+//            make sure the key is in the .env file
+//        php artisan jwt:secret
+//          dd($this->secret_key);
+
+            $token = JWT::decode($token, $this->secret_key, array('HS512'));
+            return $token;
 
         } catch (Exception $e)
         {
+
             /*
              * the token was not able to be decoded.
              * this is likely because the signature was not able to be verified (tampered token)
              */
+            //dd('here?');
             return false;
         }
 
