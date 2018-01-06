@@ -1,7 +1,7 @@
 var config = {
   env: 'development',
   api: {
-    base_url: 'http://localhost:82/api',
+    base_url: 'http://homestead.test/api',
     defaultRequest: {
       headers: {
         'X-Requested-With': 'rest.js',

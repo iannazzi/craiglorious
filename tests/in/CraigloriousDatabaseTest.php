@@ -17,7 +17,14 @@ class CraigloriousDatabaseTest extends ApiTester
     /** @test */
     function init_craiglorious()
     {
-       //DatabaseCSVCreator::createStartupSCVFile('POS', 'pos_tax_jurisdictions');
+        //some debugging stuff to help get started
+        //var_dump(Config::get('database'));
+
+        // we do not use the main connection code - gets specified in .env and phpunit.xml
+        // MainDatabaseConnector::createMainConnection();
+        var_dump(Config::get('database'));
+
+        //DatabaseCSVCreator::createStartupSCVFile('POS', 'pos_tax_jurisdictions');
         $this->writeMethod(__METHOD__);
         self::loadCraiglorious();
     }

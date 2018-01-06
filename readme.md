@@ -13,14 +13,36 @@ from workspace ./workspace.sh
 composer install
 
 npm install
-gulp
+Gulp:
+npm run dev  or npm run watch
 
-check phpunit.xml for test
+#TESTING.....
+create a database testing_databasename (databasename matches .env MAIN_DB_NAME)
+modify .env with host user pass 
+TESTING_DB_HOST=127.0.0.1
+TESTING_DB_USERNAME=homestead
+TESTING_DB_PASSWORD=secret
+
+start with 
 phpunit --testsuite=craiglorious
+if this fails check 
+tests/in/CraigloriousDatabaseTest.php
+uncomment some items to debug.
+check phpunit.xml  - 
+<env name="APP_ENV" value="testing"/>
+<env name="DB_PREFIX" value="testing"/>
 
-localhost:82
+#checking the web
+change resources/assets/js/config/development.config.js
+the host needs to be the testing host....
 
+npm run dev
+##configure the main Main dev database
+php artisan zz:dms
+php artisan zz:dst
 
+should be able to check
+http://homestead.test
 
 ##Set up staging
 would be nice to use a git hook
