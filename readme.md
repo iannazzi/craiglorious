@@ -92,11 +92,23 @@ follow directions in local
 
 failing php artisan jwt:secret -- git checkout develop fixed
 failing npm install with killed changed to 3 gb ram droplet fixed
+
+
+#build
 failing npm run production and npm run dev
+
+failing Cannot find module 'node-sass'
+rm package-lock.json
+rm -rf node_modules
+npm install
 
 -- might not still have a decent build utiltiy......
 
 
+failing php artisan zz:dms   -- .env was incorrecto
+
+php artisan zz:dms
+php artisan zz:dms
 
 
 

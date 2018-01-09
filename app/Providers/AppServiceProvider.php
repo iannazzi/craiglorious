@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register('Iannazzi\Generators\ImporterServiceProvider');
         }
         else if(($this->app->environment() == 'production')){
-            
+
         }
     }
 }
