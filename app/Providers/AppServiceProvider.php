@@ -27,5 +27,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register('Iannazzi\Generators\ImporterServiceProvider');
 
         }
+        else{
+            $this->app->register('Iannazzi\Generators\ImporterServiceProvider');
+        }
     }
 }

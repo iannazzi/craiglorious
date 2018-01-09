@@ -77,10 +77,14 @@ ssh craig@craiglorious.com
 cd /var/www/craiglorious.com
 git clone https://github.com/iannazzi/craiglorious.git $DATE
 cd $DATE
+git checkout develop
 cp /var/www/craiglorious.com/env/stag/.env .
+
+composer install
+
 sudo chgrp -R www-data storage bootstrap/cache
 sudo chmod -R ug+rwx storage bootstrap/cache
-composer install
+
 
 
 follow directions in local
