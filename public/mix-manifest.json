@@ -1,5 +1,7 @@
 {
-  "/js/app.js": "/js/app.js",
-  "/css/app.css": "/css/app.css",
-  "/js/server_connection.js": "/js/server_connection.js"
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/js/server_connection.js": "/js/server_connection.js",
+    "/css/fullcalendar.min.css": "/css/fullcalendar.min.css",
+    "/css/fullcalendar.print.min.css": "/css/fullcalendar.print.min.css"
 }

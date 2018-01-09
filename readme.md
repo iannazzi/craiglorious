@@ -86,7 +86,13 @@ composer install
 follow directions in local
 
 
-#curently failing php artisan jwt:secret
+failing php artisan jwt:secret -- git checkout develop fixed
+failing npm install with killed changed to 3 gb ram droplet fixed
+failing npm run production and npm run dev
+
+-- might not still have a decent build utiltiy......
+
+
 
 
 

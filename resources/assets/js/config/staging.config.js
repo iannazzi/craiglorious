@@ -1,7 +1,7 @@
 var config = {
   env: 'staging',
   api: {
-    base_url: 'http://craiglorious.dev:89/api',
+    base_url: 'http://staging.craiglorious.com',
     defaultRequest: {
       headers: {
         'X-Requested-With': 'rest.js',
