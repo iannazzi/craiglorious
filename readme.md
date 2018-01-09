@@ -82,6 +82,7 @@ cp /var/www/craiglorious.com/env/stag/.env .
 
 composer install
 
+//can't write to the log....
 sudo chgrp -R www-data storage bootstrap/cache
 sudo chmod -R ug+rwx storage bootstrap/cache
 
@@ -118,17 +119,19 @@ php artisan migrate
 
 
 ln -s folder /var/www/craiglorious.com/staging/live
+ln -sfn 2018-01-09r1 /var/www/craiglorious.com/staging
 
 
 ## Set up production
 would be nice to 
+
+cp /var/www/craiglorious.com/env/prod/.env .
 
 git push master production
 
 otherwise
 
 shut down site
-cd /var/www/craiglorious.com/production
 cp /var/www/staging/release_folder_name .
 cp /var/www/production/.env ./
 symlink to live
