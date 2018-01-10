@@ -86,6 +86,9 @@ composer install
 sudo chgrp -R www-data storage bootstrap/cache
 sudo chmod -R ug+rwx storage bootstrap/cache
 
+//took forever.... this worked
+sudo chown -R www-data:www-data storage
+sudo chown -R www-data:www-data bootstrap/cache
 
 
 follow directions in local

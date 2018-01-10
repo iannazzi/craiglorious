@@ -19,6 +19,7 @@
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
     "browser-env": "^2.0.29",
+    "dotenv": "^4.0.0",
     "font-awesome": "^4.7.0",
     "fullcalendar": "^3.2.0",
     "gulp": "^3.9.1",

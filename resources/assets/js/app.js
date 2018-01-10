@@ -186,7 +186,6 @@ new Vue({
     mounted(){
         let self = this;
         this.validateAuth();
-
         bus.$on('userHasLoggedOut', function () {
             console.log('destroying login');
             self.destroyLogin()
