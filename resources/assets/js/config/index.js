@@ -8,6 +8,9 @@ console.log(host);
 if(host == 'craiglorious.com') {
     env = 'production';
 }
+if(host == 'www.craiglorious.com') {
+    env = 'production';
+}
 else  if (host == 'staging.craiglorious.com')
 {
     env = 'staging';

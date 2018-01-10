@@ -1,7 +1,7 @@
 var config = {
   env: 'production',
   api: {
-    base_url: 'https://craiglorious.com',
+    base_url: 'https://craiglorious.com/api',
     defaultRequest: {
       headers: {
         'X-Requested-With': 'rest.js',
