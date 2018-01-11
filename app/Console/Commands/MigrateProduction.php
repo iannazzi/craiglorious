@@ -45,7 +45,7 @@ class MigrateProduction extends Command
             '--path' => "database/migrations/craiglorious",
             '--database' => 'main',
             '--force' => '',
-            
+            '-n' => '',
         ]);
 
         $systems = System::All();
