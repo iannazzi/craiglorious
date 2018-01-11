@@ -16,7 +16,7 @@ npm install
 npm run dev  or npm run watch
 
 ####edit .env
-APP_ENV=local
+PP_ENV=local
 APP_DEBUG=true
 APP_LOG_LEVEL=debug
 
@@ -105,38 +105,41 @@ vendor/bin/phpunit --testsuite=all
 ### create stage data if needed
 php artisan zz:dms
 php artisan zz:dst
-
 npm install
-failing npm install with killed changed to 3 gb ram droplet fixed
 npm run production
 
 ln -sfn 2018-01-09r1 /var/www/craiglorious.com/staging
 
-##Updating staging
-git fetch
+##Updating existing staging
+git fetch --all
 git reset --hard origin/develop
-might need
-npm install
-composer install
+### front end
 
+#### updates for changes to package.json
 rm package-lock.json
 rm -rf node_modules/
+npm install
+
+#### changes to src folder (js/css)
+npm run production
+
+### backend
+#### changes to composer.json
+composer install
+
+###changes to app
+###changes to the database
+php artisan migrate
+### reset the database
+php artisan zz:dms
+php artisan zz:dms
+
+
+
 
 
 #build
-failing npm run production and npm run dev
 
-failing Cannot find module 'node-sass'
-rm package-lock.json
-rm -rf node_modules
-npm install
-
-
-
-failing php artisan zz:dms   -- .env was incorrecto
-
-php artisan zz:dms
-php artisan zz:dms
 
 
 
@@ -144,11 +147,18 @@ ln -s folder /var/www/craiglorious.com/staging/live
 ln -sfn 2018-01-09r1 /var/www/craiglorious.com/staging
 
 
-## Set up production
+### Updating production
 
-
-
+cp staging $date-p1
+cd live
+php artisan down
+cd ../$date-p1
 cp /var/www/craiglorious.com/env/prod/.env .
+php artisan migrate
+rm ../live
+ln -s . /var/www/craiglorious.com/staging/live
+php artisan up
+
 
 
 
