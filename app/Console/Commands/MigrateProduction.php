@@ -44,6 +44,8 @@ class MigrateProduction extends Command
         Artisan::call('migrate', [
             '--path' => "database/migrations/craiglorious",
             '--database' => 'main',
+            '--force' => '',
+            
         ]);
 
         $systems = System::All();

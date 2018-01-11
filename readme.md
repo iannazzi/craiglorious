@@ -15,6 +15,7 @@ php artisan jwt:secret
 npm install
 npm run dev  or npm run watch
 
+SET PASSWORD = 'ffffjjjja;sldkfj';
 ####edit .env
 PP_ENV=local
 APP_DEBUG=true
