@@ -161,7 +161,12 @@ ln -s . /var/www/craiglorious.com/staging/live
 php artisan up
 
 
+scrathpad
 
-
+GRANT ALL PRIVILEGES ON * . * TO 'admin'@'localhost';
+grant all privileges on *.* to myuser@'%' identified by 'mypasswd';
+GRANT ALL PRIVILEGES ON * . * TO 'admin'@'localhost';
+CREATE USER 'looser'@'localhost' IDENTIFIED BY 'bitcoin';
+GRANT ALL ON *.* TO 'looser'@'localhost';
 
 

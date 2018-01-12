@@ -14,9 +14,9 @@ mix.copy('node_modules/fullcalendar/dist/fullcalendar.print.min.css', 'public/cs
 
 
 
-// if (mix.config.inProduction) {
-//     mix.version();
-// }
+if (mix.config.inProduction) {
+    mix.version();
+}
 //mix.copy('src/img/', 'public/img/');
 
 
