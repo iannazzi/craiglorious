@@ -3,18 +3,6 @@ process.env.DISABLE_NOTIFIER = true
 let mix = require('laravel-mix');
 
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for your application, as well as bundling up your JS files.
- |
- */
-console.log('hello');
-
 mix.js('src/app.js', 'public/js');
 mix.sass('src/sass/app.scss', 'public/css');
 mix.js('src/server_connection.js', 'public/js/server_connection.js');
@@ -25,12 +13,13 @@ mix.copy('node_modules/fullcalendar/dist/fullcalendar.print.min.css', 'public/cs
 
 
 
-console.log('goodby');
 
-if (mix.config.inProduction) {
-    mix.version();
-}
+// if (mix.config.inProduction) {
+//     mix.version();
+// }
 //mix.copy('src/img/', 'public/img/');
+
+
 
 // Full API
 // mix.js(src, output);
