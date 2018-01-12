@@ -9,7 +9,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <router-link class=" header_title navbar-brand" to="/dashboard">CraiGlorious</router-link>
+                <router-link class=" header_title navbar-brand" to="/dashboard">craiglorious</router-link>
             </div>
             <div id="navbar" class=" navbar-collapse collapse">
                 <div v-if="this.$root.appLoaded">
