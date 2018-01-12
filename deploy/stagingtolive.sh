@@ -14,7 +14,7 @@ cd /var/www/craiglorious.com/$DATEP
 pwd
 cp /var/www/craiglorious.com/env/prod/.env .
 php artisan jwt:secret
-php artisan zz:MigrateCraiglorious
+php artisan zz:MigrateProduction
 cd ..
 pwd
 rm live

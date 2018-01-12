@@ -27,9 +27,8 @@ mix.copy('src/img/', 'public/img/');
 
 console.log('goodby');
 
-if (mix.inProduction()) {
+if (mix.config.inProduction) {
     mix.version();
-    console.log('production');
 }
 
 
