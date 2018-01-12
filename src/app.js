@@ -1,6 +1,7 @@
 import './bootstrap';
 import router from './routes'
 import {getData} from './controllers/getData'
+import {validateLogin} from './controllers/auth/validateLogin';
 import {AwesomeTable} from './elements/tables/AwesomeTable';
 import {AwesomeTableWrapper} from './controllers/AwesomeTableWrapper'
 
@@ -136,24 +137,24 @@ new Vue({
         validateAuth(){
             // The app has just been initialized, check if we can get the user data with an already existing token
 
-            if (0) ml('lets validate the auth')
+            if (1) ml('lets validate the auth')
             let self = this;
             var token = localStorage.getItem('jwt-token')
             if (token !== null && token !== 'undefined') {
-
-
+                console.log('going to validate the token')
                 getData({
                     method: 'get',
-                    url: '/login/validate',
+                    url: '/auth',
                     entity: false,
                     onSuccess(response) {
-                        if (0) ml('validated token after refresh')
-
+                        console.log(response);
+                        if (1) ml('validated token after refresh')
                         self.setLogin(response.user)
                         self.appLoaded = true;
                     },
                     onError(response){
-                        if (0) ml('we have a bad token')
+                        console.log(response);
+                        if (1) ml('we have a bad token')
                         self.destroyLogin()
                         self.appLoaded = true;
                     }
@@ -162,6 +163,7 @@ new Vue({
 
             }
             else {
+                console.log('no token');
                 if (0) ml('validate token after refresh is null')
                 self.appLoaded = true;
 
@@ -195,22 +197,23 @@ new Vue({
             self.setLogin(user)
         })
 
-        // $(function () {
-        //     setInterval(function checkSession() {
-        //         getData({
-        //             method: 'get',
-        //             url: '/validate_token',
-        //             entity: false,
-        //             onSuccess(response) {
-        //             },
-        //             onError(response){
-        //                 console.log(response);
-        //                 self.destroyLogin();
-        //             }
-        //         })
-        //
-        //     }, 100000); // every 100 seconds
-        // });
+        $(function () {
+            setInterval(function checkSession() {
+                console.log('do it...');
+                getData({
+                    method: 'get',
+                    url: '/validate_token',
+                    entity: false,
+                    onSuccess(response) {
+                    },
+                    onError(response){
+                        console.log(response);
+                        self.destroyLogin();
+                    }
+                })
+
+            }, 1000); // every 100 seconds
+        });
 
 
     },

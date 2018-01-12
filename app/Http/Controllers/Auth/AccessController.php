@@ -22,7 +22,11 @@ class AccessController extends Controller
     public function checkUserIsAuthenticated(Request $request)
     {
         //at this point, we made it through middle ware so we are all set.....
+
+        $user =  \Config::get('user');
+
         return response()->json([
+            'user' => $user,
             'success' => true,
         ], 200);
 
