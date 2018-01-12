@@ -20,7 +20,6 @@ class LoginController extends Controller
         $myAuth = new myAuth();
         $myJwt = new myJwt();
 
-        dd($request);
         $username = $request->username;
         $password = $request->password;
         $company = $request->company;

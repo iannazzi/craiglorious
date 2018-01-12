@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\SpitTableDef::class,
+        Commands\TestMainConnection::class,
         Commands\MigrateProduction::class,
         Commands\SpitColumnDef::class,
         Commands\DBColumnsToArray::class,
