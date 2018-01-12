@@ -72,10 +72,13 @@ and login with admin secret
 
 
 ##Set up staging
-
+### set up code base
 ssh craig@craiglorious.com
 cd /var/www/craiglorious.com
 git clone https://github.com/iannazzi/craiglorious.git $DATE
+
+sudo chgrp -R www-data $DATE
+
 cd $DATE
 git checkout develop
 cp /var/www/craiglorious.com/env/stag/.env .
@@ -83,19 +86,41 @@ cp /var/www/craiglorious.com/env/stag/.env .
 composer install
 
 //can't write to the log....
-sudo chgrp -R www-data storage bootstrap/cache
-sudo chmod -R ug+rwx storage bootstrap/cache
 
 //took forever.... this worked
-sudo chown -R www-data:www-data storage
-sudo chown -R www-data:www-data bootstrap/cache
+//sudo chown -R www-data:www-data storage
+//sudo chown -R www-data:www-data bootstrap/cache
 
+sudo chown -R craig:www-data storage
+sudo chmod -R ug+w storage
+sudo chown -R craig:www-data bootstrap/cache
+sudo chmod -R ug+w bootstrap/cache
 
-follow directions in local
-
-
+php artisan jwt:secret
 failing php artisan jwt:secret -- git checkout develop fixed
+
+### test back end
+vendor/bin/phpunit --testsuite=all
+
+### create stage data if needed
+php artisan zz:dms
+php artisan zz:dst
+
+npm install
 failing npm install with killed changed to 3 gb ram droplet fixed
+npm run production
+
+ln -sfn 2018-01-09r1 /var/www/craiglorious.com/staging
+
+##Updating staging
+git fetch
+git reset --hard origin/develop
+might need
+npm install
+composer install
+
+rm package-lock.json
+rm -rf node_modules/
 
 
 #build
@@ -106,7 +131,6 @@ rm package-lock.json
 rm -rf node_modules
 npm install
 
--- might not still have a decent build utiltiy......
 
 
 failing php artisan zz:dms   -- .env was incorrecto
@@ -116,29 +140,17 @@ php artisan zz:dms
 
 
 
-copy the production database?
-create fake data?
-php artisan migrate
-
-
 ln -s folder /var/www/craiglorious.com/staging/live
 ln -sfn 2018-01-09r1 /var/www/craiglorious.com/staging
 
 
 ## Set up production
-would be nice to 
+
+
 
 cp /var/www/craiglorious.com/env/prod/.env .
 
-git push master production
 
-otherwise
 
-shut down site
-cp /var/www/staging/release_folder_name .
-cp /var/www/production/.env ./
-symlink to live
 
-php artisan migrate
-turn on site
 

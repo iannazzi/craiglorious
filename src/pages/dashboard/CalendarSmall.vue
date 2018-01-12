@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="mini-calendar">
     <div id="calendar"></div>
 </div>
 </template>

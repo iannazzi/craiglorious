@@ -16,5 +16,6 @@ Homestead.yaml
 .env.prod
 .env.stage
 .DS_Store
+npm-debug.*
 
 _ide_helper*.php

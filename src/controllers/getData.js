@@ -19,7 +19,7 @@ export function getData (options) {
     // };
 
 
-    let config = require('../config')
+    let config = require('../config/index')
 
 
     let client = rest.wrap(pathPrefix, { prefix: config.api.base_url })

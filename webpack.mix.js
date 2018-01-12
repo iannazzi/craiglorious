@@ -13,21 +13,24 @@ let mix = require('laravel-mix');
  | file for your application, as well as bundling up your JS files.
  |
  */
+console.log('hello');
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
-
-mix.js('resources/assets/js/server_connection.js', 'public/js/server_connection.js');
-
-
+mix.js('src/app.js', 'public/js');
+mix.sass('src/sass/app.scss', 'public/css');
+mix.js('src/server_connection.js', 'public/js/server_connection.js');
 
 mix.copy('node_modules/font-awesome/fonts/', 'public/fonts/');
 mix.copy('node_modules/fullcalendar/dist/fullcalendar.min.css', 'public/css/');
 mix.copy('node_modules/fullcalendar/dist/fullcalendar.print.min.css', 'public/css/');
 
-mix.copy('resources/assets/img/', 'public/img/');
+mix.copy('src/img/', 'public/img/');
 
+console.log('goodby');
 
+if (mix.inProduction()) {
+    mix.version();
+    console.log('production');
+}
 
 
 // Full API

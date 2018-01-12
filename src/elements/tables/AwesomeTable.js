@@ -4,8 +4,8 @@ import {RecordTableController}  from './RecordTableController';
 import {CollectionTableView}  from './CollectionTableView';
 import {CollectionTableController}  from './CollectionTableController';
 import {TableModel}  from './TableModel';
-import {SearchTableView}  from '../../elements/tables/SearchTableView';
-import {SearchTableController}  from '../../elements/tables/SearchTableController';
+import {SearchTableView}  from './SearchTableView';
+import {SearchTableController}  from './SearchTableController';
 
 
 

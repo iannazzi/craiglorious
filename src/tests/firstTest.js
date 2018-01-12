@@ -2,7 +2,7 @@ import Vue from 'vue/dist/vue.js';
 import test from 'ava';
 
 import {trim} from '../lib/strings'
-import dashboard from '../pages/dashboard/Dashboard.vue'
+import dashboard from '../pages/dashboard/dashboard.vue'
 
 test('dashboard', t => {
     new Vue(dashboard).$mount();

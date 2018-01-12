@@ -18,9 +18,9 @@ else  if (host == 'staging.craiglorious.com')
 
 console.log('detected environment is ' + env)
 var config = {
-  development: require('./development.config'),
-  production: require('./production.config'),
-  staging: require('./staging.config')
+  development: require('./development.config.js'),
+  production: require('./production.config.js'),
+  staging: require('./staging.config.js')
 }
 
 module.exports = config[env]
