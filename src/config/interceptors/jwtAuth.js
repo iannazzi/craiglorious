@@ -45,7 +45,9 @@
 				}
 				if (response.entity && response.entity.token && response.entity.token.length > 10) {
 
-                	console.log('set token from response')
+                    console.log(response.entity.token)
+
+                    console.log('set token from response with extra bearer')
 
 					localStorage.setItem('jwt-token', 'Bearer ' + response.entity.token);
 				}

@@ -76,6 +76,7 @@
                         self.stopCheckLogin();
 
                         console.log(response)
+                        localStorage.setItem('user', response.user);
                         localStorage.setItem('jwt-token', response.token);
                         //self.$emit('userHasLoggedIn', response.user);
                         bus.$emit('userHasLoggedIn', response.user);
@@ -100,37 +101,37 @@
 
             startCheckLogin: function() {
                 let self = this;
-                console.log('Turning on check login clock....');
+              //  console.log('Turning on check login clock....');
 
-                this.loginTimer = setInterval(function () {
-                    console.log('checking if a different tab logged in....');
-                    let token = localStorage.getItem('jwt-token')
-                    if (token !== null) {
-
-
-
-                        getData( {
-                            method: 'get',
-                            url: 'userid',
-                            entity: token,
-                            onSuccess(response) {
-                                self.stopCheckLogin();
-                                console.log(response)
-                                //go to dashborad
-                                console.log('need to transition page to dashboard');
-                                bus.$emit('userHasLoggedIn', response.user);
-                                self.$router.push('/dashboard');
-                            },
-                            onError(response) {
-                                console.log('error at userid');
-                            }
-                        })
-
-
-                    }
-
-
-                }, 10000); // every 100 seconds
+//                this.loginTimer = setInterval(function () {
+//                    console.log('checking if a different tab logged in....');
+//                    let token = localStorage.getItem('jwt-token')
+//                    if (token !== null) {
+//
+//
+//
+//                        getData( {
+//                            method: 'get',
+//                            url: 'userid',
+//                            entity: token,
+//                            onSuccess(response) {
+//                                self.stopCheckLogin();
+//                                console.log(response)
+//                                //go to dashborad
+//                                console.log('need to transition page to dashboard');
+//                                bus.$emit('userHasLoggedIn', response.user);
+//                                self.$router.push('/dashboard');
+//                            },
+//                            onError(response) {
+//                                console.log('error at userid');
+//                            }
+//                        })
+//
+//
+//                    }
+//
+//
+//                }, 10000); // every 100 seconds
 
             },
 

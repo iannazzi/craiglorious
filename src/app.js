@@ -7,6 +7,25 @@ import {craigSocket} from './controllers/craigSocket'
 
 import {transformer} from './helpers/transformer'
 
+// import Vuex from 'vuex'
+// Vue.use(Vuex)
+// const store = new Vuex.Store({
+//     state: {
+//         count: 0
+//     },
+//     mutations: {
+//         increment (state) {
+//             state.count++
+//         }
+//     }
+// })
+// store.commit('increment')
+// console.log(store.state.count) // -> 1
+
+
+
+
+
 
 
 
@@ -75,8 +94,8 @@ Vue.component('zzi-matrix', require('./components/wait/matrix.vue'))
 Vue.component('zzi-matrix2', require('./components/wait/matrix2.vue'))
 
 
-
-new Vue({
+//access to the root             this.$root.destroyLogin();
+let vm = new Vue({
     el: '#app',
     router: router,
     filters: {
@@ -116,8 +135,6 @@ new Vue({
                 this.admin = false;
                 myUser.admin = false;
             }
-            // broadcast an event telling our children the data is ready and views can be rendered
-            //bus.$emit('authenticated')
         },
         destroyLogin: function (user) {
             if (0) ml('Login with our token failed, do some cleanup');
@@ -128,6 +145,7 @@ new Vue({
             myUser.authenticated = false;
             myUser.admin = false;
             localStorage.removeItem('jwt-token')
+            localStorage.removeItem('user')
             cs.stopCS();
             if (this.$route.meta.guarded) {
                 if (0) ml('app reloaded, login failed on a guarded route, going to login page');
@@ -197,70 +215,71 @@ new Vue({
         bus.$on('userHasLoggedOut', function (craigSocketId) {
             console.log('bus.... user logged out... destroying login');
             self.destroyLogin()
+            self.$router.push('/auth/login');
         })
         bus.$on('userHasLoggedIn', function (user) {
             //self.getPageData();
-            console.log(self.$route.name);
-            self.setLogin(user)
+            //console.log(self.$route.name);
+            self.setLogin(localStorage.getItem('user'))
+            self.$router.push('/dashboard');
             cs.startCS();
         })
 
         bus.$on('userInput', function () {
             console.log('user input detected.... ');
 
-            // check the token expiration time
 
-            if( ! self.inactivityTimer)
-            {
-                self.inactivityTimer=true
-
-                console.log('going to get some data ... ');
-                getData({
-                    method: 'get',
-                    url: '/craigsocket',
-                    entity: false,
-                    onSuccess(response) {
-                        console.log(response);
-
-                        //double check that there is a token there, a user on a different tab could have clicked logout while transmitting....
-
-                        if(localStorage.getItem('jwt-token') === null)
-                        {
-                            //got logged out from a different tab
-                           console.log('token deleted from storage before we got back....');
-                            console.log(response);
-                           bus.$emit('userHasLoggedOut');
-                        }
-                        else
-                        {
-                            //refresh the token
-                            console.log('refresh the token');
-                            localStorage.setItem('jwt-token', response.token);
-
-                            //update messages
-
-//wait
-                            console.log('starting a timer .... ');
-                            setTimeout(function(){
-
-                                self.inactivityTimer=false;
-
-
-                            }, 1000);
-                        }
-
-                    },
-                    onError(response){
-                        console.log('unable to connect to server');
-                        console.log(response);
-                        //bus.$emit('userHasLoggedOut');
-                    }
-
-                })
-                //check the token isn't stale
-
-
-            }
+//             if( ! self.inactivityTimer)
+//             {
+//                 self.inactivityTimer=true
+//
+//                 console.log('going to get some data ... ');
+//                 getData({
+//                     method: 'get',
+//                     url: '/craigsocket',
+//                     entity: false,
+//                     onSuccess(response) {
+//                         console.log(response);
+//
+//                         //double check that there is a token there, a user on a different tab could have clicked logout while transmitting....
+//
+//                         if(localStorage.getItem('jwt-token') === null)
+//                         {
+//                             //got logged out from a different tab
+//                            console.log('token deleted from storage before we got back....');
+//                             console.log(response);
+//                            bus.$emit('userHasLoggedOut');
+//                         }
+//                         else
+//                         {
+//                             //refresh the token
+//                             console.log('refresh the token');
+//                             localStorage.setItem('jwt-token', response.token);
+//
+//                             //update messages
+//
+// //wait
+//                             console.log('starting a timer .... ');
+//                             setTimeout(function(){
+//
+//                                 self.inactivityTimer=false;
+//
+//
+//                             }, 1000);
+//                         }
+//
+//                     },
+//                     onError(response){
+//                         console.log('craigsocket unable to connect to server');
+//                         console.log(response);
+//                         //bus.$emit('userHasLoggedOut');
+//                     }
+//
+//                 })
+//                 //check the token isn't stale
+//
+//
+//             }
 
 
 
@@ -269,4 +288,28 @@ new Vue({
 
     },
 })
+
+
+window.addEventListener('storage', function(e) {
+    console.log('storage event listener fired')
+    console.log(e);
+    console.log(e.key + ' ' + e.newValue);
+    if(e.key === 'jwt-token'){
+        if(e.newValue === null){
+            //log out user
+            bus.$emit('userHasLoggedOut');
+        }
+        else{
+            if(e.oldValue === null){
+                //get the user
+                let user = localStorage.getItem('user')
+                bus.$emit('userHasLoggedIn', user);
+
+            }
+            //otherwise it was just a token refresh
+
+        }
+    }
+});
+
 ;
