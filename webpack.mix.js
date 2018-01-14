@@ -5,7 +5,11 @@ let mix = require('laravel-mix');
 
 mix.js('src/app.js', 'public/js').version();
 mix.sass('src/sass/app.scss', 'public/css').version();
-//mix.js('src/server_connection.js', 'public/js/server_connection.js').version();
+
+// mix.copy('node_modules/jquery/dist/jquery.min.js', 'public/js/');
+// mix.copy('node_modules/lodash/lodash.min.js', 'public/js/');
+// mix.copy('node_modules/fullcalendar/dist/fullcalendar.min.js', 'public/js/');
+
 
 mix.copy('node_modules/font-awesome/fonts/', 'public/fonts/');
 mix.copy('node_modules/fullcalendar/dist/fullcalendar.min.css', 'public/css/');
@@ -14,8 +18,9 @@ mix.copy('node_modules/fullcalendar/dist/fullcalendar.print.min.css', 'public/cs
 
 
 
+
 if (mix.config.inProduction) {
-    mix.version();
+    mix.uglify().minify().version();
 }
 //mix.copy('src/img/', 'public/img/');
 

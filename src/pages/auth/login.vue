@@ -85,7 +85,7 @@
                         bus.$emit('userHasLoggedIn');
                         bus.$emit('zzwaiteventover');
 
-                        self.$router.push('/dashboard');
+                        //self.$router.push('/dashboard');
                     },
                     onError(response) {
                         bus.$emit('zzwaiteventover');

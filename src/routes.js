@@ -151,25 +151,7 @@ let router = new VueRouter({
     routes
 
 })
-//here is the guard.... super easy.... why is laravel a pain>
-router.beforeEach((to, from, next) => {
 
-    //strip query off?
-    // let uri = new JsUri(window.location.href);
-    // console.log ('might need to take control of the uri query');
-    // let query = uri.query();
-    // uri.queryPairs.forEach(pair => {
-    //     console.log(pair)
-    //     uri.deleteQueryParam(pair[0]);
-    // })
-    let token = localStorage.getItem('jwt-token')
-    if (to.meta.guarded) {
-        if (!token || token === null) {
-            next({path: '/auth/logout'});
-        }
-    }
-    next()
-})
 
 
 export default router

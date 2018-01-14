@@ -7,28 +7,6 @@ import {craigSocket} from './controllers/craigSocket'
 
 import {transformer} from './helpers/transformer'
 
-// import Vuex from 'vuex'
-// Vue.use(Vuex)
-// const store = new Vuex.Store({
-//     state: {
-//         count: 0
-//     },
-//     mutations: {
-//         increment (state) {
-//             state.count++
-//         }
-//     }
-// })
-// store.commit('increment')
-// console.log(store.state.count) // -> 1
-
-
-
-
-
-
-
-
 //99% of page data will be the table......
 window.transfomer = new transformer;
 window.AwesomeTableWrapper = new AwesomeTableWrapper();
@@ -62,8 +40,6 @@ window.cached_page_data = {};
 //wrap ajax calls in case i need to swap out rest for axios
 window.getData = getData;
 
-
-
 let isDebug = true // toggle this to turn on / off for global controll
 let ml;
 if (isDebug) ml = console.log.bind(window.console);
@@ -71,18 +47,7 @@ else ml = function () {
 }
 
 if (1) ml('debug logging on');
-
-
 window.ml = ml;
-// bus.$on('userHasLoggedOut', function () {
-//     this.destroyLogin()
-// })
-//
-// bus.$on('userHasLoggedIn', function (user) {
-//     this.setLogin(user)
-// })
-
-
 
 Vue.component('nav-component', require('./pages/nav.vue'))
 Vue.component('footer-component', require('./pages/footer.vue'))
@@ -220,7 +185,7 @@ let vm = new Vue({
             console.log('bus.... user logged out... destroying login');
             if (self.$route.path != '/auth/login')
             {
-                self.last_page_accessed = self.$route.fullPath;
+                //self.last_page_accessed = self.$route.fullPath;
             }
             cs.verifyTimerStop();
             self.destroyLogin()
@@ -231,7 +196,10 @@ let vm = new Vue({
             //console.log(self.$route.name);
             self.setLogin()
             if(self.last_page_accessed){
+                //this is a pain.....
                 self.$router.push(self.last_page_accessed)
+                // self.$router.push('/dashboard');
+
             }
             else{
                 self.$router.push('/dashboard');
@@ -320,5 +288,38 @@ window.addEventListener('storage', function(e) {
         }
     }
 });
+
+//here is the guard.... super easy.... why is laravel a pain>
+router.beforeEach((to, from, next) => {
+
+    //strip query off?
+    // let uri = new JsUri(window.location.href);
+    // console.log ('might need to take control of the uri query');
+    // let query = uri.query();
+    // uri.queryPairs.forEach(pair => {
+    //     console.log(pair)
+    //     uri.deleteQueryParam(pair[0]);
+    // })
+    let token = localStorage.getItem('jwt-token')
+    if (to.meta.guarded) {
+        if (!token || token === null) {
+            next({path: '/auth/logout'});
+        }
+        else{
+            vm.last_page_accessed = to.fullPath;
+
+        }
+    }
+    next()
+})
+router.afterEach((to, from, next)=>{
+    if (to.meta.guarded) {
+        //console.log(to)
+        //console.log('store the path')
+       // vm.last_page_accessed = vm.to.fullPath;
+    }
+    //next()
+})
+
 
 ;
