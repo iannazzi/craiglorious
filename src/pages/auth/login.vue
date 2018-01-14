@@ -73,13 +73,16 @@
                     url: 'login',
                     entity: self.user,
                     onSuccess(response) {
-                        self.stopCheckLogin();
+                        //self.stopCheckLogin();
 
-                        console.log(response)
-                        localStorage.setItem('user', response.user);
+                        //console.log(response)
+                        console.log('log in success - set local storage')
+                        //console.log(response.token)
+                        //set the user first, then the token
+                        localStorage.setItem('user', JSON.stringify(response.user));
                         localStorage.setItem('jwt-token', response.token);
-                        //self.$emit('userHasLoggedIn', response.user);
-                        bus.$emit('userHasLoggedIn', response.user);
+
+                        bus.$emit('userHasLoggedIn');
                         bus.$emit('zzwaiteventover');
 
                         self.$router.push('/dashboard');

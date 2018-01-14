@@ -20,25 +20,47 @@ class AccessController extends Controller
 
     public function checkUserIsAuthenticated(Request $request)
     {
-        //at this point, we made it through middle ware so we are all set.....
-        $myAuth = new myAuth();
-        $myJwt = new myJwt();
-        $token = $myAuth->getTokenFromRequest($request);
+       //we do not want to send a new token down on this request...
+        //this is checking to see if the user is still logged in....
+        //user can be kicked out at any time by logging onto a different computer
 
-        $user =  \Config::get('user');
+        //even if we set timers on the client to log out a user the client would not know
+        //about other clients, so we have to continually check......
+
+        //at this point, we made it through middle ware so we are all set.....
+//        $myAuth = new myAuth();
+//        $myJwt = new myJwt();
+//        $token = $myAuth->getTokenFromRequest($request);
+//
+//        $user =  \Config::get('user');
 
         return response()->json([
             //'user' => $user,
-            'token' => $token,
+            //'token' => $token,
             'success' => true,
         ], 200);
 
     }
+
+    public function pageRefresh(Request $request){
+        //at this point, we made it through middle ware so we are all set.....
+//        $myAuth = new myAuth();
+//        $myJwt = new myJwt();
+//        $token = $myAuth->getTokenFromRequest($request);
+//
+        $user =  \Config::get('user');
+
+        return response()->json([
+            'user' => $user,
+            //'token' => $token,
+            'success' => true,
+        ], 200);
+    }
     public function craigSocket(Request $request){
 
-        //request is coming in every 10 seconds or so...
-        //if the token expired there would be a 401 and
-        //user would get booted
+        //craig socket is a little different than verify
+        //we call craig socket after user activity occurs
+        //we will refresh the token and send down a new one along with other data
 
         //seeing that the user is still active, give them a new token
         //which has a nice new expiration data

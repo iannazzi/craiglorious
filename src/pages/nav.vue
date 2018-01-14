@@ -31,7 +31,10 @@
                                 <ul class="dropdown-menu" uib-dropdown-menu role="menu"
                                     aria-labelledby="btn-append-to-to-body">
                                     <li role="menuitem">
-                                        <router-link to="/auth/logout">Logout</router-link>
+                                        <!--<router-link to="/auth/logout">Logout</router-link>-->
+                                        <p @click="logout">Logout</p>
+
+
                                     </li>
                                     <li class="divider"></li>
                                     <li role="menuitem">
@@ -61,11 +64,19 @@
     </nav>
 </template>
 <script>
+
     module.exports = {
         data: function () {
             return {
                 myUser,
                 navTitle: 'Vue.js',
+            }
+        },
+        methods: {
+            logout(){
+                console.log('got loggggerrrrr')
+                bus.$emit('userHasLoggedOut')
+
             }
         }
     }

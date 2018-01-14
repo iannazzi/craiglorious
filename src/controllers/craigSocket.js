@@ -3,7 +3,7 @@ export class craigSocket {
     constructor() {
         console.log('constructed....')
         this.craigsockettimer = null;
-        this.logintimer = null;
+        this.verifyTimer = null;
 
     }
 
@@ -23,25 +23,24 @@ export class craigSocket {
                 url: '/verify',
                 entity: false,
                 onSuccess(response) {
+                    console.log('from craig socket')
                     console.log(response);
 
                     //double check that there is a token there, a user on a different tab could have clicked logout while transmitting....
 
-                    if(localStorage.getItem('jwt-token') === null)
-                    {
+                    if (localStorage.getItem('jwt-token') === null) {
                         //got logged out from a different tab
                         // console.log('token deleted from storage before we got back....');
                         // console.log(response);
                         // bus.$emit('userHasLoggedOut');
                     }
-                    else
-                    {
+                    else {
                         //do not refresh the token
                     }
 
                 },
                 onError(response){
-                    console.log('unable to connect to server to verify');
+                    console.log('from craig socket: unable to connect to server to verify');
                     console.log(response);
                     bus.$emit('userHasLoggedOut');
                 }
@@ -56,5 +55,45 @@ export class craigSocket {
 
     }
 
+    verifyTimerStart() {
+        console.log('starting verify timer');
+        this.verifyTimer = setInterval(function () {
+            //verify token do not refresh
+            getData({
+                method: 'get',
+                url: '/verify',
+                entity: false,
+                onSuccess(response) {
+                    // console.log('from verify timer')
+                    // console.log(response);
+
+                    //double check that there is a token there, a user on a different tab could have clicked logout while transmitting....
+
+                    if (localStorage.getItem('jwt-token') === null) {
+                        //got logged out from a different tab
+                        // console.log('token deleted from storage before we got back....');
+                        // console.log(response);
+                        // bus.$emit('userHasLoggedOut');
+                    }
+                    else {
+                        //do not refresh the token
+                    }
+
+                },
+                onError(response){
+                    console.log('from verify timer: you got logged out');
+                    //console.log(response);
+                    bus.$emit('userHasLoggedOut');
+                }
+            })
+
+        }, 3000); // every 100 seconds
+    }
+
+    verifyTimerStop() {
+        console.log('stopping verify timer');
+        clearInterval(this.verifyTimer);
+
+    }
 
 }

@@ -2,8 +2,12 @@
 <script>
     export default {
         mounted(){
-            this.$root.destroyLogin();
-            this.$router.push('/auth/login');
+//            bus.$emit('userHasLoggedOut')
+
+        },
+        ready(){
+            bus.$emit('userHasLoggedOut')
+
         },
         route: {
             activate: function (transition) {

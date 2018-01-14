@@ -16,10 +16,10 @@ $api->version('v1', function ($api)
             //unrestricted authenticated user access pages
 
             $api->get('verify', 'Auth\AccessController@checkUserIsAuthenticated');
+            $api->get('auth', 'Auth\AccessController@pageRefresh');
             $api->get('craigsocket', 'Auth\AccessController@craigSocket');
 
             //i think these three are dead
-            $api->get('auth', 'Auth\AccessController@checkUserIsAuthenticated');
             $api->get('userid', 'Auth\AccessController@userid');
             $api->get('jwtdecode', 'Auth\AccessController@jwtdecode');
 
