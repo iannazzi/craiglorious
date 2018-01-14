@@ -122,7 +122,7 @@ let vm = new Vue({
     },
     //mixins: [myMixin],
     methods: {
-
+        //these should probably go to auth?
         setLogin: function () {
             // Save login info in our data and set header in case it's not set already
             let user = JSON.parse(localStorage.getItem('user'));
@@ -215,7 +215,7 @@ let vm = new Vue({
         let self = this;
         this.validateAuth();
 
-
+        //this should probably go to events/bus
         bus.$on('userHasLoggedOut', function (craigSocketId) {
             console.log('bus.... user logged out... destroying login');
             if (self.$route.path != '/auth/login')
@@ -230,15 +230,14 @@ let vm = new Vue({
             //self.getPageData();
             //console.log(self.$route.name);
             self.setLogin()
-            if(self.last_page_accessed === null){
-                self.$router.push('/dashboard');
+            if(self.last_page_accessed){
+                self.$router.push(self.last_page_accessed)
             }
             else{
-                self.$router.push(self.last_page_accessed)
+                self.$router.push('/dashboard');
             }
             cs.verifyTimerStart();
         })
-
         bus.$on('userInput', function () {
             console.log('user input detected.... ');
             if( ! self.inactivityTimer)
@@ -301,7 +300,7 @@ let vm = new Vue({
     },
 })
 
-
+//this should probalby go to events/window
 window.addEventListener('storage', function(e) {
     console.log('storage event listener fired')
     console.log(e);
