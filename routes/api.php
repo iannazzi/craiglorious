@@ -20,10 +20,10 @@ $api->version('v1', function ($api)
             $api->get('craigsocket', 'Auth\AccessController@craigSocket');
 
             //i think these three are dead
-            $api->get('userid', 'Auth\AccessController@userid');
-            $api->get('jwtdecode', 'Auth\AccessController@jwtdecode');
-
-            $api->get('updates', 'Auth\AccessController@getUpdates');
+//            $api->get('userid', 'Auth\AccessController@userid');
+//            $api->get('jwtdecode', 'Auth\AccessController@jwtdecode');
+//            $api->get('updates', 'Auth\AccessController@getUpdates');
+//
             $api->get('dashboard', 'DashboardController@index');
             $api->get('dashboard/cached_page_data', 'DashboardController@cachedPageData');
             $api->get('user/', 'UserController@getPreferences');
