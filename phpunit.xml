@@ -16,7 +16,6 @@
             <file>tests/in/LoginTest.php</file>
             <file>tests/in/RoleTest.php</file>
             <file>tests/in/UserTest.php</file>
-
             <file>tests/in/VendorTest.php</file>
 
 

@@ -60,7 +60,18 @@ class LoginTest extends ApiTester{
     {
 
         $this->signIn();
-        $url = $this->api('auth');
+        $url = $this->api('verify');
+
+        $this->get($url, $this->headers())
+            ->assertStatus(200);
+
+    }
+    /** @test */
+    public function craigsocket()
+    {
+
+        $this->signIn();
+        $url = $this->api('craigsocket');
 
         $this->get($url, $this->headers())
             ->assertStatus(200);
