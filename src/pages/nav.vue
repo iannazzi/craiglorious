@@ -32,7 +32,7 @@
                                     aria-labelledby="btn-append-to-to-body">
                                     <li role="menuitem">
                                         <!--<router-link to="/auth/logout">Logout</router-link>-->
-                                        <p @click="logout">Logout</p>
+                                        <a id='logout' @click="logout">Logout</a>
 
 
                                     </li>
@@ -81,3 +81,6 @@
         }
     }
 </script>
+<style>
+
+</style>
