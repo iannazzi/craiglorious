@@ -52,10 +52,12 @@ let commonRoute = function (route) {
 let routes = [
     {
         path: '',
+        redirect: 'auth/login',
         name: 'home',
         meta: {guarded: false},
         // component: require('./pages/dashboard/entry')
         component: require('./pages/home.vue')
+        // component: require('./pages/auth/login.vue')
 
     },
     {
