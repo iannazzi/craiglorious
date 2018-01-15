@@ -15,6 +15,13 @@
                 <div v-if="this.$root.appLoaded">
                     <div v-if="myUser.authenticated">
                         <ul class="nav navbar-nav navbar-right">
+
+                            <li>
+                                <router-link to="dashboard">
+                                    <i class="fa fa-dashboard fa-2x"></i></router-link>
+                            </li>
+
+                            <li><a href="" target="_blank"><i class="fa fa-plus-circle fa-2x"></i></a></li>
                             <li class="nav_text dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                    aria-haspopup="true"
@@ -32,13 +39,6 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
-                                <router-link to="dashboard">
-                                    <i class="fa fa-dashboard fa-2x"></i></router-link>
-                            </li>
-
-                            <li><a href="" target="_blank"><i class="fa fa-plus-circle fa-2x"></i></a></li>
-
                         </ul>
                     </div>
 

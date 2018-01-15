@@ -5,7 +5,7 @@ let mix = require('laravel-mix');
 
 mix.js('src/app.js', 'public/js').version();
 mix.sass('src/sass/app.scss', 'public/css').version();
-mix.js('src/server_connection.js', 'public/js/server_connection.js').version();
+//mix.js('src/server_connection.js', 'public/js/server_connection.js').version();
 
 mix.copy('node_modules/font-awesome/fonts/', 'public/fonts/');
 mix.copy('node_modules/fullcalendar/dist/fullcalendar.min.css', 'public/css/');

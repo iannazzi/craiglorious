@@ -26,10 +26,11 @@ class MyJwtMiddleWare
         $myAuth = new myAuth();
         if($myAuth->checkUserIsAuthenticated($request)){
 
-
+            //limit access to routes....
             $route = $request->route()->uri();
             $route = str_replace('/api/','',$route);
             //a few routes have special features....
+            //add them in to bypass view limitations
 
             $api = function ($name){
                 $api_prefix ='api';
@@ -37,7 +38,12 @@ class MyJwtMiddleWare
             };
             if($route == 'dashboard'
                 || $route == 'user'
+                || $route == 'craigsocket'
+                || $route == 'verify'
+                || $route == 'userid'
                 || $route == 'auth'
+
+
             )
             {
                 return $next($request);
@@ -61,7 +67,8 @@ class MyJwtMiddleWare
             }
 
             if(! $ok){
-                return response()->json(['error' => 'Why are you trying to access this route? Admins have been informed.'], 401);
+                return response()->json(['error' => 'Why are you trying to access this route? Admins have been informed.',
+                'route' => $route], 401);
             }
 
 

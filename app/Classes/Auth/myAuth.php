@@ -25,53 +25,77 @@ class myAuth
         $myAuth = new myAuth();
         $myJwt = new myJwt();
 
+        $token = $this->getTokenFromRequest($request);
+        if ($token_data = $this->myJwt->validateFirebaseToken($token))
+        {
+            $company = $token_data->data->company;
 
+            $system = System::where('company', $company)->first();
+            if ( ! $system)
+            {
+                abort(401, 'could not validate system.');
+            }
+            $system->createTenantConnection();
+            \Config::set('tenant_system', $system);
+
+            $id = $token_data->data->user_id;
+
+            $user = User::where('id', $id)
+                ->first();
+
+            if ( ! $user)
+            {
+                abort(401, 'could not validate user.');
+            }
+
+            //check the db that the unique id matches the db
+
+
+            \Config::set('user', $user);
+            \Config::set('company', $company);
+
+            $this->user = $user;
+            $unique_id = $token_data->data->unique_id;
+            if(! $this->checkUniqueIdInDb($user, $unique_id)){
+                abort(401, 'Unique Id does not match DB');
+            }
+
+            return true;
+
+        }
+        abort(401, 'could not validate token.');
+
+    }
+
+    public function getTokenFromRequest(Request $request)
+    {
         $authHeader = $request->headers->get('authorization');
-
         if ($authHeader)
         {
             $token = str_replace('Bearer ', '', $authHeader);
             if ($token)
             {
-
-                if ($token_data = $this->myJwt->validateFirebaseToken($token))
-                {
-
-                    $company = $token_data->data->company;
-
-                    $system = System::where('company', $company)->first();
-                    if ( ! $system)
-                    {
-                        abort(401, 'could not validate system.');
-                    }
-                    $system->createTenantConnection();
-                    \Config::set('tenant_system', $system);
-
-                    $id = $token_data->data->user_id;
-
-                    $user = User::where('id', $id)
-                        ->first();
-
-                    if ( ! $user)
-                    {
-                        abort(401, 'could not validate user.');
-                    }
-
-                    \Config::set('user', $user);
-                    $this->user = $user;
-
-                    return true;
-
-                }
-                abort(401, 'could not validate token.');
+                return $token;
             }
             abort(401, 'no token present');
         }
         abort(401, 'no auth header');
+
     }
 
+    public
+    function checkUniqueIdInDb($user, $unique_id)
+    {
+        $user_logged_in = \DB::select("SELECT user_id FROM users_logged_in WHERE user_id = ? AND unique_id =?", [$user->id, $unique_id]);
+        if (sizeof($user_logged_in) == 1)
+        {
+            return true;
+        }
+        return false;
+    }
 
-    public function addUserLoginToDb($request, $unique_id)
+    public
+    function addUserLoginToDb($request, $unique_id)
     {
         $user = $this->user;
         $this->deleteUserLogin($user);
@@ -82,7 +106,8 @@ class myAuth
 
     }
 
-    public function deleteUserLogin($user)
+    public
+    function deleteUserLogin($user)
     {
         \DB::delete(
             "DELETE FROM users_logged_in WHERE user_id = ?",
@@ -90,7 +115,8 @@ class myAuth
         );
     }
 
-    public function logAuthUserActivity($request)
+    public
+    function logAuthUserActivity($request)
     {
         //log the user ip address, browser, etc
         $ip = $request->ip();
@@ -102,7 +128,8 @@ class myAuth
 
     }
 
-    public function checkBrowserChange($request)
+    public
+    function checkBrowserChange($request)
     {
 
         //$unique_id = session('unique_id');

@@ -17,6 +17,7 @@
 
 
             document.addEventListener("keydown", function (event) {
+                bus.$emit('userInput');
                 meta_key = event.metaKey;
                 shift_key = event.shiftKey;
                 alt_key = event.altKey;
@@ -51,6 +52,11 @@
 
                 modifier1 = event.metaKey;
                 modifier2 = event.shiftKey;
+
+            })
+            document.addEventListener("click", function (event) {
+
+                bus.$emit('userInput');
 
             })
         }

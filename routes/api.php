@@ -14,7 +14,16 @@ $api->version('v1', function ($api)
         $api->group(['middleware' => ['MyJwtMiddleWare']], function ($api)
         {
             //unrestricted authenticated user access pages
+
+            $api->get('verify', 'Auth\AccessController@checkUserIsAuthenticated');
+            $api->get('craigsocket', 'Auth\AccessController@craigSocket');
+
+            //i think these three are dead
             $api->get('auth', 'Auth\AccessController@checkUserIsAuthenticated');
+            $api->get('userid', 'Auth\AccessController@userid');
+            $api->get('jwtdecode', 'Auth\AccessController@jwtdecode');
+
+            $api->get('updates', 'Auth\AccessController@getUpdates');
             $api->get('dashboard', 'DashboardController@index');
             $api->get('dashboard/cached_page_data', 'DashboardController@cachedPageData');
             $api->get('user/', 'UserController@getPreferences');

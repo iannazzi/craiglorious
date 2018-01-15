@@ -16,14 +16,18 @@
         },
         data(){
             return {
-                viewsLoaded: false
+                viewsLoaded: false,
+                refreshIntervalId : false
             }
         },
         mounted: function () {
             let self = this;
 
-
         },
+        methods:{
+
+
+        }
 
     }
 

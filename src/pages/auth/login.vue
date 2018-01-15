@@ -57,7 +57,8 @@
                     password: 'secret'
                 },
                 messages: [],
-                loggingIn: false
+                loggingIn: false,
+                loginTimer: null
             }
         },
 
@@ -67,45 +68,19 @@
                 bus.$emit('zzwaitevent');
                 let self = this
                 self.loggingIn = true
-                //client is from rest + mime https://github.com/cujojs/rest
-//                client({ path: 'login', entity: this.user }).then(
-//                    function (response) {
-//                        //not sure why I have to parse this
-//                        //also authoriztion header is stripped so fuck off
-//                       //let data = JSON.parse(response.entity);
-//                        localStorage.setItem('jwt-token', response.entity.token);
-//                        self.$emit('userHasLoggedIn', response.entity.user);
-//                        bus.$emit('userHasLoggedIn', response.entity.user);
-//                        bus.$emit('zzwaiteventover');
-//                        //localStorage.setItem('jobs', JSON.stringify(response.entity.jobs) )
-//                        //self.$emit('userHasFetchedToken', response.entity.token)
-//                        self.$router.push('/dashboard');
-//                    },
-//                    //second funciton is the error handler
-//                    function (response) {
-//                        bus.$emit('zzwaiteventover');
-//                        console.log(response)
-//                        self.messages = []
-//                        if (response.status && response.status.code === 401) self.messages.push({type: 'danger', message: 'Sorry, you provided invalid credentials'})
-//                        if (response.status && response.status.code === 0) self.messages.push({type: 'danger', message: 'It Looks Like the Server is Down'})
-//                        self.loggingIn = false
-//                        if (response.status && response.status.code === 5000) self.messages.push({type: 'danger', message: 'Dang, The Server Had an error'})
-//                        self.loggingIn = false
-//                    }
-//
-//                )
                 getData( {
                     method: 'post',
                     url: 'login',
                     entity: self.user,
                     onSuccess(response) {
+                        self.stopCheckLogin();
+
                         console.log(response)
                         localStorage.setItem('jwt-token', response.token);
-                        self.$emit('userHasLoggedIn', response.user);
+                        //self.$emit('userHasLoggedIn', response.user);
                         bus.$emit('userHasLoggedIn', response.user);
                         bus.$emit('zzwaiteventover');
-                        //localStorage.setItem('jobs', JSON.stringify(response.entity.jobs) )
-                        //self.$emit('userHasFetchedToken', response.entity.token)
+
                         self.$router.push('/dashboard');
                     },
                     onError(response) {
@@ -121,19 +96,56 @@
                     }
                 })
 
+            },
 
+            startCheckLogin: function() {
+                let self = this;
+                console.log('Turning on check login clock....');
+
+                this.loginTimer = setInterval(function () {
+                    console.log('checking if a different tab logged in....');
+                    let token = localStorage.getItem('jwt-token')
+                    if (token !== null) {
+
+
+
+                        getData( {
+                            method: 'get',
+                            url: 'userid',
+                            entity: token,
+                            onSuccess(response) {
+                                self.stopCheckLogin();
+                                console.log(response)
+                                //go to dashborad
+                                console.log('need to transition page to dashboard');
+                                bus.$emit('userHasLoggedIn', response.user);
+                                self.$router.push('/dashboard');
+                            },
+                            onError(response) {
+                                console.log('error at userid');
+                            }
+                        })
+
+
+                    }
+
+
+                }, 10000); // every 100 seconds
 
             },
 
+            stopCheckLogin: function() {
+                console.log('stopping login timer');
+                clearInterval(this.loginTimer);
+            }
+
         },
 
-        route: {
-            activate: function (transition) {
-                console.log('what is this for?')
-//                this.$dispatch('userHasLoggedOut')
-//                transition.next()
-            }
-        }
+        mounted: function () {
+
+            this.startCheckLogin();
+        },
+
     }
 
 </script>

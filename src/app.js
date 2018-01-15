@@ -1,9 +1,9 @@
 import './bootstrap';
 import router from './routes'
 import {getData} from './controllers/getData'
-import {validateLogin} from './controllers/auth/validateLogin';
 import {AwesomeTable} from './elements/tables/AwesomeTable';
 import {AwesomeTableWrapper} from './controllers/AwesomeTableWrapper'
+import {craigSocket} from './controllers/craigSocket'
 
 import {transformer} from './helpers/transformer'
 
@@ -14,6 +14,8 @@ import {transformer} from './helpers/transformer'
 window.transfomer = new transformer;
 window.AwesomeTableWrapper = new AwesomeTableWrapper();
 window.AwesomeTable = AwesomeTable;
+let cs = new craigSocket();
+window.cs = cs;
 
 //some globals please.....
 window.bus = new Vue();
@@ -94,6 +96,7 @@ new Vue({
             admin: false,
             cached_page_data: {},
             appLoaded: false,
+            inactivityTimer: false,
 
         }
     },
@@ -114,7 +117,7 @@ new Vue({
                 myUser.admin = false;
             }
             // broadcast an event telling our children the data is ready and views can be rendered
-            bus.$emit('authenticated')
+            //bus.$emit('authenticated')
         },
         destroyLogin: function (user) {
             if (0) ml('Login with our token failed, do some cleanup');
@@ -125,7 +128,7 @@ new Vue({
             myUser.authenticated = false;
             myUser.admin = false;
             localStorage.removeItem('jwt-token')
-
+            cs.stopCS();
             if (this.$route.meta.guarded) {
                 if (0) ml('app reloaded, login failed on a guarded route, going to login page');
                 this.$router.push('/auth/login')
@@ -149,8 +152,9 @@ new Vue({
                     onSuccess(response) {
                         console.log(response);
                         if (1) ml('validated token after refresh')
-                        self.setLogin(response.user)
+                        bus.$emit('userHasLoggedIn', response.user);
                         self.appLoaded = true;
+
                     },
                     onError(response){
                         console.log(response);
@@ -188,32 +192,79 @@ new Vue({
     mounted(){
         let self = this;
         this.validateAuth();
-        bus.$on('userHasLoggedOut', function () {
-            console.log('destroying login');
+
+
+        bus.$on('userHasLoggedOut', function (craigSocketId) {
+            console.log('bus.... user logged out... destroying login');
             self.destroyLogin()
         })
         bus.$on('userHasLoggedIn', function (user) {
             //self.getPageData();
+            console.log(self.$route.name);
             self.setLogin(user)
+            cs.startCS();
         })
 
-        $(function () {
-            setInterval(function checkSession() {
-                console.log('do it...');
+        bus.$on('userInput', function () {
+            console.log('user input detected.... ');
+
+            // check the token expiration time
+
+            if( ! self.inactivityTimer)
+            {
+                self.inactivityTimer=true
+
+                console.log('going to get some data ... ');
                 getData({
                     method: 'get',
-                    url: '/validate_token',
+                    url: '/craigsocket',
                     entity: false,
                     onSuccess(response) {
+                        console.log(response);
+
+                        //double check that there is a token there, a user on a different tab could have clicked logout while transmitting....
+
+                        if(localStorage.getItem('jwt-token') === null)
+                        {
+                            //got logged out from a different tab
+                           console.log('token deleted from storage before we got back....');
+                            console.log(response);
+                           bus.$emit('userHasLoggedOut');
+                        }
+                        else
+                        {
+                            //refresh the token
+                            console.log('refresh the token');
+                            localStorage.setItem('jwt-token', response.token);
+
+                            //update messages
+
+//wait
+                            console.log('starting a timer .... ');
+                            setTimeout(function(){
+
+                                self.inactivityTimer=false;
+
+
+                            }, 1000);
+                        }
+
                     },
                     onError(response){
+                        console.log('unable to connect to server');
                         console.log(response);
-                        self.destroyLogin();
+                        //bus.$emit('userHasLoggedOut');
                     }
-                })
 
-            }, 1000); // every 100 seconds
-        });
+                })
+                //check the token isn't stale
+
+
+            }
+
+
+
+        })
 
 
     },

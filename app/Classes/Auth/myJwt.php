@@ -18,7 +18,7 @@ class myJwt
         $tokenId = base64_encode(random_bytes(32));
         $issuedAt = time();
         $notBefore = $issuedAt;             //Adding 0 seconds
-        $expire = $notBefore + 3600;            // Adding 60 seconds
+        $expire = $notBefore + 20;            // Adding 60 seconds
         $serverName = 'notneeded'; // Retrieve the server name from config file Request::server('SERVER_NAME');
 
         /*

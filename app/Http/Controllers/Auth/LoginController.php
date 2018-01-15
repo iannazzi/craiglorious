@@ -44,10 +44,10 @@ class LoginController extends Controller
 
             $myAuth->user = $user;
 
-            //this allow only one login on one browser
+            // only one login on one browser
+            $myAuth->deleteUserLogin($user);
             $unique_id = uniqid();
             $myAuth->addUserLoginToDb($request, $unique_id);
-
             $token = $myJwt->createFirebaseToken($user, $company, $unique_id);
             return response()->json(compact('user', 'token'),200);
 
