@@ -54,7 +54,12 @@ abstract class ApiTester extends TestCase {
         return $system;
     }
 
-
+    public function indexSuccess($route){
+        $this->signIn();
+        $rawContent='{}';
+        $this->json('GET', $this->api($route), json_decode($rawContent, true),$this->headers())
+            ->assertJson(["success"=>'true']);
+    }
     public function searchSuccess($route, $rawContent){
         $this->signIn();
         $this->json('POST', $this->api($route . '/search'), json_decode($rawContent, true),$this->headers())
@@ -72,7 +77,7 @@ abstract class ApiTester extends TestCase {
     }
     public function deleteSuccess($route, $rawContent){
         $this->signIn();
-        $this->json('delete', $this->api($route), json_decode($rawContent, true),$this->headers())
+        $this->json('DELETE', $this->api($route), json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);
     }
 

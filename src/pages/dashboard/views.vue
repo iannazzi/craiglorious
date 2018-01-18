@@ -57,12 +57,9 @@
             this.query = '';
 
             let self = this;
-
             if( ! cached_page_data.views)
             {
                 if (1) ml('no cached_page_data got to go and get some')
-
-
                 getData( {
                     method: 'get',
                     url: '/dashboard',
@@ -74,14 +71,9 @@
                         });
                         self.loaded = true;
                         cached_page_data['views'] = self.views;
-                        self.$root.cached_page_data['views'] = self.views;
                         self.loadIcons();
                     },
                 })
-
-
-
-
 
             }
             else{
@@ -128,9 +120,6 @@
             ]
             $('#search_input').focus()
 
-            $(function(){
-            })
-
         },
         methods: {
             loadIcons: function () {
@@ -145,13 +134,14 @@
                     }
                 })
                 //if the search has a string display that
-                if (this.query != '') {
+                if (this.query !== '') {
+                    console.log(this.query)
                     this.views.forEach(function (view) {
                         if (view.name.toLowerCase().indexOf(that.query.toLowerCase()) >= 0) {
-                            view.show = true
+                            view.show = true;
                         }
                         else {
-                            view.show = false
+                            view.show = false;
                         }
                     })
                 }
@@ -169,13 +159,14 @@
                     })
                 }
                 else {
-//                    console.log('no active room or search qiuery display all')
+                    //console.log('no active room or search qiuery display all')
                     this.views.forEach(function (view) {
-                        view.show = true
+                        view.show = true;
                     })
                 }
             },
             searchKeyUp: function () {
+
                 this.rooms.forEach(function (room) {
                     room.active = false
                 });

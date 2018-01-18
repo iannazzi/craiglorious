@@ -48,6 +48,8 @@
     }
 </style>
 <script>
+    import {CalendarController} from '../../controllers/CalendarController.js'
+    let cc = new CalendarController();
     export default {
         data() {
             return {
@@ -55,10 +57,6 @@
             }
         },
         mounted: function () {
-
-            //cached page data...
-            console.log(this.$root.cached_page_data);
-            console.log(cached_page_data);
 
 
             let self = this;
@@ -120,13 +118,13 @@
                         eventDrop(event, delta, revertFunc, jsEvent, ui, view) {
 
                             if (copyKey) {
-                                console.log('save');
-                                self.save(event);
-                                let original_event = self.clone(event);
+                                console.log('copy save');
+                                cc.save(event);
+                                let original_event = cc.clone(event);
                                 original_event.id = '';
                                 original_event.start.subtract(delta);
                                 original_event.end.subtract(delta);
-                                self.save(original_event);
+                                cc.save(original_event);
 
 
                                 $('#calendar').fullCalendar('renderEvent', original_event);
@@ -135,13 +133,13 @@
                             else {
                                 console.log('save');
                                 //bus.$emit('move_event', event);
-                                self.save(event);
+                                cc.save(event);
                             }
 
                         },
                         eventResize: function (event, delta, revertFunc, jsEvent, ui, view) {
                             //bus.$emit('resize_event', event);
-                            self.save(event);
+                            cc.save(event);
                         },
                         header: {
                             left: 'prev,next today myCustomButton',
@@ -187,48 +185,8 @@
                 });
 
             },
-            save(event){
-
-                let post_data = {
-                    id: event.id,
-                    title: event.title,
-                    start: event.start.format('YYYY-MM-DD HH:MM:SS'),
-                    end: event.end.format('YYYY-MM-DD HH:MM:SS'),
-                    all_day: event.allDay,
-                    class_name: event.className[0],
-                    editable: 1,
-                    start_editable: 1,
-                    duration_editable: 1,
-                    resource_editable: 1,
-                }
-                let data = {data: post_data, _method: 'put'};
-
-                getData( {
-                    method: 'post',
-                    url: '/calendar',
-                    entity: data,
-                    onSuccess(response) {
-                        console.log('event_saved_from_main calendar');
-                    },
-                })
 
 
-            },
-            clone(event){
-                return {
-                    id: '',
-                    title: event.title,
-//                    start: event.start.format('YYYY-MM-DD HH:MM:SS'),
-//                    end: event.end.format('YYYY-MM-DD HH:MM:SS'),
-                    start: event.start.clone(),
-                    end: event.end.clone(),
-                    className: event.className,
-                    editable: event.editable,
-                    startEditable: event.startEditable,
-                    durationEditable: event.durationEditable,
-                    resourceEditable: event.resourceEditable,
-                }
-            }
         }
 
     }

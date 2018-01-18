@@ -16,6 +16,8 @@
             <file>tests/in/LoginTest.php</file>
             <file>tests/in/RoleTest.php</file>
             <file>tests/in/UserTest.php</file>
+            <file>tests/in/RegisterTest.php</file>
+
             <file>tests/in/VendorTest.php</file>
 
 
@@ -33,7 +35,7 @@
         <testsuite name="login">
             <file>tests/in/LoginTest.php</file>
         </testsuite>
-        <testsuite name="register_not_working">
+        <testsuite name="register">
             <file>tests/in/RegisterTest.php</file>
         </testsuite>
         

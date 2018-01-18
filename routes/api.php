@@ -10,6 +10,7 @@ $api->version('v1', function ($api)
     $api->group(['namespace' => 'App\Http\Controllers', 'middleware' => '\Barryvdh\Cors\HandleCors::class'], function ($api)
     {
         $api->post('login', 'Auth\LoginController@postLogin');
+        $api->post('register', 'Auth\RegisterController@postRegister');
 
         $api->group(['middleware' => ['MyJwtMiddleWare']], function ($api)
         {

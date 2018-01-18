@@ -29,7 +29,6 @@ export function getData (options) {
 
 
 
-
     client({path:options.url, entity:options.entity, params:options.params,method:options.method,}).then(
             function (response) {
                 //success
@@ -37,8 +36,17 @@ export function getData (options) {
                 options.onSuccess(response.entity);
             },
             function (response) {
-                //error
-                options.onError(response.entity);
+                if (typeof options.onError === 'function')
+                {
+                    options.onError(response.entity);
+                }
+                else
+                {
+                    console.log('there was an error from the request')
+                    console.log(response);
+                }
+
+
             });
     }
 

@@ -23,8 +23,8 @@ export class craigSocket {
                 url: '/verify',
                 entity: false,
                 onSuccess(response) {
-                    console.log('from craig socket')
-                    console.log(response);
+                    // console.log('from craig socket')
+                    // console.log(response);
 
                     //double check that there is a token there, a user on a different tab could have clicked logout while transmitting....
 

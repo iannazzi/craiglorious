@@ -78,10 +78,8 @@ let vm = new Vue({
             token: null,
             authenticated: false,
             admin: false,
-            cached_page_data: {},
             appLoaded: false,
             inactivityTimer: false,
-            last_page_accessed: null
 
         }
     },
@@ -111,6 +109,8 @@ let vm = new Vue({
             this.token = null
             this.authenticated = false
             this.admin = false
+            window.cached_page_data = {};
+
             myUser.authenticated = false;
             myUser.admin = false;
             localStorage.removeItem('user')
@@ -138,7 +138,7 @@ let vm = new Vue({
                     onSuccess(response) {
                         console.log(response);
                         if (1) ml('validated token after refresh')
-                        localStorage.setItem('user', JSON.stringify(response.user));
+                        //localStorage.setItem('user', JSON.stringify(response.user));
                         bus.$emit('userHasLoggedIn');
                         self.appLoaded = true;
 
@@ -160,20 +160,20 @@ let vm = new Vue({
 
             }
         },
-        getPageData(){
-            //site wide data // kinda a bad idea, pretty complicated additional logic.....
-            let self = this;
-            getData({
-                method: 'get',
-                url: '/dashboard/cached_page_data',
-                entity: false,
-                onSuccess(response) {
-                    if (1) ml('updated cached page data')
-                    self.cached_page_data = response.cached_page_data;
-                },
-
-            })
-        }
+        // getPageData(){
+        //     //site wide data // kinda a bad idea, pretty complicated additional logic.....
+        //     let self = this;
+        //     getData({
+        //         method: 'get',
+        //         url: '/dashboard/cached_page_data',
+        //         entity: false,
+        //         onSuccess(response) {
+        //             if (1) ml('updated cached page data')
+        //             self.cached_page_data = response.cached_page_data;
+        //         },
+        //
+        //     })
+        //}
     },
 
     mounted(){
@@ -190,14 +190,16 @@ let vm = new Vue({
             cs.verifyTimerStop();
             self.destroyLogin()
             self.$router.push('/auth/login');
+
         })
         bus.$on('userHasLoggedIn', function (user) {
             //self.getPageData();
             //console.log(self.$route.name);
             self.setLogin()
-            if(self.last_page_accessed){
-                //this is a pain.....
-                self.$router.push(self.last_page_accessed)
+            let last_page_accessed = localStorage.getItem('last_page_accessed')
+
+            if(last_page_accessed){
+                self.$router.push(last_page_accessed)
                 // self.$router.push('/dashboard');
 
             }
@@ -263,8 +265,6 @@ let vm = new Vue({
 
 
         })
-
-
     },
 })
 
@@ -306,7 +306,8 @@ router.beforeEach((to, from, next) => {
             next({path: '/auth/logout'});
         }
         else{
-            vm.last_page_accessed = to.fullPath;
+            //vm.last_page_accessed = to.fullPath;
+            localStorage.setItem('last_page_accessed', to.fullPath)
 
         }
     }

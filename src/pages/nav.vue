@@ -17,7 +17,7 @@
                         <ul class="nav navbar-nav navbar-right">
 
                             <li>
-                                <router-link to="dashboard">
+                                <router-link to="/dashboard">
                                     <i class="fa fa-dashboard fa-2x"></i></router-link>
                             </li>
 
@@ -42,7 +42,7 @@
                                     </li>
                                 </ul>
                             </li>
-                        </ul>
+a                        </ul>
                     </div>
 
                     <div v-else>
@@ -75,6 +75,8 @@
         methods: {
             logout(){
                 console.log('got loggggerrrrr')
+                //a couple of special things here....
+                localStorage.clear('last_page_accessed');
                 bus.$emit('userHasLoggedOut')
 
             }

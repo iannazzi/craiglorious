@@ -68,8 +68,8 @@
                     company: 'Change me',
                     name: 'Peter',
                     email: 'Peter@changeme.com',
-                    password: 'iluv2tow',
-                    password_confirmation: 'iluv2tow'
+                    password: 'secret',
+                    password_confirmation: 'secret'
                 },
                 messages: [],
                 registering: false
@@ -83,33 +83,43 @@
                 var that = this
                 alert('registering')
                 that.registering = true
-                client({ path: '/register', entity: this.user }).then(
-                    function (response) {
-                        that.getUserData()
+
+                getData( {
+                    method: 'post',
+                    url: 'register',
+                    entity: self.user,
+                    onSuccess(response) {
+                        //self.stopCheckLogin();
+
+                        //console.log(response)
+                        console.log('log in success - set local storage')
+                        //console.log(response.token)
+                        //set the user first, then the token
+                        localStorage.setItem('user', JSON.stringify(response.user));
+                        localStorage.setItem('jwt-token', response.token);
+
+                        bus.$emit('userHasLoggedIn');
+                        bus.$emit('zzwaiteventover');
+
+
+
+                        //self.$router.push('/dashboard');
                     },
-                    function (response, status) {
-                        that.messages = []
-                        if (response.status && response.status.code === 422) {
-                            console.log(response)
-                            that.messages = []
-                            for (var key in response.entity.errors) {
-                                that.messages.push({type: 'danger', message: response.entity.errors[key]})
-                                that.registering = false
-                            }
-                        }
-                    }
-                )
+                    onError(response) {
+                        bus.$emit('zzwaiteventover');
+                        console.log(response)
+                        self.messages = []
+                        if (response.status && response.status.code === 401) self.messages.push({type: 'danger', message: 'Sorry, you provided invalid credentials'})
+                        if (response.status && response.status.code === 0) self.messages.push({type: 'danger', message: 'It Looks Like the Server is Down'})
+                        self.loggingIn = false
+                        if (response.status && response.status.code === 5000) self.messages.push({type: 'danger', message: 'Dang, The Server Had an error'})
+                        self.loggingIn = false
 
-            },
-
-            getUserData: function () {
-                var that = this
-                client({ path: '/users/me' }).then(
-                    function (response) {
-                        that.$dispatch('userHasLoggedIn', response.entity.user)
-                        that.$route.router.go('/auth/profile')
                     }
-                )
+                })
+
+
+
             }
         }
     }

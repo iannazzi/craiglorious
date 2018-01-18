@@ -2,10 +2,10 @@
     <div>
         <nav-component></nav-component>
         <div class="container app-screen">
-            <div class="col-md-9">
+            <div class="col-md-9 col-md-offset-1 ">
                 <div class="tab-content">
                     <div class="tab-pane">
-                        <div class="panel panel-default">
+                        <div class="panel panel-default ">
                             <router-view></router-view>
                         </div>
                     </div><!-- End tab panel -->
@@ -15,3 +15,7 @@
         <footer-component></footer-component>
     </div>
 </template>
+
+<style>
+
+</style>

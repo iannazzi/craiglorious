@@ -69,8 +69,10 @@ class UserController extends Controller
 
         //dd($this->return_data['roles']);
         $number_of_records_available = User::all()->count();
-        $return_data = \App\Classes\Views\CIResponse::response();
+
+        $return_data =  $user;
         $return_data['roles'] = $user->role->getRoleSelectTree();
+
         $return_data['page'] = 'index';
         $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
@@ -123,7 +125,9 @@ class UserController extends Controller
         $return_data['page'] = 'edit';
         $passcode = unique_random('users', 'passcode', 5, 'number');
         $password = createPassword();
-        $return_data = \App\Classes\Views\CIResponse::response();
+
+        $user =  \Config::get('user');
+        $return_data = $user;
         $return_data['pass'] = $password;
         $return_data['code'] = $passcode;
 

@@ -3,7 +3,7 @@ process.env.DISABLE_NOTIFIER = true
 let mix = require('laravel-mix');
 
 
-mix.js('src/app.js', 'public/js').version();
+mix.js('src/app.js', 'public/js').extract(['jquery','lodash','vue',]).version();
 mix.sass('src/sass/app.scss', 'public/css').version();
 
 // mix.copy('node_modules/jquery/dist/jquery.min.js', 'public/js/');

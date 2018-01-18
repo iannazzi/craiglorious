@@ -19,8 +19,7 @@ class UserTest extends ApiTester
     /** @test */
     function index()
     {
-        $this->signIn();
-        $this->get($this->route);
+        $this->indexSuccess($this->route);
     }
 
     /** @test */

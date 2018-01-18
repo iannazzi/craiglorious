@@ -37,6 +37,9 @@
                 $('#calendar').fullCalendar({
                     height: 100,
                     header:false,
+                    editable: false,
+                    eventStartEditable: false,
+
 
                     eventClick:  function(event, jsEvent, view) {
 
