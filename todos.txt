@@ -1,0 +1,19 @@
+### Todos - for use....
+
+get an employee scheduler code...
+create a purchase order
+
+create accounts
+
+### Todos - for full release
+Mail - registration email, confirmation method, password reset email....
+
+### Bugs
+
+frontend dashboard search for a view breaks,
+    ex asdfsad then delete you will be missing icons... refresh or click a room button on and off
+    checked that the view values are set correct,
+    I think it is something with v-show or v-if....is busted beyond my control
+
+
+

@@ -13,8 +13,6 @@ class RegisterTenant {
         return System::create([
             'name' => $data['name'],
             'company' => $data['company'],
-            'phone' => $data['phone'],
-            'address' => $data['address'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'active' => 0,

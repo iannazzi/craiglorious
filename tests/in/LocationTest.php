@@ -20,7 +20,7 @@ class LocationTest extends ApiTester
     {
         $this->signIn();
         $this->get($this->route);
-    }
+   }
     /** @test */
     function can_be_searched_raw_json()
     {

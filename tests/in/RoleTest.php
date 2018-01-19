@@ -19,8 +19,8 @@ class RoleTest extends ApiTester
     function index()
     {
 
-        $this->signIn();
-        $this->get($this->api($this->route), $this->headers())->assertStatus(200);
+        $this->indexSuccess($this->route);
+
 
     }
     /** @test */

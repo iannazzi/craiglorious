@@ -3,17 +3,15 @@ use Tests\ApiTester;
 use App\Models\Tenant\User;
 
 class RegisterTest extends ApiTester{
-
+    protected $route = 'register';
 
     /** @test */
     function register_system()
     {
-        $rawContent = '{"search_fields":{"vendor_table_id":"123","vendor_table_name":"","vendor_table_account_number":"","vendor_table_active":"null"},"table_name":"vendor_table"}';
+        $rawContent = '{"company":"Change me","name":"Peter","email":"Peter@changeme.com","password":"secret235","password_confirmation":"secret235"}';
 
-        $this->searchSuccess($this->route, $rawContent);
-
-        $this->json('POST', '/api/register', ['company' => $this->faker->company, 'name' => $this->faker->name, 'email' => $this->faker->email, 'password' => 'iluv2tow', 'password_confirmation'=>'iluv2tow'])
-            ->see('token');
+        $this->json('POST', '/api/register', ['company' => $this->faker->company, 'name' => $this->faker->name, 'email' => $this->faker->email, 'password' => 'secret235', 'password_confirmation'=>'secret235'])
+            ->assertJson(["success"=>'true']);
 
 
 //        $res = $this->post('/api/register', ['company' => 'peache', 'name'=> 'JD', 'email'=> 'test@test.com']);

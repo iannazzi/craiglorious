@@ -17,10 +17,8 @@
             <file>tests/in/RoleTest.php</file>
             <file>tests/in/UserTest.php</file>
             <file>tests/in/RegisterTest.php</file>
-
             <file>tests/in/VendorTest.php</file>
-
-
+            <file>tests/in/AccountTest.php</file>
 
         </testsuite>
         <testsuite name="environment">
@@ -56,6 +54,9 @@
         </testsuite>
         <testsuite name="calendar">
             <file>tests/in/CalendarEntryTest.php</file>
+        </testsuite>
+        <testsuite name="account">
+            <file>tests/in/AccountTest.php</file>
         </testsuite>
 
 

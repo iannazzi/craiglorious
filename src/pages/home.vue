@@ -14,6 +14,8 @@
     </div>
 </template>
 <script>
+    //inspiration layout pages
+    //https://www.sparkpost.com/
     module.exports = {
 
         data: function () {

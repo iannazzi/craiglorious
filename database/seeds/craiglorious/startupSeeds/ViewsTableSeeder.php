@@ -19,7 +19,7 @@ class ViewsTableSeeder extends Seeder
                 'route'=> 'calendar',
             ],
             [
-                'name' => 'Chart Of Accounts',
+                'name' => 'Accounts',
                 'icon' => 'fa fa-list',
                 'place' => json_encode(['Office']),
                 'priority'=> 0,

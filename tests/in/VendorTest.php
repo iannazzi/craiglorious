@@ -29,10 +29,10 @@ class VendorTest extends ApiTester
 
         $this->searchSuccess($this->route, $rawContent);
     }
-
-
-
+//
 //    /** @test */
+//
+//
 //    function are_loaded()
 //    {
 //        $system = $this->getSystem();

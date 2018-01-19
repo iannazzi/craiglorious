@@ -2,67 +2,70 @@
 
 
 use App\Models\Tenant\Account;
-use App\Models\Tenant\Address;
-use App\Models\Tenant\ChartOfAccount;
-use App\Models\Tenant\Company;
-use App\Models\Tenant\Store;
-use App\Models\Tenant\Vendor;
-use Iannazzi\Generators\DatabaseImporter\DatabaseCSVCreator;
-use Iannazzi\Generators\DatabaseImporter\DatabaseDataImporter;
 use Tests\ApiTester;
 
 
 class AccountTest extends ApiTester
 {
 
+    protected $route = 'accounts';
 
     /** @test */
-    function a_company_is_added()
-    {
-
-        $system = $this->getSystem();
-        $company = factory(Company::class,'embrasse-moi')->create();
-        $em =  Company::find(1);
-        $this->assertEquals('Embrasse-Moi', $em->name);
-    }
-    /** @test */
-    function a_store_is_added()
+    function loaded()
     {
         $system = $this->getSystem();
-        $store = factory(Store::class,'embrasse-moi')->create();
-
-        $store =  Store::find(1);
-        $this->assertEquals('Pittsford', $store->name);
-
-    }
-
-    /** @test */
-    function accounts_are_loaded()
-    {
-        $system = $this->getSystem();
-        $cash = factory(Account::class, 'bank',1)->create();
-        $cash = factory(Account::class, 'cash',1)->create();
-        $ccs = factory(Account::class,'credit cards', 1)->create();
-
-
         $this->assertNotNull(Account::all());
-
     }
     /** @test */
-    function vendors_are_loaded()
+    function index()
     {
-        $system = $this->getSystem();
-        factory(Vendor::class,'inventory', 1)->create();
-        factory(Vendor::class,'expense', 1)->create();
-        $this->assertNotNull(Vendor::all());
+        $this->indexSuccess($this->route);
     }
     /** @test */
-    function inventory_vendors_are_imported_from_pos()
+    function can_be_searched_raw_json()
     {
-        $system = $this->getSystem();
+        $rawContent = '{"search_fields":{"accounts_id":"1","accounts_parent_id":"null","accounts_name":"","accounts_active":"null","accounts_comments":""},"table_name":"accounts"}';
 
-        //DatabaseDataImporter::importVendors('POS');
+        $this->searchSuccess($this->route, $rawContent);
+
     }
+//    /** @test */
+//    function can_be_created()
+//    {
+//
+//        $rawContent = '{"data":[{"id":"","parent_id":"1","name":"'. $this->faker->name . '","barcode":"1234","active":1,"comments":"asdf"}],"_method":"put"}';
+//
+//        $this->createSuccess($this->route, $rawContent);
+//
+//    }
+//    /** @test */
+//    function can_be_updated()
+//    {
+//
+//        $rawContent = '{"data":[{"id":6,"parent_id":"1","name":"a98","barcode":"1234","active":1,"comments":"asdf"}],"_method":"put"}';
+//
+//        $this->updateSuccess($this->route, $rawContent);
+//
+//    }
+//    /** @test */
+//    function can_be_destroyed()
+//    {
+//        $rawContent = '{"_method":"delete","data":{"id":1}}';
+//
+//        $this->deleteSuccess($this->route, $rawContent);
+//
+//
+//    }
+
+
+
+
+
+
+
+
+
+
 
 
 }

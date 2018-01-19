@@ -80,10 +80,10 @@
             registerUser: function (e) {
 
                 e.preventDefault()
-                var that = this
+                var self = this
                 alert('registering')
-                that.registering = true
-
+                self.registering = true
+                    console.log(JSON.stringify(self.user))
                 getData( {
                     method: 'post',
                     url: 'register',

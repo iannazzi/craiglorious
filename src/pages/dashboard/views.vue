@@ -26,7 +26,7 @@
 
         </div>
         <div v-if="loaded" class="views_div row">
-            <div v-for="view in views" v-show="view.show" class="dashbtn">
+            <div v-for="view in views" v-if="view.show" class="dashbtn">
                 <router-link :to="view.route">
 
                     <div id="dashicon"><i class="fa-3x" v-bind:class="view.icon" aria-hidden="true"></i>
@@ -137,10 +137,11 @@
                 if (this.query !== '') {
                     console.log(this.query)
                     this.views.forEach(function (view) {
-                        if (view.name.toLowerCase().indexOf(that.query.toLowerCase()) >= 0) {
+                        if (view.name.toLowerCase().includes(that.query.toLowerCase())) {
                             view.show = true;
                         }
                         else {
+                            console.log('hide' + view.name)
                             view.show = false;
                         }
                     })
