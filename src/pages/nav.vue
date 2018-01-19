@@ -76,7 +76,9 @@ a                        </ul>
             logout(){
                 console.log('got loggggerrrrr')
                 //a couple of special things here....
-                localStorage.clear('last_page_accessed');
+                //can't use local storage with differnt tabs
+                //localStorage.clear('last_page_accessed');
+                this.root.last_page_accessed = null;
                 bus.$emit('userHasLoggedOut')
 
             }

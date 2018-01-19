@@ -70,6 +70,12 @@ abstract class ApiTester extends TestCase {
         $this->json('PUT', $this->api($route), json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);
     }
+    public function showSuccess($route, $id){
+        $this->signIn();
+        $rawContent='{}';
+        $this->json('GET', $this->api($route).'/'.$id, json_decode($rawContent, true),$this->headers())
+            ->assertJson(["success"=>'true']);
+    }
     public function updateSuccess($route, $rawContent){
         $this->signIn();
         $this->json('PUT', $this->api($route), json_decode($rawContent, true),$this->headers())

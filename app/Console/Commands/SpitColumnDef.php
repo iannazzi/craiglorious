@@ -71,7 +71,7 @@ class SpitColumnDef extends Command
                     "class" => '',
                     "events" => [],
                     "search" => "LIKE ANY BETWEEN EXACT",
-                    "search_default" => "",
+                    "search_default" => "add data here for the default in the search box",
                     "properties" => [],
                     "total" => 0,
                     "round" => 0,

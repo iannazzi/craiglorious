@@ -165,12 +165,17 @@ export class TableView {
             });
             this.addEvents(col_def, element);
             this.addProperties(col_def, element);
+
             element.value = data;
+
             return element;
         }
         else
         {
-            return document.createTextNode(data);
+            if(data) {
+                return document.createTextNode(data);
+            }
+            return document.createTextNode('');
         }
 
 
@@ -323,7 +328,10 @@ export class TableView {
         }
         else
         {
-            return document.createTextNode(data);
+            if(data) {
+                return document.createTextNode(data);
+            }
+            return document.createTextNode('');
         }
     }
     createPasswordInput(col_def, data){

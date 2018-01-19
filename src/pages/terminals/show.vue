@@ -44,6 +44,7 @@
             AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
 
         },
+        mixins: [recordPageMixins],
         methods: {
             renderTable(){
                 let self = this;

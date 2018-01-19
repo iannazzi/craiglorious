@@ -129,30 +129,24 @@ export class UriController{
         })
 
     }
-    loadFromStorage(){
-        console.log('loading search from storage')
-        let search_values = this.loadSearchFromStorage()
-        console.log('loading sort from storage')
-        this.loadSortFromStorage();
-        return search_values;
-    }
     checkStorage() {
         // console.log('checkStorageForSearch ' + this.stored_search_key);
-        return sessionStorage[this.stored_search_key]
+        return window.storage[this.stored_search_key]
 
     }
 
     retrieveSearch() {
-        return JSON.parse(sessionStorage[this.stored_search_key]);
+        return JSON.parse(window.storage[this.stored_search_key]);
     }
 
     storeSearch() {
         let search_values = this.controller.getSearchFormValues();
-        sessionStorage[this.stored_search_key] = JSON.stringify(search_values);
+        window.storage[this.stored_search_key] = JSON.stringify(search_values);
+        //sessionStorage[this.stored_search_key] = JSON.stringify(search_values);
     }
     loadSearchFromStorage() {
         console.log('loading search values from storage')
-        console.log(sessionStorage[this.stored_search_key])
+        console.log(window.storage[this.stored_search_key])
         let stored_values = this.retrieveSearch();
         this.controller.view.search_elements.forEach(element => {
             if (stored_values[element.name]) {
@@ -182,8 +176,8 @@ export class UriController{
     //     })
     // }
     loadSortFromStorage() {
-        if(sessionStorage[this.stored_sort_key]){
-            this.controller.model.sort = JSON.parse(sessionStorage[this.stored_sort_key]);
+        if(window.storage[this.stored_sort_key]){
+            this.controller.model.sort = JSON.parse(window.storage[this.stored_sort_key]);
         }
     }
     removeSort(name) {
@@ -202,8 +196,8 @@ export class UriController{
         //this.removeSortFromUri(uri);
         //console.log('pushing ' + uri.toString())
         //this.pushState(uri);
-        delete sessionStorage[this.stored_search_key];
-        delete sessionStorage[this.stored_sort_key];
+        delete window.storage[this.stored_search_key];
+        delete window.storage[this.stored_sort_key];
         this.resetStoredSort();
 
         //this callback should send it

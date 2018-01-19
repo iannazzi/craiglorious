@@ -42,7 +42,6 @@
         mixins:[recordPageMixins],
         props: ['page','justcreated', 'route'],
         mounted: function () {
-            console.log(this.route)
             AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
 
         },

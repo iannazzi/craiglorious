@@ -38,6 +38,7 @@
                 dataReady: false,
             }
         },
+        mixins: [recordPageMixins],
         props: ['page','justcreated', 'route'],
         mounted: function () {
 

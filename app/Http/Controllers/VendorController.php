@@ -23,7 +23,7 @@ class VendorController extends Controller
 
 
         $q = Vendor::where('name', 'LIKE', "%{$name}%")
-            ->where('account_number', 'LIKE', "%{$account_number}%")
+       //     ->where('account_number', 'LIKE', "%{$account_number}%")
             ->where('id', 'LIKE', "%{$id}%");
         if ($active != 'null')
         {

@@ -19,10 +19,10 @@ class CreateAccountsTable extends Migration
             $table->string('account_number');
             $table->string('routing_number');
             $table->string('type');
-            $table->boolean('required');
+            $table->boolean('required')->nullable();
             $table->text('description')->nullable();
 
-            $table->integer('parent_id')->unsigned()->index();
+            $table->integer('parent_id')->unsigned()->index()->nullable();
             $table->integer('linked_id')->unsigned()->index(); //debit cards, cc multiple users
             $table->integer('autopay_id')->unsigned()->index();
             $table->integer('default_id')->unsigned()->index();

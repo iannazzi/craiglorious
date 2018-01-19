@@ -5,34 +5,7 @@ use App\Models\Craiglorious\AccountType;
 
 class Account extends BaseTenantModel {
 //use account to track what you buy
-
-
-	public function accountNotes()
-	{
-		/*
-		 * Account notes
-		 *
-		 * I want to hide as many accounts as possible
-		 * They should show up as needed
-		 *
-		 * For example sales tax: We need to pay new york state, other states show up as needed
-		 *
-		 *
-		 *Fixed Assets: Financial start date for fixed assets
-		 *ASset: asset numner (fa-0001)
-		 * purchase date
-		 * purchase price
-		 * description
-		 */
-	}
-	public function automaticAccount()
-	{
-		//create these accounts automatically
-		//accounts receivable
-		//accounts payable
-		//undeposited funds
-		//inventory asset
-	}
+    protected $guarded = ['id'];
 	public static function getAccountTypes()
 	{
 		return [
@@ -83,6 +56,11 @@ class Account extends BaseTenantModel {
                 'value' => 'Credit Card',
                 'description' => 'Credit Cards'
 			],
+            [
+                'name' => 'Current Liability',
+                'value' => 'Current Liability',
+                'description' => 'Customer Deposits, Sales Tax, Payroll Tax'
+            ],
 			[
 				'name' => 'Other Current Liability',
                 'value' => 'Other Current Liability',

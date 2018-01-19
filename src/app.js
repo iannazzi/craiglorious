@@ -36,6 +36,7 @@ window.myUser = {
     admin: false
 }
 window.cached_page_data = {};
+window.storage = {};
 
 //wrap ajax calls in case i need to swap out rest for axios
 window.getData = getData;
@@ -80,6 +81,7 @@ let vm = new Vue({
             admin: false,
             appLoaded: false,
             inactivityTimer: false,
+            last_page_accessed: null
 
         }
     },
@@ -196,8 +198,8 @@ let vm = new Vue({
             //self.getPageData();
             //console.log(self.$route.name);
             self.setLogin()
-            let last_page_accessed = localStorage.getItem('last_page_accessed')
-
+            // let last_page_accessed = localStorage.getItem('last_page_accessed')
+            let last_page_accessed = self.last_page_accessed;
             if(last_page_accessed){
                 self.$router.push(last_page_accessed)
                 // self.$router.push('/dashboard');
@@ -306,8 +308,9 @@ router.beforeEach((to, from, next) => {
             next({path: '/auth/logout'});
         }
         else{
-            //vm.last_page_accessed = to.fullPath;
-            localStorage.setItem('last_page_accessed', to.fullPath)
+            vm.last_page_accessed = to.fullPath;
+            //cant use local storage due to different tabs
+            //localStorage.setItem('last_page_accessed', to.fullPath)
 
         }
     }

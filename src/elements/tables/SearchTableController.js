@@ -67,6 +67,7 @@ export class SearchTableController extends CollectionTableController {
     }
     populateSearchValuesFromDefaultValues()
     {
+        // console.log('populating search values');
         this.model.cdo.forEach(col_def => {
             if (typeof col_def['search_default'] != 'undefined') {
                 if (col_def['type'] == 'date'){
@@ -81,17 +82,14 @@ export class SearchTableController extends CollectionTableController {
         })
     }
 
-    getSearchRecordsAndDisplay(){
+
+    getAndRenderSearch(){
         let controller = this;
-        if(typeof controller.model.options.onSearching=== 'function'){
-            controller.model.options.onSearching();
-        }
         controller.model.options.getData({
             method: 'post',
             url: '/' + controller.model.options.search_route,
             entity: controller.getSearchPostData(),
             onSuccess: function (response) {
-
 
                 controller.model.loadData(response.data.records)
                 if(response.data.records.length>0){
@@ -113,50 +111,6 @@ export class SearchTableController extends CollectionTableController {
             }
 
         })
-    }
-
-    getDefaultRecordsAndDisplay(){
-
-        if(this.model.options.number_of_records_available <= this.model.options.number_of_records_to_automatically_get)
-        {
-            //press search
-            this.view.searchClicked.notify();
-        }
-        else{
-            let message = "There are " + this.model.options.number_of_records_available + " records available, please search to limit the results.";
-            this.view.addMessageInsteadOfTable(message)
-        }
-
-
-
-
-        //
-        // //if the number of records available is < default amount to just download, then simply press search
-        //
-        // let controller = this;
-        // // if(typeof controller.model.options.onSearching=== 'function'){
-        // //     controller.model.options.onSearching();
-        // // }
-        // controller.model.options.getData({
-        //     method: 'get',
-        //     url: '/' + controller.model.options.route,
-        //     entity: {number_of_records:controller.model.options.number_of_records_to_automatically_download},
-        //     onSuccess: function (response) {
-        //         console.log(response.data.records)
-        //         if(response.data.records.length>0){
-        //             controller.model.loadData(response.data.records)
-        //             controller.view.addDataTable();
-        //             controller.setFocusToFirstInputOfSearch()
-        //         }
-        //         else{
-        //             console.log(response.number_of_records_available)
-        //             let message = "There are " + response.data.number_of_records_available + " records available, please search to limit the results.";
-        //             controller.view.addMessageInsteadOfTable(message)
-        //         }
-        //
-        //     }
-        //
-        // })
     }
 
 
