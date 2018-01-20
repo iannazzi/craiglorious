@@ -45,6 +45,7 @@ class MigrateCraigloriousCommand extends Command
         Artisan::call('migrate', [
                 '--path' => "database/migrations/craiglorious",
                 '--database' => 'main',
+                '--force'
             ]);
 //        Artisan::call('migrate', [
 //            '--path' => "database/migrations/craiglorious",
