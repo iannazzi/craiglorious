@@ -43,6 +43,7 @@ class CraigloriousDatabaseTest extends ApiTester
         Artisan::call('migrate', [
             '--path' => "database/migrations/craiglorious",
             '--database' => 'main',
+            '--force' => '1'
         ]);
         echo 'Migrations Complete' .PHP_EOL;
     }

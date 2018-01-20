@@ -45,6 +45,7 @@ class TenantDatabaseBuilder {
 		 Artisan::call('migrate', [
 	        '--path'     => "database/migrations/tenant",
 	        '--database' => $this->dbc,
+             '--force' => '1'
         ]);
 		$msg = 'Migrated ' . 	$this->database  . PHP_EOL;
 		$this->console($msg);
