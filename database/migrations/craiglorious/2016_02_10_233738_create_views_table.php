@@ -27,7 +27,7 @@ class CreateViewsTable extends Migration
 
         Artisan::call('db:seed', [
             '--class' => "ViewsTableSeeder",
-            '--force' => ''
+            '--force' => '1'
         ]);
 
     }
