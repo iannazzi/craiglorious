@@ -50,7 +50,7 @@ else ml = function () {
 if (1) ml('debug logging on');
 window.ml = ml;
 
-Vue.component('nav-component', require('./pages/nav.vue'))
+Vue.component('nav-component', require('./components/nav/nav.vue'))
 Vue.component('footer-component', require('./pages/footer.vue'))
 Vue.component('zzi-nav', require('./components/nav/nav.vue'))
 Vue.component('zzi-wait', require('./components/modals/waitModal.vue'))
