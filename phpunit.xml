@@ -55,7 +55,7 @@
         <testsuite name="calendar">
             <file>tests/in/CalendarEntryTest.php</file>
         </testsuite>
-        <testsuite name="account">
+        <testsuite name="accounts">
             <file>tests/in/AccountTest.php</file>
         </testsuite>
 

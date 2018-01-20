@@ -3,6 +3,8 @@
  */
 import {CollectionTableView}  from '../CollectionTableView';
 import {CollectionTableController}  from '../CollectionTableController';
+import {RecordTableView}  from '../RecordTableView';
+import {RecordTableController}  from '../RecordTableController';
 import {TableModel}  from '../TableModel';
 import * as math from '../math'
 import {TableEvent} from '../TableEvent';
@@ -23,10 +25,16 @@ export function DataTableTest(column_definition, data) {
         "column_definition": column_definition,
     }
 
+    let options={};
+    options.data = data;
+    options.column_definition = column_definition;
+    options.table_definition = table_definition;
 
-    let model = new TableModel(table_definition, data);
-    let view = new CollectionTableView(model);
-    let controller = new CollectionTableController(model, view);
+
+    let model = new TableModel(options);
+    let view = new RecordTableView(model);
+    let controller = new RecordTableController(model, view);
+
 
     let div2 = document.createElement('div');
     let h = document.createElement('h2');
@@ -51,18 +59,18 @@ test table: totals row, writable, barcode
         view.multiplyAmount.notify(multiply)
     }
 
-    view.multiplyAmount = new TableEvent(view);
-    controller.view.multiplyAmount.attach(
-        function (sender, element) {
-            view.elements.forEach((row, r) => {
-                let mult = element.value;
-                row.input_number.value = math.myParseFloat(row.input_number.value) * math.myParseFloat(mult);
-            });
-            view.inputChanged.notify();
-        }
-    );
+    // view.multiplyAmount = new TableEvent(view);
+    // controller.view.multiplyAmount.attach(
+    //     function (sender, element) {
+    //         view.elements.forEach((row, r) => {
+    //             let mult = element.value;
+    //             row.input_number.value = math.myParseFloat(row.input_number.value) * math.myParseFloat(mult);
+    //         });
+    //         view.inputChanged.notify();
+    //     }
+    // );
 
-    div2.appendChild(view.dataTable());
+    div2.appendChild(view.createRecordTable());
 
 
     //now test
@@ -74,6 +82,10 @@ test table: totals row, writable, barcode
     // view.deleteRowClicked.notify(false);
 
     //console.log(model.tdo);
+
+    // use awesome table/// return new this.AwesomeTable
+
+
 
 
     return div2;

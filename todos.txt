@@ -15,5 +15,8 @@ frontend dashboard search for a view breaks,
     checked that the view values are set correct,
     I think it is something with v-show or v-if....is busted beyond my control
 
+click on search only works if the input has changed
+
+browser test page is totally biffed - kinda need a complete re-do....
 
 

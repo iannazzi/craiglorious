@@ -13,8 +13,7 @@ import {SearchTableController}  from './SearchTableController';
 export class AwesomeTable {
     constructor(options) {
         //these need to go to awesometable....and should go there
-        window.firstBy = require('thenby');
-        window.JsUri = require('jsuri');
+
         //table types: record, collection,
         //record table_view create edit show  i.e. read write
 

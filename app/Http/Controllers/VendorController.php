@@ -1,36 +1,34 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Tenant\Vendor;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use App\Models\Tenant\Vendor;
 
 class VendorController extends Controller
 {
 
     public function search(Request $request)
     {
-        $data = $request->all();
+
+        $data = $this->getSanitizedData($request);
         $table_name = $data['table_name'] . '_';
         $search = $data['search_fields'];
         $name = $search[ $table_name . 'name' ];
-        $id = $search[ $table_name . 'id' ];
+        //$id = $search[ $table_name . 'id' ];
         $active = $search[ $table_name . 'active' ];
         $account_number = $search[ $table_name . 'account_number' ];
 
 
+
         $q = Vendor::where('name', 'LIKE', "%{$name}%")
-       //     ->where('account_number', 'LIKE', "%{$account_number}%")
-            ->where('id', 'LIKE', "%{$id}%");
+            ->where('account_number', 'LIKE', "%{$account_number}%");
+//            ->where('id', 'LIKE', "%{$id}%");
         if ($active != 'null')
         {
             $q->where('active', '=', $active);
         }
         $return_data['records'] = $q->get();
-
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -109,7 +107,6 @@ class VendorController extends Controller
             'name' => 'required|unique:vendors,name,' . $id,
             'main_email' => 'sometimes|email',
         );
-
         $validation = \Validator::make($data, $rules);
         if ($validation->passes())
         {

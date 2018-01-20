@@ -20,7 +20,7 @@ class CreateAccountsTable extends Migration
             $table->string('routing_number');
             $table->string('type');
             $table->boolean('required')->nullable();
-            $table->text('description')->nullable();
+            $table->text('description');
 
             $table->integer('parent_id')->unsigned()->index()->nullable();
             $table->integer('linked_id')->unsigned()->index(); //debit cards, cc multiple users
@@ -40,11 +40,11 @@ class CreateAccountsTable extends Migration
             $table->string('website_username', 40);
             $table->string('website_password');
 
-            $table->json('old_account_numbers')->nullable();
+            $table->json('old_account_numbers');
             $table->dateTime('verification_lock_date');
 
             $table->boolean('active');
-            $table->text('comments')->nullable();
+            $table->text('comments');
             $table->timestamps();
 
         });

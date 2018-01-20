@@ -3,7 +3,8 @@ window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 
-
+window.firstBy = require('thenby');
+window.JsUri = require('jsuri');
 
 
 //these are for full calendar

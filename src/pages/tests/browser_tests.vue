@@ -3,6 +3,13 @@
     <div class="panel-body">
         <div id="keys"></div>
         <div id="tests"></div>
+
+        <nav-component></nav-component>
+        <zzi-nav-keys></zzi-nav-keys>
+        <footer-component></footer-component>
+
+
+
     </div>
 
 </template>
@@ -36,9 +43,6 @@
   `;
 
             });
-
-
-
             let div = document.getElementById("tests");
             div.appendChild(tableTests());
         },

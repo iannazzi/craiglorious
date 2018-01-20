@@ -444,14 +444,13 @@ Pittsford, NY 14534`
         },
     ]
     let t1 = DataTableTest(column_definition, data);
-    let t2 = RecordTableTest(column_definition, [data[0]]);
-    let t3 = RecordTableTest(column_definition, []);
-    let t4 = AdjustableColumnTableTest();
-
-
     div.appendChild(t1);
+    let t2 = RecordTableTest(column_definition, [data[0]]);
+
     div.appendChild(t2);
+    let t3 = RecordTableTest(column_definition, []);
     div.appendChild(t3);
+    let t4 = AdjustableColumnTableTest();
     div.appendChild(t4);
     return div;
 }

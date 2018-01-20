@@ -17,8 +17,8 @@ export default function(component){
             "th_width": "40px",
             "class": "",
             "events": [],
-            "search": "LIKE ANY BETWEEN EXACT",
             "properties": [],
+
             "word_wrap": true
         },
         {

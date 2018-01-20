@@ -47,24 +47,32 @@ class AccountTest extends ApiTester
 
 
 
-//    /** @test */
-//    function can_be_updated()
-//    {
-//
-//        $rawContent = '{"data":[{"id":6,"parent_id":"1","name":"a98","barcode":"1234","active":1,"comments":"asdf"}],"_method":"put"}';
-//
-//        $this->updateSuccess($this->route, $rawContent);
-//
-//    }
-//    /** @test */
-//    function can_be_destroyed()
-//    {
-//        $rawContent = '{"_method":"delete","data":{"id":1}}';
-//
-//        $this->deleteSuccess($this->route, $rawContent);
-//
-//
-//    }
+    /** @test */
+    function can_be_updated()
+    {
+
+        $rawContent = '{"data":[{"id":"6","name":"'. $this->faker->name . '","coa_number":"13388","type":"Expense","parent_id":"","active":1,"comments":""}],"_method":"put"}';
+        $this->updateSuccess($this->route, $rawContent);
+
+    }
+    /** @test */
+    function can_not_delete_required_account()
+    {
+        $rawContent = '{"_method":"delete","data":{"id":1}}';
+
+        $this->deleteSuccess($this->route, $rawContent, false);
+
+
+    }
+    /** @test */
+    function can_be_destroyed()
+    {
+        $rawContent = '{"_method":"delete","data":{"id":45}}';
+
+        $this->deleteSuccess($this->route, $rawContent);
+
+
+    }
 
 
 

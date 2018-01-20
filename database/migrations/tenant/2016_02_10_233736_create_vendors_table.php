@@ -21,38 +21,30 @@ class CreateVendorsTable extends Migration
             $table->integer('autopay_account_id')->unsigned()->index();
             $table->integer('currency_id')->unsigned()->index();
             $table->integer('vendor_type_id')->unsigned()->index();
-            $table->integer('term_id')->unsigned()->index()->nullable();
 
             $table->string('type');
             $table->string('name');
-            $table->string('check_name')->nullable();
-            $table->string('account_number')->nullable();
+            $table->string('check_name');
+            $table->string('account_number');
 
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('job_title')->nullable();
-            $table->string('main_email')->nullable();
-            $table->string('cc_email')->nullable();
-            $table->string('main_phone')->nullable();
-            $table->string('work_phone')->nullable();
-            $table->string('mobile')->nullable();
-            $table->string('fax')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('job_title');
+            $table->string('main_email');
+            $table->string('cc_email');
+            $table->string('main_phone');
+            $table->string('work_phone');
+            $table->string('mobile');
+            $table->string('fax');
 
-            $table->string('tax_id')->nullable();
-            $table->boolean('1099');
-            $table->text('old_account_numbers')->nullable();
+            $table->text('old_account_numbers');
 
-            $table->string('website_url')->nullable();
-            $table->string('website_username', 40)->nullable();
-            $table->string('website_password', 40)->nullable();
+            $table->string('website_url');
+            $table->string('website_username', 40);
+            $table->string('website_password', 40);
 
 
-            $table->decimal('credit_limit', 20, 5)->nullable();
-            $table->string('terms', 64)->default('')->nullable();
-            $table->integer('days')->nullable();
-            $table->decimal('discount', 10, 5)->nullable();
             $table->boolean('autopay');
-            $table->decimal('interest_rate', 10, 5)->nullable();
 
             $table->dateTime('verification_lock_date')->nullable();
             $table->boolean('active');

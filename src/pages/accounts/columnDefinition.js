@@ -19,6 +19,23 @@ export default function(component){
             "properties": [],
             "word_wrap": true,
             "post": true
+        }, {
+            "db_field": "name",
+            "caption": "Name",
+            "type": "text",
+            "show_on_list": true,
+            "show_on_view": true,
+            "show_on_edit": true,
+            "show_on_create": true,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "search": "LIKE",
+            "search_default": "",
+            "properties": [],
+            "word_wrap": true,
+            "post": true
         },
         {
             "db_field": "coa_number",
@@ -39,23 +56,6 @@ export default function(component){
             "word_wrap": true,
             "post": true
         },  {
-            "db_field": "name",
-            "caption": "Name",
-            "type": "text",
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "search": "LIKE",
-            "search_default": "",
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        }, {
             "db_field": "type",
             "caption": "Type",
             "select_values": component.data.types,
