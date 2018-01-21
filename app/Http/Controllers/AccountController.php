@@ -156,7 +156,6 @@ class AccountController extends Controller
         $id = $data['id'];
 
         $data = Account::findOrFail($id);
-        //$vendor->delete();
         if ($data->required)
         {
             return response()->json([

@@ -21,4 +21,5 @@ browser test page is totally biffed - kinda need a complete re-do....
 
 Calendar - not saving, url is fucked up, after save goes weirdo, mini calendar drag n drop
 
+awesome table - validation error modal is not showing on the pop up update form
 

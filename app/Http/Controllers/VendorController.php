@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use App\Models\Craiglorious\State;
 
 use App\Models\Tenant\Vendor;
 
@@ -62,6 +63,8 @@ class VendorController extends Controller
         $vendor = Vendor::findOrFail($id);
         $return_data['page'] = 'show';
         $return_data['records'] = [$vendor]; //let js handle the data through ajax
+        $return_data['states'] = State::stateSelectArray();
+
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -77,6 +80,8 @@ class VendorController extends Controller
     {
         $return_data['page'] = 'create';
         $return_data['records'] = []; //let js handle the data through ajax
+        $return_data['states'] = State::stateSelectArray();
+
         return response()->json([
             'success' => true,
             'message' => 'search returned',

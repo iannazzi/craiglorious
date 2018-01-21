@@ -179,6 +179,7 @@ export class AwesomeTable {
                                 controller.onSaveSuccess.notify(response);
                             },
                             onError(response){
+                                console.log('got some badddd data');
                                 viewModal.showWaitModal(false);
                                 view.showErrorModal(response.responseJSON.message);
                             }
@@ -219,11 +220,6 @@ export class AwesomeTable {
 
         }
 
-
-        $(function () {
-
-
-        });
 
 
     }

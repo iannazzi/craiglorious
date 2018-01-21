@@ -69,7 +69,7 @@ export class SearchTableController extends CollectionTableController {
     {
         // console.log('populating search values');
         this.model.cdo.forEach(col_def => {
-            if (typeof col_def['search_default'] != 'undefined') {
+            if (typeof col_def['search'] != 'undefined' && typeof col_def['search_default'] != 'undefined') {
                 if (col_def['type'] == 'date'){
                     col_def.search_element[0].value = col_def.search_default;
                     col_def.search_element[1].value = col_def.search_default;

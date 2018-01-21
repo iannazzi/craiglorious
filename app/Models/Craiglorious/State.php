@@ -11,5 +11,13 @@ class State extends BaseCraigloriousModel {
 		'short_name'
 	    ];
 
+	public static function stateSelectArray(){
+        $states = State::all();
+        $rtn = [];
+        foreach($states as $state){
+            $rtn[]= array('name' => $state->name, 'value' => $state->id);
+        }
+        return $rtn;
+    }
 
 }

@@ -5,13 +5,12 @@ $factory->define(App\Models\Tenant\Employee::class, function (Faker\Generator $f
     return [
         'address1' => $faker->streetAddress,
         'address2' => $faker->secondaryAddress,
-
         'city' => $faker->city,
         'zip' => $faker->postcode,
-        'state_id' => $faker->randomDigit,
+        'state_id' => $faker->numberBetween(1, 50),
 
     'ss' => $faker->randomDigit . $faker->randomDigit . $faker->randomDigit . '-' . $faker->randomDigit . $faker->randomDigit . '-' . $faker->randomDigit . $faker->randomDigit . $faker->randomDigit . $faker->randomDigit,
-        'active' => 1,
+        'active' =>rand ( 0 , 1 ),
         'first_name' => $faker->firstName(),
         'last_name' => $faker->lastName(),
         'email' => $faker->email(),

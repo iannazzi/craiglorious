@@ -37,6 +37,16 @@ class CreateVendorsTable extends Migration
             $table->string('mobile');
             $table->string('fax');
 
+
+
+            $table->string('address1');
+            $table->string('address2');
+            $table->string('address3');
+            $table->string('city');
+            $table->string('zip');
+            $table->integer('state_id')->unsigned()->index()->nullable();
+
+
             $table->text('old_account_numbers');
 
             $table->string('website_url');
@@ -48,8 +58,6 @@ class CreateVendorsTable extends Migration
 
             $table->dateTime('verification_lock_date')->nullable();
             $table->boolean('active');
-            $table->text('billing_address');
-            $table->text('shipping_address');
             $table->text('description');
             $table->text('comments');
             $table->unique(['name', 'account_number']);

@@ -7,7 +7,7 @@ export default function(component){
             "onClick":  function(id){
                 component.$router.push(component.route + '/' + id)
             },
-            "route": "employees",
+            "route": "customers",
             "show_on_list": true,
             "show_on_view": true,
             "show_on_edit": true,
@@ -71,6 +71,7 @@ export default function(component){
             "class": "",
             "events": [],
             "search_default": "",
+            "search": "LIKE ANY BETWEEN EXACT",
 
             "properties": [],
             "word_wrap": true,
@@ -89,6 +90,7 @@ export default function(component){
             "class": "",
             "events": [],
             "search_default": "",
+            "search": "LIKE ANY BETWEEN EXACT",
 
             "properties": [],
             "word_wrap": true,
@@ -203,78 +205,8 @@ export default function(component){
             "word_wrap": true,
             "post": true
         },
-        {
-            "db_field": "emergency_contact",
-            "caption": "Emergency Contact",
-            "type": "text",
-            "show_on_list": false,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "search_default": "",
 
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        },
-        {
-            "db_field": "emergency_phone",
-            "caption": "Emergency Phone",
-            "type": "text",
-            "show_on_list": false,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "search_default": "",
-
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        },
-        {
-            "db_field": "ss",
-            "caption": "Social Security #",
-            "type": "text",
-            "show_on_list": false,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "search_default": "",
-
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        },
-        {
-            "db_field": "withholding_allowance",
-            "caption": "Withholding Allowance",
-            "type": "text",
-            "show_on_list": false,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "properties": [],
-            "search_default": "",
-
-            "word_wrap": true,
-            "post": true
-        },{
+      {
             "db_field": "comments",
             "caption": "Comments",
             "type": "textarea",

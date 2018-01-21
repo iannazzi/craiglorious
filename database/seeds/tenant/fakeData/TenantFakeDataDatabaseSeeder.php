@@ -16,6 +16,8 @@ class TenantFakeDataDatabaseSeeder extends Seeder
         $this->call('VendorsTableSeeder');
         $this->call('CalendarEntriesTableSeeder');
         $this->call('EmployeesTableSeeder');
+        $this->call('CustomersTableSeeder');
+
 //        $this->call('CalendarEntriesTableSeeder');
 
     }

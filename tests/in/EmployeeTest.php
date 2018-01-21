@@ -51,48 +51,53 @@ class EmployeeTest extends ApiTester
     /** @test */
     function can_be_searched_raw_json()
     {
-        $rawContent = '{"search_fields":{"employees_full_name":"a","employees_comments":"","employees_active":"null"},"table_name":"employees"}';
+        $rawContent = '{"search_fields":{"employees_first_name":"","employees_last_name":"","employees_comments":"","employees_active":"1"},"table_name":"employees"}';
         $this->searchSuccess($this->route, $rawContent);
 
     }
-//    /** @test */
-//    function can_be_created()
-//    {
-//        $rawContent = '{"data":[{"id":"","name":"'. $this->faker->name . '","coa_number":"13388","type":"Expense","parent_id":"","active":1,"comments":""}],"_method":"put"}';
-//
-//
-//        $this->createSuccess($this->route, $rawContent);
-//    }
-//    /** @test */
-//    function can_be_shown()
-//    {
-//        $system = $this->getSystem();
-//        $id = Account::first()->id;
-//        $this->showSuccess($this->route, $id);
-//
-//    }
-//    /** @test */
-//    function can_be_updated()
-//    {
-//
-//        $rawContent = '{"data":[{"id":"6","name":"'. $this->faker->name . '","coa_number":"13388","type":"Expense","parent_id":"","active":1,"comments":""}],"_method":"put"}';
-//        $this->updateSuccess($this->route, $rawContent);
-//
-//    }
-//    /** @test */
-//    function can_not_delete_required_account()
-//    {
-//        $rawContent = '{"_method":"delete","data":{"id":1}}';
-//        $this->deleteSuccess($this->route, $rawContent, false);
-//
-//
-//    }
-//    /** @test */
-//    function can_be_destroyed()
-//    {
-//        $rawContent = '{"_method":"delete","data":{"id":45}}';
-//        $this->deleteSuccess($this->route, $rawContent);
-//
-//
-//    }
+    /** @test */
+    function can_be_created()
+    {
+        $rawContent = '{"data":[{"id":"","first_name":"'. $this->faker->name . '","last_name":"'. $this->faker->name . '","active":1,"comments":""}],"_method":"put"}';
+
+
+        $this->createSuccess($this->route, $rawContent);
+    }
+    /** @test */
+    function can_be_shown()
+    {
+        $system = $this->getSystem();
+        $id =Employee::first()->id;
+        $this->showSuccess($this->route, $id);
+
+    }
+    /** @test */
+    function can_be_updated()
+    {
+
+        $rawContent = '{"data":[{"id":19,"first_name":"Delaney","last_name":"Koch","phone":"885-349-9918 x7584","email":"delfina.gutmann@gmail.com","address1":"1140 McClure Mission","address2":"Apt. 425","address3":"","city":"Juanitaville","state_id":"4","zip":"98063","emergency_contact":"Charity Roob V","emergency_phone":"305-648-1980 x41695","ss":"888-14-2838","withholding_allowance":"","comments":"","active":0}],"_method":"put"}';
+        $this->updateSuccess($this->route, $rawContent);
+
+    }
+    /** @test */
+    function ss_unique()
+    {
+
+        $rawContent = '{"data":[{"id":"2","first_name":"'. $this->faker->name . '","last_name":"'. $this->faker->name . '","active":1,"comments":"", "ss":"111-11-1111"}],"_method":"put"}';
+        $this->updateSuccess($this->route, $rawContent);
+        $rawContent = '{"data":[{"id":"3","first_name":"'. $this->faker->name . '","last_name":"'. $this->faker->name . '","active":1,"comments":"", "ss":"111-11-1111"}],"_method":"put"}';
+        $this->updateSuccess($this->route, $rawContent, false);
+
+
+    }
+
+
+    /** @test */
+    function can_be_destroyed()
+    {
+        $rawContent = '{"_method":"delete","data":{"id":4}}';
+        $this->deleteSuccess($this->route, $rawContent);
+
+
+    }
 }

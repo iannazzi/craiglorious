@@ -7,11 +7,14 @@ $factory->define(App\Models\Tenant\Vendor::class,  function (Faker\Generator $fa
 {
     return [
         'type' => 'Expense',
-        'billing_address' => $faker->address,
-        'shipping_address' => $faker->address,
+        'address1' => $faker->streetAddress,
+        'address2' => $faker->secondaryAddress,
+        'city' => $faker->city,
+        'zip' => $faker->postcode,
+        'state_id' => $faker->numberBetween(1, 50),
         'name' => $faker->unique()->company,
         'account_number' => $faker->creditCardNumber(),
-        'active' => 1,
+        'active' => rand ( 0 , 1 ),
         //'check_name' => $faker->address(),
         'first_name' => $faker->firstName(),
         'last_name' => $faker->lastName(),

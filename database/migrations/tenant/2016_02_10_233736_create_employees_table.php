@@ -18,13 +18,18 @@ class CreateEmployeesTable extends Migration
 
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('emergency_phone');
+            $table->string('emergency_contact');
 
             $table->string('ss');
+
+
             $table->string('phone');
             $table->string('email', 64)->default('');
 
             $table->string('address1');
             $table->string('address2');
+            $table->string('address3');
             $table->string('city');
             $table->string('zip');
             $table->integer('state_id')->unsigned()->index()->nullable();
@@ -34,8 +39,7 @@ class CreateEmployeesTable extends Migration
 
             $table->text('comments');
 
-            $table->string('emergency_phone')->nullable();
-            $table->string('emergency_contact')->nullable();
+
             $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletes();

@@ -14,13 +14,21 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->index();
             $table->string('first_name', 30);
             $table->string('last_name', 40);
-            $table->integer('billing_address_id')->unsigned()->index();
-            $table->string('emails',255);
+            $table->string('email',255);
             $table->string('phone', 20);
-            $table->text('comments')->nullable();
+
+            $table->string('address1');
+            $table->string('address2');
+            $table->string('address3');
+            $table->string('city');
+            $table->string('zip');
+            $table->integer('state_id')->unsigned()->index()->nullable();
+
+
+
+            $table->text('comments');
             $table->string('status');
             $table->integer('active');
             

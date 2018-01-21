@@ -129,6 +129,8 @@ let routes = [
     commonRoute('vendors'),
     commonRoute('employees'),
     commonRoute('accounts'),
+    commonRoute('customers'),
+
 
     {
         path: '/browser_tests',

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Models\Craiglorious\State;
+use App\Models\Tenant\Customer;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Models\Tenant\Employee;
 use DB ;
 
-class EmployeeController extends Controller
+class CustomerController extends Controller
 {
 
     public function search(Request $request)
@@ -18,31 +18,28 @@ class EmployeeController extends Controller
         $search = $data['search_fields'];
         $first_name = $search[ $table_name . 'first_name' ];
         $last_name = $search[ $table_name . 'last_name' ];
-        $full_name = $first_name . ' ' . $last_name;
-
-        //$parent_id = $search[ $table_name . 'parent_id' ];
         $comments = $search[ $table_name . 'comments' ];
         $active =  $search[ $table_name . 'active' ];
+        $phone =  $search[ $table_name . 'phone' ];
+        $email =  $search[ $table_name . 'email' ];
 
 
 
-    $q4 = Employee::where('comments', 'LIKE',  '%' . $comments. '%')
+
+        $q = Customer::where('comments', 'LIKE',  '%' . $comments. '%')
                     ->where('first_name', 'LIKE', '%' . $first_name. '%')
-                    ->where('last_name', 'LIKE', '%' . $last_name. '%');
+                    ->where('last_name', 'LIKE', '%' . $last_name. '%')
+                    ->where('phone', 'LIKE', '%' . $phone. '%')
+                    ->where('email', 'LIKE', '%' . $email. '%');
 
-        $q3 = DB::table('employees')
-            ->select(DB::raw("CONCAT(first_name,' ',last_name) as full_name, comments, active, id"))
-            ->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'LIKE', '%'.$full_name.'%')
-            ->where('comments', 'LIKE',  '%'.$comments .'%');
 
 
         if ($active != 'null')
         {
-            $q3->where('active', $active);
-            $q4->where('active', $active);
+            $q->where('active', $active);
         }
 
-        $return_data['records'] = $q4->get();
+        $return_data['records'] = $q->get();
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -54,9 +51,10 @@ class EmployeeController extends Controller
     {
 
 
-        $number_of_records_available = Employee::all()->count();
+        $number_of_records_available = Customer::all()->count();
         if ($number_of_records_available < 100)
         {
+            //$data = Vendor::all();
         } else
         {
             $data = [];
@@ -74,15 +72,9 @@ class EmployeeController extends Controller
         //
     }
 
-    public function commonReturnData()
-    {
-        $return_data['states'] = State::stateSelectArray();
-        return $return_data;
-    }
-
     public function show($id)
     {
-        $q = Employee::findOrFail($id);
+        $q = Customer::findOrFail($id);
         $return_data['page'] = 'show';
         $return_data['records'] = [$q];
         $return_data['states'] = State::stateSelectArray();
@@ -130,13 +122,14 @@ class EmployeeController extends Controller
         $rules = array(
             'first_name' => 'required',
             'last_name' => 'required',
-            'ss' => 'unique:employees,ss,' . $id,
+            'email' => 'email',
         );
 
         $validation = \Validator::make($data, $rules);
         if ($validation->passes())
         {
-            $update = Employee::firstOrNew(['id' => $id]);
+            $update = Customer::firstOrNew(['id' => $id]);
+            //$update = Vendor::find($id);
             $update->fill($data);
             if ($update->save())
             {
@@ -163,10 +156,9 @@ class EmployeeController extends Controller
         $data = $request->data;
         $id = $data['id'];
 
-        $q = Employee::findOrFail($id);
-        //$vendor->delete();
-        $q['active'] = 0;
-        $q->save();
+        $vendor = Customer::findOrFail($id);
+        $vendor['active'] = 0;
+        $vendor->save();
 
 
         return response()->json([

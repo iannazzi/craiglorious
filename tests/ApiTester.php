@@ -76,10 +76,10 @@ abstract class ApiTester extends TestCase {
         $this->json('GET', $this->api($route).'/'.$id, json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);
     }
-    public function updateSuccess($route, $rawContent){
+    public function updateSuccess($route, $rawContent,$success='true'){
         $this->signIn();
         $this->json('PUT', $this->api($route), json_decode($rawContent, true),$this->headers())
-            ->assertJson(["success"=>'true']);
+            ->assertJson(["success"=>$success]);
     }
     public function deleteSuccess($route, $rawContent, $success='true'){
         $this->signIn();
