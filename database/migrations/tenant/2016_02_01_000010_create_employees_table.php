@@ -29,6 +29,9 @@ class CreateEmployeesTable extends Migration
             $table->string('zip');
             $table->integer('state_id')->unsigned()->index()->nullable();
 
+            $table->decimal('pay_rate');
+            $table->integer('withholding_allowance');
+
 
             $table->string('emergency_phone')->nullable();
             $table->string('emergency_contact')->nullable();

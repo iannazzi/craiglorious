@@ -21,5 +21,7 @@ $factory->define(App\Models\Tenant\Employee::class, function (Faker\Generator $f
         'emergency_phone' => $faker->phoneNumber(),
         'emergency_contact' => $faker->name(),
     ];
+
+
 });
 

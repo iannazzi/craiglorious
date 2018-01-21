@@ -6,12 +6,44 @@ use App\Models\Tenant\Vendor;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use App\Models\Tenant\Employee;
+use DB ;
 
 class EmployeeController extends Controller
 {
 
+    public function search(Request $request)
+    {
+        $data = $request->all();
+        $table_name = $data['table_name'] . '_';
+        $search = $data['search_fields'];
+        $name = $search[ $table_name . 'full_name' ];
 
+        //$parent_id = $search[ $table_name . 'parent_id' ];
+        $comments = $search[ $table_name . 'comments' ];
+        $active = $search[ $table_name . 'active' ];
+
+
+        $q = Employee::where('comments', 'LIKE', "%{$comments}%");
+
+        $q->select(DB::raw("CONCAT( first_name,  ' ', last_name )"));
+
+        if ($active != 'null')
+        {
+            $q->where('active', '=', $active);
+        }
+
+        $return_data['records'] = $q->get();
+
+        //dd($return_data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'search returned',
+            'data' => $return_data,
+        ], 200);
+
+    }
     public function index()
     {
 

@@ -7,7 +7,7 @@ export default function(component){
             "onClick":  function(id){
                 component.$router.push(component.route + '/' + id)
             },
-            "route": "locations",
+            "route": "employees",
             "show_on_list": true,
             "show_on_view": true,
             "show_on_edit": true,
@@ -16,33 +16,14 @@ export default function(component){
             "td_tags": "",
             "class": "",
             "events": [],
-            "search": "LIKE ANY BETWEEN EXACT",
-            "search_default": "",
             "properties": [],
-            "word_wrap": true,
-            "post": true
-        }, {
-            "db_field": "parent_id",
-            "caption": "Parent Location",
-            "type": "select",
 
-            "select_values": component.data.locations,
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "search": "LIKE ANY BETWEEN EXACT",
             "search_default": "",
-            "properties": [],
             "word_wrap": true,
             "post": true
         }, {
-            "db_field": "name",
-            "caption": "Name",
+            "db_field": "full_name",
+            "caption": "Full Name",
             "type": "text",
             "show_on_list": true,
             "show_on_view": true,
@@ -53,41 +34,7 @@ export default function(component){
             "class": "",
             "events": [],
             "search": "LIKE ANY BETWEEN EXACT",
-            "search_default": "",
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        }, {
-            "db_field": "barcode",
-            "caption": "Barcode",
-            "type": "text",
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "search": "LIKE ANY BETWEEN EXACT",
-            "search_default": "",
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        }, {
-            "db_field": "active",
-            "caption": "Active",
-            "type": "checkbox",
-            "default_value": "1",
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "search": "LIKE ANY BETWEEN EXACT",
+
             "search_default": "",
             "properties": [],
             "word_wrap": true,
@@ -105,11 +52,32 @@ export default function(component){
             "class": "",
             "events": [],
             "search": "LIKE ANY BETWEEN EXACT",
+
             "search_default": "",
             "properties": [],
             "word_wrap": true,
             "post": true
-        }];
+        },
+        {
+            "db_field": "active",
+            "caption": "Active",
+            "type": "checkbox",
+            "default_value": "1",
+            "show_on_list": true,
+            "show_on_view": true,
+            "show_on_edit": true,
+            "show_on_create": true,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "search": "LIKE ANY BETWEEN EXACT",
+
+            "search_default": "0",
+            "properties": [],
+            "word_wrap": true,
+            "post": true
+        }, ];
 
     return column_definition;
 }

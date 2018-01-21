@@ -18,5 +18,5 @@ Homestead.yaml
 .env.stage
 .DS_Store
 npm-debug.*
-
+/database/initialDataGitIgnoreSensitive
 _ide_helper*.php

@@ -33,11 +33,25 @@ class ViewsTableSeeder extends Seeder
                 'route'=> 'vendors',
             ],
             [
-                'name' => 'Bills & Receipts',
+                'name' => 'Employees',
+                'icon' => 'fa fa-users',
+                'place' => json_encode(['Office']),
+                'priority'=> 0,
+                'route'=> 'employees',
+            ],
+            [
+                'name' => 'Bills & Expense Receipts',
                 'icon' => 'fa fa-book',
                 'place' => json_encode(['Office']),
                 'priority'=> 0,
                 'route'=> 'bills',
+            ],
+            [
+                'name' => 'Customers',
+                'icon' => 'fa fa-handshake-o',
+                'place' => json_encode(['Customer Counter']),
+                'priority'=> 0,
+                'route'=> 'customers',
             ],
             [
                 'name' => 'Pay Vendor',
@@ -53,13 +67,7 @@ class ViewsTableSeeder extends Seeder
                 'priority'=> 0,
                 'route'=> 'transfer',
             ],
-            [
-                'name' => 'Employees',
-                'icon' => 'fa fa-users',
-                'place' => json_encode(['Office']),
-                'priority'=> 0,
-                'route'=> 'employees',
-            ],
+
             [
                 'name' => 'Payroll',
                 'icon' => 'fa fa-book',
@@ -81,13 +89,7 @@ class ViewsTableSeeder extends Seeder
                 'priority'=> 0,
                 'route'=> 'accounting_setup',
             ],
-            [
-                'name' => 'Customers',
-                'icon' => 'fa fa-handshake-o',
-                'place' => json_encode(['Customer Counter']),
-                'priority'=> 0,
-                'route'=> 'customers',
-            ],
+
             [
                 'name' => 'Point Of Sale',
                 'icon' => 'fa fa-money',

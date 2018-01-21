@@ -58,7 +58,7 @@ class SpitColumnDef extends Command
                     "type" => "html date text textarea number row_checkbox row_number checkbox select tree_select button link radio",
                     "placeholder" => false,
                     "route" => "$table", //this is going away....
-                    "onClick" => "callback",
+                    "onClick" =>  "function(id){component.$router.push(component.route + '/' + id)}",
                     "select_values" => [['value'=>'open','name'=>'Open'],['value'=>'closed','name'=>'Closed'],['value'=>'locked','name'=>'Locked']],
                     'array' => "true or not set caption has to then be set in 2d array [[]]",
                     'default_value' => 'default value is set',

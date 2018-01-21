@@ -16,14 +16,22 @@ class EmployeesTableSeeder extends Seeder
         Factory('App\Models\Tenant\Employee', 30)->create();
         $users = App\Models\Tenant\User::all();
         $employees = App\Models\Tenant\Employee::all();
+
+        foreach( $employees as $employee){
+
+        }
         for($i = 0;$i<5;$i++){
             $employees[$i]->user_id = $users[$i]->id;
+            //dd($employees[$i]);
+            $employees[$i]->save();
         }
+
+        //$employees->save();
         //can assign user id to first five employees....
 
 
 
 
-        echo 'EmployeesTableSeeder' . PHP_EOL;
+        echo 'Seeded EmployeesTableSeeder' . PHP_EOL;
     }
 }

@@ -44,9 +44,6 @@ class AccountTest extends ApiTester
         $this->showSuccess($this->route, $id);
 
     }
-
-
-
     /** @test */
     function can_be_updated()
     {
@@ -59,7 +56,6 @@ class AccountTest extends ApiTester
     function can_not_delete_required_account()
     {
         $rawContent = '{"_method":"delete","data":{"id":1}}';
-
         $this->deleteSuccess($this->route, $rawContent, false);
 
 
@@ -68,20 +64,10 @@ class AccountTest extends ApiTester
     function can_be_destroyed()
     {
         $rawContent = '{"_method":"delete","data":{"id":45}}';
-
         $this->deleteSuccess($this->route, $rawContent);
 
 
     }
-
-
-
-
-
-
-
-
-
 
 
 

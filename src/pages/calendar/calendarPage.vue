@@ -109,6 +109,9 @@
                     cal.fullCalendar({
                         //height: 650,
                         selectable: true,
+
+                        dayNamesShort: ['Sunday', 'Monday', 'Tuesday', 'Wednesday',
+                            'Thursday', 'Friday', 'Saturday'],
                         eventRender: function (event, element) {
                             element.bind('dblclick', function () {
                                 bus.$emit('edit_calendar_entry', event)
