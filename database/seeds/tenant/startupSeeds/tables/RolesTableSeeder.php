@@ -39,6 +39,7 @@ class RolesTableSeeder extends Seeder
             }
         }
 
+        echo 'RolesTableSeeder complete' . PHP_EOL;
 
 //        $views = View::all();
 //        $roles = Role::all();

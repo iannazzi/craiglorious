@@ -10,6 +10,8 @@ class ViewsTableSeeder extends Seeder
 	{
 
 
+	    //if you change the name here you need to change the role view file
+
         $views = [
             [
                 'name' => 'Calendar',
@@ -40,7 +42,7 @@ class ViewsTableSeeder extends Seeder
                 'route'=> 'employees',
             ],
             [
-                'name' => 'Bills & Expense Receipts',
+                'name' => 'Bills & Receipts',
                 'icon' => 'fa fa-book',
                 'place' => json_encode(['Office']),
                 'priority'=> 0,

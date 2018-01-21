@@ -23,6 +23,7 @@ class EmployeeTest extends ApiTester
     function seed()
     {
         $system = $this->getSystem();
+        \DB::table('employees')->truncate();
         Artisan::call('db:seed', [
             '--class' => "EmployeesTableSeeder",
         ]);
@@ -50,7 +51,7 @@ class EmployeeTest extends ApiTester
     /** @test */
     function can_be_searched_raw_json()
     {
-        $rawContent = '{"search_fields":{"employees_full_name":"","employees_comments":"","employees_active":"null"},"table_name":"employees"}';
+        $rawContent = '{"search_fields":{"employees_full_name":"a","employees_comments":"","employees_active":"null"},"table_name":"employees"}';
         $this->searchSuccess($this->route, $rawContent);
 
     }

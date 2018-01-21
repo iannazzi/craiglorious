@@ -17,7 +17,7 @@ class Employee extends BaseTenantModel {
         $names = explode(" ", $name);
 
         // Search each Name Field for any specified Name
-        return User::where(function($query) use ($names) {
+        return Employee::where(function($query) use ($names) {
             $query->whereIn('first_name', $names);
             $query->orWhere(function($query) use ($names) {
                 $query->whereIn('last_name', $names);

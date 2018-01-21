@@ -23,19 +23,46 @@ class EmployeeController extends Controller
         $comments = $search[ $table_name . 'comments' ];
         $active = $search[ $table_name . 'active' ];
 
+        $hackproof['name'] = $name;
+        $hackproof['comments'] = $comments;
 
-        $q = Employee::where('comments', 'LIKE', "%{$comments}%");
 
-        $q->select(DB::raw("CONCAT( first_name,  ' ', last_name )"));
+        $q3 = DB::table('employees')
+            ->select(DB::raw("CONCAT(first_name,' ',last_name) as full_name, comments, active, id"))
+            ->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'LIKE', '%'.$name.'%')
+//            ->orWhere(function ($query) {
+//                $query->where('first_name', 'LIKE', 100)
+//                    ->orWhere('last_name', 'LIKE', 'Admin');
+//            })
+            ->where('comments', 'LIKE',  '%'.$comments .'%');
+
+
+
+
+        $q = "SELECT CONCAT(first_name,' ',last_name) as full_name, comments, active, id 
+              FROM employees 
+              WHERE CONCAT(first_name,' ',last_name) LIKE '%{$name}%' 
+              AND comments LIKE '%{$comments}%'";
+
+        $q2 = "SELECT CONCAT(first_name,' ',last_name) as full_name, comments, active, id
+              FROM employees
+              WHERE CONCAT(first_name,' ',last_name) LIKE '%:name%'
+              AND comments LIKE '%:comments%'
+              ";
+       // $results = DB::select( DB::raw($q2), $hackproof);
+        //nothing....
 
         if ($active != 'null')
         {
-            $q->where('active', '=', $active);
+            $q += " AND active = '{$active}'";
+            $hackproof['active'] = $active;
+            $q3->where('active', $active);
         }
 
-        $return_data['records'] = $q->get();
 
-        //dd($return_data);
+        $return_data['records'] = $q3->get();
+
+
 
         return response()->json([
             'success' => true,

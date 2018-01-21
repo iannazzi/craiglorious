@@ -48,10 +48,10 @@ class CreateVendorsTable extends Migration
 
             $table->dateTime('verification_lock_date')->nullable();
             $table->boolean('active');
-            $table->text('billing_address')->nullable();
-            $table->text('shipping_address')->nullable();
-            $table->text('description')->nullable();
-            $table->text('comments')->nullable();
+            $table->text('billing_address');
+            $table->text('shipping_address');
+            $table->text('description');
+            $table->text('comments');
             $table->unique(['name', 'account_number']);
             $table->timestamps();
             $table->softDeletes();

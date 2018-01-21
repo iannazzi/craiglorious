@@ -32,6 +32,7 @@ class CreateEmployeesTable extends Migration
             $table->decimal('pay_rate');
             $table->integer('withholding_allowance');
 
+            $table->text('comments');
 
             $table->string('emergency_phone')->nullable();
             $table->string('emergency_contact')->nullable();
