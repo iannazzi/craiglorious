@@ -23,7 +23,6 @@ class RolesTableSeeder extends Seeder
 //        $system = App\Models\Craiglorious\System::first();
 //        $system->createTenantConnection();
 
-        //$views = View::all();
 
         $insert = function ($role_id, $view_id, $access){
             \DB::insert('insert into role_view (role_id, view_id, access) values (?, ?, ?)', [$role_id, $view_id, $access]);

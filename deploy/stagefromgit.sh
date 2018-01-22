@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
+f=/var/www/craiglorious.com
 
 DATE=`date +%Y%m%d`
-DATEP=$DATE'-gs1'
+DATEP=$DATE'-StageFromGit'
 
+cd $f
 rm -rf $DATEP
 git clone https://github.com/iannazzi/craiglorious.git $DATEP
 sudo chgrp -R www-data $DATEP
-cd $DATEP
+cd $f/$DATEP
 git checkout develop
-cp /var/www/craiglorious.com/env/stag/.env .
+cp $f/env/stag/.env .
 composer install
 php artisan jwt:secret
 
@@ -20,18 +22,18 @@ sudo chmod -R ug+w storage
 sudo chown -R craig:www-data bootstrap/cache
 sudo chmod -R ug+w bootstrap/cache
 
-cd /var/www/craiglorious.com/staging
+cd $f/staging
 pwd
 php artisan down
-cd /var/www/craiglorious.com/$DATEP
+cd $f/$DATEP
 pwd
 php artisan zz:dms
 php artisan zz:dst
 
-cd /var/www/craiglorious.com
+cd $f
 pwd
-rm staging
-ln -s $DATEP /var/www/craiglorious.com/staging
-cd staging
+rm $f/staging
+ln -s $DATEP $f/staging
+cd $f/staging
 pwd
 php artisan up

@@ -2,21 +2,29 @@
 
 use App\Models\BaseCraigloriousModel;
 
-class View extends BaseCraigloriousModel {
+class View extends BaseCraigloriousModel
+{
 
-
-	protected $guarded = [
-		'id'
-	    ];
+    protected $guarded = [
+        'id'
+    ];
     protected $casts = [
         'place' => 'json'
     ];
-    public function isRole()
-    {
-        if (strtolower($this->name)=='role'){
-            return true;
-        }
-        return false;
-    }
+
+
+
+//      looks like a dead function if you come acrosss it maybe get rid of it....
+
+//    public function isRole()
+//    {
+//        if (strtolower($this->name) == 'role')
+//        {
+//            return true;
+//        }
+//
+//        return false;
+//    }
+
 
 }

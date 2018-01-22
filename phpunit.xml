@@ -24,9 +24,20 @@
         <testsuite name="environment">
             <file>tests/in/Environment.php</file>
         </testsuite>
+
+
         <testsuite name="craiglorious">
             <file>tests/in/CraigloriousDatabaseTest.php</file>
         </testsuite>
+        <testsuite name="views">
+            <file>tests/in/ViewTest.php</file>
+        </testsuite>
+
+
+
+
+
+
         <testsuite name="tenant">
             <file>tests/in/TenantDatabaseTest.php</file>
         </testsuite>

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #stage quick fix
-cd staging
+f=/var/www/craiglorious.com
+
+cd $f/staging
 git fetch --all
 git reset --hard origin/develop
 

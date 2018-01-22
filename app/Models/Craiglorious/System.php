@@ -32,6 +32,7 @@ class System extends BaseCraigloriousModel
     {
         //system_view table to limit per system
         return View::all();
+
     }
 
 
