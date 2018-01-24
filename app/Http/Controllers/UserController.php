@@ -200,13 +200,16 @@ class UserController extends Controller
     }
     public function create()
     {
+
         $passcode = unique_random('users', 'passcode', 5, 'number');
         $password = createPassword();
+//        $password = '1234';
 
         $user =\Config::get('user');
         $role = $user->role;
         $return_data['roles'] = $role->getRoleSelectTree();
         $return_data['page'] = 'create';
+        $return_data['records'] = [];
         $return_data['password_suggestions'] = [
             [
                 'password' => $password,
@@ -218,7 +221,7 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'record updated',
-            'id' => $return_data
+            'data' => $return_data
         ], 200);
         //return \View::make('pages/users/users', ['json' => json_encode($return_data)]);
 

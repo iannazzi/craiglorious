@@ -49,8 +49,14 @@
             renderTable(){
                 let self = this;
                 this.column_definition = columnDefinition(this);
+
+
+
                 let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
 
+                console.log(recordTable);
+                //to add data to the page now....
+                //recordTable.model.password.value = this.data.password_suggestions.password
 
                 $(function(){
                     recordTable.addTo('record_table');

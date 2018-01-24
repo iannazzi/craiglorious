@@ -18,7 +18,7 @@ export class ErrorModal {
          
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-lg" id="confirmTrue" data-dismiss="modal">OK</button>
+        <button type="button" class="btn btn-primary btn-lg" id="${this.id}_confirmTrue" >OK</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -31,11 +31,14 @@ export class ErrorModal {
                 $(return_div).modal('hide');
             }
         });
+        let self = this;
+        $(document).on("click", '#' + this.id + '_confirmTrue', function(event){
+            self.hide();
+        });
         this.error_div = return_div;
         return return_div;
     }
     addErrorMessage(message_array){
-        console.log(message_array)
         let div = document.createElement('div');
         let h2 = document.createElement('h2');
         h2.innerHTML = 'There was a problem:'
@@ -59,11 +62,15 @@ export class ErrorModal {
     }
     show()
     {
-        console.log('showing....')
+        console.log('showing error modal')
 
         $(this.error_div).modal('show');
     }
     hide(){
-        $(this.error_div).modal('show');
+        $(this.error_div).modal('hide');
     }
+    onClick(){
+        console.log('user clicked modal dismiss');
+    }
+
 }

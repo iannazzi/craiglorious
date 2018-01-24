@@ -4,7 +4,7 @@
     <div>
         <div v-if="dataReady">
             <div id="data_table_view">
-                <button class="btn-new" @click="$router.push('/locations/create')"><i class="fa fa-plus"
+                <button class="btn-new" @click="$router.push('/'+ route + '/create')"><i class="fa fa-plus"
                                                                                       aria-hidden="true"></i>New
                     {{modelName}}
                 </button>

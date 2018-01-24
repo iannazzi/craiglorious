@@ -91,7 +91,9 @@ export class AwesomeTable {
         let controller = new RecordTableController(model, view);
 
         //modal is used for a pop up 'edit_display
-        let modelModal = new TableModel(this.clone(this.options));
+        let modal_options = this.clone(this.options);
+        modal_options.name = modal_options.name + '_modal';
+        let modelModal = new TableModel(modal_options);
         let viewModal = new RecordTableView(modelModal);
         let controllerModal = new RecordTableController(modelModal, viewModal);
 
@@ -164,7 +166,7 @@ export class AwesomeTable {
                     viewModal.showWaitModal(true);
                     console.log(JSON.stringify(post_data))
 
-                    console.log(self.options)
+                    //console.log(self.options)
 
 
                     self.options.getData(
@@ -179,9 +181,8 @@ export class AwesomeTable {
                                 controller.onSaveSuccess.notify(response);
                             },
                             onError(response){
-                                console.log('got some badddd data');
                                 viewModal.showWaitModal(false);
-                                view.showErrorModal(response.responseJSON.message);
+                                viewModal.showErrorModal(response.message);
                             }
                         }
                     );

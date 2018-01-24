@@ -59,6 +59,7 @@ export default function(component){
             "show_on_view": false,
             "show_on_edit": false,
             "show_on_create": true,
+
             "th_width": "150px",
             "td_tags": "",
             "class": "",

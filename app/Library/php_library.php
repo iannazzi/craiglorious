@@ -27,12 +27,15 @@ function createPassword(){
     $faker = \Faker\Factory::create();
     $my_rand_strng = substr(str_shuffle(passwordSymbols()), -1);
     $part1 = $faker->firstName;
-    $part2 = $faker->randomNumber(4);
+    $part2 = xDigitString(4);
     $part3 = $my_rand_strng;
     $shuffle = $faker->shuffle([$part1,$part2,$part3]);
     $join = substr(str_shuffle("-:_"), -1);
     $password = implode($join,$shuffle);
     return $password;
+}
+function xDigitString($digits = 4){
+    return str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
 }
 function passwordSymbols()
 {

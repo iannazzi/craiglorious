@@ -39,9 +39,9 @@ export class AwesomeTableWrapper
             //name: "role",
             data: component.data.records,
             route: component.route,
+            name: component.route,
             column_definition: component.column_definition,
             table_buttons: ['edit', 'delete'],
-
             type: 'record', //record, collection or searchable
             table_view: component.page, //index, create, edit, and show pages: columns respond differnetly to
             access: access, //read vs write
@@ -116,7 +116,6 @@ export class AwesomeTableWrapper
 
 
     }
-
 
     createSearchableCollectionTable(component, number_of_records_to_automatically_get = 100){
         return new this.AwesomeTable({

@@ -240,7 +240,7 @@ export default function(component){
             "events": [],
             "search": "LIKE ANY BETWEEN EXACT",
 
-            "search_default": 0,
+            "search_default": 1,
             "properties": [],
             "word_wrap": true,
             "post": true

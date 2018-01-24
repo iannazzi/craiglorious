@@ -31,6 +31,17 @@ class UserTest extends ApiTester
     }
 
     /** @test */
+    function get_create()
+    {
+        $this->signIn();
+        $rawContent='{}';
+        $this->json('GET', $this->api($this->route .'/create'), json_decode($rawContent, true),$this->headers())
+            ->assertJson(["success"=>'true']);
+
+
+    }
+
+    /** @test */
     function can_be_created()
     {
 
