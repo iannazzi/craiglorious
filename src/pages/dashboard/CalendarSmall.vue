@@ -4,7 +4,10 @@
 </div>
 </template>
 <style>
-
+    #mini-calendar
+    {
+        padding-top : 20px;
+    }
 </style>
 <script>
 

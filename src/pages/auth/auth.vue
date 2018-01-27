@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav-component></nav-component>
-        <div class="container app-screen">
+        <div class="container app-screen login_top">
             <div class="col-md-9 col-md-offset-1 ">
                 <div class="tab-content">
                     <div class="tab-pane">
@@ -15,7 +15,8 @@
         <footer-component></footer-component>
     </div>
 </template>
-
 <style>
-
+    .login_top{
+        padding-top:20px;
+    }
 </style>

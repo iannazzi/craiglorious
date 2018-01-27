@@ -1,7 +1,7 @@
 {
   "presets": [
     ["env", {
-      "targets:": { "node": "7" } // change this to your node version
+      "targets:": { "node": "7" }
     }]
   ]
 }

@@ -1,4 +1,4 @@
-<template><div>
+<template><div class="login_top">
 
     <div class="panel-heading">
         Sign in to your account

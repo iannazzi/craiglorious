@@ -1,6 +1,6 @@
 <template>
     <nav class="main_navbar navbar navbar-default navbar-fixed-top navbar-inverse">
-        <div class="container-fluid">
+        <div class="container-fluid craiglorious_header">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
                         aria-expanded="false" aria-controls="navbar">
@@ -80,4 +80,35 @@
     }
 </script>
 <style>
+    .craiglorious_header{
+        height:76px;
+    }
+    .nav_text span{
+        font-size: 2.0em;
+        font-weight: bold;
+    //vertical-align: -0.15em;
+        padding-right:12px;
+    }
+
+    #bootstrap-overrides nav2 {
+        color: red;
+    }
+
+    #bootstrap-overrides .main_navbar {
+        background-color: mix(#2B3856, #000000);
+    }
+
+    #bootstrap-overrides .header_title {
+        font-size: 55px;
+        font-weight: Bold;
+        font-family: 'Arial Black';
+        color: red;
+        margin: 0px;
+    //padding-top:13px;
+        padding-left: 0px;
+        padding-bottom: 0px;
+        padding-right: 0px;
+        letter-spacing: -3px;
+    }
+
 </style>

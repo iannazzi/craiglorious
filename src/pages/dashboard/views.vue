@@ -12,7 +12,7 @@
                     {{ room.name }}
                 </button>
             </div>
-            <div id="search_div" class="">
+            <div id="search_div" class="col-xs-12">
                 <input id="search_input"
 
                        type="text"
@@ -41,6 +41,8 @@
         </div>
     </div>
 </template>
+
+
 <script>
 
     export default {
@@ -195,16 +197,3 @@
         }
     }
 </script>
-<style>
-
-    .wait i {
-        font-size: 500px;
-
-    }
-    .wait-text {
-        display: table-cell;padding-left:30px;
-    }
-    .confirmModalDiv {
-
-    }
-</style>

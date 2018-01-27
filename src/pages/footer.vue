@@ -26,6 +26,24 @@
         </footer>
     </div>
 </template>
+<style>
+    .footer {
+        background-color: #f5f5f5;
+        border-top: 1px solid #e7e7e7;
+        bottom: 0;
+        height: 80px;
+        position: absolute;
+        width: 100%;
+    }
+    .footer-social-icons {
+        font-size: 32px;
+        padding-top: 18px;
+
+    a {
+        color: #777;
+    }
+    }
+</style>
 <script>
     module.exports = {
         data: function () {
