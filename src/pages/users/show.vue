@@ -54,12 +54,13 @@
 
                 let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
 
-                console.log(recordTable);
-                //to add data to the page now....
-                //recordTable.model.password.value = this.data.password_suggestions.password
 
                 $(function(){
                     recordTable.addTo('record_table');
+                    //to add data to the page now....
+                    recordTable.controller.updateCellValue('password',self.data.password_suggestions.password);
+                    recordTable.controller.updateCellValue('passcode',self.data.password_suggestions.passcode);
+                    console.log(recordTable.model);
                     bus.$emit('zzwaitoverevent');
                 })
             }

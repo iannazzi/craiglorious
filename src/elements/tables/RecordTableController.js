@@ -19,7 +19,10 @@ export class RecordTableController extends TableController {
 
     }
 
-
+    updateCellValue(column_name, val, row = 0){
+        this.model.tdo[row][column_name]['data'] = val;
+        this.view.updateTable();
+    }
     copyTable() {
         this.cdo.forEach((col_def) => {
             let element = this.view.elements[col_def.db_field];
@@ -37,7 +40,6 @@ export class RecordTableController extends TableController {
             }
         })
     }
-
 
 
     getConfirm(confirmMessage, callback) {

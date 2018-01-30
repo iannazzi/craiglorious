@@ -219,7 +219,6 @@ export class TableModel {
         return this.tdo.length;
     }
 
-
     copyRows(row_array, place = 'bottom') {
         //copying objects is a bit of a bitch... as long as there are no functions this will work
         let newRowCounter = 0;

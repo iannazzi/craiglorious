@@ -90,12 +90,22 @@ export class AwesomeTable {
         let view = new RecordTableView(model);
         let controller = new RecordTableController(model, view);
 
+
+
         //modal is used for a pop up 'edit_display
         let modal_options = this.clone(this.options);
         modal_options.name = modal_options.name + '_modal';
         let modelModal = new TableModel(modal_options);
         let viewModal = new RecordTableView(modelModal);
         let controllerModal = new RecordTableController(modelModal, viewModal);
+
+        this.model = model;
+        this.view = view;
+        this.controller = controller;
+        this.modelModal = modelModal;
+        this.viewModal = viewModal;
+        this.controllerModal = controllerModal;
+
 
         let self = this;
         //this nonsense is to set the focus to the first input..

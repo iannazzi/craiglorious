@@ -65,20 +65,22 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $user =  \Config::get('user');
+        $user = \Config::get('user');
 
         //dd($this->return_data['roles']);
         $number_of_records_available = User::all()->count();
 
-        $return_data =  $user;
+        $return_data = $user;
         $return_data['roles'] = $user->role->getRoleSelectTree();
 
         $return_data['page'] = 'index';
         $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
-        if($number_of_records_available<=$request->number_of_records){
+        if ($number_of_records_available <= $request->number_of_records)
+        {
             $return_data['records'] = User::all(); //let js handle the data through ajax
         }
+
         return response()->json([
             'success' => true,
             'message' => 'search returned',
@@ -91,12 +93,12 @@ class UserController extends Controller
     public function show($id)
     {
 
-        $user =  \Config::get('user');
+        $user = \Config::get('user');
         $return_data['roles'] = $user->role->getRoleSelectTree();
         $user = User::findOrFail($id);
         if ($user->isAdmin())
         {
-            if ( \Config::get('user')->isAdmin())
+            if (\Config::get('user')->isAdmin())
             {
                 //good to continue
             } else
@@ -116,8 +118,6 @@ class UserController extends Controller
         ], 200);
 
 
-
-
     }
 
     public function getPreferences()
@@ -126,7 +126,7 @@ class UserController extends Controller
         $passcode = unique_random('users', 'passcode', 5, 'number');
         $password = createPassword();
 
-        $user =  \Config::get('user');
+        $user = \Config::get('user');
         $return_data = $user;
         $return_data['pass'] = $password;
         $return_data['code'] = $passcode;
@@ -146,11 +146,11 @@ class UserController extends Controller
         $data = $request->all();
 
 
-
-        if(isset($data['password'])){
+        if (isset($data['password']))
+        {
             $rules['password'] = $this->passwordRules();
-        }
-        else if (isset($data['passcode'])){
+        } else if (isset($data['passcode']))
+        {
             $rules['passcode'] = $this->passcodeRules($id);
         }
         $validation = \Validator::make($data, $rules);
@@ -158,10 +158,11 @@ class UserController extends Controller
         {
 
             $user = User::find($id);
-            if(isset($data['password'])){
+            if (isset($data['password']))
+            {
                 $user->password = bcrypt($data['password']);
-            }
-            elseif (isset($data['passcode'])){
+            } elseif (isset($data['passcode']))
+            {
                 $user->passcode = $data['passcode'];
             }
             if ($user->save())
@@ -177,18 +178,23 @@ class UserController extends Controller
         }
         $errors = $validation->errors();
         $errors = json_decode($errors);
+
         return response()->json([
             'success' => false,
             'message' => $errors
         ], 422);
     }
-    public function passwordRules(){
+
+    public function passwordRules()
+    {
         return ['required',
             'min:8',
-            'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d])(?=.*['.passwordSymbols().']).*$/',
+           // 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d])(?=.*[' . passwordSymbols() . ']).*$/',
             'confirmed'];
     }
-    public function passcodeRules($id){
+
+    public function passcodeRules($id)
+    {
 //        return ['minlength:5',
 //                'maxlength:10',
 //        ];
@@ -198,6 +204,7 @@ class UserController extends Controller
             'unique:users,passcode,' . $id,
             'confirmed'];
     }
+
     public function create()
     {
 
@@ -205,19 +212,19 @@ class UserController extends Controller
         $password = createPassword();
 //        $password = '1234';
 
-        $user =\Config::get('user');
+        $user = \Config::get('user');
         $role = $user->role;
         $return_data['roles'] = $role->getRoleSelectTree();
         $return_data['page'] = 'create';
         $return_data['records'] = [];
-        $return_data['password_suggestions'] = [
+        $return_data['password_suggestions'] =
             [
                 'password' => $password,
                 'password_confirmation' => $password,
                 'passcode' => $passcode,
                 'passcode_confirmation' => $passcode
-            ]
-        ]; //let js handle the data through ajax
+
+            ]; //let js handle the data through ajax
         return response()->json([
             'success' => true,
             'message' => 'record updated',
