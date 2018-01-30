@@ -11,9 +11,6 @@ $font-family-sans-serif: "Lato", Helvetica, Arial, sans-serif !default;
 $font-size-base: 14px;
 $navbar-height: 65px;
 
-
-
-// Variables
 @import "variables";
 
 /*
@@ -25,8 +22,6 @@ $navbar-height: 65px;
 @import "node_modules/font-awesome/scss/font-awesome";
 
 
-
-
 /**
  * Elements
  */
@@ -36,9 +31,7 @@ $navbar-height: 65px;
 @import "elements/buttons";
 @import "elements/forms";
 @import "elements/modals";
-@import "elements/nav";
 @import "elements/panels";
-@import "elements/tables";
 @import "elements/tooltips";
 @import "elements/fullcalendar";
 
@@ -49,10 +42,8 @@ $navbar-height: 65px;
 @import "components/tabs";
 //pages
 @import "../pages/dashboard/style";
-@import "../pages/vendors/style";
 @import "../pages/roles/style";
 @import "../pages/user/style";
-@import "../pages/users/style";
 
 html {
   min-height: 100%;
@@ -66,16 +57,10 @@ body {
   background-color: white;
 }
 
-
-
 [v-cloak] {
   display: none;
 }
 
-.vcenter {
-  display: inline-block;
-  vertical-align: middle;
-  float: none;
-}
+
 
 
