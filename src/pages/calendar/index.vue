@@ -4,7 +4,6 @@
         <zzi-nav-keys></zzi-nav-keys>
         <div v-show="loaded">
             <div id="calendar"></div>
-            <zzi-calendar-entry-modal></zzi-calendar-entry-modal>
             <div class="container hidden-print">
                 <div class="jumbotron">
                     <h1>Help is here</h1>
@@ -62,19 +61,16 @@
 
             self.renderCal();
             this.loaded = true;
-            let renderEvents = function(){
-                getData( {
-                    method: 'get',
-                    url: '/calendar',
-                    entity: false,
-                    onSuccess(response) {
-                        bus.$emit('addCalendarEventTypes', response.data.event_types)
-                        self.loaded = true;
-                        $("#calendar").fullCalendar('addEventSource', response.data.events)
-                    },
-                })
-            }
-            renderEvents();
+            getData( {
+                method: 'get',
+                url: '/calendar',
+                entity: false,
+                onSuccess(response) {
+                    bus.$emit('addCalendarEventTypes', response.data.event_types)
+                    self.loaded = true;
+                    $("#calendar").fullCalendar('addEventSource', response.data.events)
+                },
+            })
 
             bus.$on('add_event', function (event) {
                 console.log('add event');
@@ -83,10 +79,8 @@
                 //$('#calendar').fullCalendar('renderEvent', self.clone(event));
             });
             bus.$on('refetchEvents', function () {
-                $('#calendar').fullCalendar('removeEvents');
-                renderEvents();
-//                console.log('refetchEvents');
-//                $('#calendar').fullCalendar('refetchEvents')
+                console.log('refetchEvents');
+                $('#calendar').fullCalendar('refetchEvents')
             })
 
 
@@ -155,15 +149,22 @@
                             if (view.name == 'month') {
                                 cal.fullCalendar('gotoDate', date);
                                 cal.fullCalendar('changeView', 'agendaWeek')
+
                             }
                             else {
-                                bus.$emit('add_calendar_entry', date)
+                                //go to a create page.....with the date
+                                let datest = encodeURI(date.format());
+                                self.$router.push({path:'calendar/create', query: { datest}});
                             }
+
 
                         },
                         eventClick: function (event, jsEvent, view) {
 //                        bus.$emit('edit_calendar_entry', event) use double click instead
-                        },
+                            if (event.url) {
+                                window.open(event.url);
+                                return false;
+                            }                        },
                         scrollTime: '14:00:00',
 //                    minTime:'05:00:00',
 //                    maxTime:'22:00:00',
@@ -189,6 +190,8 @@
                 });
 
             },
+
+
         }
 
     }

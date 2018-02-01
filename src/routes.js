@@ -103,13 +103,6 @@ let routes = [
 
     },
     {
-        path: '/calendar',
-        name: 'calendar',
-
-        meta: {guarded: true},
-        component: require('./pages/calendar/calendarPage.vue')
-    },
-    {
         path: '/user',
         meta: {guarded: true},
         component: require('./pages/layout.vue'),
@@ -121,6 +114,15 @@ let routes = [
             }
         ]
     },
+    {
+        path: '/calendar',
+        name: 'calendar',
+
+        meta: {guarded: true},
+        component: require('./pages/calendar/calendarPage.vue')
+    },
+
+    // commonRoute('calendar'),
     commonRoute('roles'),
     commonRoute('users'),
     commonRoute('locations'),
@@ -156,7 +158,5 @@ let router = new VueRouter({
     routes
 
 })
-
-
 
 export default router

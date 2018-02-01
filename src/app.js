@@ -4,15 +4,14 @@ import {getData} from './controllers/getData'
 import {AwesomeTable} from './elements/tables/AwesomeTable';
 import {AwesomeTableWrapper} from './controllers/AwesomeTableWrapper'
 import {craigSocket} from './controllers/craigSocket'
-
 import {transformer} from './helpers/transformer'
 
 //99% of page data will be the table......
 window.transfomer = new transformer;
 window.AwesomeTableWrapper = new AwesomeTableWrapper();
 window.AwesomeTable = AwesomeTable;
-let cs = new craigSocket();
-window.cs = cs;
+window.cs = new craigSocket();
+
 
 //some globals please.....
 window.bus = new Vue();
@@ -54,7 +53,7 @@ Vue.component('nav-component', require('./components/nav/nav.vue'))
 Vue.component('footer-component', require('./pages/footer.vue'))
 Vue.component('zzi-nav', require('./components/nav/nav.vue'))
 Vue.component('zzi-wait', require('./components/modals/waitModal.vue'))
-Vue.component('zzi-calendar-entry-modal', require('./pages/calendar/CalendarEventModal.vue'))
+//Vue.component('zzi-calendar-entry-modal', require('./pages/calendar/CalendarEventModal.vue'))
 Vue.component('zzi-nav-keys', require('./components/keyCommands/dashboardKeyCommands.vue'))
 Vue.component('zzi-matrix', require('./components/wait/matrix.vue'))
 Vue.component('zzi-matrix2', require('./components/wait/matrix2.vue'))
@@ -142,6 +141,27 @@ let vm = new Vue({
                         if (1) ml('validated token after refresh')
                         //localStorage.setItem('user', JSON.stringify(response.user));
                         bus.$emit('userHasLoggedIn');
+
+                            self.setLogin()
+                            if(last_page_accessed_flag){
+                                let last_page_accessed = self.last_page_accessed;
+                                if(last_page_accessed){
+                                    self.$router.push(last_page_accessed)
+                                    // self.$router.push('/dashboard');
+                                }
+                                else{
+                                    self.$router.push('/dashboard');
+                                }
+                            }
+
+                            if(verify_timer_flag){
+                                cs.verifyTimerStart();
+                            }
+
+
+
+
+
                         self.appLoaded = true;
 
                     },
@@ -162,20 +182,7 @@ let vm = new Vue({
 
             }
         },
-        // getPageData(){
-        //     //site wide data // kinda a bad idea, pretty complicated additional logic.....
-        //     let self = this;
-        //     getData({
-        //         method: 'get',
-        //         url: '/dashboard/cached_page_data',
-        //         entity: false,
-        //         onSuccess(response) {
-        //             if (1) ml('updated cached page data')
-        //             self.cached_page_data = response.cached_page_data;
-        //         },
-        //
-        //     })
-        //}
+
     },
 
     mounted(){
@@ -194,78 +201,85 @@ let vm = new Vue({
             self.$router.push('/auth/login');
 
         })
-        bus.$on('userHasLoggedIn', function (user) {
-            //self.getPageData();
-            //console.log(self.$route.name);
-            self.setLogin()
-            // let last_page_accessed = localStorage.getItem('last_page_accessed')
-            let last_page_accessed = self.last_page_accessed;
-            if(last_page_accessed){
-                self.$router.push(last_page_accessed)
-                // self.$router.push('/dashboard');
+        // bus.$on('userHasLoggedIn', function (user) {
+        //     //self.getPageData();
+        //     //console.log(self.$route.name);
+        //     self.setLogin()
+        //     // let last_page_accessed = localStorage.getItem('last_page_accessed')
+        //     if(last_page_accessed_flag){
+        //         let last_page_accessed = self.last_page_accessed;
+        //         if(last_page_accessed){
+        //             self.$router.push(last_page_accessed)
+        //             // self.$router.push('/dashboard');
+        //         }
+        //         else{
+        //             self.$router.push('/dashboard');
+        //         }
+        //     }
+        //
+        //     if(verify_timer_flag){
+        //         cs.verifyTimerStart();
+        //     }
+        // })
+        bus.$on('pageRefresh', function(){});
+        bus.$on('UserLoggedInFromAnotherTab', function(){
 
-            }
-            else{
-                self.$router.push('/dashboard');
-            }
-            cs.verifyTimerStart();
-        })
+        });
         bus.$on('userInput', function () {
-            console.log('user input detected.... ');
-            if( ! self.inactivityTimer)
-            {
-                self.inactivityTimer=true
+            if(user_input_flag){
+                console.log('user input detected.... ');
+                if( ! self.inactivityTimer)
+                {
+                    self.inactivityTimer=true
 
-                console.log('going to get some data ... ');
-                getData({
-                    method: 'get',
-                    url: '/craigsocket',
-                    entity: false,
-                    onSuccess(response) {
-                        console.log(response);
+                    console.log('going to get some data ... ');
+                    getData({
+                        method: 'get',
+                        url: '/craigsocket',
+                        entity: false,
+                        onSuccess(response) {
+                            console.log(response);
 
-                        //double check that there is a token there, a user on a different tab could have clicked logout while transmitting....
+                            //double check that there is a token there, a user on a different tab could have clicked logout while transmitting....
 
-                        if(localStorage.getItem('jwt-token') === null)
-                        {
-                            //got logged out from a different tab
-                           console.log('craigsocket back but token deleted from storage before we got back....');
-                           console.log(response);
-                           bus.$emit('userHasLoggedOut');
-                        }
-                        else
-                        {
-                            //refresh the token
-                            console.log('refresh the token');
-                            localStorage.setItem('jwt-token', response.token);
+                            if(localStorage.getItem('jwt-token') === null)
+                            {
+                                //got logged out from a different tab
+                                console.log('craigsocket back but token deleted from storage before we got back....');
+                                console.log(response);
+                                bus.$emit('userHasLoggedOut');
+                            }
+                            else
+                            {
+                                //refresh the token
+                                console.log('refresh the token');
+                                localStorage.setItem('jwt-token', response.token);
 
-                            //update messages
+                                //update messages
 
 //wait
-                            //console.log('starting a timer ..');
-                            setTimeout(function(){
+                                //console.log('starting a timer ..');
+                                setTimeout(function(){
 
-                                self.inactivityTimer=false;
+                                    self.inactivityTimer=false;
 
 
-                            }, 10000);
+                                }, 10000);
+                            }
+
+                        },
+                        onError(response){
+                            console.log('craigsocket unable to connect to server');
+                            console.log(response);
+                            //bus.$emit('userHasLoggedOut');
                         }
 
-                    },
-                    onError(response){
-                        console.log('craigsocket unable to connect to server');
-                        console.log(response);
-                        //bus.$emit('userHasLoggedOut');
-                    }
-
-                })
-                //check the token isn't stale
+                    })
+                    //check the token isn't stale
 
 
+                }
             }
-
-
-
         })
     },
 })
@@ -282,7 +296,19 @@ window.addEventListener('storage', function(e) {
         }
         else{
             if(e.oldValue === null){
-                bus.$emit('userHasLoggedIn');
+                vm.setLogin()
+                if(last_page_accessed_flag){
+                    let last_page_accessed = vm.last_page_accessed;
+                    if(last_page_accessed){
+                        vm.$router.push(last_page_accessed)
+                    }
+                    else{
+                        vm.$router.push('/dashboard');
+                    }
+                }
+                if(verify_timer_flag){
+                    cs.verifyTimerStart();
+                }
 
             }
             //otherwise it was just a token refresh
@@ -296,7 +322,7 @@ router.beforeEach((to, from, next) => {
 
     //strip query off?
     // let uri = new JsUri(window.location.href);
-    // console.log ('might need to take control of the uri query');
+     //console.log ('might need to take control of the uri query');
     // let query = uri.query();
     // uri.queryPairs.forEach(pair => {
     //     console.log(pair)
@@ -325,5 +351,3 @@ router.afterEach((to, from, next)=>{
     //next()
 })
 
-
-;

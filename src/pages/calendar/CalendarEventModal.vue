@@ -137,7 +137,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
 
@@ -210,57 +209,9 @@
                 errors: new Errors(),
                 show: false,
                 eventTypes: [],
-//                eventTypes:[
-//                    {
-//                        'value': 'null',
-//                        'name': 'Select....',
-//                        'visible':true
-//                    },
-//                    {
-//                        'value': 'scheduled_shift',
-//                        'name': 'Scheduled Shift',
-//                        'visible':true
-//                    },
-//                    {
-//                        'value': 'actual_shift',
-//                        'name': 'Actual Shift',
-//                        'visible':false
-//                    },
-//                    {
-//                        'value': 'customer_appointment',
-//                        'name': 'Appointment',
-//                        'visible':true
-//                    },
-//                    {
-//                        'value': 'personal_appointment',
-//                        'name': 'Personal Appointment',
-//                        'visible':true
-//                    },
-//                    {
-//                        'value': 'internal_meeting',
-//                        'name': 'Meeting',
-//                        'visible':true
-//                    },
-//                    {
-//                        'value': 'location_event',
-//                        'name': 'Event',
-//                        'visible':false
-//
-//                    },
-//                    {
-//                        'value': 'external_meeting',
-//                        'name': 'External Meeting',
-//                        'visible':false
-//                    },
-//                    {
-//                        'value': 'external_event',
-//                        'name': 'External Event',
-//                        'visible':false
-//                    },
-//
-//                ]
             }
-        }, computed: {
+        },
+        computed: {
             // a computed getter
             formattedEventType: function () {
                 // `this` points to the vm instance
@@ -298,9 +249,6 @@
 
 //                self.show=true;
                 $('#add-edit-event-modal').modal('show');
-
-
-
             })
             bus.$on('drag_copy_event',function(event){
                 self.add_edit = false;
@@ -395,8 +343,8 @@
                 }
 
             },
-            onDelete(){
-
+            onDelete(e){
+                e.preventDefault();
                 let post_data = {
                     id: this.id,
                 }
@@ -405,30 +353,35 @@
                 console.log(JSON.stringify(data))
                 this.loading = true;
 
-                $.ajax({
+                getData( {
+                    method: 'delete',
                     url: '/calendar',
-                    type: 'POST',
-                    data: data,
-                    success: function (response) {
+                    entity: data,
+                    onSuccess(response) {
                         self.loading = false;
                         self.hideModal();
                         bus.$emit('refetchEvents');
                     },
-                    error(response){
-                       console.log(response);
+                    onError(response){
+                        console.log(response);
+                        bus.$emit('event_save_error', response);
                     }
-                });
+                })
+
+
             },
             onCopy(){
                 //lets see.....
                 //remove the id and set add to true?
                 this.id='';
                 this.add=true;
+
             },
-            onSave(){
+            onSave(e){
+                e.preventDefault();
+                //alert('on save');
                 this.loading = true;
                 this.save();
-                let self = this;
 
             },
             save(){
@@ -447,14 +400,16 @@
                 }
                 let data = {data: post_data, _method: 'put'};
                 let self = this;
-//                console.log(JSON.stringify(data))
+                console.log(JSON.stringify(data))
 
                 getData( {
                     method: 'post',
                     url: '/calendar',
                     entity: data,
                     onSuccess(response) {
-                        console.log('event_saved');
+
+
+                        console.log('event_saved_from_modal');
                         if(self.add_edit) {
                             bus.$emit('event_saved');
                         }

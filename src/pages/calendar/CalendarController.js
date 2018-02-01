@@ -17,7 +17,7 @@ export class CalendarController
         let data = {data: post_data, _method: 'put'};
 
         getData( {
-            method: 'post',
+            method: 'put',
             url: '/calendar',
             entity: data,
             onSuccess(response) {

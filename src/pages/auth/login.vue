@@ -82,10 +82,12 @@
                         localStorage.setItem('user', JSON.stringify(response.user));
                         localStorage.setItem('jwt-token', response.token);
 
-                        bus.$emit('userHasLoggedIn');
-                        bus.$emit('zzwaiteventover');
-
-                        //self.$router.push('/dashboard');
+                        //bus.$emit('userHasLoggedIn');
+                        self.$root.setLogin();
+                        if(verify_timer_flag){
+                            cs.verifyTimerStart();
+                        }
+                        self.$router.push('/dashboard');
                     },
                     onError(response) {
                         bus.$emit('zzwaiteventover');
@@ -102,52 +104,13 @@
 
             },
 
-            startCheckLogin: function() {
-                let self = this;
-              //  console.log('Turning on check login clock....');
 
-//                this.loginTimer = setInterval(function () {
-//                    console.log('checking if a different tab logged in....');
-//                    let token = localStorage.getItem('jwt-token')
-//                    if (token !== null) {
-//
-//
-//
-//                        getData( {
-//                            method: 'get',
-//                            url: 'userid',
-//                            entity: token,
-//                            onSuccess(response) {
-//                                self.stopCheckLogin();
-//                                console.log(response)
-//                                //go to dashborad
-//                                console.log('need to transition page to dashboard');
-//                                bus.$emit('userHasLoggedIn', response.user);
-//                                self.$router.push('/dashboard');
-//                            },
-//                            onError(response) {
-//                                console.log('error at userid');
-//                            }
-//                        })
-//
-//
-//                    }
-//
-//
-//                }, 10000); // every 100 seconds
-
-            },
-
-            stopCheckLogin: function() {
-                console.log('stopping login timer');
-                clearInterval(this.loginTimer);
-            }
 
         },
 
         mounted: function () {
+            //if we are logged in then redirect....
 
-            this.startCheckLogin();
         },
 
     }

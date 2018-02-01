@@ -28,7 +28,7 @@
                 url: '/calendar',
                 entity: false,
                 onSuccess(response) {
-                    $("#calendar").fullCalendar( 'addEventSource', response.events )
+                    $("#calendar").fullCalendar( 'addEventSource', response.data.events )
                 },
             })
 
