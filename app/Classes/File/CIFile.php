@@ -71,18 +71,23 @@ class CIFile
 	}
 	public function arrayToCSVFile($filepath, $array, $delimiter = ";", $save_keys=false, $header = true )
 	{
-		$content = '';
+        //dd($array);
+
+        $content = '';
 	    reset($array);
-	    foreach($array[0] as $key1 => $value)
+
+        foreach($array[0] as $key1 => $value)
 		{
 			$headers[] = $key1;
 		}
-		if($header) {
+
+        if($header) {
 			if ($save_keys){ $content .= $delimiter; }
 			$content .= (is_array($headers)) ? implode($delimiter, $headers) : $headers;
 			$content .= "\n";
 		}
-		reset($array);
+
+        reset($array);
 	    while(list($key, $val) = each($array))
 	    {
 	        // replace tabs in keys and values to [space]
@@ -90,13 +95,15 @@ class CIFile
 	        $val = str_replace("\t", " ", $val);
 	 
 	        if ($save_keys){ $content .=  ($key+1).$delimiter; }
-	 
-	        // create line:
+
+            // create line:
 	        $content .= (is_array($val)) ? implode($delimiter, $val) : $val;
 	        $content .= "\n";
 	    }
-	 	$this->makeDirectory($filepath);
-	    if ($fp = fopen($filepath, 'w+'))
+
+        $this->makeDirectory($filepath);
+
+        if ($fp = fopen($filepath, 'w+'))
 	    {
 	        fwrite($fp, $content);
 	        fclose($fp);
