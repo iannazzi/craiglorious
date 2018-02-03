@@ -122,7 +122,6 @@ let routes = [
         component: require('./pages/calendar/calendarPage.vue')
     },
 
-    // commonRoute('calendar'),
     commonRoute('roles'),
     commonRoute('users'),
     commonRoute('locations'),

@@ -22,6 +22,7 @@ class CalendarController extends Controller
             $tmp = [
                 'id' => $entry->id,
                 'title' => $entry->title,
+                'comments' => $entry->comments,
                 'start' => $entry->start,
                 'end' => $entry->end,
                 'className' => $entry->class_name,

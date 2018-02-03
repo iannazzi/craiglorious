@@ -72,12 +72,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label>Day</label>
-                                    <input @keydown="errors.clear('start')" type="date" class="form-control" v-model="start_date" @change="checkDate">
+                                    <input @keydown="errors.clear('start')" @click="errors.clear('start')" type="date" class="form-control" v-model="start_date" @change="checkDate">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Time</label>
 
-                                    <input @keydown="errors.clear('start')" type="time" @change="checkDate" class="form-control" v-model="start_time">
+                                    <input @keydown="errors.clear('start')" @click="errors.clear('start')" type="time" @change="checkDate" class="form-control" v-model="start_time">
                                 </div>
 
 
@@ -95,11 +95,11 @@
 
                                 <div class="col-md-4">
                                     <label>Day</label>
-                                    <input @keydown="errors.clear('end')" type="date" class="form-control" v-model="end_date" @change="checkDate">
+                                    <input @keydown="errors.clear('end')" @click="errors.clear('end')" type="date" class="form-control" v-model="end_date" @change="checkDate">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Time</label>
-                                    <input @keydown="errors.clear('end')" type="time" class="form-control" v-model="end_time" @change="checkDate">
+                                    <input @keydown="errors.clear('end')" @click="errors.clear('end')" type="time" class="form-control" v-model="end_time" @change="checkDate">
                                 </div>
 
                             </div>
@@ -109,7 +109,15 @@
                                       v-text="errors.get('end')"></span>
                                 </div>
                             </div>
-
+                            <div class="row vertical-align">
+                                <div class="col-md-4">
+                                    <h4>Comments</h4>
+                                </div>
+                                <div class="col-md-8">
+                                    <textarea  class="form-control" v-model="comments" >
+                                    </textarea>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button v-if="!add" class="btn btn-danger pull-left delete-event" v-on:click="onDelete">
@@ -190,6 +198,7 @@
                     end_date: '',
                     end_time: '',
                     title: '',
+                    comments: '',
                     id: '',
                 }),
                 event:{
@@ -205,6 +214,7 @@
                 end_date: '',
                 end_time: '',
                 title: '',
+                comments: '',
                 id: '',
                 errors: new Errors(),
                 show: false,
@@ -212,11 +222,6 @@
             }
         },
         computed: {
-            // a computed getter
-            formattedEventType: function () {
-                // `this` points to the vm instance
-
-            },
             safeEndDate(){
                 if (moment(this.end_date).isSameOrBefore(this.start_date)) {
                     this.end_date = this.start_date;
@@ -231,9 +236,7 @@
             }
         },
         mounted(){
-
             let self = this;
-
             bus.$on('addCalendarEventTypes', function (event_types) {
                 self.eventTypes = event_types;
             })
@@ -246,41 +249,13 @@
                 self.add = false;
                 self.loading=false;
                 self.loadEventData(event);
-
-//                self.show=true;
                 $('#add-edit-event-modal').modal('show');
-            })
-            bus.$on('drag_copy_event',function(event){
-                self.add_edit = false;
-                self.loadEventData(event);
-                self.id='';
-                self.save();
-            })
-            bus.$on('move_event',function(event){
-                self.add_edit = false;
-                self.loadEventData(event);
-                self.save();
-            })
-            bus.$on('resize_event',function(event){
-                self.add_edit = false;
-                self.loadEventData(event);
-                self.save();
-            })
-            bus.$on('event_saved', function(){
-                console.log('event_saved bus');
-                self.loading = false;
-                self.hideModal();
-                if (self.add){
-                    bus.$emit('add_event', self.getEvent());
-                }
             })
             bus.$on('event_save_error', function(response){
                 self.loading = false;
                 console.log('event_save_error bus');
                 self.errors.record(response.message);
             })
-
-
             $('#add-edit-event-modal').on('shown.bs.modal', function () {
                 $('#entry_title').focus();
                 $('#entry_title').select();
@@ -288,7 +263,6 @@
         },
         methods: {
             loadEventData(event){
-
                 this.start_date = event.start.format('YYYY-MM-DD');
                 this.end_date = event.end.format('YYYY-MM-DD');
                 this.start_time = event.start.format('HH:mm');
@@ -296,6 +270,7 @@
                 this.class_name = event.className[0];
                 this.allDay = event.allDay;
                 this.title = event.title;
+                this.comments = event.comments;
                 this.id = event.id;
             },
             hideModal(){
@@ -313,6 +288,8 @@
                 this.class_name = null;
                 this.title = '';
                 this.id = '';
+                this.comments = '';
+
                 $('#add-edit-event-modal').modal('show');
             },
             getEvent(){
@@ -322,6 +299,7 @@
                     start: this.getStartDateTime(),
                     end: this.getEndDateTime(),
                     title: this.title,
+                    comments: this.comments,
                     id: this.id,
                     editable: 1,
                     startEditable: 1,
@@ -330,12 +308,6 @@
                 }
             },
             checkDate(){
-                console.log(this.start_date);
-                console.log(this.end_date);
-                console.log(this.start_time);
-                console.log(this.end_time);
-                console.log(moment(this.end_date + ' ' + this.end_time + ':00').isSameOrBefore(this.start_date + ' ' + this.start_time + ':00'));
-
                 if (moment(this.end_date + ' ' + this.end_time + ':00').isSameOrBefore(this.start_date + ' ' + this.start_time + ':00')) {
 //                    if (moment(this.end_date).isSameOrBefore(this.start_date)) {
                     this.end_date = this.start_date;
@@ -360,7 +332,7 @@
                     onSuccess(response) {
                         self.loading = false;
                         self.hideModal();
-                        bus.$emit('refetchEvents');
+                        bus.$emit('event_saved');
                     },
                     onError(response){
                         console.log(response);
@@ -370,25 +342,27 @@
 
 
             },
-            onCopy(){
+            onCopy(e){
                 //lets see.....
                 //remove the id and set add to true?
                 this.id='';
                 this.add=true;
+                e.preventDefault();
 
             },
             onSave(e){
                 e.preventDefault();
-                //alert('on save');
                 this.loading = true;
                 this.save();
-
             },
             save(){
+                //this is different than the calendarController.js save becuase this is not a full
+                //fullcalendar event object
 
                 let post_data = {
                     id: this.id,
                     title: this.title,
+                    comments: this.comments,
                     start: this.getStartDateTime(),
                     end: this.getEndDateTime(),
                     all_day: this.allDay,
@@ -407,20 +381,18 @@
                     url: '/calendar',
                     entity: data,
                     onSuccess(response) {
+                        self.hideModal();
+                        bus.$emit('event_saved');
 
-
-                        console.log('event_saved_from_modal');
-                        if(self.add_edit) {
-                            bus.$emit('event_saved');
-                        }
+//                        if(self.add_edit) {
+//                            bus.$emit('event_saved');
+//                        }
                     },
                     onError(response){
                         console.log(response);
                         bus.$emit('event_save_error', response);
                     }
                 })
-
-
 
             },
             getStartDateTime(){

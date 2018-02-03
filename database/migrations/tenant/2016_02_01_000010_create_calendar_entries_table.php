@@ -17,6 +17,7 @@ class CreateCalendarEntriesTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('title');
+            $table->text('comments');
             $table->boolean('all_day');
             $table->dateTime('start');
             $table->dateTime('end');

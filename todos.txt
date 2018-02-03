@@ -19,7 +19,7 @@ click on search only works if the input has changed
 
 browser test page is totally biffed - kinda need a complete re-do....
 
-Calendar - not saving, url is fucked up, after save goes weirdo, mini calendar drag n drop
+Calendar - mini calendar drag n drop, not sure how many events we are grabbing
 
 awesome table - validation error modal is not showing on the pop up update form
 

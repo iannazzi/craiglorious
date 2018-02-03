@@ -40,8 +40,10 @@
                 $('#calendar').fullCalendar({
                     height: 100,
                     header:false,
-                    editable: false,
-                    eventStartEditable: false,
+                    eventDrop(event, delta, revertFunc, jsEvent, ui, view) {
+                        //revertFunc();
+                        self.$router.push({path: '/calendar', query: { event: event.id }});
+                    },
 
 
                     eventClick:  function(event, jsEvent, view) {

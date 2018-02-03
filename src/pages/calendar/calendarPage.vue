@@ -47,6 +47,7 @@
 </style>
 <script>
     import {CalendarController} from './CalendarController.js'
+
     let cc = new CalendarController();
     export default {
         data() {
@@ -60,6 +61,7 @@
         mounted: function () {
             let self = this;
 
+
             self.renderCal();
             this.loaded = true;
             let renderEvents = function(){
@@ -69,13 +71,26 @@
                     entity: false,
                     onSuccess(response) {
                         bus.$emit('addCalendarEventTypes', response.data.event_types)
-                        self.loaded = true;
+                        console.log('removing events');
+                        $('#calendar').fullCalendar('removeEvents');
+                        console.log('rendering new events');
                         $("#calendar").fullCalendar('addEventSource', response.data.events)
                     },
                 })
             }
+            console.log('rendering initial events');
             renderEvents();
+            bus.$on('event_saved', function(){
+                console.log('event_saved bus');
+                renderEvents();
+                //bus.$emit('refetchEvents');
 
+//                if (self.add_edit){
+////                    bus.$emit('add_event', self.getEvent());
+//                    bus.$emit('refetchEvents', self.getEvent());
+//
+//                }
+            })
             bus.$on('add_event', function (event) {
                 console.log('add event');
                 console.log(event);
@@ -83,13 +98,11 @@
                 //$('#calendar').fullCalendar('renderEvent', self.clone(event));
             });
             bus.$on('refetchEvents', function () {
-                $('#calendar').fullCalendar('removeEvents');
-                renderEvents();
+
+
 //                console.log('refetchEvents');
 //                $('#calendar').fullCalendar('refetchEvents')
             })
-
-
 
         },
         methods: {
@@ -122,7 +135,7 @@
                         eventDrop(event, delta, revertFunc, jsEvent, ui, view) {
 
                             if (copyKey) {
-                                console.log('copy save');
+                                console.log('event moved with copy key');
                                 cc.save(event);
                                 let original_event = cc.clone(event);
                                 original_event.id = '';
@@ -131,18 +144,20 @@
                                 cc.save(original_event);
 
 
-                                $('#calendar').fullCalendar('renderEvent', original_event);
+                                //$('#calendar').fullCalendar('renderEvent', original_event);
 
                             }
                             else {
-                                console.log('save');
-                                //bus.$emit('move_event', event);
+                                console.log('event moved');
+                                console.log(event);
                                 cc.save(event);
                             }
 
                         },
                         eventResize: function (event, delta, revertFunc, jsEvent, ui, view) {
                             //bus.$emit('resize_event', event);
+                            console.log('event resized');
+                            console.log(event);
                             cc.save(event);
                         },
                         header: {
