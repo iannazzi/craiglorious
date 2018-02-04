@@ -47,7 +47,7 @@ class CIFile
 		} 
 		fclose($outstream);
 	}
-	public function csv_to_array($filename='', $delimiter=',')
+	public function csvToArray($filename='', $delimiter=',')
 	{
 
 		if(!file_exists($filename) || !is_readable($filename))
@@ -59,7 +59,7 @@ class CIFile
 		{
 			while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE)
 			{
-				if(!$header)
+			    if(!$header)
 					$header = $row;
 				else
 					$data[] = array_combine($header, $row);

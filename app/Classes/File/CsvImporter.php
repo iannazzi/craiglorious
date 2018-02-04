@@ -1,5 +1,5 @@
 <?php 
-namespace App\Classes\Database;
+namespace App\Classes\File;
 
 class CsvImporter 
 { 

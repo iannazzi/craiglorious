@@ -25,7 +25,7 @@ class DatabaseCsvLoader
         $table = basename((string) $file, '.csv');
         if (Schema::Connection($dbc)->hasTable($table))
         {
-            $csv = $fileManager->csv_to_array($file, ';');
+            $csv = $fileManager->csvToArray($file, ';');
             $num_chunk_records = 1000;
             $chunk_array = array_chunk($csv, $num_chunk_records);
             foreach($chunk_array as $chunk)

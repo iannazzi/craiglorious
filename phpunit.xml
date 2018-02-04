@@ -74,6 +74,13 @@
             <file>tests/in/CustomerTest.php</file>
         </testsuite>
 
+        <testsuite name="csv">
+            <file>tests/File/CsvTest.php</file>
+        </testsuite>
+        <testsuite name="em">
+            <file>tests/EmbrasseMoi/emDatabaseTest.php</file>
+        </testsuite>
+
 
     </testsuites>
     <filter>

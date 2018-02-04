@@ -6,7 +6,9 @@ class Employee extends BaseTenantModel {
 
 
     protected $guarded = ['id'];
-
+public static function removeDashes($ss){
+    return str_replace('-','',$ss);
+}
 
 
 }

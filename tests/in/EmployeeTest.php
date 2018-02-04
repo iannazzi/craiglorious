@@ -11,7 +11,16 @@ class EmployeeTest extends ApiTester
     protected $route = 'employees';
 
 
+    /** @test */
+    function em_has_employees()
+    {
+        Artisan::call('db:seed', [
+            '--class' => "EmbrasseMoiDatabaseSeeder",
+        ]);
+        $system = $this->getSystem('embrasse-moi');
+        $this->assertNotCount(0, Employee::all());
 
+    }
     /** @test */
     function factory()
     {
@@ -19,22 +28,15 @@ class EmployeeTest extends ApiTester
         $fac = Factory('App\Models\Tenant\Employee', 30)->create();
         $this->assertNotNull($fac);
     }
+
     /** @test */
-    function seed()
+    function loaded()
     {
         $system = $this->getSystem();
         \DB::table('employees')->truncate();
         Artisan::call('db:seed', [
             '--class' => "EmployeesTableSeeder",
         ]);
-    }
-
-
-    /** @test */
-    function loaded()
-    {
-        $system = $this->getSystem();
-
         $emp = Employee::all();
 //        dd($emp[3]);
 //        var_dump($emp);

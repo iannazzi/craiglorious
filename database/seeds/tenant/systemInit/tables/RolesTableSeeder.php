@@ -18,7 +18,7 @@ class RolesTableSeeder extends Seeder
 
         $file = database_path("seeds/tenant/systemInit/csvStartupData/RoleViews.csv");
         $fileManager = new App\Classes\File\CIFile();
-        $csv = $fileManager->csv_to_array($file, ';');
+        $csv = $fileManager->csvToArray($file, ';');
 //this is here for testing
 //        $system = App\Models\Craiglorious\System::first();
 //        $system->createTenantConnection();
