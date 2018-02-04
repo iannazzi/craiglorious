@@ -30,8 +30,6 @@ class EmployeeTest extends ApiTester
     }
 
 
-
-
     /** @test */
     function loaded()
     {

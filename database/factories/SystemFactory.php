@@ -10,6 +10,26 @@ $factory->define(App\Models\Craiglorious\System::class, function (Faker\Generato
         'password' => bcrypt('secret'),
     ];
 });
+$factory->defineAs(App\Models\Craiglorious\System::class, 'test', function ($faker) {
+    return [
+        'name' => 'Craig Iannazzi',
+        'company' => 'Test',
+        'email' => 'cowchickencatdog@gmail.com',
+        'password' => bcrypt('secret'),
+        'phone' => '',
+        'address' => '',
+    ];
+});
+$factory->defineAs(App\Models\Craiglorious\System::class, 'demo', function ($faker) {
+    return [
+        'name' => 'Craig Iannazzi',
+        'company' => 'Demo',
+        'email' => 'craig.iannazzi@gmail.com',
+        'password' => bcrypt('secret'),
+        'phone' => '',
+        'address' => '',
+    ];
+});
 $factory->defineAs(App\Models\Craiglorious\System::class, 'embrasse-moi', function ($faker) {
     return [
         'name' => 'Craig Iannazzi',

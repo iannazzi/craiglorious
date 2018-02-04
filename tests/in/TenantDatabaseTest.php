@@ -1,7 +1,7 @@
 <?php
 
 
-
+use App\Models\Tenant\Employee;
 use Iannazzi\Generators\DatabaseImporter\DatabaseDestroyer;
 use Tests\ApiTester;
 use App\Classes\TenantSystem\TenantSystemBuilder;
@@ -16,7 +16,14 @@ class TenantDatabaseTest extends ApiTester
         echo 'System setup All Tenant Databases' .PHP_EOL;
         //DatabaseCSVCreator::createStartupSCVFile('POS', 'pos_tax_jurisdictions');
         $this->writeMethod(__METHOD__);
+        System::truncate();
+        self::systemReset();
+        self::createDemo();
+        $this->assertNotCount(0, Employee::all());
         self::createEM();
+        $this->assertCount(0, Employee::all());
+        self::createNew();
+        $this->assertCount(0, Employee::all());
 
     }
 
@@ -27,26 +34,51 @@ class TenantDatabaseTest extends ApiTester
      * and then you will not have a system....
      */
 
+    public static function createDemo()
+    {
+        echo 'Creating Demo tenant' .PHP_EOL;
 
+        $demo = factory(System::class,'demo')->create();
+//        $tenantSystemBuilder = new TenantSystemBuilder($demo);
+//        $tenantSystemBuilder->deleteSystem();
+//        $tenantSystemBuilder->setupTenantSystem();
+//        $demo->createTenantConnection();
+        //now seed it
+        Artisan::call('db:seed', [
+            '--class' => "DemoDatabaseSeeder",
+        ]);
+
+    }
 
 
     public static function createEM()
     {
-        self::systemReset();
-        System::truncate();
+        echo 'Creating Embrasse-Moi tenant' .PHP_EOL;
         $embrasse = factory(System::class,'embrasse-moi')->create();
-        $tenantSystemBuilder = new TenantSystemBuilder($embrasse);
+//        $tenantSystemBuilder = new TenantSystemBuilder($embrasse);
+//        $tenantSystemBuilder->deleteSystem();
+//        $tenantSystemBuilder->setupTenantSystem();
+//        $embrasse->createTenantConnection();
+        Artisan::call('db:seed', [
+            '--class' => "EmbrasseMoiDatabaseSeeder",
+        ]);
+    }
+
+    public static function createNew()
+    {
+        echo 'Creating Test tenant' .PHP_EOL;
+        $new = factory(System::class, 'test')->create();
+        $tenantSystemBuilder = new TenantSystemBuilder($new);
         $tenantSystemBuilder->deleteSystem();
         $tenantSystemBuilder->setupTenantSystem();
-        $embrasse->createTenantConnection();
+        $new->createTenantConnection();
+
+
+
+
     }
     public static function systemReset()
     {
-
-//        $csv_path = database_path("seeds/csv_startup_data/craiglorious");
-//        DatabaseCsvLoader::loadCSVStartupData('main', $csv_path);
-
-
         //delete all tenant systems
         echo 'Deleting All Tenant Databases' .PHP_EOL;
         DatabaseDestroyer::deleteAllTenantDatabases();

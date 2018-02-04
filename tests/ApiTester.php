@@ -26,7 +26,7 @@ abstract class ApiTester extends TestCase {
         $this->fake = Faker::create();
         $this->faker = Faker::create();
     }
-    public function signIn($username= 'admin', $password='secret', $company='Embrasse-moi')
+    public function signIn($username= 'admin', $password='secret', $company='test')
     {
 
         $data=['username'=>$username, 'password'=>$password, 'company'=>$company];
@@ -46,9 +46,11 @@ abstract class ApiTester extends TestCase {
         return '/api/' . $route;
 
     }
-    function getSystem()
+    function getSystem($company = 'test')
     {
-        $system = System::first();
+        $system = System::where('company', $company)->first();
+
+        //$system = System::first();
         $system->createTenantConnection();
 //        dd($system->company);
         return $system;
