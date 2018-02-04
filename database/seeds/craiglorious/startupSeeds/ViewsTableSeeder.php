@@ -4,13 +4,12 @@ use Illuminate\Database\Seeder;
 	
 class ViewsTableSeeder extends Seeder
 {
-
-
     public function run()
 	{
 
 
 	    //if you change the name here you need to change the role view file
+        echo 'running ViewsTableSeeder' . PHP_EOL;
 
         $views = [
             [

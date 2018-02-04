@@ -46,5 +46,9 @@ class CraigloriousDatabaseTest extends ApiTester
             '--force' => '1'
         ]);
         echo 'Migrations Complete' .PHP_EOL;
+        //this is done on the migration
+//        Artisan::call('db:seed', [
+//            '--class' => "CraigloriousDatabaseSeeder",
+//        ]);
     }
 }

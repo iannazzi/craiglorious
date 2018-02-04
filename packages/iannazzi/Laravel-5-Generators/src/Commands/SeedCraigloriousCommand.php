@@ -19,7 +19,7 @@ class SeedCraigloriousCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Artisan command to seed craiglorious db:seed --class="CraigloriousFakeDataDatabaseSeeder';
+    protected $description = 'Artisan command to seed craiglorious db:seed --class="CraigloriousDatabaseSeeder';
 
     /**
      * Create a new command instance.
@@ -39,7 +39,7 @@ class SeedCraigloriousCommand extends Command
     public function handle()
     {
         Artisan::call('db:seed', [
-            '--class' => "CraigloriousFakeDataDatabaseSeeder",
+            '--class' => "CraigloriousDatabaseSeeder",
         ]);
     }
 }
