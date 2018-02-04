@@ -96,6 +96,7 @@ class CalendarController extends Controller
         $id = $data['id'];
         $end = $data['end'];
         $start = $data['start'];
+        // probably want this: DateTime::createFromFormat('Y-m-d H:i:s', $myDate);
         //dd(strtotime($start) <= strtotime($end));
         $rules = array(
             'title' => 'required',

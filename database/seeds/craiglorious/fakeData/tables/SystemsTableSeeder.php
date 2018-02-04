@@ -9,29 +9,31 @@ class SystemsTableSeeder extends Seeder
     public function run()
 	{
         echo 'running SystemsTableSeeder' . PHP_EOL;
-        echo 'Tuncating Systems Table - works fine' . PHP_EOL;
+        //1 is demo, 2 is embrasse-moi
         System::truncate();
-       ;
-       echo 'Newing up a system then filling it works fine' . PHP_EOL;
+        System::create( [
+            'name' => 'Craig',
+            'company' => 'demo',
+            'email' => 'craig.iannazzi@gmail.com',
+            'password' => bcrypt('secret'),
+            'phone' => '585-484-1170',
+            'address' => 'abc street',
+        ]);
+       echo 'Creating Embrasse Moi' . PHP_EOL;
         $system = new System();
         $system->fill([
-            'name' => 'Peter Iannazzi',
+            'name' => 'Craig Iannazzi',
             'company' => 'Embrasse-Moi',
-            'email' => 'ci@embrasse-moi.com',
+            'email' => 'craig.iannazzi@embrasse-moi.com',
             'password' => bcrypt('secret'),
             'phone' => '585-383-1170',
             'address' => '1 N Main Street, Pittsford NY, 14534',
         ]);
         $system->save();
-        echo 'create is not working fine: returning message killed after stalling for some time' . PHP_EOL;
-         System::create( [
-            'name' => 'Peter',
-            'company' => 'cf, LLC',
-            'email' => 'vf@vd.com',
-            'password' => bcrypt('secret'),
-            'phone' => '585-484-1170',
-            'address' => 'abc street',
-        ]);
+
+        // add other accounts here
+
+
 
 //        echo 'Adding IE Destinations' . PHP_EOL;
 //        System::create([

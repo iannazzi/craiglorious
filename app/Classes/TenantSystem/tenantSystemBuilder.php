@@ -28,6 +28,10 @@ Class TenantSystemBuilder {
         $this->dbc = $system->dbc();
         $this->output = new ConsoleOutput();
 	}
+    function tenant_csv_seed_path()
+    {
+        return database_path("seeds/tenant/systemInit/csvStartupData/");
+    }
 	public function setupTenantSystem() //sytem is the model from craigland.....  
 	{ 
      	//there is no fall back - I could manually delete or even re-install...
@@ -44,8 +48,7 @@ Class TenantSystemBuilder {
 
         //csv is easier than building arrays up...
         //csv is the first filling of databases
-        $path = database_path("seeds/tenant/csvStartupData");
-        DatabaseCsvLoader::loadCSVStartupData($this->dbc, $path);
+        DatabaseCsvLoader::loadCSVStartupData($this->dbc, $this->tenant_csv_seed_path());
         $this->console('Csv Data Skipped');
 
         $this->createTenantSystemAdminAccount();

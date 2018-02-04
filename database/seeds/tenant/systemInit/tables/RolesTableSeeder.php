@@ -16,7 +16,7 @@ class RolesTableSeeder extends Seeder
     {
         echo 'RolesTableSeeder - it is easier to do this with csv' . PHP_EOL;
 
-        $file = database_path("seeds/tenant/RoleViews/RoleViews.csv");
+        $file = database_path("seeds/tenant/systemInit/csvStartupData/RoleViews.csv");
         $fileManager = new App\Classes\File\CIFile();
         $csv = $fileManager->csv_to_array($file, ';');
 //this is here for testing

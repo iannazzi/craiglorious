@@ -35,7 +35,11 @@ class CreateEmployeesTable extends Migration
             $table->integer('state_id')->unsigned()->index()->nullable();
 
             $table->decimal('pay_rate');
-            $table->integer('withholding_allowance');
+            $table->integer('withholding_allowance')->nullable();
+            $table->integer('married');
+            $table->integer('member');
+
+
 
             $table->text('comments');
 
@@ -44,6 +48,10 @@ class CreateEmployeesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        //insert into embrasse-moi system the csv file of employees
+
+
     }
 
     /**

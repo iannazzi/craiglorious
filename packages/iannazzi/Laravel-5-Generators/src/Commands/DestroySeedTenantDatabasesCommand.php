@@ -39,7 +39,10 @@ class DestroySeedTenantDatabasesCommand extends Command
     public function handle()
     {
         Artisan::call('db:seed', [
-            '--class' => "DestroyCreateTenantDatabasesWithFakeDataSeeder",
+            '--class' => "DemoDatabaseSeeder",
+        ]);
+        Artisan::call('db:seed', [
+            '--class' => "EmbrasseMoiDatabaseSeeder",
         ]);
     }
 }
