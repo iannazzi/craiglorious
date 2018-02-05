@@ -12,16 +12,24 @@ class emDatabaseTest extends ApiTester
 {
 
     /** @test */
-    function system_init()
+    function em_seeder()
     {
-        //assume em system is already made
-
         Artisan::call('db:seed', [
             '--class' => "EmbrasseMoiDatabaseSeeder",
         ]);
+    }
+    /** @test */
+    function employees_are_loaded()
+    {
+        $system = $this->getSystem('Embrasse-moi');
         $this->assertNotCount(0, Employee::all());
-        $this->assertNotCount(0, User::all());
-
+    }
+    /** @test */
+    function users_are_loaded()
+    {
+        $system = $this->getSystem('Embrasse-moi');
+        $user = User::first();
+        $this->assertEquals($user->username, 'craig.iannazzi');
     }
 
 }

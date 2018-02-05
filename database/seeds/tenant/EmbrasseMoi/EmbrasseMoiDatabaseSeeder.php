@@ -33,13 +33,6 @@ class EmbrasseMoiDatabaseSeeder extends Seeder
 
         $this->call('EmEmployeesSeeder');
         $this->call('EmUsersSeeder');
-        //Add employees
-
-
-
-
-
-
 
 
          Model::reguard();

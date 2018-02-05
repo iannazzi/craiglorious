@@ -28,7 +28,6 @@ php artisan down
 cd $f/$DATEP
 pwd
 php artisan zz:dms
-php artisan zz:dst
 
 cd $f
 pwd

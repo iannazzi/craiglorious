@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#hmm this one failed once so far, looks like it ran old code
 f=/var/www/craiglorious.com
 
 cd $f/staging
@@ -7,7 +8,7 @@ git fetch --all
 git reset --hard origin/develop
 
 composer install
-php artisan zz:dms
+phpunit --testsuite=all
 php artisan zz:dms
 
 #rm package-lock.json

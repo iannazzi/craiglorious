@@ -18,8 +18,7 @@ class EmUsersSeeder extends Seeder
 
         $i_got_the_data = true;
         $cifile = new CIFile();
-        $filename = base_path() . '/database/seeds/tenant/EmbrasseMoi/DataGitIgnore/posImport/users.csv';
-
+        $filename = em_data_seed_path() . '/users.csv';
         if($i_got_the_data){
             User::truncate();
             $users = $cifile->csvToArray($filename, ';');

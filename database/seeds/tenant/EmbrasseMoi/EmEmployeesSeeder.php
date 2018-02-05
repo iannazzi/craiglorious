@@ -13,10 +13,10 @@ class EmEmployeesSeeder extends Seeder
 
     public function run()
     {
-
-
         //Add employees
-        $file= database_path("seeds/tenant/EmbrasseMoi/DataGitIgnore/employees.csv");
+        $file = em_data_seed_path() . '/employees.csv';
+
+
         $cifile = new CIFile();
 
         $employees = $cifile->csvToArray($file);
