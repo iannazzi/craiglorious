@@ -19,13 +19,27 @@ class TenantDatabaseTest extends ApiTester
         System::truncate();
         self::systemReset();
         self::createDemo();
-        $this->assertNotCount(0, Employee::all());
         self::createEM();
-        $this->assertCount(0, Employee::all());
         self::createNew();
-        $this->assertCount(0, Employee::all());
 
     }
+    /** @test */
+    function demo_initialized_database(){
+        $system = $this->getSystem('demo');
+        $this->assertNotCount(0, Employee::all());
+    }
+    /** @test */
+    function embrasse_moi_initialized_database(){
+        $system = $this->getSystem('embrasse-moi');
+        $this->assertNotCount(0, Employee::all());
+    }
+
+    /** @test */
+    function new_system_initialized_database(){
+        $system = $this->getSystem('test');
+        $this->assertCount(0, Employee::all());
+    }
+
 
 
 
@@ -72,9 +86,6 @@ class TenantDatabaseTest extends ApiTester
         $tenantSystemBuilder->deleteSystem();
         $tenantSystemBuilder->setupTenantSystem();
         $new->createTenantConnection();
-
-
-
 
     }
     public static function systemReset()

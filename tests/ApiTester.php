@@ -26,6 +26,11 @@ abstract class ApiTester extends TestCase {
         $this->fake = Faker::create();
         $this->faker = Faker::create();
     }
+    public function console($msg)
+    {
+        $out = new ConsoleOutput();
+        $out->writeln($msg);
+    }
     public function signIn($username= 'admin', $password='secret', $company='test')
     {
 

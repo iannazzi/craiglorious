@@ -16,29 +16,26 @@ class DemoDatabaseSeeder extends Seeder
     // php artisan db:seed --class=localDatabaseSeeder
     public function run()
     {
-        echo 'running DestroyCreateTenantDatabasesWithFakeDataSeeder seeder ';
-		Model::unguard();
+        Model::unguard();
 
 
         $system = System::find(1);
 
+        echo 'Demo Database Seeder: Create Database called ' . $system->dbc() . ' using connection default' . PHP_EOL;
+        echo $system->company . PHP_EOL;
 
-            echo 'Demo Database Seeder: Create Database called ' .$system->dbc() . ' using connection default' . PHP_EOL;
-            echo $system->company .PHP_EOL;
+        $tenantSystemBuilder = new TenantSystemBuilder($system);
+        $tenantSystemBuilder->deleteSystem();
+        $tenantSystemBuilder->setupTenantSystem();
+        $system->createTenantConnection();
 
-            $tenantSystemBuilder = new TenantSystemBuilder($system);
-            $tenantSystemBuilder->deleteSystem();
-            $tenantSystemBuilder->setupTenantSystem();
-            $system->createTenantConnection();
-
-
-
-
-            $this->call('TenantFakeDataDatabaseSeeder');
+        $this->call('VendorsTableSeeder');
+        $this->call('CalendarEntriesTableSeeder');
+        $this->call('EmployeesTableSeeder');
+        $this->call('CustomersTableSeeder');
 
 
         Model::reguard();
-
 
 
     }

@@ -26,7 +26,6 @@ class AppServiceProvider extends ServiceProvider
         //I have some pretty dangerous things here...
         if ($this->app->environment() == 'local') {
             $this->app->register('Iannazzi\Generators\ImporterServiceProvider');
-
         }
         else if ($this->app->environment() == 'staging'){
             $this->app->register('Iannazzi\Generators\ImporterServiceProvider');
