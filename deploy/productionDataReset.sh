@@ -9,7 +9,6 @@ then
     sed -i 's/APP_ENV=production/APP_ENV=staging/g' $f/live/.env
     cd $f/live
     php artisan zz:dms
-    php artisan zz:dst
     sed -i 's/APP_ENV=staging/APP_ENV=production/g' $f/live/.env
 fi
 

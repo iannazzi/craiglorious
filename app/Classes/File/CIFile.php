@@ -71,7 +71,6 @@ class CIFile
 	}
 	public function arrayToCSVFile($filepath, $array, $delimiter = ";", $save_keys=false, $header = true )
 	{
-        //dd($array);
 
         $content = '';
 	    reset($array);
@@ -86,20 +85,20 @@ class CIFile
 			$content .= (is_array($headers)) ? implode($delimiter, $headers) : $headers;
 			$content .= "\n";
 		}
-
         reset($array);
-	    while(list($key, $val) = each($array))
-	    {
-	        // replace tabs in keys and values to [space]
-	        $key = str_replace("\t", " ", $key);
-	        $val = str_replace("\t", " ", $val);
-	 
-	        if ($save_keys){ $content .=  ($key+1).$delimiter; }
+        foreach($array as $row){
 
-            // create line:
-	        $content .= (is_array($val)) ? implode($delimiter, $val) : $val;
-	        $content .= "\n";
-	    }
+            // replace tabs in keys and values to [space]
+//            $key = str_replace("\t", " ", $key);
+//            $val = str_replace("\t", " ", $val);
+
+//            if ($save_keys){ $content .=  ($key+1).$delimiter; }
+            $content .= (is_array($row)) ? implode($delimiter, $row) : $row;
+            $content .= "\n";
+
+
+        }
+
 
         $this->makeDirectory($filepath);
 
@@ -122,6 +121,12 @@ class CIFile
 			$this->files->makeDirectory(dirname($path), 0777, true, true);
 		}
 	}
+	public function deleteDirectory($path){
+	    $this->files->deleteDirectory($path);
+    }
+    public function deleteFile($file){
+        $this->files->delete($file);
+    }
 	public function fileUploadHandler($posted_name, $target_path)
 	{
 			makeDir($target_path);

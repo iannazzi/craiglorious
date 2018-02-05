@@ -2,6 +2,7 @@
 
 
 use App\Models\Tenant\Employee;
+use App\Models\Tenant\User;
 use Iannazzi\Generators\DatabaseImporter\DatabaseDestroyer;
 use Tests\ApiTester;
 use App\Classes\TenantSystem\TenantSystemBuilder;
@@ -19,6 +20,7 @@ class emDatabaseTest extends ApiTester
             '--class' => "EmbrasseMoiDatabaseSeeder",
         ]);
         $this->assertNotCount(0, Employee::all());
+        $this->assertNotCount(0, User::all());
 
     }
 

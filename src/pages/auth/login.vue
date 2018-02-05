@@ -52,7 +52,7 @@
         data: function () {
             return {
                 user: {
-                    company: 'embrasse-moi',
+                    company: 'demo',
                     username: 'admin',
                     password: 'secret'
                 },
