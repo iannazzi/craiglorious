@@ -14,6 +14,7 @@ class emDatabaseTest extends ApiTester
     /** @test */
     function em_seeder()
     {
+        dd(env('APP_ENV'));
         Artisan::call('db:seed', [
             '--class' => "EmbrasseMoiDatabaseSeeder",
         ]);
