@@ -15,7 +15,7 @@ class EmEmployeesSeeder extends Seeder
     {
         //Add employees
         $file = em_data_seed_path() . '/employees.csv';
-
+dd($file);
 
         $cifile = new CIFile();
 
