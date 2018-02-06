@@ -19,12 +19,9 @@ class CsvTest extends ApiTester
 
         $this->assertNotNull($array);
 
-
-
         $path = base_path() . '/tests/File/tmpData';
         $filename = $path . '/tmp.csv';
-
-
+        
         $file = new CIFile();
         $file->makeDirectory($filename);
         $this->assertDirectoryExists($path);
