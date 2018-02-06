@@ -13,7 +13,7 @@ class CsvTest extends ApiTester
         $system = $this->getSystem();
         $cifile = new CIFile();
 
-        $file= database_path("seeds/tenant/EmbrasseMoi/DataGitIgnore/employees.csv");
+        $file=  em_data_seed_path()."/employees.csv";
 
         $array = $cifile->csvToArray($file);
 

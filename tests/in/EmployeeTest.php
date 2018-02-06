@@ -20,21 +20,7 @@ class EmployeeTest extends ApiTester
         $this->assertNotNull($fac);
     }
 
-    /** @test */
-    function loaded()
-    {
-        $system = $this->getSystem();
-        \DB::table('employees')->truncate();
 
-        //cant run this on a new system
-        EmployeesTableSeeder::run();
-
-        $emp = Employee::all();
-//        dd($emp[3]);
-//        var_dump($emp);
-        $this->assertNotNull($emp);
-
-    }
     /** @test */
     function index()
     {

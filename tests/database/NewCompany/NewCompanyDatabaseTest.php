@@ -3,6 +3,8 @@
 
 use App\Models\Tenant\Employee;
 use App\Models\Tenant\User;
+use App\Models\Tenant\Role;
+
 use App\Models\Tenant\Vendor;
 use Tests\ApiTester;
 use App\Classes\TenantSystem\TenantSystemBuilder;

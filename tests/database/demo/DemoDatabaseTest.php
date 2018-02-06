@@ -23,12 +23,21 @@ class DemoDatabaseTest extends ApiTester
         $this->assertNotNull($tables);
     }
     /** @test */
-    function faker_data_loaded()
+    function employee_data_loaded()
     {
         $system = $this->getSystem('demo');
         $this->assertNotCount(0, Employee::all());
+    }
+    /** @test */
+    function vendor_data_loaded()
+    {
+        $system = $this->getSystem('demo');
         $this->assertNotCount(0, Vendor::all());
+    }
+    /** @test */
+    function location_data_loaded()
+    {
+        $system = $this->getSystem('demo');
         $this->assertNotCount(0, Location::all());
-
     }
 }

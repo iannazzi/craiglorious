@@ -32,7 +32,7 @@ abstract class ApiTester extends TestCase {
         $out = new ConsoleOutput();
         $out->writeln($msg);
     }
-    public function signIn($username= 'admin', $password='secret', $company='test')
+    public function signIn($username= 'admin', $password='secret', $company='demo')
     {
 
         $data=['username'=>$username, 'password'=>$password, 'company'=>$company];

@@ -19,13 +19,19 @@
 
 
 
-            <!--<file>tests/in/LoginTest.php</file>-->
-            <!--<file>tests/in/RoleTest.php</file>-->
-            <!--<file>tests/in/UserTest.php</file>-->
-            <!--<file>tests/in/RegisterTest.php</file>-->
-            <!--<file>tests/in/VendorTest.php</file>-->
-            <!--<file>tests/in/AccountTest.php</file>-->
-            <!--<file>tests/in/EmployeeTest.php</file>-->
+            <file>tests/in/LoginTest.php</file>
+            <file>tests/api/RoleTest.php</file>
+            <file>tests/api/UserTest.php</file>
+            <file>tests/in/RegisterTest.php</file>
+            <file>tests/in/VendorTest.php</file>
+            <file>tests/in/AccountTest.php</file>
+            <file>tests/in/EmployeeTest.php</file>
+            <file>tests/in/LocationTest.php</file>
+            <file>tests/in/AccountTest.php</file>
+            <file>tests/in/CustomerTest.php</file>
+            <file>tests/File/CsvTest.php</file>
+
+
 
         </testsuite>
         <testsuite name="env">
@@ -63,17 +69,13 @@
         <testsuite name="vendors">
             <file>tests/in/VendorTest.php</file>
         </testsuite>
-
-
         <testsuite name="locations">
             <file>tests/in/LocationTest.php</file>
         </testsuite>
         <testsuite name="employees">
             <file>tests/in/EmployeeTest.php</file>
         </testsuite>
-        <testsuite name="calendar">
-            <file>tests/in/CalendarEntryTest.php</file>
-        </testsuite>
+
         <testsuite name="accounts">
             <file>tests/in/AccountTest.php</file>
         </testsuite>
@@ -84,10 +86,10 @@
         <testsuite name="csv">
             <file>tests/File/CsvTest.php</file>
         </testsuite>
-        <testsuite name="em">
-            <file>tests/EmbrasseMoi/emDatabaseTest.php</file>
-        </testsuite>
 
+        <testsuite name="calendarbusted">
+            <file>tests/in/CalendarEntryTest.php</file>
+        </testsuite>
 
     </testsuites>
     <filter>

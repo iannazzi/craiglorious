@@ -19,12 +19,8 @@ class EmployeesTableSeeder extends BaseSeeder
         Factory('App\Models\Tenant\Employee', 30)->create();
 
         $users = User::all();
-
         $employees = Employee::all();
 
-        foreach( $employees as $employee){
-
-        }
         for($i = 0;$i<5;$i++){
             $employees[$i]->user_id = $users[$i]->id;
             //dd($employees[$i]);

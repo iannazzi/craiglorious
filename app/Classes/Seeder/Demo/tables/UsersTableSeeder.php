@@ -9,7 +9,7 @@ class UsersTableSeeder extends BaseSeeder
 {
     public static function run()
     {
-
+        self::console('DemoUsersTableSeeder');
         $users = [
             [
                 'username' => 'owner',
@@ -77,8 +77,6 @@ class UsersTableSeeder extends BaseSeeder
                 'active' => 1,
             ],
         ];
-
         User::insert($users);
-
     }
 }

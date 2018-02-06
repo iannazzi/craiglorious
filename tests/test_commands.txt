@@ -1,24 +1,24 @@
-enter the workspace container
-
-cd laradock
-./workspace.sh
-
-These are some ditties about testing
-
-Haven't been here for a while?
-
-Rebuild and Test the main database connection....
-
-Case Sensitive!!!!!
-
-phpunit --testsuite CraigloriousDatabaseTest
+phpunit --testsuite=all
 
 
-next can we rebuild setup systems
+Demo system
+test factory
+seed
+test seed
 
-phpunit --testsuite TenantDatabaseTest
+new system
+test initialized data
 
-login
-phpunit --testsuite Login
 
-phpunit --testsuite vendors
+em system
+seed and test data
+
+API
+test routes and controllers
+
+workflow
+ex: Purchase orders
+    create and test migration
+    create and test factory
+    create and test http search create etc
+    build view

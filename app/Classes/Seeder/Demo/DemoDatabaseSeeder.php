@@ -20,8 +20,6 @@ class DemoDatabaseSeeder extends BaseSeeder
         $tenantSystemBuilder = new TenantSystemBuilder($system);
         $tenantSystemBuilder->deleteSystem();
         $tenantSystemBuilder->setupTenantSystem();
-//        $system->createTenantConnection();
-
         UsersTableSeeder::run();
         VendorsTableSeeder::run();
         CalendarEntriesTableSeeder::run();
