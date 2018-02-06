@@ -1,5 +1,6 @@
 <?php
 namespace Tests;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use App\Models\Craiglorious\System;
 use Faker\Factory as Faker;
 use Artisan;
@@ -54,10 +55,7 @@ abstract class ApiTester extends TestCase {
     function getSystem($company = 'test')
     {
         $system = System::where('company', $company)->first();
-
-        //$system = System::first();
         $system->createTenantConnection();
-//        dd($system->company);
         return $system;
     }
 

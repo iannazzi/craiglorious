@@ -1,4 +1,5 @@
 <?php
+use App\Classes\Seeder\Demo\tables\EmployeesTableSeeder;
 use App\Models\Tenant\Employee;
 use Tests\ApiTester;
 use App\Models\Tenant\User;
@@ -12,18 +13,6 @@ class EmployeeTest extends ApiTester
 
 
     /** @test */
-    function em_has_employees()
-    {
-        Artisan::call('db:seed', [
-            '--class' => "EmbrasseMoiDatabaseSeeder",
-            '--force' => 1
-
-        ]);
-        $system = $this->getSystem('embrasse-moi');
-        $this->assertNotCount(0, Employee::all());
-
-    }
-    /** @test */
     function factory()
     {
         $system = $this->getSystem();
@@ -36,11 +25,10 @@ class EmployeeTest extends ApiTester
     {
         $system = $this->getSystem();
         \DB::table('employees')->truncate();
-        Artisan::call('db:seed', [
-            '--class' => "EmployeesTableSeeder",
-            '--force' => 1
 
-        ]);
+        //cant run this on a new system
+        EmployeesTableSeeder::run();
+
         $emp = Employee::all();
 //        dd($emp[3]);
 //        var_dump($emp);

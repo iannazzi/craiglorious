@@ -10,12 +10,6 @@ class LocationTest extends ApiTester
     protected $route = 'locations';
 
     /** @test */
-    function loaded()
-    {
-        $system = $this->getSystem();
-        $this->assertNotNull(Location::all());
-    }
-    /** @test */
     function index()
     {
         $this->signIn();

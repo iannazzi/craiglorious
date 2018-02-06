@@ -18,9 +18,7 @@ Homestead.yaml
 .env.stage
 .DS_Store
 npm-debug.*
-/database/seeds/tenant/EmbrasseMoi/DataGitIgnore
 /tests/File/tmpData
-/deploy/production/.env
-/deploy/staging/.env
+/DataGitIgnore
 
 _ide_helper*.php

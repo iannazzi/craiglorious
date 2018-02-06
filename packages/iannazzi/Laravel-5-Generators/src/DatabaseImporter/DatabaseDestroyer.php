@@ -21,9 +21,8 @@ class DatabaseDestroyer
             if (strpos($dbn, $prefix) !== false)
             {
                 $sql = 'Drop Database ' . $dbn;
-                echo 'Deleting ' . $dbn . PHP_EOL;
+                self::console('Deleting ' . $dbn);
                 DB::connection('main')->statement($sql);
-                echo 'Deleted ' . $dbn . PHP_EOL;
             }
         }
         DB::connection('main')->statement('SET FOREIGN_KEY_CHECKS = 1');

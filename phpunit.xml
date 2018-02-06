@@ -10,38 +10,49 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="all">
-            <file>tests/in/EnvironmentTest.php</file>
-            <file>tests/in/CraigloriousDatabaseTest.php</file>
-            <file>tests/in/TenantDatabaseTest.php</file>
-            <file>tests/in/LoginTest.php</file>
-            <file>tests/in/RoleTest.php</file>
-            <file>tests/in/UserTest.php</file>
-            <file>tests/in/RegisterTest.php</file>
-            <file>tests/in/VendorTest.php</file>
-            <file>tests/in/AccountTest.php</file>
-            <file>tests/in/EmployeeTest.php</file>
+            <file>tests/setup/EnvironmentTest.php</file>
+            <file>tests/database/craiglorious/CraigloriousDatabaseTest.php</file>
+            <file>tests/database/demo/DemoDatabaseTest.php</file>
+            <file>tests/database/NewCompany/NewCompanyDatabaseTest.php</file>
+            <file>tests/database/EmbrasseMoi/EmbrasseMoiDatabaseTest.php</file>
+
+
+
+
+            <!--<file>tests/in/LoginTest.php</file>-->
+            <!--<file>tests/in/RoleTest.php</file>-->
+            <!--<file>tests/in/UserTest.php</file>-->
+            <!--<file>tests/in/RegisterTest.php</file>-->
+            <!--<file>tests/in/VendorTest.php</file>-->
+            <!--<file>tests/in/AccountTest.php</file>-->
+            <!--<file>tests/in/EmployeeTest.php</file>-->
 
         </testsuite>
         <testsuite name="env">
-            <file>tests/in/EnvironmentTest.php</file>
+            <file>tests/setup/EnvironmentTest.php</file>
         </testsuite>
-
-
         <testsuite name="craiglorious">
-            <file>tests/in/CraigloriousDatabaseTest.php</file>
+            <file>tests/database/craiglorious/CraigloriousDatabaseTest.php</file>
         </testsuite>
-        <testsuite name="views">
-            <file>tests/in/ViewTest.php</file>
+        <testsuite name="demo">
+            <file>tests/database/demo/DemoDatabaseTest.php</file>
+        </testsuite>
+        <testsuite name="em">
+            <file>tests/database/EmbrasseMoi/EmbrasseMoiDatabaseTest.php</file>
+        </testsuite>
+        <testsuite name="newcompany">
+            <file>tests/database/NewCompany/NewCompanyDatabaseTest.php</file>
         </testsuite>
 
 
 
-
-
-
-        <testsuite name="tenant">
-            <file>tests/in/TenantDatabaseTest.php</file>
+        <testsuite name="api">
+            <file>tests/api/RoleTest.php</file>
+            <file>tests/api/UserTest.php</file>
         </testsuite>
+
+
+
         <testsuite name="login">
             <file>tests/in/LoginTest.php</file>
         </testsuite>
@@ -52,12 +63,8 @@
         <testsuite name="vendors">
             <file>tests/in/VendorTest.php</file>
         </testsuite>
-        <testsuite name="roles">
-            <file>tests/in/RoleTest.php</file>
-        </testsuite>
-        <testsuite name="users">
-            <file>tests/in/UserTest.php</file>
-        </testsuite>
+
+
         <testsuite name="locations">
             <file>tests/in/LocationTest.php</file>
         </testsuite>

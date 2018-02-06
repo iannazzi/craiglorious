@@ -1,4 +1,5 @@
 <?php
+use App\Classes\Seeder\Demo\tables\CustomersTableSeeder;
 use App\Models\Tenant\Customer;
 use Tests\ApiTester;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -20,15 +21,10 @@ class CustomerTest extends ApiTester
     /** @test */
     function seed()
     {
-        $system = $this->getSystem();
+        $system = $this->getSystem('test');
         \DB::table('customers')->truncate();
-        Artisan::call('db:seed', [
-            '--class' => "CustomersTableSeeder",
-        ]);
+        CustomersTableSeeder::run();
     }
-
-
-
 
     /** @test */
     function loaded()

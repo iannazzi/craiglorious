@@ -32,10 +32,8 @@ class ImporterServiceProvider extends ServiceProvider
         $this->registerCommand('ImportDatabaseCommand');
         $this->registerCommand('MigrateCraigloriousCommand');
         $this->registerCommand('SeedCraigloriousCommand');
-        $this->registerCommand('DeleteMigrateSeedTenantDatabaseCommand');
         $this->registerCommand('DmsCommand');
         $this->registerCommand('DstCommand');
-        $this->registerCommand('DestroySeedTenantDatabasesCommand');
 
     }
 

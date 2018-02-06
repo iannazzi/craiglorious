@@ -39,7 +39,16 @@ class DmsCommand extends Command
     public function handle()
     {
 
-        Artisan::call('zz:DeleteMigrateSeedTenantDatabase', [
+        Artisan::call('zz:DeleteAllSystems', [
+
+        ]);
+        Artisan::call('zz:MigrateCraiglorious', [
+
+        ]);
+        Artisan::call('zz:SeedCraiglorious', [
+
+        ]);
+        Artisan::call('zz:DestroySeedTenantDatabases', [
 
         ]);
 

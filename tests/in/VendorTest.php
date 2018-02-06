@@ -8,12 +8,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 class VendorTest extends ApiTester
 {
     protected $route = 'vendors';
-    /** @test */
-    function loaded()
-    {
-        $system = $this->getSystem();
-        $this->assertNotNull(Vendor::all());
-    }
+
 
     /** @test */
     function index()

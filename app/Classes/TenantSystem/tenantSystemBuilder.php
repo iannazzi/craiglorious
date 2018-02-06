@@ -40,7 +40,6 @@ Class TenantSystemBuilder {
         $tenantDatabaseBuilder->createTenantDatabase();
         TenantDatabaseConnector::createTenantConnection($this->system);
         $tenantDatabaseBuilder->migrateTenantDatabase();
-        $this->console('Migration Complete');
 
         /*
          * load csv -- due to foreign key restraints  may have have to move some imports to migrations
@@ -49,13 +48,10 @@ Class TenantSystemBuilder {
         //csv is easier than building arrays up...
         //csv is the first filling of databases
         DatabaseCsvLoader::loadCSVStartupData($this->dbc, $this->tenant_csv_seed_path());
-        $this->console('Csv Data Skipped');
 
         $this->createTenantSystemAdminAccount();
-        $this->console('Admin Account Complete');
 
         $tenantDatabaseBuilder->startupSeedTenantDatabase();
-        $this->console('Seeding Complete');
 
         //views come from the system this is pretty weird so far
 //        $this->createAdminRoleViews();
@@ -74,10 +70,9 @@ Class TenantSystemBuilder {
     {
 
     }
-	
 	public function createTenantSystemAdminAccount()
 	{
-		$this->console( 'Creating Admin account...for ' .$this->system->dbc() . PHP_EOL);
+		$this->console( 'Creating Admin account...for ' .$this->system->dbc());
 		$posUserData = [
             
             'username'=> 'admin',
@@ -90,12 +85,11 @@ Class TenantSystemBuilder {
             ];
 
         $posUser = User::create($posUserData);
-        $this->console( 'Created Admin account...for ' .$this->system->dbc() . PHP_EOL);
 
     }
     public function createAdminRoleViews()
     {
-        $this->console( 'Adding views to admin role ' .$this->system->dbc() . PHP_EOL);
+        $this->console( 'Adding views to admin role ' .$this->system->dbc());
 
         $views = $this->system->views();
 

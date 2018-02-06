@@ -39,7 +39,13 @@ class DstCommand extends Command
     public function handle()
     {
 
-        Artisan::call('zz:DestroySeedTenantDatabases', [
+        Artisan::call('db:seed', [
+            '--class' => "DemoDatabaseSeeder",
+            '--force' => 1
+        ]);
+        Artisan::call('db:seed', [
+            '--class' => "EmbrasseMoiDatabaseSeeder",
+            '--force' => 1
 
         ]);
 

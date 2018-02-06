@@ -12,7 +12,6 @@ class CreateViewsTable extends Migration
      */
     public function up()
     {
-        echo 'Creating Views...';
         Schema::create('views', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 40);
@@ -24,12 +23,6 @@ class CreateViewsTable extends Migration
             $table->text('comments')->nullable();
             $table->timestamps();
         });
-
-        Artisan::call('db:seed', [
-            '--class' => "ViewsTableSeeder",
-            '--force' => '1'
-        ]);
-
     }
 
     /**

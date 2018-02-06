@@ -2,6 +2,7 @@
 
 namespace Iannazzi\Generators\Commands;
 
+use App\Classes\Seeder\Craiglorious\CraigloriousDatabaseSeeder;
 use Artisan;
 use Illuminate\Console\Command;
 
@@ -19,7 +20,7 @@ class SeedCraigloriousCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Artisan command to seed craiglorious db:seed --class="CraigloriousDatabaseSeeder';
+    protected $description = 'Dangerous command to seed craiglorious';
 
     /**
      * Create a new command instance.
@@ -38,10 +39,6 @@ class SeedCraigloriousCommand extends Command
      */
     public function handle()
     {
-        Artisan::call('db:seed', [
-            '--class' => "CraigloriousDatabaseSeeder",
-            '--force' => 1
-
-        ]);
+        CraigloriousDatabaseSeeder::run();
     }
 }

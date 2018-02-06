@@ -9,7 +9,8 @@ function em_data_seed_path(){
 
 
     if(env('LOCATION') == 'local'){
-        return database_path("seeds/tenant/EmbrasseMoi/DataGitIgnore");
+        $path = base_path(). "/DataGitIgnore/seeds/EmbrasseMoi";
+        return $path;
     }
     elseif(env('LOCATION') == 'server')
     {
