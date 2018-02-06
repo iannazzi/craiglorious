@@ -18,7 +18,7 @@ Homestead.yaml
 .env.stage
 .DS_Store
 npm-debug.*
-/tests/File/tmpData
+/tests/file/tmpData
 /DataGitIgnore
 
 _ide_helper*.php
