@@ -10,7 +10,7 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="all">
-            <file>tests/in/Environment.php</file>
+            <file>tests/in/EnvironmentTest.php</file>
             <file>tests/in/CraigloriousDatabaseTest.php</file>
             <file>tests/in/TenantDatabaseTest.php</file>
             <file>tests/in/LoginTest.php</file>
@@ -22,8 +22,8 @@
             <file>tests/in/EmployeeTest.php</file>
 
         </testsuite>
-        <testsuite name="environment">
-            <file>tests/in/Environment.php</file>
+        <testsuite name="env">
+            <file>tests/in/EnvironmentTest.php</file>
         </testsuite>
 
 

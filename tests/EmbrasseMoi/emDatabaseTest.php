@@ -16,6 +16,7 @@ class emDatabaseTest extends ApiTester
     {
         Artisan::call('db:seed', [
             '--class' => "EmbrasseMoiDatabaseSeeder",
+            '--force' => 1
         ]);
     }
     /** @test */

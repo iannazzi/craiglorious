@@ -60,6 +60,7 @@ class TenantDatabaseTest extends ApiTester
         //now seed it
         Artisan::call('db:seed', [
             '--class' => "DemoDatabaseSeeder",
+            '--force' =>1
         ]);
 
     }
@@ -75,6 +76,7 @@ class TenantDatabaseTest extends ApiTester
 //        $embrasse->createTenantConnection();
         Artisan::call('db:seed', [
             '--class' => "EmbrasseMoiDatabaseSeeder",
+            '--force' =>1
         ]);
     }
 

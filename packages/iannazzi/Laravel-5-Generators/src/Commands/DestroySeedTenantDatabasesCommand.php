@@ -40,9 +40,12 @@ class DestroySeedTenantDatabasesCommand extends Command
     {
         Artisan::call('db:seed', [
             '--class' => "DemoDatabaseSeeder",
+            '--force' => 1
         ]);
         Artisan::call('db:seed', [
             '--class' => "EmbrasseMoiDatabaseSeeder",
+            '--force' => 1
+
         ]);
     }
 }

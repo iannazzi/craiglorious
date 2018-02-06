@@ -16,6 +16,8 @@ class EmployeeTest extends ApiTester
     {
         Artisan::call('db:seed', [
             '--class' => "EmbrasseMoiDatabaseSeeder",
+            '--force' => 1
+
         ]);
         $system = $this->getSystem('embrasse-moi');
         $this->assertNotCount(0, Employee::all());
@@ -36,6 +38,8 @@ class EmployeeTest extends ApiTester
         \DB::table('employees')->truncate();
         Artisan::call('db:seed', [
             '--class' => "EmployeesTableSeeder",
+            '--force' => 1
+
         ]);
         $emp = Employee::all();
 //        dd($emp[3]);

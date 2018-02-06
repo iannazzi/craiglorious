@@ -20,4 +20,7 @@ Homestead.yaml
 npm-debug.*
 /database/seeds/tenant/EmbrasseMoi/DataGitIgnore
 /tests/File/tmpData
+/deploy/production/.env
+/deploy/staging/.env
+
 _ide_helper*.php

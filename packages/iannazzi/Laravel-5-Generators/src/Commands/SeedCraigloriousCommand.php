@@ -40,6 +40,8 @@ class SeedCraigloriousCommand extends Command
     {
         Artisan::call('db:seed', [
             '--class' => "CraigloriousDatabaseSeeder",
+            '--force' => 1
+
         ]);
     }
 }

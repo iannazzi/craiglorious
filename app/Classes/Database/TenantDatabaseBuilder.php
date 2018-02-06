@@ -55,6 +55,7 @@ class TenantDatabaseBuilder {
         $this->console($msg);
         Artisan::call('db:seed', [
             '--class' => "TenantStartupDatabaseSeeder",
+            '--force' => 1
         ]);
         $msg = 'Seeded ' . 	$this->database  . PHP_EOL;
         $this->console($msg);

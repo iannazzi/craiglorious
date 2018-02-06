@@ -3,7 +3,7 @@
 use Tests\ApiTester;
 use Illuminate\Support\Facades\App;
 
-class Environment extends ApiTester{
+class EnvironmentTest extends ApiTester{
 
     /** @test */
     public function env_file_is_correct()
@@ -24,6 +24,13 @@ class Environment extends ApiTester{
         if (env('JWT_SECRET')==''){
             dd('JWT_SECRET not set Set JWT_SECRET via php artisan JWT:secret');
         }
+
+        $this->assertNotNull(env('LOCATION'));
+        $this->assertNotNull(env('DB_PREFIX'));
+        $this->assertNotNull(env('MAIN_DB_NAME'));
+        $this->assertNotNull(env('JWT_SECRET'));
+
+
 
     }
 
