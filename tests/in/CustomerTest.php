@@ -19,7 +19,7 @@ class CustomerTest extends ApiTester
         $this->assertNotNull($fac);
     }
     /** @test */
-    function seed()
+    function it_can_seed()
     {
         $system = $this->getSystem('test');
         \DB::table('customers')->truncate();
@@ -69,20 +69,15 @@ class CustomerTest extends ApiTester
     /** @test */
     function can_be_updated()
     {
-
         $rawContent = '{"data":[{"id":19,"first_name":"Delaney","last_name":"Koch","phone":"885-349-9918 x7584","email":"delfina.gutmann@gmail.com","address1":"1140 McClure Mission","address2":"Apt. 425","address3":"","city":"Juanitaville","state_id":"4","zip":"98063","comments":"","active":0}],"_method":"put"}';
         $this->updateSuccess($this->route, $rawContent);
 
     }
-
-
-
     /** @test */
     function can_be_destroyed()
     {
         $rawContent = '{"_method":"delete","data":{"id":4}}';
         $this->deleteSuccess($this->route, $rawContent);
-
 
     }
 }

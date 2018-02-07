@@ -12,6 +12,7 @@
         <testsuite name="all">
             <file>tests/setup/EnvironmentTest.php</file>
             <file>tests/database/craiglorious/CraigloriousDatabaseTest.php</file>
+            <file>tests/database/TenantDatabaseTest.php</file>
             <file>tests/database/demo/DemoDatabaseTest.php</file>
             <file>tests/database/NewCompany/NewCompanyDatabaseTest.php</file>
             <file>tests/database/EmbrasseMoi/EmbrasseMoiDatabaseTest.php</file>
