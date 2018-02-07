@@ -4,6 +4,9 @@ namespace Iannazzi\Generators\Commands;
 
 use Artisan;
 use Illuminate\Console\Command;
+use App\Classes\Seeder\EmbrasseMoi\EmbrasseMoiDatabaseSeeder;
+use App\Classes\Seeder\Demo\DemoDatabaseSeeder;
+
 
 class DstCommand extends Command
 {
@@ -19,7 +22,7 @@ class DstCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Alias for zz:DestroyCreateTenantDatabasesWithFakeDataSeeder';
+    protected $description = 'This will create test, Demo and Em systems';
 
     /**
      * Create a new command instance.
@@ -39,15 +42,9 @@ class DstCommand extends Command
     public function handle()
     {
 
-        Artisan::call('db:seed', [
-            '--class' => "DemoDatabaseSeeder",
-            '--force' => 1
-        ]);
-        Artisan::call('db:seed', [
-            '--class' => "EmbrasseMoiDatabaseSeeder",
-            '--force' => 1
 
-        ]);
+        DemoDatabaseSeeder::run();
+        EmbrasseMoiDatabaseSeeder::run();
 
     }
 }

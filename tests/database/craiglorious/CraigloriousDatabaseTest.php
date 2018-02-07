@@ -40,6 +40,14 @@ class CraigloriousDatabaseTest extends ApiTester
     {
         $this->assertNotNull(View::all());
     }
+    /** @test */
+    function dms_command()
+    {
+        Artisan::call('zz:dms');
+        $this->assertNotNull(System::all());
+        $this->assertNotNull(View::all());
+    }
+
 
 
 }

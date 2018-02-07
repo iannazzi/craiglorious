@@ -19,7 +19,7 @@ class DmsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Alias for zz:DeleteMigrateSeedTenantDatabaseCommand';
+    protected $description = 'Clear Craiglorious Seed Craiglorious remove Tenant Databases';
 
     /**
      * Create a new command instance.
@@ -48,7 +48,7 @@ class DmsCommand extends Command
         Artisan::call('zz:SeedCraiglorious', [
 
         ]);
-        Artisan::call('zz:DestroySeedTenantDatabases', [
+        Artisan::call('zz:dst', [
 
         ]);
 
