@@ -37,7 +37,7 @@ class LoginTest extends ApiTester{
     public function validate_the_token()
     {
 
-        $this->signIn('admin','secret','demo');
+        $this->signIn('demo', 'admin','secret');
         $url = $this->api('verify');
 
         $this->get($url, $this->headers())
@@ -48,7 +48,7 @@ class LoginTest extends ApiTester{
     public function craigsocket()
     {
 
-        $this->signIn('admin','secret','demo');
+        $this->signIn('demo', 'admin','secret');
         $url = $this->api('craigsocket');
 
         $this->get($url, $this->headers())
@@ -58,7 +58,7 @@ class LoginTest extends ApiTester{
     /** @test */
     public function a_user_can_see_the_dashboard()
     {
-        $this->signIn('admin','secret','demo');
+        $this->signIn('demo', 'admin','secret');
 
         $url = $this->api('dashboard');
 
@@ -75,7 +75,7 @@ class LoginTest extends ApiTester{
     /** @test */
     public function user_can_see_roles()
     {
-        $this->signIn('admin','secret','demo');
+        $this->signIn('demo', 'admin','secret');
 
         $url = $this->api('roles');
 
@@ -92,8 +92,7 @@ class LoginTest extends ApiTester{
     /** @test */
     public function owner_cannot_see_roles()
     {
-        $this->signIn('owner','secret','demo');
-
+        $this->signIn('demo', 'owner','secret');
         $url = $this->api('roles');
 
 

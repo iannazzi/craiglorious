@@ -59,6 +59,24 @@ export default function(component){
             "post": true
         },
         {
+            "db_field": "pay_rate",
+            "caption": "Hourly Rate",
+            "type": "text",
+            "show_on_list": false,
+            "show_on_view": true,
+            "show_on_edit": true,
+            "show_on_create": true,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "search_default": "",
+
+            "properties": [],
+            "word_wrap": true,
+            "post": true
+        },
+        {
             "db_field": "phone",
             "caption": "Phone",
             "type": "text",
@@ -308,7 +326,7 @@ export default function(component){
             "events": [],
             "search": "LIKE ANY BETWEEN EXACT",
 
-            "search_default": 0,
+            "search_default": 1,
             "properties": [],
             "word_wrap": true,
             "post": true

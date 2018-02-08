@@ -21,7 +21,7 @@ class EmEmployeesSeeder extends BaseSeeder
         foreach ($employees as $employee)
         {
             $employee['state_id'] = State::where('short_name',$employee['state'])->first()->id;
-            $employee['ss'] = Employee::removeDashes($employee['ss']);
+           // $employee['ss'] = Employee::removeDashes($employee['ss']);
             unset($employee['state']);
             $new_emp[] = $employee;
         }

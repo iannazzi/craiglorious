@@ -35,7 +35,7 @@ class CreateEmployeesTable extends Migration
             $table->integer('state_id')->unsigned()->index()->nullable();
 
             $table->decimal('pay_rate');
-            $table->integer('withholding_allowance')->nullable();
+            $table->string('withholding_allowance');
             $table->integer('married');
             $table->integer('member');
 

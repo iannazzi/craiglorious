@@ -117,8 +117,7 @@ class UserTest extends ApiTester
         $this->json('post', '/api/user', json_decode($rawContent, true), $this->headers())
             ->assertJson(["success" => true]);
 
-
-        $this->signIn('owner');
+        $this->signIn('demo', 'owner', 'secret');
         $rawContent = '{"passcode":"01111","passcode_confirmation":"01111"}';
         $this->json('post', '/api/user', json_decode($rawContent, true), $this->headers())
             ->assertJson(["success" => false]);

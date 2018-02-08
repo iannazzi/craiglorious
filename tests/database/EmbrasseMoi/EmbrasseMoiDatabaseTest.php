@@ -26,6 +26,17 @@ class EmbrasseMoiDatabaseTest extends ApiTester
         $this->assertNotCount(0, Employee::all());
     }
     /** @test */
+    function employees_index()
+    {
+        $this->indexSuccess('employees', 'embrasse-moi','craig.iannazzi', 'feeling positive');
+    }
+    /** @test */
+    function can_be_searched_raw_json()
+    {
+        $rawContent = '{"search_fields":{"employees_first_name":"","employees_last_name":"","employees_comments":"","employees_active":"1"},"table_name":"employees"}';
+        $this->searchSuccess('employees', $rawContent);
+    }
+    /** @test */
     function users_are_loaded()
     {
         $system = $this->getSystem('Embrasse-moi');

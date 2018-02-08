@@ -32,9 +32,8 @@ abstract class ApiTester extends TestCase {
         $out = new ConsoleOutput();
         $out->writeln($msg);
     }
-    public function signIn($username= 'admin', $password='secret', $company='demo')
+    public function signIn($company='demo', $username= 'admin', $password='secret')
     {
-
         $data=['username'=>$username, 'password'=>$password, 'company'=>$company];
         $response = $this->post('/api/login', $data);
         $system = $this->getSystem();
@@ -59,8 +58,8 @@ abstract class ApiTester extends TestCase {
         return $system;
     }
 
-    public function indexSuccess($route){
-        $this->signIn();
+    public function indexSuccess($route, $company='demo', $user='admin', $password='secret'){
+        $this->signIn($company, $user, $password);
         $rawContent='{}';
         $this->json('GET', $this->api($route), json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);

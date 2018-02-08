@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label">Username</label>
                 <div class="col-md-6">
-                    <input type="text" class="form-control" v-model="user.username">
+                    <input type="text" class="form-control" ref="username" v-model="user.username">
                 </div>
             </div>
 
@@ -47,6 +47,7 @@
 </div></template>
 
 <script>
+    let jwtDecode = require('jwt-decode');
     module.exports = {
 
         data: function () {
@@ -81,6 +82,9 @@
                         //set the user first, then the token
                         localStorage.setItem('user', JSON.stringify(response.user));
                         localStorage.setItem('jwt-token', response.token);
+                        let decoded = jwtDecode(response.token);
+                        console.log(decoded.data.company)
+                        localStorage.setItem('company', decoded.data.company);
 
                         //bus.$emit('userHasLoggedIn');
                         self.$root.setLogin();
@@ -109,9 +113,20 @@
         },
 
         mounted: function () {
-            //if we are logged in then redirect....
+            //check if there is a company, if so populate
+            console.log(localStorage.getItem('company'));
+            if(localStorage.getItem('company') !== null){
+                this.user.company = localStorage.getItem('company').toLowerCase();
+                if(this.user.company !== 'demo'){
+                    this.user.username = '';
+                    this.user.password = '';
+                    this.$refs.username.focus()
+                }
 
-        },
+            }
+
+
+                },
 
     }
 

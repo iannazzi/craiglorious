@@ -43,7 +43,7 @@ class EmUsersSeeder extends BaseSeeder
                 $entry = [];
                 $entry['username'] = $row->login;
                 $entry['password'] = bcrypt('feeling positive');
-                $entry['passcode'] = bcrypt('33456');
+                //$entry['passcode'] = bcrypt('33456');
                 $entry['role'] = 'admin';
                 $new_data[] = $entry;
             }
