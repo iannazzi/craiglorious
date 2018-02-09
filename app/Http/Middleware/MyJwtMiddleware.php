@@ -53,7 +53,6 @@ class MyJwtMiddleWare
             $views = $myAuth->user->views();
             $ok = false;
 
-
             //now check user accessable routes
             foreach($views as $view)
             {

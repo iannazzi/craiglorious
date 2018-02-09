@@ -40,6 +40,10 @@ abstract class ApiTester extends TestCase {
     {
         $this-> signIn('demo','admin','secret');
     }
+    public function dump($response){
+        dd($response->getContent());
+
+    }
     public function signIn($company='demo', $username= 'admin', $password='secret')
     {
         $system = $this->getSystem($company);

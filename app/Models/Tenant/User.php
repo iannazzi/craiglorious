@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenant;
 
+use App\Classes\Auth\myAuth;
 use App\Models\BaseTenantModel;
 use App\Models\Craiglorious\System;
 use App\Models\Tenant\Role;
@@ -34,7 +35,7 @@ class User extends BaseTenantModel implements AuthenticatableContract,
      * @var array
      */
     protected $fillable = ['username', 'password', 'passcode', 'role_id', 'active', 'employee_id'];
-    protected $hidden = ['password','passcode'];
+    protected $hidden = ['password', 'passcode'];
 
     public function system()
     {
@@ -79,6 +80,22 @@ class User extends BaseTenantModel implements AuthenticatableContract,
         {
             return \App\Models\Tenant\Role::select('id AS value', 'name AS name')->where('id', '!=', '1')->get()->toArray();
         }
+    }
+
+    public function doesUserHaveAccessToView($view)
+    {
+        //does the user have access to the view?
+        $myAuth = new myAuth();
+
+        $views = \Config::get('user')->views();
+        dd($views);
+        $ok = false;
+
+        foreach($views as $view2)
+        {
+
+        }
+
     }
 
     public function views()
@@ -230,14 +247,19 @@ class User extends BaseTenantModel implements AuthenticatableContract,
     {
         return false;
     }
-    public static function userSelectArray(){
+
+    public static function userSelectArray()
+    {
         $users = User::all();
         $rtn = [];
-        foreach($users as $user){
-            $rtn[]= array('name' => $user->username, 'value' => $user->id);
+        foreach ($users as $user)
+        {
+            $rtn[] = array('name' => $user->username, 'value' => $user->id);
         }
+
         return $rtn;
     }
+
     public function user()
     {
         return $this->hasOne('App\Models\Tenant\Employee');

@@ -16,7 +16,6 @@ export function data(){
 
         },
         class_name: null,
-        employee_name: null,
         add_edit : false,
         loading: false,
         add: true,
@@ -33,5 +32,6 @@ export function data(){
         show_employees:false,
         eventTypes: [],
         employees:{},
+        employee_id: null
     }
 }

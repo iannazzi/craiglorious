@@ -2,8 +2,6 @@ export function mounted(){
     let self = this;
     bus.$on('addCalendarModalData', function (data) {
         self.eventTypes = data.event_types;
-        console.log('employees');
-        console.log(data.employees);
         self.employees = data.employees;
 
     })
@@ -24,7 +22,9 @@ export function mounted(){
         self.errors.record(response.message);
     })
     $('#add-edit-event-modal').on('shown.bs.modal', function () {
-        $('#entry_title').focus();
-        $('#entry_title').select();
+        //$('#entry_title').focus();
+        //$('#entry_title').select();
+
+        self.$refs.class_select.focus()
     })
 }

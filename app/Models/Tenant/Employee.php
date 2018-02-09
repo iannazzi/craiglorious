@@ -18,7 +18,7 @@ class Employee extends BaseTenantModel
         return str_replace('-', '', $ss);
     }
     public static function employeeSelectArray(){
-        $employees = Employee::where('active',1);
+        $employees = Employee::where('active',1)->get();
         $rtn = [];
         foreach($employees as $emp){
             $rtn[]= array('name' => $emp->first_name . ' ' . $emp->last_name, 'value' => $emp->id);

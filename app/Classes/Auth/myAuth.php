@@ -83,8 +83,7 @@ class myAuth
 
     }
 
-    public
-    function checkUniqueIdInDb($user, $unique_id)
+    public function checkUniqueIdInDb($user, $unique_id)
     {
         $user_logged_in = \DB::select("SELECT user_id FROM users_logged_in WHERE user_id = ? AND unique_id =?", [$user->id, $unique_id]);
         if (sizeof($user_logged_in) == 1)

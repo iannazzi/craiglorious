@@ -1,7 +1,6 @@
 export default {
     typeSelect(event){
         this.errors.clear(event.target.name);
-        console.log(event);
 
         if (event.target.value == 'scheduled_shift') {
             this.show_employees = true;
@@ -11,7 +10,21 @@ export default {
         }
 
     },
+
+    employeeSelect(event){
+        //using jquery: let emp_name = $('#employee_select').find('option:selected').text().trim();
+        //let selected_index = ;
+        //console.log(this.selected_emp_value);
+        //console.log(selected_index);
+        //let emp_name = this.employees[event.target.options.selectedIndex - 1].name;
+        let emp_name = this.employees[event.target.options.selectedIndex - 1].name;
+
+        if(this.title == ''){
+            this.title = 'Shift: ' + emp_name;
+        }
+    },
     loadEventData(event){
+        console.log(event);
         this.start_date = event.start.format('YYYY-MM-DD');
         this.end_date = event.end.format('YYYY-MM-DD');
         this.start_time = event.start.format('HH:mm');
@@ -21,6 +34,7 @@ export default {
         this.title = event.title;
         this.comments = event.comments;
         this.id = event.id;
+        this.employee_id = event.employee_id;
     },
     hideModal(){
         this.show = false;
@@ -38,24 +52,25 @@ export default {
         this.title = '';
         this.id = '';
         this.comments = '';
+        this.employee_id = null;
 
         $('#add-edit-event-modal').modal('show');
     },
-    getEvent(){
-        return {
-            className: this.class_name,
-            allDay: this.allDay,
-            start: this.getStartDateTime(),
-            end: this.getEndDateTime(),
-            title: this.title,
-            comments: this.comments,
-            id: this.id,
-            editable: 1,
-            startEditable: 1,
-            durationEditable: 1,
-            resourceEditable: 1,
-        }
-    },
+    // getEvent(){
+    //     return {
+    //         className: this.class_name,
+    //         allDay: this.allDay,
+    //         start: this.getStartDateTime(),
+    //         end: this.getEndDateTime(),
+    //         title: this.title,
+    //         comments: this.comments,
+    //         id: this.id,
+    //         editable: 1,
+    //         startEditable: 1,
+    //         durationEditable: 1,
+    //         resourceEditable: 1,
+    //     }
+    // },
     checkDate(){
         if (moment(this.end_date + ' ' + this.end_time + ':00').isSameOrBefore(this.start_date + ' ' + this.start_time + ':00')) {
 //                    if (moment(this.end_date).isSameOrBefore(this.start_date)) {
@@ -116,6 +131,7 @@ export default {
             end: this.getEndDateTime(),
             all_day: this.allDay,
             class_name: this.class_name,
+            employee_id: this.employee_id,
             editable: 1,
             start_editable: 1,
             duration_editable: 1,

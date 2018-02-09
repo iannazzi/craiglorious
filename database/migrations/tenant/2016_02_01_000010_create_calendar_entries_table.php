@@ -16,6 +16,7 @@ class CreateCalendarEntriesTable extends Migration
         {
             $table->increments('id');
             $table->integer('user_id');
+            $table->integer('employee_id')->nullable();
             $table->string('title');
             $table->text('comments');
             $table->boolean('all_day');

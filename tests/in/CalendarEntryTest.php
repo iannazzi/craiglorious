@@ -1,5 +1,6 @@
 <?php
 use App\Models\Tenant\CalendarEntry;
+use App\Models\Tenant\Employee;
 use Tests\ApiTester;
 use Iannazzi\Generators\DatabaseImporter\DatabaseDestroyer;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -41,19 +42,40 @@ class CalendarEntryTest extends ApiTester
     {
         $this->signInToDemo();
         $rawContent = '{}';
-        $data = $this->json('Get', $this->api($this->route), json_decode($rawContent, true),$this->headers());
-        dd($data->getContent());
+        $response = $this->json('Get', $this->api($this->route), json_decode($rawContent, true),$this->headers());
+        $data= json_decode($response->getContent());
+        $employees = $data->data->employees;
+        $this->assertNotNull($employees);
     }
 
     /** @test */
     function can_be_created()
     {
-        $this->signInToTest();
+        $this->signInToDemo();
 
-        $rawContent = '{"data":{"id":"","title":"hello","comments":"","start":"2018-02-09 09:30:00","end":"2018-02-09 10:30:00","all_day":false,"class_name":"scheduled_shift","editable":1,"start_editable":1,"duration_editable":1,"resource_editable":1},"_method":"put"}';
+        $rawContent = '{"data":{"id":"","title":"Shift: Craig Iannazzi","comments":"","start":"2018-02-09 10:00:00","end":"2018-02-09 11:00:00","all_day":false,"class_name":"scheduled_shift","employee_id":1,"editable":1,"start_editable":1,"duration_editable":1,"resource_editable":1},"_method":"put"}';
 
         $this->json('PUT', $this->api($this->route), json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);
+
+    }
+
+    /** @test */
+    function user_has_access_to_enmployees()
+    {
+        $this->signIn();
+        \Config::get('user')->doesUserHaveAccessToView('employees');
+
+    }
+    /** @test */
+    function null_employee_value()
+    {
+        $this->signInToTest();
+        $rawContent = '{"data":{"id":"","title":"test","comments":"","start":"2018-02-09 08:00:00","end":"2018-02-09 09:00:00","all_day":false,"class_name":"scheduled_shift","employee_id":null,"editable":1,"start_editable":1,"duration_editable":1,"resource_editable":1},"_method":"put"}';
+        $response = $this->json('PUT', $this->api($this->route), json_decode($rawContent, true),$this->headers());
+        $data= json_decode($response->getContent());
+        $employee_id = CalendarEntry::where('id',$data->id)->pluck('employee_id')->employee_id;
+        $this->assertNull($employee_id);
 
     }
     /** @test */
@@ -63,7 +85,6 @@ class CalendarEntryTest extends ApiTester
         $rawContent = '{"data":{"id":"123","title":"hello","comments":"","start":"2018-02-09 09:30:00","end":"2018-02-09 10:30:00","all_day":false,"class_name":"scheduled_shift","editable":1,"start_editable":1,"duration_editable":1,"resource_editable":1},"_method":"put"}';
         $this->json('PUT', $this->api($this->route), json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);
-
 
     }
     /** @test */

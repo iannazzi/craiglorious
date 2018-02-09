@@ -23,24 +23,15 @@
                                     {{id}}
                                 </div>
                             </div>
-                            <div class="row vertical-align">
-                                <div class="col-md-4">
-                                    <h4>Event Title</h4>
-                                </div>
-                                <div class="col-md-8" v-bind:class="{ 'has-error': errors.has('title') }">
-                                    <input id="entry_title" type="text" name="title" class="form-control"
-                                           v-model="title" @keydown="errors.clear('title')">
-                                    <span class="help text-danger" v-if="errors.has('title')"
-                                          v-text="errors.get('title')"></span>
-                                </div>
-                            </div>
+
                             <div class="row vertical-align">
                                 <div class="col-md-4">
                                     <h4>Event Type</h4>
                                 </div>
                                 <div class="col-md-8">
                                     <select v-model="class_name" name="class_name" class="form-control"
-                                            @change="typeSelect">
+                                            @change="typeSelect"
+                                            ref="class_select">
                                         <option v-for="eventType in eventTypes"
                                                 v-show="eventType.visible"
                                                 :id="eventType.id"
@@ -53,19 +44,33 @@
                                           v-text="errors.get('class_name')"></span>
 
                                 </div>
-                                <div class="col-md-8" v-if="show_employees">
-                                    <select v-model="employee_name" name="employee_name" class="form-control">
+                            </div>
+                            <div class="row vertical-align" v-if="show_employees">
+                                <div class="col-md-4">
+                                    <h4>Employee</h4>
+                                </div>
+                                <div class="col-md-8">
+                                    <select v-model = "employee_id" class="form-control" @change="employeeSelect">
+                                        <option value="null">Select Employee...</option>
                                         <option v-for="employee in employees"
-                                                :id="employee.id"
-                                                :value="employee.id">
+                                                v-bind:value="employee.value">
                                             {{employee.name}}
                                         </option>
                                     </select>
 
 
                                 </div>
-
-
+                            </div>
+                            <div class="row vertical-align">
+                                <div class="col-md-4">
+                                    <h4>Event Title</h4>
+                                </div>
+                                <div class="col-md-8" v-bind:class="{ 'has-error': errors.has('title') }">
+                                    <input id="entry_title" type="text" name="title" class="form-control"
+                                           v-model="title" @keydown="errors.clear('title')">
+                                    <span class="help text-danger" v-if="errors.has('title')"
+                                          v-text="errors.get('title')"></span>
+                                </div>
                             </div>
                             <div class="row vertical-align">
                                 <div class="col-sm-4">
@@ -83,12 +88,14 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label>Day</label>
-                                    <input @keydown="errors.clear('start')" @click="errors.clear('start')" type="date" class="form-control" v-model="start_date" @change="checkDate">
+                                    <input @keydown="errors.clear('start')" @click="errors.clear('start')" type="date"
+                                           class="form-control" v-model="start_date" @change="checkDate">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Time</label>
 
-                                    <input @keydown="errors.clear('start')" @click="errors.clear('start')" type="time" @change="checkDate" class="form-control" v-model="start_time">
+                                    <input @keydown="errors.clear('start')" @click="errors.clear('start')" type="time"
+                                           @change="checkDate" class="form-control" v-model="start_time">
                                 </div>
 
 
@@ -106,11 +113,13 @@
 
                                 <div class="col-md-4">
                                     <label>Day</label>
-                                    <input @keydown="errors.clear('end')" @click="errors.clear('end')" type="date" class="form-control" v-model="end_date" @change="checkDate">
+                                    <input @keydown="errors.clear('end')" @click="errors.clear('end')" type="date"
+                                           class="form-control" v-model="end_date" @change="checkDate">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Time</label>
-                                    <input @keydown="errors.clear('end')" @click="errors.clear('end')" type="time" class="form-control" v-model="end_time" @change="checkDate">
+                                    <input @keydown="errors.clear('end')" @click="errors.clear('end')" type="time"
+                                           class="form-control" v-model="end_time" @change="checkDate">
                                 </div>
 
                             </div>
@@ -125,7 +134,7 @@
                                     <h4>Comments</h4>
                                 </div>
                                 <div class="col-md-8">
-                                    <textarea  class="form-control" v-model="comments" >
+                                    <textarea class="form-control" v-model="comments">
                                     </textarea>
                                 </div>
                             </div>
