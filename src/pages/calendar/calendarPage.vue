@@ -23,7 +23,6 @@
                         </tr>
                     </table>
                 </div>
-
             </div>
         </div>
         <div v-show="false">
@@ -70,7 +69,7 @@
                     url: '/calendar',
                     entity: false,
                     onSuccess(response) {
-                        bus.$emit('addCalendarEventTypes', response.data.event_types)
+                        bus.$emit('addCalendarModalData', response.data)
                         console.log('removing events');
                         $('#calendar').fullCalendar('removeEvents');
                         console.log('rendering new events');

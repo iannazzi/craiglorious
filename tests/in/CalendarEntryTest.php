@@ -7,68 +7,78 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 class CalendarEntryTest extends ApiTester
 {
+   // these tests can be run individually, so we need to build it up from scratch each time
+    // for this reason use the test system
+    // the demo system would only test the seeder then
+
+
+    protected $route = 'calendar';
     /** @test */
     function are_emptied()
     {
-        $system = $this->getSystem();
-        //DatabaseDestroyer::emptyTable($system->dbc(), 'vendors');
-        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        $system = $this->getSystem('test');
         \DB::table('calendar_entries')->truncate();
-        \DB::statement('SET FOREIGN_KEY_CHECKS=1    ;');
         $this->assertEmpty(CalendarEntry::all());
     }
     /** @test */
     function are_loaded()
     {
-        $system = $this->getSystem();
+        $system = $this->getSystem('test');
         factory(CalendarEntry::class, 200)->create();
         $this->assertNotNull(CalendarEntry::all());
     }
+
     /** @test */
-    function can_be_searched()
+    function can_get_them()
     {
-        $system = $this->getSystem();
-        $this->withoutMiddleware();
-
-        $rawContent = '{"search_fields":{"id":"123","title":""},"table_name":"vendor_table"}';
-
-        $this->json('POST', '/calendar/search', json_decode($rawContent, true))
-            ->assertJsonFragment([
-                'id' => 123,
-            ]);
-
+        $this->signInToTest();
+        $rawContent = '{}';
+        $this->json('Get', $this->api($this->route), json_decode($rawContent, true),$this->headers())
+            ->assertJson(["success"=>'true']);
     }
+    /** @test */
+    function employees_sent_down_to_calendar()
+    {
+        $this->signInToDemo();
+        $rawContent = '{}';
+        $data = $this->json('Get', $this->api($this->route), json_decode($rawContent, true),$this->headers());
+        dd($data->getContent());
+    }
+
     /** @test */
     function can_be_created()
     {
-        $system = $this->getSystem();
-        $this->withoutMiddleware();
+        $this->signInToTest();
 
-        $rawContent = '{"data":[{"id":"","title":"new","start":"2017-03-10 10:00:00", "end":"2017-03-10 11:00:00"}],"_method":"patch"}';
+        $rawContent = '{"data":{"id":"","title":"hello","comments":"","start":"2018-02-09 09:30:00","end":"2018-02-09 10:30:00","all_day":false,"class_name":"scheduled_shift","editable":1,"start_editable":1,"duration_editable":1,"resource_editable":1},"_method":"put"}';
 
-        $this->json('put', '/calendar', json_decode($rawContent, true))
+        $this->json('PUT', $this->api($this->route), json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);
 
     }
     /** @test */
     function can_be_updated()
     {
-        $system = $this->getSystem();
-        $this->withoutMiddleware();
-
-        $rawContent = '{"data":[{"id":123,"title":"Craig Iannazzi"}],"_method":"patch"}';
-
-        $this->json('put', '/calendar', json_decode($rawContent, true))
+        $this->signInToTest();
+        $rawContent = '{"data":{"id":"123","title":"hello","comments":"","start":"2018-02-09 09:30:00","end":"2018-02-09 10:30:00","all_day":false,"class_name":"scheduled_shift","editable":1,"start_editable":1,"duration_editable":1,"resource_editable":1},"_method":"put"}';
+        $this->json('PUT', $this->api($this->route), json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);
+
+
     }
     /** @test */
     function can_be_destroyed()
     {
-        $system = $this->getSystem();
-        $this->withoutMiddleware();
-        $rawContent = '{"_method":"delete","data":{"id":7}}';
-        $this->json('delete', '/calendar', json_decode($rawContent, true))
+        $this->signInToTest();
+        $rawContent = '{"data":{"id":1},"_method":"delete"}';
+
+        $this->json('delete', $this->api($this->route), json_decode($rawContent, true),$this->headers())
             ->assertJson(["success"=>'true']);
     }
+
+
+
+
+
 
 }

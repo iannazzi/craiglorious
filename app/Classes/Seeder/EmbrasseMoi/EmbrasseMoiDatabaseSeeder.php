@@ -27,9 +27,8 @@ class EmbrasseMoiDatabaseSeeder extends BaseSeeder
         $tenantSystemBuilder->deleteSystem();
         $tenantSystemBuilder->setupTenantSystem();
         //$system->createTenantConnection();
-
-        EmEmployeesSeeder::run();
         EmUsersSeeder::run();
+        EmEmployeesSeeder::run();
 
     }
 

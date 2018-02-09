@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tenant\CalendarEntry;
+use App\Models\Tenant\Employee;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -13,9 +14,12 @@ class CalendarController extends Controller
 {
     public function getEvents(Request $request)
     {
+
         $entries = CalendarEntry::all();
+
         $return_data['events'] = [];
         $return_data['event_types'] = CalendarEntry::getEventTypes();
+        $return_data['employees'] = Employee::employeeSelectArray();
 
         foreach ($entries as $entry)
         {
@@ -51,12 +55,6 @@ class CalendarController extends Controller
     public function getEventTypes(){
 
         return response()->json( CalendarEntry::getEventTypes());
-    }
-
-    public function postEvents(Request $request)
-    {
-        echo json_encode(['name' => 'got the post event ',
-            'requesrt' => $request->all()]);
     }
 
     public function search(Request $request)

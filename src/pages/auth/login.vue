@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label">Password</label>
                 <div class="col-md-6">
-                    <input type="password" class="form-control" v-model="user.password">
+                    <input type="password" class="form-control" ref="password" v-model="user.password">
                 </div>
             </div>
 
@@ -117,7 +117,15 @@
             console.log(localStorage.getItem('company'));
             if(localStorage.getItem('company') !== null){
                 this.user.company = localStorage.getItem('company').toLowerCase();
-                if(this.user.company !== 'demo'){
+                if(this.user.company === 'demo'){
+                    this.$refs.username.focus()
+                }
+                else if(this.user.company === 'embrasse-moi'){
+                    this.user.username = 'craig.iannazzi';
+                    this.user.password = '';
+                    this.$refs.password.focus()
+                }
+                else {
                     this.user.username = '';
                     this.user.password = '';
                     this.$refs.username.focus()

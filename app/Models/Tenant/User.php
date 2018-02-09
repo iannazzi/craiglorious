@@ -230,4 +230,16 @@ class User extends BaseTenantModel implements AuthenticatableContract,
     {
         return false;
     }
+    public static function userSelectArray(){
+        $users = User::all();
+        $rtn = [];
+        foreach($users as $user){
+            $rtn[]= array('name' => $user->username, 'value' => $user->id);
+        }
+        return $rtn;
+    }
+    public function user()
+    {
+        return $this->hasOne('App\Models\Tenant\Employee');
+    }
 }

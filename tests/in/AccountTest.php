@@ -7,7 +7,8 @@ use Tests\ApiTester;
 
 class AccountTest extends ApiTester
 {
-
+    //account has initialized data
+    //this test would truncate account and load the inital data?
     protected $route = 'accounts';
 
     /** @test */

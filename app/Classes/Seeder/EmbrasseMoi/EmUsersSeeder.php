@@ -19,27 +19,40 @@ class EmUsersSeeder extends BaseSeeder
         $i_got_the_data = true;
         $cifile = new CIFile();
         $filename = em_data_seed_path() . '/users.csv';
-        if($i_got_the_data){
+        if ($i_got_the_data)
+        {
             User::truncate();
             $users = $cifile->csvToArray($filename, ';');
             $new = [];
             foreach ($users as $user)
             {
-                $user['role_id'] = Role::where('name',$user['role'])->first()->id;
+                $user['role_id'] = Role::where('name', $user['role'])->first()->id;
+                if ($user['username'] == 'craig.iannazzi')
+                {
+                    $user['password'] = bcrypt('     fjgh');
+                } elseif ($user['username'] == 'kristine.iannazzi')
+                {
+                    $user['password'] = bcrypt('     fjgh');
+                } else
+                {
+                    $user['password'] = bcrypt('feeling positive');
+                }
+
                 unset($user['role']);
                 $new[] = $user;
             }
             User::insert($new);
-        }
-        else{
+        } else
+        {
             Iannazzi\Generators\DatabaseImporter\DatabaseConnector::addConnections();
-            $rows =  DB::connection('POS')->select("select * from pos_users where active = 1");
+            $rows = DB::connection('POS')->select("select * from pos_users where active = 1");
             $new_data = [];
 
 //        $pos_key = env('POS_KEY');
 //        $mm = new DatabaseMigrationMap();
 
-            foreach($rows as $row){
+            foreach ($rows as $row)
+            {
                 $entry = [];
                 $entry['username'] = $row->login;
                 $entry['password'] = bcrypt('feeling positive');
@@ -52,7 +65,6 @@ class EmUsersSeeder extends BaseSeeder
             $cifile->arrayToCSVFile($filename, $new_data, ';', false, true);
 
         }
-
 
 
     }

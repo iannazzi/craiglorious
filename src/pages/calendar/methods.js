@@ -1,0 +1,153 @@
+export default {
+    typeSelect(event){
+        this.errors.clear(event.target.name);
+        console.log(event);
+
+        if (event.target.value == 'scheduled_shift') {
+            this.show_employees = true;
+        }
+        else {
+            this.show_employees = false;
+        }
+
+    },
+    loadEventData(event){
+        this.start_date = event.start.format('YYYY-MM-DD');
+        this.end_date = event.end.format('YYYY-MM-DD');
+        this.start_time = event.start.format('HH:mm');
+        this.end_time = event.end.format('HH:mm');
+        this.class_name = event.className[0];
+        this.allDay = event.allDay;
+        this.title = event.title;
+        this.comments = event.comments;
+        this.id = event.id;
+    },
+    hideModal(){
+        this.show = false;
+        $('#add-edit-event-modal').modal('hide');
+    },
+    addEvent(date){
+        this.loading = false;
+        this.add = true;
+        this.errors.clearAll();
+        this.start_date = date.format('YYYY-MM-DD');
+        this.end_date = date.format('YYYY-MM-DD');
+        this.start_time = date.format('HH:mm');
+        this.end_time = date.add(1, 'hour').format('HH:mm');
+        this.class_name = null;
+        this.title = '';
+        this.id = '';
+        this.comments = '';
+
+        $('#add-edit-event-modal').modal('show');
+    },
+    getEvent(){
+        return {
+            className: this.class_name,
+            allDay: this.allDay,
+            start: this.getStartDateTime(),
+            end: this.getEndDateTime(),
+            title: this.title,
+            comments: this.comments,
+            id: this.id,
+            editable: 1,
+            startEditable: 1,
+            durationEditable: 1,
+            resourceEditable: 1,
+        }
+    },
+    checkDate(){
+        if (moment(this.end_date + ' ' + this.end_time + ':00').isSameOrBefore(this.start_date + ' ' + this.start_time + ':00')) {
+//                    if (moment(this.end_date).isSameOrBefore(this.start_date)) {
+            this.end_date = this.start_date;
+            this.end_time = this.start_time;
+        }
+
+    },
+    onDelete(e){
+        e.preventDefault();
+        let post_data = {
+            id: this.id,
+        }
+        let data = {data: post_data, _method: 'delete'};
+        let self = this;
+        console.log(JSON.stringify(data))
+        this.loading = true;
+
+        getData({
+            method: 'delete',
+            url: '/calendar',
+            entity: data,
+            onSuccess(response) {
+                self.loading = false;
+                self.hideModal();
+                bus.$emit('event_saved');
+            },
+            onError(response){
+                console.log(response);
+                bus.$emit('event_save_error', response);
+            }
+        })
+
+
+    },
+    onCopy(e){
+        //lets see.....
+        //remove the id and set add to true?
+        this.id = '';
+        this.add = true;
+        e.preventDefault();
+
+    },
+    onSave(e){
+        e.preventDefault();
+        this.loading = true;
+        this.save();
+    },
+    save(){
+        //this is different than the calendarController.js save becuase this is not a full
+        //fullcalendar event object
+
+        let post_data = {
+            id: this.id,
+            title: this.title,
+            comments: this.comments,
+            start: this.getStartDateTime(),
+            end: this.getEndDateTime(),
+            all_day: this.allDay,
+            class_name: this.class_name,
+            editable: 1,
+            start_editable: 1,
+            duration_editable: 1,
+            resource_editable: 1,
+        }
+        let data = {data: post_data, _method: 'put'};
+        let self = this;
+        console.log(JSON.stringify(data))
+
+        getData({
+            method: 'post',
+            url: '/calendar',
+            entity: data,
+            onSuccess(response) {
+                self.hideModal();
+                bus.$emit('event_saved');
+
+//                        if(self.add_edit) {
+//                            bus.$emit('event_saved');
+//                        }
+            },
+            onError(response){
+                console.log(response);
+                bus.$emit('event_save_error', response);
+            }
+        })
+
+    },
+    getStartDateTime(){
+        return this.start_date + ' ' + this.start_time + ':00'
+    },
+    getEndDateTime(){
+        return this.end_date + ' ' + this.end_time + ':00'
+    },
+}

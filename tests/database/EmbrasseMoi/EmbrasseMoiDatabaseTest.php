@@ -26,10 +26,16 @@ class EmbrasseMoiDatabaseTest extends ApiTester
         $this->assertNotCount(0, Employee::all());
     }
     /** @test */
+    function sign_in()
+    {
+        $this->signIn('embrasse-moi','craig.iannazzi', 'feeling positive');
+    }
+    /** @test */
     function employees_index()
     {
         $this->indexSuccess('employees', 'embrasse-moi','craig.iannazzi', 'feeling positive');
     }
+
     /** @test */
     function can_be_searched_raw_json()
     {
@@ -38,6 +44,13 @@ class EmbrasseMoiDatabaseTest extends ApiTester
     }
     /** @test */
     function users_are_loaded()
+    {
+        $system = $this->getSystem('Embrasse-moi');
+        $emp = Employee::where('first_name','craig')->first();
+        $this->assertEquals($emp->user()->username, 'craig.iannazzi');
+    }
+    /** @test */
+    function employee_has_a_user()
     {
         $system = $this->getSystem('Embrasse-moi');
         $user = User::first();

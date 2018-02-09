@@ -59,6 +59,25 @@ export default function(component){
             "post": true
         },
         {
+            "db_field": "user_id",
+            "caption": "User",
+            "type": "select",
+            "select_values" : component.data.users,
+            "show_on_list": true,
+            "show_on_view": true,
+            "show_on_edit": true,
+            "show_on_create": true,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "search_default": "",
+
+            "properties": [],
+            "word_wrap": true,
+            "post": true
+        },
+        {
             "db_field": "pay_rate",
             "caption": "Hourly Rate",
             "type": "text",

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Craiglorious\State;
 use Illuminate\Http\Request;
-
+Use App\Models\Tenant\User;
 use App\Http\Requests;
 use App\Models\Tenant\Employee;
 use DB ;
@@ -61,6 +61,7 @@ class EmployeeController extends Controller
         {
             $data = [];
         }
+        $return_data = $this->commonReturnData();
         $return_data['page'] = 'index';
         $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
@@ -77,12 +78,14 @@ class EmployeeController extends Controller
     public function commonReturnData()
     {
         $return_data['states'] = State::stateSelectArray();
+        $return_data['users'] = User::userSelectArray();
         return $return_data;
     }
 
     public function show($id)
     {
         $q = Employee::findOrFail($id);
+        $return_data = $this->commonReturnData();
         $return_data['page'] = 'show';
         $return_data['records'] = [$q];
         $return_data['states'] = State::stateSelectArray();
@@ -97,8 +100,8 @@ class EmployeeController extends Controller
 
     public function create()
     {
+        $return_data = $this->commonReturnData();
         $return_data['page'] = 'create';
-        $return_data['states'] = State::stateSelectArray();
         $return_data['records'] = []; //let js handle the data through ajax
         return response()->json([
             'success' => true,

@@ -88,7 +88,7 @@
             <file>tests/File/CsvTest.php</file>
         </testsuite>
 
-        <testsuite name="calendarbusted">
+        <testsuite name="cal">
             <file>tests/in/CalendarEntryTest.php</file>
         </testsuite>
 

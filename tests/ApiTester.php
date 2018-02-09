@@ -32,11 +32,20 @@ abstract class ApiTester extends TestCase {
         $out = new ConsoleOutput();
         $out->writeln($msg);
     }
+    public function signInToTest()
+    {
+        $this-> signIn('test','admin','secret');
+    }
+    public function signInToDemo()
+    {
+        $this-> signIn('demo','admin','secret');
+    }
     public function signIn($company='demo', $username= 'admin', $password='secret')
     {
+        $system = $this->getSystem($company);
         $data=['username'=>$username, 'password'=>$password, 'company'=>$company];
-        $response = $this->post('/api/login', $data);
-        $system = $this->getSystem();
+        $response = $this->post($this->api('login'), $data);
+
         $content = json_decode($response->getContent());
         //$this->assertObjectHasAttribute('token', $content, 'Token does not exists');
         $this->token = $content->token;

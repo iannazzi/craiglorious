@@ -5,6 +5,7 @@ use App\Classes\Seeder\BaseSeeder;
 use App\Models\Tenant\Employee;
 use App\Models\Craiglorious\State;
 use App\Classes\File\CIFile;
+use App\Models\Tenant\User;
 
 class EmEmployeesSeeder extends BaseSeeder
 {
@@ -16,13 +17,20 @@ class EmEmployeesSeeder extends BaseSeeder
 
         $cifile = new CIFile();
 
-        $employees = $cifile->csvToArray($file);
+        $employees = $cifile->csvToArray($file, ';');
         $new_emp = [];
         foreach ($employees as $employee)
         {
             $employee['state_id'] = State::where('short_name',$employee['state'])->first()->id;
-           // $employee['ss'] = Employee::removeDashes($employee['ss']);
             unset($employee['state']);
+            $employee['user_id'] = User::where('username',$employee['user'])->first()->id;
+            unset($employee['user']);
+
+
+
+
+           // $employee['ss'] = Employee::removeDashes($employee['ss']);
+
             $new_emp[] = $employee;
         }
         Employee::insert($new_emp);

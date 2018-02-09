@@ -34,8 +34,8 @@ $api->version('v1', function ($api)
             {
                 //restricted user access here....
                 $api->get('calendar', 'CalendarController@getEvents');
-                $api->get('calendar/event_types', 'CalendarController@getEventTypes');
-                $api->post('calendar/search', 'CalendarController@search');
+//                $api->get('calendar/event_types', 'CalendarController@getEventTypes');
+//                $api->post('calendar/search', 'CalendarController@search');
                 $api->put('calendar', 'CalendarController@update');
                 $api->delete('calendar', 'CalendarController@destroy');
 
