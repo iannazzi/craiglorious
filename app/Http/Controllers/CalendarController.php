@@ -18,10 +18,14 @@ class CalendarController extends Controller
         $entries = CalendarEntry::all();
 
         $return_data['events'] = [];
-        $return_data['event_types'] = CalendarEntry::getEventTypes();
+        $schedule_access = \Config::get('user')->doesUserHaveAccessToView('employees');
+
+        $event_types = CalendarEntry::getEventTypes($schedule_access);
+
+        $return_data['event_types'] = $event_types;
         $return_data['employees'] = Employee::employeeSelectArray();
         //does the user have access to view employees?
-        $return_data['schedule_access'] = null;
+        $return_data['schedule_access'] = $schedule_access;
         foreach ($entries as $entry)
         {
             $tmp = [

@@ -49,6 +49,7 @@ abstract class ApiTester extends TestCase {
         $system = $this->getSystem($company);
         $data=['username'=>$username, 'password'=>$password, 'company'=>$company];
         $response = $this->post($this->api('login'), $data);
+        $response->assertStatus(200);
 
         $content = json_decode($response->getContent());
         //$this->assertObjectHasAttribute('token', $content, 'Token does not exists');

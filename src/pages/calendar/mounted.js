@@ -1,8 +1,12 @@
 export function mounted(){
     let self = this;
     bus.$on('addCalendarModalData', function (data) {
+        console.log(data.schedule_access);
+
         self.eventTypes = data.event_types;
         self.employees = data.employees;
+        self.schedule_access = data.schedule_access;
+        console.log('schedule_access ' + data.schedule_access);
 
     })
     bus.$on('add_calendar_entry', function (date) {
@@ -10,6 +14,16 @@ export function mounted(){
         self.addEvent(date);
     })
     bus.$on('edit_calendar_entry', function (event) {
+
+        console.log('editing event does user have access? ' + self.schedule_access)
+        console.log(event.className[0]);
+        if(event.className[0] == 'scheduled_shift'){
+            if(!self.schedule_access)
+            {
+                alert('Permission denied');
+                return;
+            }
+        }
         self.add_edit = true;
         self.add = false;
         self.loading=false;

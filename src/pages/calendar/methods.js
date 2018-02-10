@@ -42,6 +42,7 @@ export default {
     },
     addEvent(date){
         this.loading = false;
+        this.show_employees = false;
         this.add = true;
         this.errors.clearAll();
         this.start_date = date.format('YYYY-MM-DD');

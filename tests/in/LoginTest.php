@@ -15,6 +15,13 @@ class LoginTest extends ApiTester{
             ->assertStatus(200);
     }
     /** @test */
+    public function sign_in_demo_admin(){
+        $this->signIn('demo','addmin','secret');
+        dd(\Config::get('user'));
+
+    }
+
+    /** @test */
     public function a_user_enters_the_wrong_company_name()
     {
         $this->json('POST', $this->api('login'), ['company' => 'sdfghsdghjh', 'username'=> 'admin', 'password' => 'secret'])

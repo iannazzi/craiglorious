@@ -32,6 +32,8 @@ export function data(){
         show_employees:false,
         eventTypes: [],
         employees:{},
-        employee_id: null
+        employee_id: null,
+        schedule_access: null
+
     }
 }

@@ -46,12 +46,14 @@
 </style>
 <script>
     import {CalendarController} from './CalendarController.js'
+    import fullcalendar from './fullcalendar.js'
 
     let cc = new CalendarController();
     export default {
         data() {
             return {
-                loaded: false
+                loaded: false,
+                schedule_access: null
             }
         },
         components: {
@@ -63,25 +65,11 @@
 
             self.renderCal();
             this.loaded = true;
-            let renderEvents = function(){
-                getData( {
-                    method: 'get',
-                    url: '/calendar',
-                    entity: false,
-                    onSuccess(response) {
-                        bus.$emit('addCalendarModalData', response.data)
-                        console.log('removing events');
-                        $('#calendar').fullCalendar('removeEvents');
-                        console.log('rendering new events');
-                        $("#calendar").fullCalendar('addEventSource', response.data.events)
-                    },
-                })
-            }
             console.log('rendering initial events');
-            renderEvents();
+            self.renderEvents();
             bus.$on('event_saved', function(){
                 console.log('event_saved bus');
-                renderEvents();
+                self.renderEvents();
                 //bus.$emit('refetchEvents');
 
 //                if (self.add_edit){
@@ -105,9 +93,25 @@
 
         },
         methods: {
+            renderEvents(){
+                let self = this;
+                getData( {
+                    method: 'get',
+                    url: '/calendar',
+                    entity: false,
+                    onSuccess(response) {
+                        bus.$emit('addCalendarModalData', response.data)
+                        self.schedule_access = response.data.schedule_access;
+                        console.log('removing events');
+                        $('#calendar').fullCalendar('removeEvents');
+                        console.log('rendering new events');
+                        $("#calendar").fullCalendar('addEventSource', response.data.events)
+                    },
+                })
+            },
             renderCal(){
                 let self = this;
-                $(document).ready(function () {
+                //$(document).ready(function () {
 
 
                     let copyKey;
@@ -135,12 +139,22 @@
 
                             if (copyKey) {
                                 console.log('event moved with copy key');
-                                cc.save(event);
-                                let original_event = cc.clone(event);
-                                original_event.id = '';
-                                original_event.start.subtract(delta);
-                                original_event.end.subtract(delta);
-                                cc.save(original_event);
+
+                                if(self.checkScheduleAccess(event)){
+                                    cc.save(event,self);
+                                    let original_event = cc.clone(event);
+                                    original_event.id = '';
+                                    original_event.start.subtract(delta);
+                                    original_event.end.subtract(delta);
+                                    cc.save(original_event, self);
+                                }
+                                else{
+                                    self.renderEvents();
+                                }
+
+
+
+
 
 
                                 //$('#calendar').fullCalendar('renderEvent', original_event);
@@ -148,8 +162,12 @@
                             }
                             else {
                                 console.log('event moved');
-                                console.log(event);
-                                cc.save(event);
+                                if(self.checkScheduleAccess(event)){
+                                    cc.save(event,self);
+                                }
+                                else{
+                                    self.renderEvents();
+                                }
                             }
 
                         },
@@ -157,7 +175,13 @@
                             //bus.$emit('resize_event', event);
                             console.log('event resized');
                             console.log(event);
-                            cc.save(event);
+                            if(self.checkScheduleAccess(event)){
+                                cc.save(event,self);
+                            }
+                            else{
+                                self.renderEvents();
+                            }
+
                         },
                         header: {
                             left: 'prev,next today myCustomButton',
@@ -200,9 +224,21 @@
                         ],
                     })
 
-                });
+           //     });
 
             },
+            checkScheduleAccess(event){
+                console.log(event.className[0]);
+                console.log(this.schedule_access);
+                if(event.className[0] == 'scheduled_shift'){
+                    if(!this.schedule_access)
+                    {
+                        alert('Permission denied');
+                        return false;
+                    }
+                }
+                return true;
+            }
         }
 
     }

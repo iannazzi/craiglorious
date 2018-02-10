@@ -13,35 +13,29 @@ class CalendarEntry extends BaseTenantModel {
         'start_editable' => 'boolean',
         'resource_editable' => 'boolean',
     ];
-    public static function getEventTypes()
+    public static function getEventTypes($access)
     {
-//        return [
-//            'scheduled_shift',
-//            'actual_shift',
-//            'customer_appointment',
-//            'personal_appointment',
-//            'internal_meeting',
-//            'external_meeting',
-//            'external_event',
-//            'location_event',
-//        ];
 
-        return [
-                    [
-                        'id'=>  'null',
-                        'text'=>  'Select....',
-                        'visible'=> true
-                    ],
-                    [
-                        'id'=>  'scheduled_shift',
-                        'text'=>  'Scheduled Shift',
-                        'visible'=> true
-                    ],
-                    [
-                        'id'=>  'actual_shift',
-                        'text'=>  'Actual Shift',
-                        'visible'=> false
-                    ],
+        $event_types = [];
+        $event_types[] = [
+            'id'=>  'null',
+            'text'=>  'Select....',
+            'visible'=> true
+        ];
+        if($access){
+            $event_types[] =[
+                'id'=>  'scheduled_shift',
+                'text'=>  'Scheduled Shift',
+                'visible'=> true
+            ];
+            $event_types[] =  [
+                'id'=>  'actual_shift',
+                'text'=>  'Actual Shift',
+                'visible'=> false
+            ];
+
+        }
+        $remaining_events =  [
                     [
                         'id'=>  'customer_appointment',
                         'text'=>  'Appointment',
@@ -58,24 +52,13 @@ class CalendarEntry extends BaseTenantModel {
                         'visible'=> true
                     ],
                     [
-                        'id'=>  'location_event',
-                        'text'=>  'Event',
-                        'visible'=> false
-
-                    ],
-                    [
-                        'id'=>  'external_meeting',
-                        'text'=>  'External Meeting',
-                        'visible'=> false
-                    ],
-                    [
                         'id'=>  'external_event',
                         'text'=>  'Event',
                         'visible'=> true
                     ]
 
                 ];
-
+        return array_merge($event_types,$remaining_events);
     }
 
 }

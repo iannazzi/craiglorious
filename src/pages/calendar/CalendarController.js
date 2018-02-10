@@ -1,8 +1,23 @@
 export class CalendarController
 {
-    save(event){
+    save(event, vue_calander_component){
         // console.log(event.start.format('YYYY-MM-DD HH:mm:ss'))
         // console.log(event.start.format())
+
+        // console.log('save after resize or move.....');
+        // console.log(event);
+        // console.log(event.className[0]);
+        // console.log('vue_calander_component');
+        // console.log(vue_calander_component.$data.schedule_access);
+        //
+        // if(event.className[0] == 'scheduled_shift'){
+        //     if(!self.schedule_access)
+        //     {
+        //         alert('Permission denied');
+        //         return;
+        //     }
+        // }
+
         let post_data = {
             id: event.id,
             title: event.title,

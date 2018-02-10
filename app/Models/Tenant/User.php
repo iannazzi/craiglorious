@@ -84,17 +84,14 @@ class User extends BaseTenantModel implements AuthenticatableContract,
 
     public function doesUserHaveAccessToView($view)
     {
-        //does the user have access to the view?
-        $myAuth = new myAuth();
-
         $views = \Config::get('user')->views();
-        dd($views);
-        $ok = false;
-
         foreach($views as $view2)
         {
-
+            if($view2->route == $view){
+                return true;
+            }
         }
+        return false;
 
     }
 
