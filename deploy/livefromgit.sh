@@ -24,7 +24,7 @@ npm run production
 
 cd /var/www/craiglorious.com/live
 pwd
-php artisan down
+#php artisan down
 cd $f/$DATEP
 php artisan zz:MigrateProduction
 cd $f
@@ -32,4 +32,4 @@ rm live
 ln -s $DATEP $f/live
 cd $f/live
 pwd
-php artisan up
+#php artisan up

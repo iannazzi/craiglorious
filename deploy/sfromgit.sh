@@ -1,38 +1,40 @@
 #!/usr/bin/env bash
+
+#./scpScripts.sh
+
 f=/var/www/craiglorious.com
 
 DATE=`date +%Y%m%d`
 DATEP=$DATE'-StageFromGit'
 
-cd $f
-rm -rf $DATEP
-git clone https://github.com/iannazzi/craiglorious.git $DATEP
-sudo chgrp -R www-data $DATEP
-cd $f/$DATEP
-git checkout develop
-cp $f/env/stag/.env .
-composer install
-php artisan jwt:secret
 
-npm install
-npm run production
+ssh -t craig@craiglorious.com "cd $f &&\
+rm -rf $DATEP &&\
+git clone https://github.com/iannazzi/craiglorious.git $DATEP &&\
+sudo chgrp -R www-data $DATEP &&\
+cd $f/$DATEP &&\
+git checkout develop &&\
+cp $f/env/stag/.env . &&\
+composer install &&\
+php artisan jwt:secret &&\
 
-sudo chown -R craig:www-data storage
-sudo chmod -R ug+w storage
-sudo chown -R craig:www-data bootstrap/cache
-sudo chmod -R ug+w bootstrap/cache
+npm install &&\
+npm run production &&\
 
-cd $f/staging
-pwd
-php artisan down
-cd $f/$DATEP
-pwd
-php artisan zz:dms
+sudo chown -R craig:www-data storage &&\
+sudo chmod -R ug+w storage &&\
+sudo chown -R craig:www-data bootstrap/cache &&\
+sudo chmod -R ug+w bootstrap/cache &&\
 
-cd $f
-pwd
-rm $f/staging
-ln -s $DATEP $f/staging
-cd $f/staging
-pwd
-php artisan up
+cd $f/staging &&\
+pwd &&\
+cd $f/$DATEP &&\
+pwd &&\
+php artisan zz:dms &&\
+
+cd $f &&\
+pwd &&\
+rm $f/staging &&\
+ln -s $DATEP $f/staging &&\
+cd $f/staging &&\
+pwd"
