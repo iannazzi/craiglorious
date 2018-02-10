@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 f=/var/www/craiglorious.com
+#git fetch --all &&\
+#git reset --hard origin/develop &&\
+ssh craig@craiglorious.com "cd $f/staging &&\
+php artisan down &&\
+git pull
 
-cd $f/staging
-php artisan down --message="Upgrading Database" --retry=60
-git fetch --all
-git reset --hard origin/develop
+composer install &&\
+npm install &&\
 
-composer install
-npm install
-
-npm run production
-php artisan up
+npm run production &&\
+php artisan up"
 
 

@@ -23,6 +23,7 @@ export function mounted(){
                 alert('Permission denied');
                 return;
             }
+            self.show_employees = true;
         }
         self.add_edit = true;
         self.add = false;

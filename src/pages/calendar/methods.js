@@ -10,16 +10,25 @@ export default {
         }
 
     },
-
+    keyhander(event){
+      if (event.keyCode==13)
+      {
+          this.onSave(event);
+          event.preventDefault();
+      }
+    },
     employeeSelect(event){
         //using jquery: let emp_name = $('#employee_select').find('option:selected').text().trim();
-        //let selected_index = ;
-        //console.log(this.selected_emp_value);
-        //console.log(selected_index);
-        //let emp_name = this.employees[event.target.options.selectedIndex - 1].name;
-        let emp_name = this.employees[event.target.options.selectedIndex - 1].name;
+        this.errors.clear('title');
+        let selected_index = event.target.options.selectedIndex;
+        console.log(selected_index);
 
-        if(this.title == ''){
+        if(selected_index==0)
+        {
+            this.title = ''
+        }
+        else{
+            let emp_name = this.employees[selected_index - 1].name;
             this.title = 'Shift: ' + emp_name;
         }
     },

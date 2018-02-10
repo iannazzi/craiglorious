@@ -13,7 +13,7 @@
                         <h4 v-else>{{title}}</h4>
 
                     </div>
-                    <form id="add-edit-event-form" @keydown="errors.clear($event.target.name)">
+                    <form id="add-edit-event-form" @keydown="errors.clear($event.target.name)" v-on:keydown="keyhander">
                         <div class="modal-body">
                             <div v-if="!add" class="row vertical-align">
                                 <div class="col-md-4">
@@ -129,7 +129,7 @@
                                       v-text="errors.get('end')"></span>
                                 </div>
                             </div>
-                            <div class="row vertical-align">
+                            <div id="comments" class="row vertical-align">
                                 <div class="col-md-4">
                                     <h4>Comments</h4>
                                 </div>
@@ -148,7 +148,7 @@
                             </button>
 
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary" :disabled="errors.any()" v-on:click="onSave">
+                            <button type="submit"  class="btn btn-primary" :disabled="errors.any()" v-on:click="onSave">
                                 Save
                             </button>
                         </div>
