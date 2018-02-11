@@ -126,6 +126,7 @@
                     cal.fullCalendar({
                         //height: 650,
                         selectable: true,
+                        height: "auto",
 
                         dayNamesShort: ['Sunday', 'Monday', 'Tuesday', 'Wednesday',
                             'Thursday', 'Friday', 'Saturday'],
