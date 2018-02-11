@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Classes\File\CIFile;
 use App\Classes\Seeder\EmbrasseMoi\EmbrasseMoiDatabaseSeeder;
 use App\Models\Tenant\Employee;
 use App\Models\Tenant\User;
@@ -9,6 +10,8 @@ use Tests\ApiTester;
 
 class EmbrasseMoiDatabaseTest extends ApiTester
 {
+    protected $users;
+
 
     /** @test */
     function em_seeder()
@@ -20,6 +23,12 @@ class EmbrasseMoiDatabaseTest extends ApiTester
         $this->assertNotNull($tables);
     }
     /** @test */
+    function user_password()
+    {
+        $this->assertNotEmpty($this->password('craig.iannazzi'));
+        $this->assertFalse($this->password('fox.mulder'));
+    }
+    /** @test */
     function employees_are_loaded()
     {
         $system = $this->getSystem('Embrasse-moi');
@@ -28,20 +37,14 @@ class EmbrasseMoiDatabaseTest extends ApiTester
     /** @test */
     function sign_in()
     {
-        $this->signIn('embrasse-moi','craig.iannazzi', 'feeling positive');
+        $this->signIn('embrasse-moi','craig.iannazzi', $this->password('craig.iannazzi'));
     }
     /** @test */
     function employees_index()
     {
-        $this->indexSuccess('employees', 'embrasse-moi','craig.iannazzi', 'feeling positive');
+        $this->indexSuccess('employees', 'embrasse-moi','craig.iannazzi', $this->password('craig.iannazzi'));
     }
 
-    /** @test */
-    function can_be_searched_raw_json()
-    {
-        $rawContent = '{"search_fields":{"employees_first_name":"","employees_last_name":"","employees_comments":"","employees_active":"1"},"table_name":"employees"}';
-        $this->searchSuccess('employees', $rawContent);
-    }
     /** @test */
     function users_are_loaded()
     {
@@ -57,4 +60,15 @@ class EmbrasseMoiDatabaseTest extends ApiTester
         $this->assertEquals($user->username, 'craig.iannazzi');
     }
 
+    function password($username){
+        $cifile = new CIFile();
+        $filename = em_data_seed_path() . '/users.csv';
+        $users = $cifile->csvToArray($filename, ';');
+        foreach ($users as $user){
+            if($user['username'] == $username){
+                return $user['password'];
+            }
+        }
+        return false;
+    }
 }

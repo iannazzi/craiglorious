@@ -13,8 +13,7 @@ class VendorTest extends ApiTester
     /** @test */
     function index()
     {
-        $this->signIn();
-        $this->get($this->route);
+        $this->indexSuccess($this->route);
     }
 
     /** @test */
@@ -38,30 +37,8 @@ class VendorTest extends ApiTester
         factory(Vendor::class, 200)->create();
         $this->assertNotNull(Vendor::all());
     }
-    /** @test */
-    function get_index()
-    {
-        $system = $this->getSystem();
-        $this->withoutMiddleware();
-
-        //$this->get('/vendors')->assertStatus(200);
 
 
-    }
-//    /** @test */
-//    function can_be_searched()
-//    {
-//        $system = $this->getSystem();
-//        $this->withoutMiddleware();
-//
-//        $rawContent = '{"search_fields":{"vendor_table_id":"123","vendor_table_name":"","vendor_table_account_number":"","vendor_table_active":"null"},"table_name":"vendor_table"}';
-//
-//        $this->json('POST', '/vendors/search', json_decode($rawContent, true))
-//            ->assertJsonFragment([
-//                'id' => 123,
-//            ]);
-//
-//    }
     /** @test */
     function can_be_created()
     {

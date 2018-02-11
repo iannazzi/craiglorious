@@ -16,7 +16,7 @@ class LoginTest extends ApiTester{
     }
     /** @test */
     public function sign_in_demo_admin(){
-        $this->signIn('demo','addmin','secret');
+        $this->signIn('demo','admin','secret');
         dd(\Config::get('user'));
 
     }

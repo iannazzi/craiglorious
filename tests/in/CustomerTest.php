@@ -24,6 +24,7 @@ class CustomerTest extends ApiTester
         $system = $this->getSystem('test');
         \DB::table('customers')->truncate();
         CustomersTableSeeder::run();
+        $this->assertEquals(1,1);
     }
 
     /** @test */
