@@ -50,6 +50,9 @@
         <testsuite name="newcompany">
             <file>tests/database/NewCompany/NewCompanyDatabaseTest.php</file>
         </testsuite>
+        <testsuite name="pro">
+            <file>tests/database/production/ProductionDatabaseTest.php</file>
+        </testsuite>
 
 
 

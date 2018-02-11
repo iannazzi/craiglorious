@@ -47,22 +47,6 @@ class UserTest extends ApiTester
 
     }
 
-    /** @test */
-    function password_can_be_updated()
-    {
-//        $this->signIn();
-//
-//        $username = $this->faker->userName;
-//        $password = createPassword();
-//
-//        $rawContent = '{"password":"*_Erica_1964","password_confirmation":"*_Erica_1964"}
-//';
-//
-//        $this->json('post', '/api/user', json_decode($rawContent, true), $this->headers())
-//            ->assertJson(["success" => 'true']);
-
-
-    }
 
     /** @test */
     function bad_password()

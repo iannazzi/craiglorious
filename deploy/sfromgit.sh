@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#./scpScripts.sh
+./scpScripts.sh
 
 f=/var/www/craiglorious.com
 
@@ -11,7 +11,7 @@ DATEP=$DATE'-StageFromGit'
 ssh -t craig@craiglorious.com "cd $f &&\
 rm -rf $DATEP &&\
 git clone https://github.com/iannazzi/craiglorious.git $DATEP &&\
-sudo chgrp -R www-data $DATEP &&\
+chgrp -R www-data $DATEP &&\
 cd $f/$DATEP &&\
 git checkout prel55upgrade &&\
 cp $f/env/stag/.env . &&\
@@ -21,10 +21,10 @@ php artisan jwt:secret &&\
 npm install &&\
 npm run production &&\
 
-sudo chown -R craig:www-data storage &&\
-sudo chmod -R ug+w storage &&\
-sudo chown -R craig:www-data bootstrap/cache &&\
-sudo chmod -R ug+w bootstrap/cache &&\
+chown -R craig:www-data storage &&\
+chmod -R ug+w storage &&\
+chown -R craig:www-data bootstrap/cache &&\
+chmod -R ug+w bootstrap/cache &&\
 
 cd $f/staging &&\
 pwd &&\

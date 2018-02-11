@@ -27,18 +27,8 @@ class EmUsersSeeder extends BaseSeeder
             foreach ($users as $user)
             {
                 $user['role_id'] = Role::where('name', $user['role'])->first()->id;
-                if ($user['username'] == 'craig.iannazzi')
-                {
-                    $user['password'] = bcrypt('     fjgh');
-                } elseif ($user['username'] == 'kristine.iannazzi')
-                {
-                    $user['password'] = bcrypt('     fjgh');
-                } else
-                {
-                    $user['password'] = bcrypt('feeling positive');
-                }
-
                 unset($user['role']);
+                $user['password'] = bcrypt( $user['password']);
                 $new[] = $user;
             }
             User::insert($new);

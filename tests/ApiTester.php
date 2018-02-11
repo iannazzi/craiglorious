@@ -69,6 +69,7 @@ abstract class ApiTester extends TestCase {
     {
         $system = System::where('company', $company)->first();
         $system->createTenantConnection();
+        \DB::statement('set global max_connections = 800;');
         return $system;
     }
 

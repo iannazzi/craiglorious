@@ -18,7 +18,7 @@
         "barryvdh/laravel-ide-helper": "^2.1",
         "fzaninotto/faker": "~1.7",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~6.0"
+        "phpunit/phpunit": "~5.0"
     },
     "autoload": {
         "classmap": [

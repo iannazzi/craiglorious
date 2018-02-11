@@ -1,0 +1,2451 @@
+diff --git a/app/Api/Controllers/AuthController.php b/app/Api/Controllers/AuthController.php
+new file mode 100644
+index 0000000..7bf5d4b
+--- /dev/null
++++ b/app/Api/Controllers/AuthController.php
+@@ -0,0 +1,143 @@
++<?php
++
++namespace Api\Controllers;
++use Illuminate\Support\Facades\Auth;
++
++use App\User;
++use Dingo\Api\Facade\API;
++use Illuminate\Http\Request;
++use Api\Requests\UserRequest;
++use Api\Requests\RegistrationRequest;
++
++use Tymon\JWTAuth\Facades\JWTAuth;
++use Tymon\JWTAuth\Exceptions\JWTException;
++use App\Models\Craiglorious\System;
++use App\Classes\TenantSystem\TenantSystemBuilder;
++
++class AuthController extends BaseController
++{
++    public function me(Request $request)
++    {
++        $payload = JWTAuth::parseToken()->getPayload();
++        $system = System::where('company', '=', $payload['company'])->first();
++        if(!$system)
++        {
++            return response()->json(['error' => 'invalid_credentials'], 401);
++        }
++        $system->createTenantConnection();
++
++        return JWTAuth::parseToken()->authenticate();
++    }
++
++    public function authenticate(Request $request)
++    {
++        // grab credentials from the request
++        // will it be username or email?
++        $credentials = $request->only('username', 'password');
++        $company = $request->only('company');
++        $system = System::where('company', '=', $company['company'])->first();
++
++        if(!$system)
++        {
++            return response()->json(['error' => 'invalid_credentials'], 401);
++        }
++
++        $system->createTenantConnection();
++        $customClaims = ['company' => $company['company'], 'system' => $system->id];
++
++        try {
++            // attempt to verify the credentials and create a token for the user
++            if (! $token = JWTAuth::attempt($credentials, $customClaims)) {
++                return response()->json(['error' => 'invalid_credentials'], 401);
++            }
++        } catch (JWTException $e) {
++            // something went wrong whilst attempting to encode the token
++            return response()->json(['error' => 'could_not_create_token'], 500);
++        }
++
++        //get the jobs available for the user
++        $user = Auth::user();
++        $jobs = $user->getJobs();
++
++        // all good so return the token
++        return response()->json(compact('token', 'jobs'));
++    }
++
++    public function validateToken() 
++    {
++        // Our routes file should have already authenticated this token, so we just return success here
++        //dd(JWTAuth::parseToken());
++        return API::response()->array(['status' => 'success'])->statusCode(200);
++    }
++
++    public function register(RegistrationRequest $request)
++    {
++//        $new_system = $request->only(['company', 'email', 'password']);
++     //dd($request->company);
++
++        $system = new System();
++        $system->company = $request->company;
++        $system->name = $request->name;
++        $system->email= $request->email;
++        $system->password = bcrypt($request->password);
++        $system->save();
++
++
++        $tenantSystemBuilder = new TenantSystemBuilder($system);
++        //$tenantSystemBuilder->deleteSystem();
++        $tenantSystemBuilder->setupTenantSystem();
++        $system->createTenantConnection();
++
++
++        $user = User::first();
++        $user = User::where('username','=', 'admin')->firstOrFail();
++
++        $customClaims = ['company' => $system->company, 'system' => $system->id];
++
++        $token = JWTAuth::fromUser($user,$customClaims);
++
++        return response()->json(compact('token'));
++    }
++    /**
++     * Returns the authenticated user
++     *
++     * @return \Illuminate\Http\JsonResponse
++     */
++    public function authenticatedUser(Request $request)
++    {
++//        die(var_dump($request->header()));
++//        $token = JWTAuth::getToken();
++//        dd('token' . $token);
++        try {
++            if (!$user = JWTAuth::parseToken()->authenticate()) {
++                return response()->json(['user_not_found'], 404);
++            }
++        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
++            return response()->json(['token_expired'], $e->getStatusCode());
++        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
++            return response()->json(['token_invalid'], $e->getStatusCode());
++        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
++            return response()->json(['token_absent'], $e->getStatusCode());
++        }
++        // the token is valid and we have found the user via the sub claim
++        return response()->json(compact('user'));
++    }
++    /**
++     * Refresh the token
++     *z
++     * @return mixed
++     */
++    public function getToken()
++    {
++        $token = JWTAuth::getToken();
++        if (!$token) {
++            return $this->response->errorMethodNotAllowed('Token not provided');
++        }
++        try {
++            $refreshedToken = JWTAuth::refresh($token);
++        } catch (JWTException $e) {
++            return $this->response->errorInternal('Not able to refresh Token');
++        }
++        return $this->response->withArray(['token' => $refreshedToken]);
++    }
++}
+\ No newline at end of file
+diff --git a/app/Api/Controllers/BaseController.php b/app/Api/Controllers/BaseController.php
+new file mode 100644
+index 0000000..ac675a9
+--- /dev/null
++++ b/app/Api/Controllers/BaseController.php
+@@ -0,0 +1,11 @@
++<?php
++
++namespace Api\Controllers;
++
++use Dingo\Api\Routing\Helpers;
++use Illuminate\Routing\Controller;
++
++class BaseController extends Controller
++{
++    use Helpers;
++}
+\ No newline at end of file
+diff --git a/app/Api/Controllers/DashboardController.php b/app/Api/Controllers/DashboardController.php
+new file mode 100644
+index 0000000..010e1e2
+--- /dev/null
++++ b/app/Api/Controllers/DashboardController.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace Api\Controllers;
++use Dingo\Api\Facade\API, Illuminate\Support\Facades\Auth;
++
++/**
++ * @Resource('Dashboard', uri='/dashboard')
++ */
++class DashboardController extends BaseController
++{
++
++    public function __construct() 
++    {
++       // $this->middleware('jwt.auth');
++    }
++    public function index()
++    {
++
++        //dd('why am i at api/controllers/dashboard?');
++        $user = Auth::user();
++        $views = $user->getViews();
++        return array('views' =>$views);
++
++    }
++    
++
++    
++}
+diff --git a/app/Api/Controllers/DogsController.php b/app/Api/Controllers/DogsController.php
+new file mode 100644
+index 0000000..02efdbb
+--- /dev/null
++++ b/app/Api/Controllers/DogsController.php
+@@ -0,0 +1,84 @@
++<?php
++
++namespace Api\Controllers;
++
++use App\Dog;
++use App\Http\Requests;
++use Illuminate\Http\Request;
++use Api\Requests\DogRequest;
++use Api\Transformers\DogTransformer;
++use Dingo\Api\Facade\API;
++
++/**
++ * @Resource('Dogs', uri='/dogs')
++ */
++class DogsController extends BaseController
++{
++
++    public function __construct() 
++    {
++       // $this->middleware('jwt.auth');
++    }
++
++    /**
++     * Show all dogs
++     *
++     * Get a JSON representation of all the dogs
++     * 
++     * @Get('/')
++     */
++    public function index()
++    {
++       // return ['Dog'];
++        return $this->collection(Dog::all(), new DogTransformer);
++    }
++
++    /**
++     * Store a new dog in the database.
++     *
++     * @param  \Illuminate\Http\Request  $request
++     * @return \Illuminate\Http\Response
++     */
++    public function store()
++    {
++        return API::response()->array(['status' => 'success'])->statusCode(200);
++
++        return Dog::create($request->only(['name', 'age']));
++    }
++
++    /**
++     * Display the specified resource.
++     *
++     * @param  int  $id
++     * @return \Illuminate\Http\Response
++     */
++    public function show($id)
++    {
++        return $this->item(Dog::findOrFail($id), new DogTransformer);
++    }
++
++    /**
++     * Update the dog in the database.
++     *
++     * @param  \Illuminate\Http\Request  $request
++     * @param  int  $id
++     * @return \Illuminate\Http\Response
++     */
++    public function update(DogRequest $request, $id)
++    {
++        $dog = Dog::findOrFail($id);
++        $dog->update($request->only(['name', 'age']));
++        return $dog;
++    }
++
++    /**
++     * Remove the specified resource from storage.
++     *
++     * @param  int  $id
++     * @return \Illuminate\Http\Response
++     */
++    public function destroy($id)
++    {
++        return Dog::destroy($id);
++    }
++}
+diff --git a/app/Api/Requests/DogRequest.php b/app/Api/Requests/DogRequest.php
+new file mode 100644
+index 0000000..eb5ead9
+--- /dev/null
++++ b/app/Api/Requests/DogRequest.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace Api\Requests;
++
++use Dingo\Api\Http\FormRequest;
++
++class DogRequest extends FormRequest
++{
++	public function authorize()
++	{
++		return true;
++	}
++
++	public function rules()
++	{
++		return [
++	    	'name' => 'required|max:100',
++	    	'age' => 'required|numeric|between:0,40'
++    	];
++	}
++}
+\ No newline at end of file
+diff --git a/app/Api/Requests/RegistrationRequest.php b/app/Api/Requests/RegistrationRequest.php
+new file mode 100644
+index 0000000..332b7fc
+--- /dev/null
++++ b/app/Api/Requests/RegistrationRequest.php
+@@ -0,0 +1,35 @@
++<?php
++
++namespace Api\Requests;
++
++use Dingo\Api\Http\FormRequest;
++
++class RegistrationRequest extends FormRequest
++{
++    /**
++     * Determine if the user is authorized to make this request.
++     *
++     * @return bool
++     */
++    public function authorize()
++    {
++        return true;
++    }
++
++    /**
++     * Get the validation rules that apply to the request.
++     *
++     * @return array
++     */
++    public function rules()
++    {
++        //I need to get to main database connection using the systems table....
++        //I need to validate a request
++        return [
++            'company' => 'required|max:255|unique:main.systems',
++            'name' => 'required|max:255',
++            'email' => 'required|email|max:255|unique:main.systems',
++            'password' => 'required|confirmed|min:4',
++        ];
++    }
++}
+diff --git a/app/Api/Requests/UserRequest.php b/app/Api/Requests/UserRequest.php
+new file mode 100644
+index 0000000..1737f16
+--- /dev/null
++++ b/app/Api/Requests/UserRequest.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace Api\Requests;
++
++use Dingo\Api\Http\FormRequest;
++
++class UserRequest extends FormRequest
++{
++    /**
++     * Determine if the user is authorized to make this request.
++     *
++     * @return bool
++     */
++    public function authorize()
++    {
++        return true;
++    }
++
++    /**
++     * Get the validation rules that apply to the request.
++     *
++     * @return array
++     */
++    public function rules()
++    {
++        return [
++            'name' => 'required|max:255',
++            'email' => 'required|email|max:255|unique:users',
++            'password' => 'required|confirmed|min:4',
++        ];
++    }
++}
+diff --git a/app/Api/Transformers/DogTransformer.php b/app/Api/Transformers/DogTransformer.php
+new file mode 100644
+index 0000000..7320993
+--- /dev/null
++++ b/app/Api/Transformers/DogTransformer.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace Api\Transformers;
++
++use App\Dog;
++use League\Fractal\TransformerAbstract;
++
++class DogTransformer extends TransformerAbstract
++{
++	public function transform(Dog $dog)
++	{
++		return [
++			'id' 	=> (int) $dog->id,
++			'name'  => $dog->name,
++			'age'	=> (int) $dog->age
++		];
++	}
++}
+\ No newline at end of file
+diff --git a/app/Classes/Auth/JWTGenerateSecretCommand.php b/app/Classes/Auth/JWTGenerateSecretCommand.php
+index 3769258..8a30ea1 100644
+--- a/app/Classes/Auth/JWTGenerateSecretCommand.php
++++ b/app/Classes/Auth/JWTGenerateSecretCommand.php
+@@ -1,5 +1,14 @@
+ <?php
+ 
++/*
++ * This file is part of jwt-auth.
++ *
++ * (c) Sean Tymon <tymon148@gmail.com>
++ *
++ * For the full copyright and license information, please view the LICENSE
++ * file that was distributed with this source code.
++ */
++
+ namespace App\Classes\Auth;
+ 
+ use Illuminate\Support\Str;
+@@ -28,7 +37,7 @@ class JWTGenerateSecretCommand extends Command
+      *
+      * @return void
+      */
+-    public function handle()
++    public function fire()
+     {
+         $key = $this->getRandomKey();
+ 
+diff --git a/app/Classes/Auth/myJwt.php b/app/Classes/Auth/myJwt.php
+index f5b7e53..c936865 100644
+--- a/app/Classes/Auth/myJwt.php
++++ b/app/Classes/Auth/myJwt.php
+@@ -1,5 +1,6 @@
+ <?php namespace App\Classes\Auth;
+ 
++use Namshi\JOSE\SimpleJWS;
+ use \Firebase\JWT\JWT;
+ use Illuminate\Http\Request;
+ 
+@@ -81,5 +82,54 @@ class myJwt
+ 
+ 
+ 
++//some other stuff not working....
++
++    protected function authHeaderResponse()
++    {
++        // send the refreshed token back to the client
++        //$response->headers->set('Authorization', 'Bearer '.$this->auth->refresh());
++    }
++    protected function createNamshiToken($user, $company)
++    {
++
++        $jws = new SimpleJWS(array(
++            'alg' => 'RS256'
++        ));
++        $jws->setPayload(array(
++            'uid' => $user->id,
++            'company' => $company
++        ));
++
++        //do not understandy this...
++
++        $privateKey = openssl_pkey_get_private("file://path/to/private.key", self::SSL_KEY_PASSPHRASE);
++
++        $jws->sign($privateKey);
++
++        //    setcookie('identity', $jws->getTokenString());
++
++        return $jws->getTokenString();
++
++
++    }
++    protected function validateNamshiToken($token)
++    {
++        //$jws        = SimpleJWS::load($_COOKIE['identity']);
++
++        $jws = SimpleJWS::load($token);
++        $public_key = openssl_pkey_get_public("/path/to/public.key");
++
++        // verify that the token is valid and had the same values
++        // you emitted before while setting it as a cookie
++        if ($jws->isValid($public_key, 'RS256'))
++        {
++            $payload = $jws->getPayload();
++
++            echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['uid']);
++        }
++    }
++
++
++
+ 
+ }
+\ No newline at end of file
+diff --git a/app/Classes/Seeder/EmbrasseMoi/EmUsersSeeder.php b/app/Classes/Seeder/EmbrasseMoi/EmUsersSeeder.php
+index 4b35de7..4cfaed0 100644
+--- a/app/Classes/Seeder/EmbrasseMoi/EmUsersSeeder.php
++++ b/app/Classes/Seeder/EmbrasseMoi/EmUsersSeeder.php
+@@ -27,19 +27,18 @@ class EmUsersSeeder extends BaseSeeder
+             foreach ($users as $user)
+             {
+                 $user['role_id'] = Role::where('name', $user['role'])->first()->id;
+-                unset($user['role']);
+-                $user['password'] = bcrypt($user['password']);
+-//                if ($user['username'] == 'craig.iannazzi')
+-//                {
+-//                    $user['password'] = bcrypt('     fjgh');
+-//                } elseif ($user['username'] == 'kristine.iannazzi')
+-//                {
+-//                    $user['password'] = bcrypt('     fjgh');
+-//                } else
+-//                {
+-//                    $user['password'] = bcrypt('feeling positive');
+-//                }
++                if ($user['username'] == 'craig.iannazzi')
++                {
++                    $user['password'] = bcrypt('     fjgh');
++                } elseif ($user['username'] == 'kristine.iannazzi')
++                {
++                    $user['password'] = bcrypt('     fjgh');
++                } else
++                {
++                    $user['password'] = bcrypt('feeling positive');
++                }
+ 
++                unset($user['role']);
+                 $new[] = $user;
+             }
+             User::insert($new);
+diff --git a/app/Http/Middleware/MyJwtMiddleware.php b/app/Http/Middleware/MyJwtMiddleware.php
+index bd37bb0..4c94bcd 100644
+--- a/app/Http/Middleware/MyJwtMiddleware.php
++++ b/app/Http/Middleware/MyJwtMiddleware.php
+@@ -1,12 +1,26 @@
+ <?php
++/**
++ * Created by PhpStorm.
++ * User: embrasse-moi
++ * Date: 11/25/16
++ * Time: 9:44 PM
++ */
+ 
+ namespace App\Http\Middleware;
+ 
+ 
++use App\Models\Craiglorious\System;
+ use App\Classes\Auth\myAuth;
+ 
+ class MyJwtMiddleWare
+ {
++    /**
++     * Handle an incoming request.
++     *
++     * @param  \Illuminate\Http\Request $request
++     * @param  \Closure $next
++     * @return mixed
++     */
+     public function handle($request, \Closure $next)
+     {
+         $myAuth = new myAuth();
+diff --git a/composer.json b/composer.json
+index 1ea4dbd..2ea8510 100644
+--- a/composer.json
++++ b/composer.json
+@@ -1,27 +1,23 @@
+ {
+-    "name": "iannazzi/craiglorious",
+-    "description": "Craiglorious",
+-    "keywords": ["accounting", "craiglorious", "laravel", "tenant","vuejs"],
++    "name": "laravel/laravel",
++    "description": "The Laravel Framework.",
++    "keywords": ["framework", "laravel"],
+     "license": "MIT",
+     "type": "project",
+     "require": {
+-        "php": ">=7.1.3",
+-        "barryvdh/laravel-cors": "0.9.3",
+-        "dingo/api": "2.0.0-alpha1",
+-        "fideloper/proxy": "~4.0",
++        "php": ">=5.6.4",
++        "barryvdh/laravel-cors": "^0.9.2",
++        "dingo/api": "1.0.*@dev",
+         "firebase/php-jwt": "^4.0",
+-
+         "laravel/framework": "5.4.*",
+         "laravel/tinker": "~1.0",
+         "namshi/jose": "^7.0",
+         "tymon/jwt-auth": "1.0.0-beta.3"
+-
+     },
+     "require-dev": {
+-        "filp/whoops": "~2.0",
+-        "nunomaduro/collision": "~1.1",
++        "barryvdh/laravel-ide-helper": "^2.1",
+         "fzaninotto/faker": "~1.7",
+-        "mockery/mockery": "~1.0",
++        "mockery/mockery": "0.9.*",
+         "phpunit/phpunit": "~6.0"
+     },
+     "autoload": {
+@@ -42,12 +38,23 @@
+         }
+     },
+     "scripts": {
+-
++        "post-root-package-install": [
++            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
++        ],
++        "post-create-project-cmd": [
++            "php artisan key:generate"
++        ],
++        "post-install-cmd": [
++            "Illuminate\\Foundation\\ComposerScripts::postInstall",
++            "php artisan optimize"
++        ],
++        "post-update-cmd": [
++            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
++            "php artisan optimize"
++        ]
+     },
+     "config": {
+         "preferred-install": "dist",
+         "sort-packages": true
+-    },
+-    "minimum-stability": "dev",
+-    "prefer-stable": true
++    }
+ }
+diff --git a/composer.lock b/composer.lock
+index a37715b..04d2fdd 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "279059b461543c8d11f7985b7ce58a34",
++    "content-hash": "9e40a097b51763fbf072da907c657e00",
+     "packages": [
+         {
+             "name": "barryvdh/laravel-cors",
+@@ -71,27 +71,26 @@
+         },
+         {
+             "name": "dingo/api",
+-            "version": "v2.0.0-alpha1",
++            "version": "v1.0.0-beta8",
+             "source": {
+                 "type": "git",
+                 "url": "https://github.com/dingo/api.git",
+-                "reference": "8beb74dd307770c909f0474e26a1004099ac78bd"
++                "reference": "46cffad61942caa094dd876155e503b6819c5095"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/dingo/api/zipball/8beb74dd307770c909f0474e26a1004099ac78bd",
+-                "reference": "8beb74dd307770c909f0474e26a1004099ac78bd",
++                "url": "https://api.github.com/repos/dingo/api/zipball/46cffad61942caa094dd876155e503b6819c5095",
++                "reference": "46cffad61942caa094dd876155e503b6819c5095",
+                 "shasum": ""
+             },
+             "require": {
+-                "dingo/blueprint": "^0.2",
++                "dingo/blueprint": "0.2.*",
+                 "illuminate/routing": "^5.1",
+                 "illuminate/support": "^5.1",
+-                "league/fractal": "^0.17",
+-                "php": "^7.0"
++                "league/fractal": ">=0.12.0",
++                "php": "^5.5.9 || ^7.0"
+             },
+             "require-dev": {
+-                "friendsofphp/php-cs-fixer": "~2",
+                 "illuminate/auth": "^5.1",
+                 "illuminate/cache": "^5.1",
+                 "illuminate/console": "^5.1",
+@@ -100,27 +99,21 @@
+                 "illuminate/filesystem": "^5.1",
+                 "illuminate/log": "^5.1",
+                 "illuminate/pagination": "^5.1",
+-                "laravel/lumen-framework": "^5.1",
++                "laravel/lumen-framework": "5.1.* || 5.2.*",
++                "lucadegasperi/oauth2-server-laravel": "5.0.*",
+                 "mockery/mockery": "~0.9",
+                 "phpunit/phpunit": "^4.8 || ^5.0",
+                 "squizlabs/php_codesniffer": "~2.0",
+                 "tymon/jwt-auth": "1.0.*"
+             },
+             "suggest": {
++                "lucadegasperi/oauth2-server-laravel": "Protect your API with OAuth 2.0.",
+                 "tymon/jwt-auth": "Protect your API with JSON Web Tokens."
+             },
+             "type": "library",
+             "extra": {
+                 "branch-alias": {
+-                    "dev-master": "2.0-dev"
+-                },
+-                "laravel": {
+-                    "providers": [
+-                        "Dingo\\Api\\Provider\\LaravelServiceProvider"
+-                    ],
+-                    "aliases": {
+-                        "API": "Dingo\\Api\\Facade\\API"
+-                    }
++                    "dev-master": "1.0-dev"
+                 }
+             },
+             "autoload": {
+@@ -148,7 +141,7 @@
+                 "laravel",
+                 "restful"
+             ],
+-            "time": "2017-09-20T15:57:14+00:00"
++            "time": "2017-02-10T00:56:04+00:00"
+         },
+         {
+             "name": "dingo/blueprint",
+@@ -429,63 +422,6 @@
+             "time": "2014-09-09T13:34:57+00:00"
+         },
+         {
+-            "name": "egulias/email-validator",
+-            "version": "2.1.3",
+-            "source": {
+-                "type": "git",
+-                "url": "https://github.com/egulias/EmailValidator.git",
+-                "reference": "1bec00a10039b823cc94eef4eddd47dcd3b2ca04"
+-            },
+-            "dist": {
+-                "type": "zip",
+-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/1bec00a10039b823cc94eef4eddd47dcd3b2ca04",
+-                "reference": "1bec00a10039b823cc94eef4eddd47dcd3b2ca04",
+-                "shasum": ""
+-            },
+-            "require": {
+-                "doctrine/lexer": "^1.0.1",
+-                "php": ">= 5.5"
+-            },
+-            "require-dev": {
+-                "dominicsayers/isemail": "dev-master",
+-                "phpunit/phpunit": "^4.8.35",
+-                "satooshi/php-coveralls": "^1.0.1"
+-            },
+-            "suggest": {
+-                "ext-intl": "PHP Internationalization Libraries are required to use the SpoofChecking validation"
+-            },
+-            "type": "library",
+-            "extra": {
+-                "branch-alias": {
+-                    "dev-master": "2.0.x-dev"
+-                }
+-            },
+-            "autoload": {
+-                "psr-4": {
+-                    "Egulias\\EmailValidator\\": "EmailValidator"
+-                }
+-            },
+-            "notification-url": "https://packagist.org/downloads/",
+-            "license": [
+-                "MIT"
+-            ],
+-            "authors": [
+-                {
+-                    "name": "Eduardo Gulias Davis"
+-                }
+-            ],
+-            "description": "A library for validating emails against several RFCs",
+-            "homepage": "https://github.com/egulias/EmailValidator",
+-            "keywords": [
+-                "email",
+-                "emailvalidation",
+-                "emailvalidator",
+-                "validation",
+-                "validator"
+-            ],
+-            "time": "2017-11-15T23:40:40+00:00"
+-        },
+-        {
+             "name": "erusev/parsedown",
+             "version": "1.6.4",
+             "source": {
+@@ -531,60 +467,6 @@
+             "time": "2017-11-14T20:44:03+00:00"
+         },
+         {
+-            "name": "fideloper/proxy",
+-            "version": "4.0.0",
+-            "source": {
+-                "type": "git",
+-                "url": "https://github.com/fideloper/TrustedProxy.git",
+-                "reference": "cf8a0ca4b85659b9557e206c90110a6a4dba980a"
+-            },
+-            "dist": {
+-                "type": "zip",
+-                "url": "https://api.github.com/repos/fideloper/TrustedProxy/zipball/cf8a0ca4b85659b9557e206c90110a6a4dba980a",
+-                "reference": "cf8a0ca4b85659b9557e206c90110a6a4dba980a",
+-                "shasum": ""
+-            },
+-            "require": {
+-                "illuminate/contracts": "~5.0",
+-                "php": ">=5.4.0"
+-            },
+-            "require-dev": {
+-                "illuminate/http": "~5.6",
+-                "mockery/mockery": "~1.0",
+-                "phpunit/phpunit": "^6.0"
+-            },
+-            "type": "library",
+-            "extra": {
+-                "laravel": {
+-                    "providers": [
+-                        "Fideloper\\Proxy\\TrustedProxyServiceProvider"
+-                    ]
+-                }
+-            },
+-            "autoload": {
+-                "psr-4": {
+-                    "Fideloper\\Proxy\\": "src/"
+-                }
+-            },
+-            "notification-url": "https://packagist.org/downloads/",
+-            "license": [
+-                "MIT"
+-            ],
+-            "authors": [
+-                {
+-                    "name": "Chris Fidao",
+-                    "email": "fideloper@gmail.com"
+-                }
+-            ],
+-            "description": "Set trusted proxies for Laravel",
+-            "keywords": [
+-                "load balancing",
+-                "proxy",
+-                "trusted proxy"
+-            ],
+-            "time": "2018-02-07T20:20:57+00:00"
+-        },
+-        {
+             "name": "firebase/php-jwt",
+             "version": "v4.0.0",
+             "source": {
+@@ -716,16 +598,16 @@
+         },
+         {
+             "name": "laravel/framework",
+-            "version": "v5.5.34",
++            "version": "v5.4.36",
+             "source": {
+                 "type": "git",
+                 "url": "https://github.com/laravel/framework.git",
+-                "reference": "1de7c0aec13eadbdddc2d1ba4019b064b2c6b966"
++                "reference": "1062a22232071c3e8636487c86ec1ae75681bbf9"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/laravel/framework/zipball/1de7c0aec13eadbdddc2d1ba4019b064b2c6b966",
+-                "reference": "1de7c0aec13eadbdddc2d1ba4019b064b2c6b966",
++                "url": "https://api.github.com/repos/laravel/framework/zipball/1062a22232071c3e8636487c86ec1ae75681bbf9",
++                "reference": "1062a22232071c3e8636487c86ec1ae75681bbf9",
+                 "shasum": ""
+             },
+             "require": {
+@@ -734,22 +616,21 @@
+                 "ext-mbstring": "*",
+                 "ext-openssl": "*",
+                 "league/flysystem": "~1.0",
+-                "monolog/monolog": "~1.12",
++                "monolog/monolog": "~1.11",
+                 "mtdowling/cron-expression": "~1.0",
+                 "nesbot/carbon": "~1.20",
+-                "php": ">=7.0",
+-                "psr/container": "~1.0",
+-                "psr/simple-cache": "^1.0",
++                "paragonie/random_compat": "~1.4|~2.0",
++                "php": ">=5.6.4",
+                 "ramsey/uuid": "~3.0",
+-                "swiftmailer/swiftmailer": "~6.0",
+-                "symfony/console": "~3.3",
+-                "symfony/debug": "~3.3",
+-                "symfony/finder": "~3.3",
+-                "symfony/http-foundation": "~3.3",
+-                "symfony/http-kernel": "~3.3",
+-                "symfony/process": "~3.3",
+-                "symfony/routing": "~3.3",
+-                "symfony/var-dumper": "~3.3",
++                "swiftmailer/swiftmailer": "~5.4",
++                "symfony/console": "~3.2",
++                "symfony/debug": "~3.2",
++                "symfony/finder": "~3.2",
++                "symfony/http-foundation": "~3.2",
++                "symfony/http-kernel": "~3.2",
++                "symfony/process": "~3.2",
++                "symfony/routing": "~3.2",
++                "symfony/var-dumper": "~3.2",
+                 "tijsverkoyen/css-to-inline-styles": "~2.2",
+                 "vlucas/phpdotenv": "~2.2"
+             },
+@@ -766,6 +647,7 @@
+                 "illuminate/database": "self.version",
+                 "illuminate/encryption": "self.version",
+                 "illuminate/events": "self.version",
++                "illuminate/exception": "self.version",
+                 "illuminate/filesystem": "self.version",
+                 "illuminate/hashing": "self.version",
+                 "illuminate/http": "self.version",
+@@ -787,38 +669,33 @@
+             "require-dev": {
+                 "aws/aws-sdk-php": "~3.0",
+                 "doctrine/dbal": "~2.5",
+-                "filp/whoops": "^2.1.4",
+-                "mockery/mockery": "~1.0",
+-                "orchestra/testbench-core": "3.5.*",
++                "mockery/mockery": "~0.9.4",
+                 "pda/pheanstalk": "~3.0",
+-                "phpunit/phpunit": "~6.0",
+-                "predis/predis": "^1.1.1",
+-                "symfony/css-selector": "~3.3",
+-                "symfony/dom-crawler": "~3.3"
++                "phpunit/phpunit": "~5.7",
++                "predis/predis": "~1.0",
++                "symfony/css-selector": "~3.2",
++                "symfony/dom-crawler": "~3.2"
+             },
+             "suggest": {
+                 "aws/aws-sdk-php": "Required to use the SQS queue driver and SES mail driver (~3.0).",
+                 "doctrine/dbal": "Required to rename columns and drop SQLite columns (~2.5).",
+-                "ext-pcntl": "Required to use all features of the queue worker.",
+-                "ext-posix": "Required to use all features of the queue worker.",
+                 "fzaninotto/faker": "Required to use the eloquent factory builder (~1.4).",
+                 "guzzlehttp/guzzle": "Required to use the Mailgun and Mandrill mail drivers and the ping methods on schedules (~6.0).",
+                 "laravel/tinker": "Required to use the tinker console command (~1.0).",
+                 "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 driver (~1.0).",
+-                "league/flysystem-cached-adapter": "Required to use Flysystem caching (~1.0).",
+                 "league/flysystem-rackspace": "Required to use the Flysystem Rackspace driver (~1.0).",
+                 "nexmo/client": "Required to use the Nexmo transport (~1.0).",
+                 "pda/pheanstalk": "Required to use the beanstalk queue driver (~3.0).",
+                 "predis/predis": "Required to use the redis cache and queue drivers (~1.0).",
+-                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~3.0).",
+-                "symfony/css-selector": "Required to use some of the crawler integration testing tools (~3.3).",
+-                "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~3.3).",
+-                "symfony/psr-http-message-bridge": "Required to psr7 bridging features (~1.0)."
++                "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~2.0).",
++                "symfony/css-selector": "Required to use some of the crawler integration testing tools (~3.2).",
++                "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~3.2).",
++                "symfony/psr-http-message-bridge": "Required to psr7 bridging features (0.2.*)."
+             },
+             "type": "library",
+             "extra": {
+                 "branch-alias": {
+-                    "dev-master": "5.5-dev"
++                    "dev-master": "5.4-dev"
+                 }
+             },
+             "autoload": {
+@@ -846,7 +723,7 @@
+                 "framework",
+                 "laravel"
+             ],
+-            "time": "2018-02-06T15:36:55+00:00"
++            "time": "2017-08-30T09:26:16+00:00"
+         },
+         {
+             "name": "laravel/tinker",
+@@ -1182,6 +1059,69 @@
+             "time": "2017-01-23T04:29:33+00:00"
+         },
+         {
++            "name": "namshi/jose",
++            "version": "7.2.3",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/namshi/jose.git",
++                "reference": "89a24d7eb3040e285dd5925fcad992378b82bcff"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/namshi/jose/zipball/89a24d7eb3040e285dd5925fcad992378b82bcff",
++                "reference": "89a24d7eb3040e285dd5925fcad992378b82bcff",
++                "shasum": ""
++            },
++            "require": {
++                "ext-date": "*",
++                "ext-hash": "*",
++                "ext-json": "*",
++                "ext-pcre": "*",
++                "ext-spl": "*",
++                "php": ">=5.5",
++                "symfony/polyfill-php56": "^1.0"
++            },
++            "require-dev": {
++                "phpseclib/phpseclib": "^2.0",
++                "phpunit/phpunit": "^4.5|^5.0",
++                "satooshi/php-coveralls": "^1.0"
++            },
++            "suggest": {
++                "ext-openssl": "Allows to use OpenSSL as crypto engine.",
++                "phpseclib/phpseclib": "Allows to use Phpseclib as crypto engine, use version ^2.0."
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Namshi\\JOSE\\": "src/Namshi/JOSE/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Alessandro Nadalin",
++                    "email": "alessandro.nadalin@gmail.com"
++                },
++                {
++                    "name": "Alessandro Cinelli (cirpo)",
++                    "email": "alessandro.cinelli@gmail.com"
++                }
++            ],
++            "description": "JSON Object Signing and Encryption library for PHP.",
++            "keywords": [
++                "JSON Web Signature",
++                "JSON Web Token",
++                "JWS",
++                "json",
++                "jwt",
++                "token"
++            ],
++            "time": "2016-12-05T07:27:31+00:00"
++        },
++        {
+             "name": "nesbot/carbon",
+             "version": "1.22.1",
+             "source": {
+@@ -1480,55 +1420,6 @@
+             "time": "2017-07-14T14:27:02+00:00"
+         },
+         {
+-            "name": "psr/container",
+-            "version": "1.0.0",
+-            "source": {
+-                "type": "git",
+-                "url": "https://github.com/php-fig/container.git",
+-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+-            },
+-            "dist": {
+-                "type": "zip",
+-                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+-                "shasum": ""
+-            },
+-            "require": {
+-                "php": ">=5.3.0"
+-            },
+-            "type": "library",
+-            "extra": {
+-                "branch-alias": {
+-                    "dev-master": "1.0.x-dev"
+-                }
+-            },
+-            "autoload": {
+-                "psr-4": {
+-                    "Psr\\Container\\": "src/"
+-                }
+-            },
+-            "notification-url": "https://packagist.org/downloads/",
+-            "license": [
+-                "MIT"
+-            ],
+-            "authors": [
+-                {
+-                    "name": "PHP-FIG",
+-                    "homepage": "http://www.php-fig.org/"
+-                }
+-            ],
+-            "description": "Common Container Interface (PHP FIG PSR-11)",
+-            "homepage": "https://github.com/php-fig/container",
+-            "keywords": [
+-                "PSR-11",
+-                "container",
+-                "container-interface",
+-                "container-interop",
+-                "psr"
+-            ],
+-            "time": "2017-02-14T16:28:37+00:00"
+-        },
+-        {
+             "name": "psr/log",
+             "version": "1.0.2",
+             "source": {
+@@ -1576,54 +1467,6 @@
+             "time": "2016-10-10T12:19:37+00:00"
+         },
+         {
+-            "name": "psr/simple-cache",
+-            "version": "1.0.0",
+-            "source": {
+-                "type": "git",
+-                "url": "https://github.com/php-fig/simple-cache.git",
+-                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24"
+-            },
+-            "dist": {
+-                "type": "zip",
+-                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/753fa598e8f3b9966c886fe13f370baa45ef0e24",
+-                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24",
+-                "shasum": ""
+-            },
+-            "require": {
+-                "php": ">=5.3.0"
+-            },
+-            "type": "library",
+-            "extra": {
+-                "branch-alias": {
+-                    "dev-master": "1.0.x-dev"
+-                }
+-            },
+-            "autoload": {
+-                "psr-4": {
+-                    "Psr\\SimpleCache\\": "src/"
+-                }
+-            },
+-            "notification-url": "https://packagist.org/downloads/",
+-            "license": [
+-                "MIT"
+-            ],
+-            "authors": [
+-                {
+-                    "name": "PHP-FIG",
+-                    "homepage": "http://www.php-fig.org/"
+-                }
+-            ],
+-            "description": "Common interfaces for simple caching",
+-            "keywords": [
+-                "cache",
+-                "caching",
+-                "psr",
+-                "psr-16",
+-                "simple-cache"
+-            ],
+-            "time": "2017-01-02T13:31:39+00:00"
+-        },
+-        {
+             "name": "psy/psysh",
+             "version": "v0.8.17",
+             "source": {
+@@ -1777,30 +1620,29 @@
+         },
+         {
+             "name": "swiftmailer/swiftmailer",
+-            "version": "v6.0.2",
++            "version": "v5.4.9",
+             "source": {
+                 "type": "git",
+                 "url": "https://github.com/swiftmailer/swiftmailer.git",
+-                "reference": "412333372fb6c8ffb65496a2bbd7321af75733fc"
++                "reference": "7ffc1ea296ed14bf8260b6ef11b80208dbadba91"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/412333372fb6c8ffb65496a2bbd7321af75733fc",
+-                "reference": "412333372fb6c8ffb65496a2bbd7321af75733fc",
++                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/7ffc1ea296ed14bf8260b6ef11b80208dbadba91",
++                "reference": "7ffc1ea296ed14bf8260b6ef11b80208dbadba91",
+                 "shasum": ""
+             },
+             "require": {
+-                "egulias/email-validator": "~2.0",
+-                "php": ">=7.0.0"
++                "php": ">=5.3.3"
+             },
+             "require-dev": {
+                 "mockery/mockery": "~0.9.1",
+-                "symfony/phpunit-bridge": "~3.3@dev"
++                "symfony/phpunit-bridge": "~3.2"
+             },
+             "type": "library",
+             "extra": {
+                 "branch-alias": {
+-                    "dev-master": "6.0-dev"
++                    "dev-master": "5.4-dev"
+                 }
+             },
+             "autoload": {
+@@ -1822,13 +1664,13 @@
+                 }
+             ],
+             "description": "Swiftmailer, free feature-rich PHP mailer",
+-            "homepage": "http://swiftmailer.symfony.com",
++            "homepage": "https://swiftmailer.symfony.com",
+             "keywords": [
+                 "email",
+                 "mail",
+                 "mailer"
+             ],
+-            "time": "2017-09-30T22:39:41+00:00"
++            "time": "2018-01-23T07:37:21+00:00"
+         },
+         {
+             "name": "symfony/console",
+@@ -2322,6 +2164,62 @@
+             "time": "2018-01-30T19:27:44+00:00"
+         },
+         {
++            "name": "symfony/polyfill-php56",
++            "version": "v1.7.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/polyfill-php56.git",
++                "reference": "ebc999ce5f14204c5150b9bd15f8f04e621409d8"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/ebc999ce5f14204c5150b9bd15f8f04e621409d8",
++                "reference": "ebc999ce5f14204c5150b9bd15f8f04e621409d8",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=5.3.3",
++                "symfony/polyfill-util": "~1.0"
++            },
++            "type": "library",
++            "extra": {
++                "branch-alias": {
++                    "dev-master": "1.7-dev"
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Polyfill\\Php56\\": ""
++                },
++                "files": [
++                    "bootstrap.php"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Nicolas Grekas",
++                    "email": "p@tchwork.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Symfony polyfill backporting some PHP 5.6+ features to lower PHP versions",
++            "homepage": "https://symfony.com",
++            "keywords": [
++                "compatibility",
++                "polyfill",
++                "portable",
++                "shim"
++            ],
++            "time": "2018-01-30T19:27:44+00:00"
++        },
++        {
+             "name": "symfony/polyfill-php70",
+             "version": "v1.7.0",
+             "source": {
+@@ -2381,6 +2279,58 @@
+             "time": "2018-01-30T19:27:44+00:00"
+         },
+         {
++            "name": "symfony/polyfill-util",
++            "version": "v1.7.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/polyfill-util.git",
++                "reference": "e17c808ec4228026d4f5a8832afa19be85979563"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/e17c808ec4228026d4f5a8832afa19be85979563",
++                "reference": "e17c808ec4228026d4f5a8832afa19be85979563",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=5.3.3"
++            },
++            "type": "library",
++            "extra": {
++                "branch-alias": {
++                    "dev-master": "1.7-dev"
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Polyfill\\Util\\": ""
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Nicolas Grekas",
++                    "email": "p@tchwork.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Symfony utilities for portability of PHP codes",
++            "homepage": "https://symfony.com",
++            "keywords": [
++                "compat",
++                "compatibility",
++                "polyfill",
++                "shim"
++            ],
++            "time": "2018-01-31T18:08:44+00:00"
++        },
++        {
+             "name": "symfony/process",
+             "version": "v3.4.4",
+             "source": {
+@@ -2692,6 +2642,71 @@
+             "time": "2017-11-27T11:13:29+00:00"
+         },
+         {
++            "name": "tymon/jwt-auth",
++            "version": "1.0.0-beta.3",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/tymondesigns/jwt-auth.git",
++                "reference": "66a7339ea4946ab75bb6b0d96d3d4477da47631b"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/tymondesigns/jwt-auth/zipball/66a7339ea4946ab75bb6b0d96d3d4477da47631b",
++                "reference": "66a7339ea4946ab75bb6b0d96d3d4477da47631b",
++                "shasum": ""
++            },
++            "require": {
++                "illuminate/auth": "5.1.* || 5.2.* || 5.3.* || 5.4.*",
++                "illuminate/contracts": "5.1.* || 5.2.* || 5.3.* || 5.4.*",
++                "illuminate/http": "5.1.* || 5.2.* || 5.3.* || 5.4.*",
++                "illuminate/support": "5.1.* || 5.2.* || 5.3.* || 5.4.*",
++                "namshi/jose": "^7.0",
++                "nesbot/carbon": "^1.0",
++                "php": "^5.5.9 || ^7.0"
++            },
++            "require-dev": {
++                "cartalyst/sentinel": "2.0.*",
++                "illuminate/console": "5.1.* || 5.2.* || 5.3.* || 5.4.*",
++                "illuminate/database": "5.1.* || 5.2.* || 5.3.* || 5.4.*",
++                "illuminate/routing": "5.1.* || 5.2.* || 5.3.* || 5.4.*",
++                "mockery/mockery": "0.9.*",
++                "phpunit/phpunit": "~4.8 || ~6.0"
++            },
++            "type": "library",
++            "extra": {
++                "branch-alias": {
++                    "dev-develop": "1.0-dev"
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "Tymon\\JWTAuth\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Sean Tymon",
++                    "email": "tymon148@gmail.com",
++                    "homepage": "http://tymon.xyz",
++                    "role": "Developer"
++                }
++            ],
++            "description": "JSON Web Token Authentication for Laravel and Lumen",
++            "homepage": "https://github.com/tymondesigns/jwt-auth",
++            "keywords": [
++                "Authentication",
++                "JSON Web Token",
++                "auth",
++                "jwt",
++                "laravel"
++            ],
++            "time": "2017-03-25T22:50:20+00:00"
++        },
++        {
+             "name": "vlucas/phpdotenv",
+             "version": "v2.4.0",
+             "source": {
+@@ -2794,38 +2809,52 @@
+     ],
+     "packages-dev": [
+         {
+-            "name": "doctrine/instantiator",
+-            "version": "1.1.0",
++            "name": "barryvdh/laravel-ide-helper",
++            "version": "v2.4.3",
+             "source": {
+                 "type": "git",
+-                "url": "https://github.com/doctrine/instantiator.git",
+-                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
++                "url": "https://github.com/barryvdh/laravel-ide-helper.git",
++                "reference": "5c304db44fba8e9c4aa0c09739e59f7be7736fdd"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
+-                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
++                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/5c304db44fba8e9c4aa0c09739e59f7be7736fdd",
++                "reference": "5c304db44fba8e9c4aa0c09739e59f7be7736fdd",
+                 "shasum": ""
+             },
+             "require": {
+-                "php": "^7.1"
++                "barryvdh/reflection-docblock": "^2.0.4",
++                "illuminate/console": "^5.0,<5.7",
++                "illuminate/filesystem": "^5.0,<5.7",
++                "illuminate/support": "^5.0,<5.7",
++                "php": ">=5.4.0",
++                "symfony/class-loader": "^2.3|^3.0"
+             },
+             "require-dev": {
+-                "athletic/athletic": "~0.1.8",
+-                "ext-pdo": "*",
+-                "ext-phar": "*",
+-                "phpunit/phpunit": "^6.2.3",
+-                "squizlabs/php_codesniffer": "^3.0.2"
++                "doctrine/dbal": "~2.3",
++                "illuminate/config": "^5.0,<5.7",
++                "illuminate/view": "^5.0,<5.7",
++                "phpunit/phpunit": "4.*",
++                "scrutinizer/ocular": "~1.1",
++                "squizlabs/php_codesniffer": "~2.3"
++            },
++            "suggest": {
++                "doctrine/dbal": "Load information from the database about models for phpdocs (~2.3)"
+             },
+             "type": "library",
+             "extra": {
+                 "branch-alias": {
+-                    "dev-master": "1.2.x-dev"
++                    "dev-master": "2.3-dev"
++                },
++                "laravel": {
++                    "providers": [
++                        "Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider"
++                    ]
+                 }
+             },
+             "autoload": {
+                 "psr-4": {
+-                    "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
++                    "Barryvdh\\LaravelIdeHelper\\": "src"
+                 }
+             },
+             "notification-url": "https://packagist.org/downloads/",
+@@ -2834,55 +2863,106 @@
+             ],
+             "authors": [
+                 {
+-                    "name": "Marco Pivetta",
+-                    "email": "ocramius@gmail.com",
+-                    "homepage": "http://ocramius.github.com/"
++                    "name": "Barry vd. Heuvel",
++                    "email": "barryvdh@gmail.com"
+                 }
+             ],
+-            "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
+-            "homepage": "https://github.com/doctrine/instantiator",
++            "description": "Laravel IDE Helper, generates correct PHPDocs for all Facade classes, to improve auto-completion.",
+             "keywords": [
+-                "constructor",
+-                "instantiate"
++                "autocomplete",
++                "codeintel",
++                "helper",
++                "ide",
++                "laravel",
++                "netbeans",
++                "phpdoc",
++                "phpstorm",
++                "sublime"
+             ],
+-            "time": "2017-07-22T11:58:36+00:00"
++            "time": "2018-02-08T07:56:07+00:00"
+         },
+         {
+-            "name": "filp/whoops",
+-            "version": "2.1.14",
++            "name": "barryvdh/reflection-docblock",
++            "version": "v2.0.4",
+             "source": {
+                 "type": "git",
+-                "url": "https://github.com/filp/whoops.git",
+-                "reference": "c6081b8838686aa04f1e83ba7e91f78b7b2a23e6"
++                "url": "https://github.com/barryvdh/ReflectionDocBlock.git",
++                "reference": "3dcbd98b5d9384a5357266efba8fd29884458e5c"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/filp/whoops/zipball/c6081b8838686aa04f1e83ba7e91f78b7b2a23e6",
+-                "reference": "c6081b8838686aa04f1e83ba7e91f78b7b2a23e6",
++                "url": "https://api.github.com/repos/barryvdh/ReflectionDocBlock/zipball/3dcbd98b5d9384a5357266efba8fd29884458e5c",
++                "reference": "3dcbd98b5d9384a5357266efba8fd29884458e5c",
+                 "shasum": ""
+             },
+             "require": {
+-                "php": "^5.5.9 || ^7.0",
+-                "psr/log": "^1.0.1"
++                "php": ">=5.3.3"
+             },
+             "require-dev": {
+-                "mockery/mockery": "0.9.*",
+-                "phpunit/phpunit": "^4.8.35 || ^5.7",
+-                "symfony/var-dumper": "^2.6 || ^3.0"
++                "phpunit/phpunit": "~4.0,<4.5"
+             },
+             "suggest": {
+-                "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
+-                "whoops/soap": "Formats errors as SOAP responses"
++                "dflydev/markdown": "~1.0",
++                "erusev/parsedown": "~1.0"
+             },
+             "type": "library",
+             "extra": {
+                 "branch-alias": {
+-                    "dev-master": "2.0-dev"
++                    "dev-master": "2.0.x-dev"
++                }
++            },
++            "autoload": {
++                "psr-0": {
++                    "Barryvdh": [
++                        "src/"
++                    ]
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Mike van Riel",
++                    "email": "mike.vanriel@naenius.com"
++                }
++            ],
++            "time": "2016-06-13T19:28:20+00:00"
++        },
++        {
++            "name": "doctrine/instantiator",
++            "version": "1.1.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/doctrine/instantiator.git",
++                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
++                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
++                "shasum": ""
++            },
++            "require": {
++                "php": "^7.1"
++            },
++            "require-dev": {
++                "athletic/athletic": "~0.1.8",
++                "ext-pdo": "*",
++                "ext-phar": "*",
++                "phpunit/phpunit": "^6.2.3",
++                "squizlabs/php_codesniffer": "^3.0.2"
++            },
++            "type": "library",
++            "extra": {
++                "branch-alias": {
++                    "dev-master": "1.2.x-dev"
+                 }
+             },
+             "autoload": {
+                 "psr-4": {
+-                    "Whoops\\": "src/Whoops/"
++                    "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
+                 }
+             },
+             "notification-url": "https://packagist.org/downloads/",
+@@ -2891,22 +2971,18 @@
+             ],
+             "authors": [
+                 {
+-                    "name": "Filipe Dobreira",
+-                    "homepage": "https://github.com/filp",
+-                    "role": "Developer"
++                    "name": "Marco Pivetta",
++                    "email": "ocramius@gmail.com",
++                    "homepage": "http://ocramius.github.com/"
+                 }
+             ],
+-            "description": "php error handling for cool kids",
+-            "homepage": "https://filp.github.io/whoops/",
++            "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
++            "homepage": "https://github.com/doctrine/instantiator",
+             "keywords": [
+-                "error",
+-                "exception",
+-                "handling",
+-                "library",
+-                "throwable",
+-                "whoops"
++                "constructor",
++                "instantiate"
+             ],
+-            "time": "2017-11-23T18:22:44+00:00"
++            "time": "2017-07-22T11:58:36+00:00"
+         },
+         {
+             "name": "fzaninotto/faker",
+@@ -2960,20 +3036,20 @@
+         },
+         {
+             "name": "hamcrest/hamcrest-php",
+-            "version": "v2.0.0",
++            "version": "v1.2.2",
+             "source": {
+                 "type": "git",
+                 "url": "https://github.com/hamcrest/hamcrest-php.git",
+-                "reference": "776503d3a8e85d4f9a1148614f95b7a608b046ad"
++                "reference": "b37020aa976fa52d3de9aa904aa2522dc518f79c"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/hamcrest/hamcrest-php/zipball/776503d3a8e85d4f9a1148614f95b7a608b046ad",
+-                "reference": "776503d3a8e85d4f9a1148614f95b7a608b046ad",
++                "url": "https://api.github.com/repos/hamcrest/hamcrest-php/zipball/b37020aa976fa52d3de9aa904aa2522dc518f79c",
++                "reference": "b37020aa976fa52d3de9aa904aa2522dc518f79c",
+                 "shasum": ""
+             },
+             "require": {
+-                "php": "^5.3|^7.0"
++                "php": ">=5.3.2"
+             },
+             "replace": {
+                 "cordoval/hamcrest-php": "*",
+@@ -2982,18 +3058,15 @@
+             },
+             "require-dev": {
+                 "phpunit/php-file-iterator": "1.3.3",
+-                "phpunit/phpunit": "~4.0",
+-                "satooshi/php-coveralls": "^1.0"
++                "satooshi/php-coveralls": "dev-master"
+             },
+             "type": "library",
+-            "extra": {
+-                "branch-alias": {
+-                    "dev-master": "2.0-dev"
+-                }
+-            },
+             "autoload": {
+                 "classmap": [
+                     "hamcrest"
++                ],
++                "files": [
++                    "hamcrest/Hamcrest.php"
+                 ]
+             },
+             "notification-url": "https://packagist.org/downloads/",
+@@ -3004,34 +3077,34 @@
+             "keywords": [
+                 "test"
+             ],
+-            "time": "2016-01-20T08:20:44+00:00"
++            "time": "2015-05-11T14:41:42+00:00"
+         },
+         {
+             "name": "mockery/mockery",
+-            "version": "1.0",
++            "version": "0.9.9",
+             "source": {
+                 "type": "git",
+                 "url": "https://github.com/mockery/mockery.git",
+-                "reference": "1bac8c362b12f522fdd1f1fa3556284c91affa38"
++                "reference": "6fdb61243844dc924071d3404bb23994ea0b6856"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/mockery/mockery/zipball/1bac8c362b12f522fdd1f1fa3556284c91affa38",
+-                "reference": "1bac8c362b12f522fdd1f1fa3556284c91affa38",
++                "url": "https://api.github.com/repos/mockery/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
++                "reference": "6fdb61243844dc924071d3404bb23994ea0b6856",
+                 "shasum": ""
+             },
+             "require": {
+-                "hamcrest/hamcrest-php": "~2.0",
++                "hamcrest/hamcrest-php": "~1.1",
+                 "lib-pcre": ">=7.0",
+-                "php": ">=5.6.0"
++                "php": ">=5.3.2"
+             },
+             "require-dev": {
+-                "phpunit/phpunit": "~5.7|~6.1"
++                "phpunit/phpunit": "~4.0"
+             },
+             "type": "library",
+             "extra": {
+                 "branch-alias": {
+-                    "dev-master": "1.0.x-dev"
++                    "dev-master": "0.9.x-dev"
+                 }
+             },
+             "autoload": {
+@@ -3056,7 +3129,7 @@
+                 }
+             ],
+             "description": "Mockery is a simple yet flexible PHP mock object framework for use in unit testing with PHPUnit, PHPSpec or any other testing framework. Its core goal is to offer a test double framework with a succinct API capable of clearly defining all possible object operations and interactions using a human readable Domain Specific Language (DSL). Designed as a drop in alternative to PHPUnit's phpunit-mock-objects library, Mockery is easy to integrate with PHPUnit and can operate alongside phpunit-mock-objects without the World ending.",
+-            "homepage": "http://github.com/mockery/mockery",
++            "homepage": "http://github.com/padraic/mockery",
+             "keywords": [
+                 "BDD",
+                 "TDD",
+@@ -3069,7 +3142,7 @@
+                 "test double",
+                 "testing"
+             ],
+-            "time": "2017-10-06T16:20:43+00:00"
++            "time": "2017-02-28T12:52:32+00:00"
+         },
+         {
+             "name": "myclabs/deep-copy",
+@@ -3117,67 +3190,6 @@
+             "time": "2017-10-19T19:58:43+00:00"
+         },
+         {
+-            "name": "nunomaduro/collision",
+-            "version": "v1.1.22",
+-            "source": {
+-                "type": "git",
+-                "url": "https://github.com/nunomaduro/collision.git",
+-                "reference": "236609bd5a067587f600bc55c5d683b840798b22"
+-            },
+-            "dist": {
+-                "type": "zip",
+-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/236609bd5a067587f600bc55c5d683b840798b22",
+-                "reference": "236609bd5a067587f600bc55c5d683b840798b22",
+-                "shasum": ""
+-            },
+-            "require": {
+-                "filp/whoops": "^2.1.4",
+-                "php": "^7.1",
+-                "symfony/console": "~2.8|~3.3|~4.0"
+-            },
+-            "require-dev": {
+-                "laravel/framework": "5.5.*",
+-                "phpunit/phpunit": "~6.5"
+-            },
+-            "type": "library",
+-            "extra": {
+-                "laravel": {
+-                    "providers": [
+-                        "NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider"
+-                    ]
+-                }
+-            },
+-            "autoload": {
+-                "psr-4": {
+-                    "NunoMaduro\\Collision\\": "src/"
+-                }
+-            },
+-            "notification-url": "https://packagist.org/downloads/",
+-            "license": [
+-                "MIT"
+-            ],
+-            "authors": [
+-                {
+-                    "name": "Nuno Maduro",
+-                    "email": "enunomaduro@gmail.com"
+-                }
+-            ],
+-            "description": "Cli error handling for console/command-line PHP applications.",
+-            "keywords": [
+-                "artisan",
+-                "cli",
+-                "command-line",
+-                "console",
+-                "error",
+-                "handling",
+-                "laravel",
+-                "laravel-zero",
+-                "php",
+-                "symfony"
+-            ],
+-            "time": "2018-02-07T10:42:20+00:00"
+-        },
+-        {
+             "name": "phar-io/manifest",
+             "version": "1.0.1",
+             "source": {
+@@ -4294,6 +4306,62 @@
+             "time": "2016-10-03T07:35:21+00:00"
+         },
+         {
++            "name": "symfony/class-loader",
++            "version": "v3.4.4",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/class-loader.git",
++                "reference": "e63c12699822bb3b667e7216ba07fbcc3a3e203e"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/class-loader/zipball/e63c12699822bb3b667e7216ba07fbcc3a3e203e",
++                "reference": "e63c12699822bb3b667e7216ba07fbcc3a3e203e",
++                "shasum": ""
++            },
++            "require": {
++                "php": "^5.5.9|>=7.0.8"
++            },
++            "require-dev": {
++                "symfony/finder": "~2.8|~3.0|~4.0",
++                "symfony/polyfill-apcu": "~1.1"
++            },
++            "suggest": {
++                "symfony/polyfill-apcu": "For using ApcClassLoader on HHVM"
++            },
++            "type": "library",
++            "extra": {
++                "branch-alias": {
++                    "dev-master": "3.4-dev"
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Component\\ClassLoader\\": ""
++                },
++                "exclude-from-classmap": [
++                    "/Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Fabien Potencier",
++                    "email": "fabien@symfony.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Symfony ClassLoader Component",
++            "homepage": "https://symfony.com",
++            "time": "2018-01-03T07:37:34+00:00"
++        },
++        {
+             "name": "theseer/tokenizer",
+             "version": "1.1.0",
+             "source": {
+@@ -4335,12 +4403,15 @@
+         }
+     ],
+     "aliases": [],
+-    "minimum-stability": "dev",
+-    "stability-flags": [],
+-    "prefer-stable": true,
++    "minimum-stability": "stable",
++    "stability-flags": {
++        "dingo/api": 20,
++        "tymon/jwt-auth": 10
++    },
++    "prefer-stable": false,
+     "prefer-lowest": false,
+     "platform": {
+-        "php": ">=7.1.3"
++        "php": ">=5.6.4"
+     },
+     "platform-dev": []
+ }
+diff --git a/config/app.php b/config/app.php
+index 65d2f6d..2f2412f 100644
+--- a/config/app.php
++++ b/config/app.php
+@@ -169,7 +169,8 @@ return [
+          */
+         Laravel\Tinker\TinkerServiceProvider::class,
+         Dingo\Api\Provider\LaravelServiceProvider::class,
+-
++//        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
++        'Tymon\JWTAuth\Providers\LaravelServiceProvider',
+ 
+         /*
+          * Application Service Providers...
+@@ -233,6 +234,7 @@ return [
+         'View' => Illuminate\Support\Facades\View::class,
+         'APIRoute'  => Dingo\Api\Facade\Route::class,
+         'API'       => Dingo\Api\Facade\API::class,
++        'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
+ 
+     ],
+ 
+diff --git a/config/jwt.php b/config/jwt.php
+new file mode 100644
+index 0000000..5518d13
+--- /dev/null
++++ b/config/jwt.php
+@@ -0,0 +1,173 @@
++<?php
++
++/*
++ * This file is part of jwt-auth.
++ *
++ * (c) Sean Tymon <tymon148@gmail.com>
++ *
++ * For the full copyright and license information, please view the LICENSE
++ * file that was distributed with this source code.
++ */
++
++return [
++
++    /*
++    |--------------------------------------------------------------------------
++    | JWT Authentication Secret
++    |--------------------------------------------------------------------------
++    |
++    | Don't forget to set this, as it will be used to sign your tokens.
++    | A helper command is provided for this: `php artisan jwt:generate`
++    |
++    */
++
++    'secret' => env('JWT_SECRET', 'Gos7dGlWdNGbMQV6J1WNoD5gcolN3gp1'),
++
++    /*
++    |--------------------------------------------------------------------------
++    | JWT time to live
++    |--------------------------------------------------------------------------
++    |
++    | Specify the length of time (in minutes) that the token will be valid for.
++    | Defaults to 1 hour
++    |
++    */
++
++    'ttl' => 300,
++
++    /*
++    |--------------------------------------------------------------------------
++    | Refresh time to live
++    |--------------------------------------------------------------------------
++    |
++    | Specify the length of time (in minutes) that the token can be refreshed
++    | within. I.E. The user can refresh their token within a 2 week window of
++    | the original token being created until they must re-authenticate.
++    | Defaults to 2 weeks
++    |
++    */
++
++    'refresh_ttl' => 20160,
++
++    /*
++    |--------------------------------------------------------------------------
++    | JWT hashing algorithm
++    |--------------------------------------------------------------------------
++    |
++    | Specify the hashing algorithm that will be used to sign the token.
++    |
++    | See here: https://github.com/namshi/jose/tree/2.2.0/src/Namshi/JOSE/Signer
++    | for possible values
++    |
++    */
++
++    'algo' => 'HS256',
++
++    /*
++    |--------------------------------------------------------------------------
++    | User Model namespace
++    |--------------------------------------------------------------------------
++    |
++    | Specify the full namespace to your User model.
++    | e.g. 'Acme\Entities\User'
++    |
++    */
++
++    'user' => 'App\Models\Tenant\User',
++
++    /*
++    |--------------------------------------------------------------------------
++    | User identifier
++    |--------------------------------------------------------------------------
++    |
++    | Specify a unique property of the user that will be added as the 'sub'
++    | claim of the token payload.
++    |
++    */
++
++    'identifier' => 'id',
++
++    /*
++    |--------------------------------------------------------------------------
++    | Required Claims
++    |--------------------------------------------------------------------------
++    |
++    | Specify the required claims that must exist in any token.
++    | A TokenInvalidException will be thrown if any of these claims are not
++    | present in the payload.
++    |
++    */
++
++    'required_claims' => ['iss', 'iat', 'exp', 'nbf', 'sub', 'jti'],
++
++    /*
++    |--------------------------------------------------------------------------
++    | Blacklist Enabled
++    |--------------------------------------------------------------------------
++    |
++    | In order to invalidate tokens, you must have the blacklist enabled.
++    | If you do not want or need this functionality, then set this to false.
++    |
++    */
++
++    'blacklist_enabled' => env('JWT_BLACKLIST_ENABLED', true),
++
++    /*
++    |--------------------------------------------------------------------------
++    | Providers
++    |--------------------------------------------------------------------------
++    |
++    | Specify the various providers used throughout the package.
++    |
++    */
++
++    'providers' => [
++
++        /*
++        |--------------------------------------------------------------------------
++        | User Provider
++        |--------------------------------------------------------------------------
++        |
++        | Specify the provider that is used to find the user based
++        | on the subject claim
++        |
++        */
++
++        'user' => 'Tymon\JWTAuth\Providers\User\EloquentUserAdapter',
++
++        /*
++        |--------------------------------------------------------------------------
++        | JWT Provider
++        |--------------------------------------------------------------------------
++        |
++        | Specify the provider that is used to create and decode the tokens.
++        |
++        */
++
++        'jwt' => 'Tymon\JWTAuth\Providers\JWT\NamshiAdapter',
++
++        /*
++        |--------------------------------------------------------------------------
++        | Authentication Provider
++        |--------------------------------------------------------------------------
++        |
++        | Specify the provider that is used to authenticate users.
++        |
++        */
++
++        'auth' => 'Tymon\JWTAuth\Providers\Auth\IlluminateAuthAdapter',
++
++        /*
++        |--------------------------------------------------------------------------
++        | Storage Provider
++        |--------------------------------------------------------------------------
++        |
++        | Specify the provider that is used to store tokens in the blacklist
++        |
++        */
++
++        'storage' => 'Tymon\JWTAuth\Providers\Storage\IlluminateCacheAdapter',
++
++    ],
++
++];
+diff --git a/deploy/livefromgit.sh b/deploy/livefromgit.sh
+index d36b627..0bd3219 100755
+--- a/deploy/livefromgit.sh
++++ b/deploy/livefromgit.sh
+@@ -1,37 +1,35 @@
+ #!/usr/bin/env bash
+ f=/var/www/craiglorious.com
+-./scpScripts.sh
+-
+ DATE=`date +%Y%m%d`
+ DATEP=$DATE'-gl1'
+ 
+-ssh -t craig@craiglorious.com "cd $f &&\
+-rm -rf $DATEP &&\
+-git clone https://github.com/iannazzi/craiglorious.git $DATEP &&\
+-sudo chgrp -R www-data $DATEP &&\
+-cd $DATEP &&\
+-git checkout develop &&\
+-cp $f/env/prod/.env . &&\
+-composer install &&\
++cd $f
++rm -rf $DATEP
++git clone https://github.com/iannazzi/craiglorious.git $DATEP
++sudo chgrp -R www-data $DATEP
++cd $DATEP
++git checkout develop
++cp $f/env/prod/.env .
++composer install
+ 
+-sudo chown -R craig:www-data storage &&\
+-sudo chmod -R ug+w storage &&\
+-sudo chown -R craig:www-data bootstrap/cache &&\
+-sudo chmod -R ug+w bootstrap/cache &&\
++sudo chown -R craig:www-data storage
++sudo chmod -R ug+w storage
++sudo chown -R craig:www-data bootstrap/cache
++sudo chmod -R ug+w bootstrap/cache
+ 
+-php artisan jwt:secret &&\
++php artisan jwt:secret
+ 
+-npm install &&\
+-npm run production &&\
++npm install
++npm run production
+ 
+-cd /var/www/craiglorious.com/live &&\
+-pwd &&\
+-php artisan down
+-cd $f/$DATEP &&\
+-php artisan zz:MigrateProduction &&\
+-php artisan up
+-cd $f &&\
+-rm live &&\
+-ln -s $DATEP $f/live &&\
+-cd $f/live &&\
+-pwd"
++cd /var/www/craiglorious.com/live
++pwd
++#php artisan down
++cd $f/$DATEP
++php artisan zz:MigrateProduction
++cd $f
++rm live
++ln -s $DATEP $f/live
++cd $f/live
++pwd
++#php artisan up
+\ No newline at end of file
+diff --git a/deploy/productionDataReset.sh b/deploy/productionDataReset.sh
+index e076f0f..ef9e34e 100755
+--- a/deploy/productionDataReset.sh
++++ b/deploy/productionDataReset.sh
+@@ -1,13 +1,14 @@
+ #!/usr/bin/env bash
+ f=/var/www/craiglorious.com
+ 
++
+ read -p "THIS WILL KILL PRODUCTION DATA Are you sure? " -n 1 -r
+ echo    # (optional) move to a new line
+ if [[ $REPLY =~ ^[Yy]$ ]]
+ then
+-    #sed -i 's/APP_ENV=production/APP_ENV=staging/g' $f/live/.env
+-    ssh -t craig@craiglorious.com "cd $f/live &&\
+-    php artisan zz:dms"
+-    #sed -i 's/APP_ENV=staging/APP_ENV=production/g' $f/live/.env
++    sed -i 's/APP_ENV=production/APP_ENV=staging/g' $f/live/.env
++    cd $f/live
++    php artisan zz:dms
++    sed -i 's/APP_ENV=staging/APP_ENV=production/g' $f/live/.env
+ fi
+ 
+diff --git a/deploy/sfg2.sh b/deploy/sfg2.sh
+deleted file mode 100755
+index 83a88fc..0000000
+--- a/deploy/sfg2.sh
++++ /dev/null
+@@ -1,40 +0,0 @@
+-#!/usr/bin/env bash
+-
+-#./scpScripts.sh
+-
+-f=/var/www/craiglorious.com
+-
+-DATE=`date +%Y%m%d`
+-DATEP=$DATE'-StageFromGit'
+-
+-
+-cd $f &&\
+-rm -rf $DATEP &&\
+-git clone https://github.com/iannazzi/craiglorious.git $DATEP &&\
+-chgrp -R www-data $DATEP &&\
+-cd $f/$DATEP &&\
+-git checkout develop &&\
+-cp $f/env/stag/.env . &&\
+-composer install &&\
+-php artisan jwt:secret &&\
+-
+-npm install &&\
+-npm run production &&\
+-
+-chown -R craig:www-data storage &&\
+-chmod -R ug+w storage &&\
+-chown -R craig:www-data bootstrap/cache &&\
+-chmod -R ug+w bootstrap/cache &&\
+-
+-cd $f/staging &&\
+-pwd &&\
+-cd $f/$DATEP &&\
+-pwd &&\
+-php artisan zz:dms &&\
+-
+-cd $f &&\
+-pwd &&\
+-rm $f/staging &&\
+-ln -s $DATEP $f/staging &&\
+-cd $f/staging &&\
+-pwd
+diff --git a/deploy/sfromgit.sh b/deploy/sfromgit.sh
+index 17d7c0f..08cddd1 100755
+--- a/deploy/sfromgit.sh
++++ b/deploy/sfromgit.sh
+@@ -1,6 +1,6 @@
+ #!/usr/bin/env bash
+ 
+-./scpScripts.sh
++#./scpScripts.sh
+ 
+ f=/var/www/craiglorious.com
+ 
+@@ -11,9 +11,9 @@ DATEP=$DATE'-StageFromGit'
+ ssh -t craig@craiglorious.com "cd $f &&\
+ rm -rf $DATEP &&\
+ git clone https://github.com/iannazzi/craiglorious.git $DATEP &&\
+-chgrp -R www-data $DATEP &&\
++sudo chgrp -R www-data $DATEP &&\
+ cd $f/$DATEP &&\
+-git checkout develop &&\
++git checkout prel55upgrade &&\
+ cp $f/env/stag/.env . &&\
+ composer install &&\
+ php artisan jwt:secret &&\
+@@ -21,10 +21,10 @@ php artisan jwt:secret &&\
+ npm install &&\
+ npm run production &&\
+ 
+-chown -R craig:www-data storage &&\
+-chmod -R ug+w storage &&\
+-chown -R craig:www-data bootstrap/cache &&\
+-chmod -R ug+w bootstrap/cache &&\
++sudo chown -R craig:www-data storage &&\
++sudo chmod -R ug+w storage &&\
++sudo chown -R craig:www-data bootstrap/cache &&\
++sudo chmod -R ug+w bootstrap/cache &&\
+ 
+ cd $f/staging &&\
+ pwd &&\
+diff --git a/deploy/test.sh b/deploy/test.sh
+deleted file mode 100755
+index 6deeb93..0000000
+--- a/deploy/test.sh
++++ /dev/null
+@@ -1,3 +0,0 @@
+-#!/usr/bin/env bash
+-cd ..
+-composer install
+\ No newline at end of file
+diff --git a/tests/ApiTester.php b/tests/ApiTester.php
+index 2090987..38d2663 100644
+--- a/tests/ApiTester.php
++++ b/tests/ApiTester.php
+@@ -4,7 +4,8 @@ use Symfony\Component\Console\Output\ConsoleOutput;
+ use App\Models\Craiglorious\System;
+ use Faker\Factory as Faker;
+ use Artisan;
+-
++use Tymon\JWTAuth\Facades\JWTAuth;
++use Tymon\JWTAuth\Exceptions\JWTException;
+ 
+ 
+ abstract class ApiTester extends TestCase {
+@@ -23,7 +24,6 @@ abstract class ApiTester extends TestCase {
+     function __construct()
+     {
+         parent::__construct();
+-
+         $this->fake = Faker::create();
+         $this->faker = Faker::create();
+     }
+@@ -69,9 +69,6 @@ abstract class ApiTester extends TestCase {
+     {
+         $system = System::where('company', $company)->first();
+         $system->createTenantConnection();
+-        //this statement is a temp fix for a framework issue
+-        //#upgrade fix
+-        \DB::statement('set global max_connections = 800;');
+         return $system;
+     }
+ 
+diff --git a/tests/api/UserTest.php b/tests/api/UserTest.php
+index 45bd3bf..b35bb66 100644
+--- a/tests/api/UserTest.php
++++ b/tests/api/UserTest.php
+@@ -47,9 +47,9 @@ class UserTest extends ApiTester
+ 
+     }
+ 
+-//    /** @test */
+-//    function password_can_be_updated()
+-//    {
++    /** @test */
++    function password_can_be_updated()
++    {
+ //        $this->signIn();
+ //
+ //        $username = $this->faker->userName;
+@@ -60,9 +60,9 @@ class UserTest extends ApiTester
+ //
+ //        $this->json('post', '/api/user', json_decode($rawContent, true), $this->headers())
+ //            ->assertJson(["success" => 'true']);
+-//
+-//
+-//    }
++
++
++    }
+ 
+     /** @test */
+     function bad_password()
+diff --git a/tests/database/TenantDatabaseTest.php b/tests/database/TenantDatabaseTest.php
+index f5976a7..2a52fb6 100644
+--- a/tests/database/TenantDatabaseTest.php
++++ b/tests/database/TenantDatabaseTest.php
+@@ -11,7 +11,6 @@ class TenantDatabaseTest extends ApiTester
+     function system_init()
+     {
+         DatabaseDestroyer::deleteAllTenantDatabases();
+-        $this->assertEquals(1,1);
+     }
+ 
+ }
+diff --git a/tests/database/assertions.txt b/tests/database/assertions.txt
+deleted file mode 100644
+index c9e73ab..0000000
+--- a/tests/database/assertions.txt
++++ /dev/null
+@@ -1,46 +0,0 @@
+-assertArrayHasKey()
+-assertClassHasAttribute()
+-assertArraySubset()
+-assertClassHasStaticAttribute()
+-assertContains()
+-assertContainsOnly()
+-assertContainsOnlyInstancesOf()
+-assertCount()
+-assertDirectoryExists()
+-assertDirectoryIsReadable()
+-assertDirectoryIsWritable()
+-assertEmpty()
+-assertEqualXMLStructure()
+-assertEquals()
+-assertFalse()
+-assertFileEquals()
+-assertFileExists()
+-assertFileIsReadable()
+-assertFileIsWritable()
+-assertGreaterThan()
+-assertGreaterThanOrEqual()
+-assertInfinite()
+-assertInstanceOf()
+-assertInternalType()
+-assertIsReadable()
+-assertIsWritable()
+-assertJsonFileEqualsJsonFile()
+-assertJsonStringEqualsJsonFile()
+-assertJsonStringEqualsJsonString()
+-assertLessThan()
+-assertLessThanOrEqual()
+-assertNan()
+-assertNull()
+-assertObjectHasAttribute()
+-assertRegExp()
+-assertStringMatchesFormat()
+-assertStringMatchesFormatFile()
+-assertSame()
+-assertStringEndsWith()
+-assertStringEqualsFile()
+-assertStringStartsWith()
+-assertThat()
+-assertTrue()
+-assertXmlFileEqualsXmlFile()
+-assertXmlStringEqualsXmlFile()
+-assertXmlStringEqualsXmlString()
+\ No newline at end of file
+diff --git a/tests/in/LoginTest.php b/tests/in/LoginTest.php
+index 5cc6782..4000431 100644
+--- a/tests/in/LoginTest.php
++++ b/tests/in/LoginTest.php
+@@ -17,7 +17,7 @@ class LoginTest extends ApiTester{
+     /** @test */
+     public function sign_in_demo_admin(){
+         $this->signIn('demo','admin','secret');
+-        //dd(\Config::get('user'));
++        dd(\Config::get('user'));
+ 
+     }
+ 
+diff --git a/tests/in/VendorTest.php b/tests/in/VendorTest.php
+index 87460bd..ea7b13f 100644
+--- a/tests/in/VendorTest.php
++++ b/tests/in/VendorTest.php
+@@ -13,10 +13,7 @@ class VendorTest extends ApiTester
+     /** @test */
+     function index()
+     {
+-//        $this->signIn();
+-//        $this->get($this->route);
+         $this->indexSuccess($this->route);
+-
+     }
+ 
+     /** @test */
