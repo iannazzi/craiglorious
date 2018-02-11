@@ -9,7 +9,7 @@
         "barryvdh/laravel-cors": "^0.9.2",
         "dingo/api": "1.0.*@dev",
         "firebase/php-jwt": "^4.0",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "namshi/jose": "^7.0",
         "tymon/jwt-auth": "1.0.0-beta.3"
