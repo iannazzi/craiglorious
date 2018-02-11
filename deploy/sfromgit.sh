@@ -13,7 +13,7 @@ rm -rf $DATEP &&\
 git clone https://github.com/iannazzi/craiglorious.git $DATEP &&\
 chgrp -R www-data $DATEP &&\
 cd $f/$DATEP &&\
-git checkout prel55upgrade &&\
+git checkout develop &&\
 cp $f/env/stag/.env . &&\
 composer install &&\
 php artisan jwt:secret &&\
