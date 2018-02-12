@@ -5,10 +5,14 @@ use \Route;
 
 class CIRoutes
 {
-    public static function addRoutes($api, $name)
+    public static function addRoutes($api, $name, $plural = true)
     {
-
-        $n2 = ucfirst(substr($name,0,strlen($name)-1));
+        if($plural){
+            $n2 = ucfirst(substr($name,0,strlen($name)-1));
+        }
+        else{
+            $n2 = ucfirst($name);
+        }
        $api->get($name.'/', $n2.'Controller@index');
        $api->get($name.'/create', $n2.'Controller@create');
        $api->get($name.'/{id}', $n2.'Controller@show');

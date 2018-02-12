@@ -25,6 +25,12 @@ class Employee extends BaseTenantModel
         }
         return $rtn;
     }
+    public static function random()
+    {
+        $employees = Employee::where('active',1)->get();
+        $rand = rand(0,$employees->count()-1);
+        return $employees[$rand];
+    }
 
 
 }

@@ -47,8 +47,6 @@ class VendorTest extends ApiTester
 
         $this->createSuccess($this->route, $rawContent);
 
-
-
     }
     /** @test */
     function can_be_updated()

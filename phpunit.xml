@@ -53,13 +53,13 @@
         <testsuite name="pro">
             <file>tests/database/production/ProductionDatabaseTest.php</file>
         </testsuite>
-
-
-
-        <testsuite name="api">
-            <file>tests/api/RoleTest.php</file>
-            <file>tests/api/UserTest.php</file>
+        <testsuite name="schedule">
+            <file>tests/in/ScheduleTest.php</file>
         </testsuite>
+
+
+
+
 
 
 

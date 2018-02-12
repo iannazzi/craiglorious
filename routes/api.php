@@ -54,6 +54,7 @@ $api->version('v1', function ($api)
                 CIRoutes::addRoutes($api, 'employees');
                 CIRoutes::addRoutes($api, 'accounts');
                 CIRoutes::addRoutes($api, 'customers');
+                CIRoutes::addRoutes($api, 'schedules');
 
 
             });

@@ -1,6 +1,8 @@
 <?php namespace App\Models\Tenant;
 
 use App\Models\BaseTenantModel;
+use Carbon\Carbon;
+
 
 class CalendarEntry extends BaseTenantModel {
 
@@ -60,5 +62,11 @@ class CalendarEntry extends BaseTenantModel {
                 ];
         return array_merge($event_types,$remaining_events);
     }
+    public function hours(){
+        $start = Carbon::createFromFormat('Y-m-d H:i:s', $this->start);
+        $end = Carbon::createFromFormat('Y-m-d H:i:s', $this->end);
+        $hours = $start->diffInMinutes($end)/60;
+        return $hours;
 
+    }
 }
