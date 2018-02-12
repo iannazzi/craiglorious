@@ -19,12 +19,6 @@ $api->version('v1', function ($api)
             $api->get('verify', 'Auth\AccessController@checkUserIsAuthenticated');
             $api->get('auth', 'Auth\AccessController@pageRefresh');
             $api->get('craigsocket', 'Auth\AccessController@craigSocket');
-
-            //i think these three are dead
-//            $api->get('userid', 'Auth\AccessController@userid');
-//            $api->get('jwtdecode', 'Auth\AccessController@jwtdecode');
-//            $api->get('updates', 'Auth\AccessController@getUpdates');
-//
             $api->get('dashboard', 'DashboardController@index');
             $api->get('dashboard/cached_page_data', 'DashboardController@cachedPageData');
             $api->get('user/', 'UserController@getPreferences');
@@ -34,8 +28,6 @@ $api->version('v1', function ($api)
             {
                 //restricted user access here....
                 $api->get('calendar', 'CalendarController@getEvents');
-//                $api->get('calendar/event_types', 'CalendarController@getEventTypes');
-//                $api->post('calendar/search', 'CalendarController@search');
                 $api->put('calendar', 'CalendarController@update');
                 $api->delete('calendar', 'CalendarController@destroy');
 
