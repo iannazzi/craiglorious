@@ -1,4 +1,5 @@
 <?php
+use App\Classes\Accounting\Payroll\Payroll;
 use App\Models\Tenant\CalendarEntry;
 use App\Models\Tenant\Employee;
 use Tests\ApiTester;
@@ -31,7 +32,7 @@ class ScheduleTest extends ApiTester
     function schedules_are_loaded()
     {
         $system = $this->getSystem('demo');
-        factory(CalendarEntry::class, 'scheduled_shift', 1000)->create();
+        factory(CalendarEntry::class, 'scheduled_shift', 100)->create();
         $this->assertNotNull(CalendarEntry::all());
     }
 
@@ -89,8 +90,9 @@ class ScheduleTest extends ApiTester
             "employee_id" => 1
         ]);
         //how long is it?
-
-        $this->assertEquals($event1->hours(), 8.25);
+        $from = '2018-02-09 00:00:00';
+        $to = '2018-02-09 23:59:59';
+        $this->assertEquals($event1->hours($from,$to), 8.25);
 
         $event2 = CalendarEntry::create([
             'title' => 'Shift: Craig Patrick',
@@ -99,44 +101,48 @@ class ScheduleTest extends ApiTester
             "class_name" => "scheduled_shift",
             "employee_id" => 1
         ]);
-        $this->assertEquals($event2->hours(), 4.5);
+        $from = '2018-02-09 00:00:00';
+        $to = '2018-02-09 23:59:59';
+        $this->assertEquals($event2->hours($from,$to), 4.5);
 
-        //now we want to get events within a date range
-        //only schedule shifts for a single day...
-        $from = "2018-02-09";
-        $to  = "2018-02-19";
-
-        $entries = CalendarEntry::whereBetween('start', [$from, $to])->get();
-        $entries2 = CalendarEntry::where('start', '>=', $from)
-            ->where('start', '<=', $to)
-            ->get();
-        dd($entries2->hours());
-
-        dd($entries2);
-            $date1 = Carbon::today()->toDateString();
-            $date2 = Carbon::today()->toDateString();
-
-
-
-
-
-
-    }
-
-    /** @test */
-    function summate_hours_across_midnight()
-    {
-
-        $return = CalendarEntry::create([
+        $event3 = CalendarEntry::create([
             'title' => 'Shift: Craig Patrick',
-            "start" => "2018-02-09 22:00:00",
-            "end" => "2018-02-10 02:00:00",
+            "start" => "2018-02-07 22:00:00",
+            "end" => "2018-02-08 04:30:00",
+            "class_name" => "scheduled_shift",
+            "employee_id" => 1
+        ]);
+        $event4 = CalendarEntry::create([
+            'title' => 'Shift: Craig Patrick',
+            "start" => "2018-02-08 12:00:00",
+            "end" => "2018-02-08 14:30:00",
             "class_name" => "scheduled_shift",
             "employee_id" => 1
         ]);
 
 
+        //now we want to get events within a date range
+        //only schedule shifts for a single day...
+        $from = "2018-02-08 00:00:00";
+        $to  = "2018-02-10 23:59:59";
+        //2-7: 2
+        //2-8 : 4.5+ 4.5 = 9
+        //2-9 : 2 + 8.25 = 10.25
+        //2-10 : 2.5
+
+
+       Payroll::calculateHours($from, $to);
+
+
+
+
+
+
+
+
     }
+
+    //employee cannot have hours on top of hours...
 
 
 }
