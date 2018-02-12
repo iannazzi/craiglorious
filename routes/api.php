@@ -48,15 +48,13 @@ $api->version('v1', function ($api)
 
                 CIRoutes::addRoutes($api, 'users');
                 CIRoutes::addRoutes($api, 'locations');
-//                CIRoutes::addRoutes($api, 'terminals');
-//                CIRoutes::addRoutes($api, 'printers');
-//                CIRoutes::addRoutes($api, 'vendors');
-//                CIRoutes::addRoutes($api, 'employees');
-//                CIRoutes::addRoutes($api, 'accounts');
-//                CIRoutes::addRoutes($api, 'customers');
-
+                CIRoutes::addRoutes($api, 'terminals');
+                CIRoutes::addRoutes($api, 'printers');
+                CIRoutes::addRoutes($api, 'vendors');
+                CIRoutes::addRoutes($api, 'employees');
+                CIRoutes::addRoutes($api, 'accounts');
+                CIRoutes::addRoutes($api, 'customers');
                 CIRoutes::addRoutes($api, 'schedules');
-
 
 
             });
