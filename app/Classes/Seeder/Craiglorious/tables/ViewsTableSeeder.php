@@ -80,7 +80,7 @@ class ViewsTableSeeder extends BaseSeeder
                 'icon' => 'fa fa-user-plus',
                 'place' => json_encode(['Office']),
                 'priority'=> 0,
-                'route'=> 'schedule',
+                'route'=> 'schedules',
             ],
             [
                 'name' => 'Reports',

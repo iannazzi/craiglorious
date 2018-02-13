@@ -43,7 +43,7 @@ class DBColumnsToArray extends Command
         $this->info($table);
         //get the first system connection
 
-        $system = System::first();
+        $system = System::where('company','demo')->firstOrFail();
         $system->createTenantConnection();
         $results = \DB::getSchemaBuilder()->getColumnListing($table);
 

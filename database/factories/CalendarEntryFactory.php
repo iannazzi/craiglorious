@@ -13,7 +13,6 @@ $factory->define(App\Models\Tenant\CalendarEntry::class,  function (Faker\Genera
 
 
 $classname = $faker->randomElement([
-            'scheduled_shift',
             'customer_appointment',
             'personal_appointment',
             'internal_meeting',
@@ -57,7 +56,7 @@ $factory->defineAs(App\Models\Tenant\CalendarEntry::class, 'scheduled_shift', fu
     return $return;
 });
 
-$factory->defineAs(App\Models\Tenant\CalendarEntry::class, 'shift1', function (Faker\Generator $faker)
+$factory->defineAs(App\Models\Tenant\CalendarEntry::class, 'shift', function (Faker\Generator $faker)
 {
     $startDate = Carbon::createFromTimeStamp($faker->dateTimeBetween('-90 days', '+90 days')->getTimestamp());
     $endDate = Carbon::createFromFormat('Y-m-d H:i:s', $startDate)->addHours(random_int(4,12));
@@ -69,7 +68,7 @@ $factory->defineAs(App\Models\Tenant\CalendarEntry::class, 'shift1', function (F
         'end' => $endDate,
         'editable' => 1,
         'class_name'=> 'scheduled_shift',
-        'employee_id' => 1,
+        'employee_id' => Employee::random()->id,
         'duration_editable' => 1,
         'resource_editable' => 1,
         'start_editable' => 1,

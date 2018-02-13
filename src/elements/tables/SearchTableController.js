@@ -162,8 +162,19 @@ export class SearchTableController extends CollectionTableController {
 
     }
     setFocusToFirstInputOfSearch() {
-        this.view.search_elements[0].focus();
-        this.view.search_elements[0].select();
+        if(this.view.search_elements[0].nodeName.toLowerCase() === 'input'){
+            this.view.search_elements[0].focus();
+            this.view.search_elements[0].select();
+        }
+        else if (this.view.search_elements[0].nodeName.toLowerCase() === 'select'){
+            console.log('select.......');
+            this.view.search_elements[0].focus();
+        }
+        else{
+            this.view.search_elements[0].focus();
+            this.view.search_elements[0].select();
+        }
+
     }
 
 

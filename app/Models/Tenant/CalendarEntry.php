@@ -2,9 +2,11 @@
 
 use App\Models\BaseTenantModel;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class CalendarEntry extends BaseTenantModel {
+    use SoftDeletes;
 
 
     protected $guarded = ['id'];

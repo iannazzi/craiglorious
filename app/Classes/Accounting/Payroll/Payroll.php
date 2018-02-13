@@ -8,12 +8,20 @@ class Payroll
     {
 
     }
-
-    public static function getEmployeeHours($from, $to)
+    public static function getEmployees( $from, $to){
+        $entries = CalendarEntry::select('employee_id')->where('end', '>=', $from)
+            ->distinct()
+            ->where('end', '<=', $to)
+            ->where('class_name', 'scheduled_shift')
+            ->get()->toArray();
+        return $entries;
+    }
+    public static function getEmployeeHours($employee_id, $from, $to)
     {
         $entries = CalendarEntry::where('end', '>=', $from)
             ->where('end', '<=', $to)
             ->where('class_name', 'scheduled_shift')
+            ->where('employee_id',$employee_id)
             ->get();
 
         return $entries;
@@ -24,18 +32,18 @@ class Payroll
         return false;
     }
 
-    public static function calculateHours($from, $to)
+    public static function calculateHours($empoyee_id, $from, $to)
     {
 
-        $entries = self::getEmployeeHours($from, $to);
+        $entries = self::getEmployeeHours($empoyee_id, $from, $to);
         //$employees = findEmployeesWhoWorked($entries);
 
         $hours = 0;
         foreach ($entries as $entry)
         {
-            $hours = $hours + $entry->hours($from, $to);
+            $hours +=  $entry->hours($from, $to);
         }
-        dd($hours);
+        return $hours;
 
 
         //return an array of employee_id => x hours => x
@@ -51,6 +59,18 @@ class Payroll
         }
 
         return $hours;
+    }
+
+    public static function totalHours($from, $to){
+
+        //could further break this down by location, department, etc
+        $employees = self::getEmployees($from, $to);
+        $total = 0;
+        foreach($employees as $employee){
+            $total += self::calculateHours($employee['employee_id'], $from, $to);
+        }
+        return $total;
+
     }
 }
 

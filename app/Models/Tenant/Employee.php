@@ -31,6 +31,9 @@ class Employee extends BaseTenantModel
         $rand = rand(0,$employees->count()-1);
         return $employees[$rand];
     }
+    public  function fullname(){
+        return $this->first_name . ' ' . $this->last_name;
+    }
 
 
 }

@@ -51,6 +51,7 @@
 
                 $(function () {
                     self.searchableTable.addTo('searchableTable')
+
                 })
 
 
