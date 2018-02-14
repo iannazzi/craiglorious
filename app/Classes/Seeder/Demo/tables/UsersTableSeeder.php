@@ -41,7 +41,7 @@ class UsersTableSeeder extends BaseSeeder
                 'active' => 1,
             ],
             [
-                'username' => 'Back.end',
+                'username' => 'John.Doe',
 //                'first_name' => 'Back End Associate',
                 'password' => bcrypt('secret'),
                 'passcode' => '12344',

@@ -1,5 +1,5 @@
 <?php
-//use Illuminate\Http\Request;
+
 function hello_world()
 {
     echo 'hello world';
@@ -259,5 +259,22 @@ function toAscii($str) {
 
 	return $clean;
 }
+function scrubDate($date, $time){
+    //is it 24 h?
+    $time = strtoupper($time);
+    $pm = false;
+    if (strpos($time, 'PM'))
+    {
+        $time = str_replace('PM', '', $time);
+        $time = trim($time);
+        $pm = true;
+    }
 
-?>
+    $date = $date . ' ' . $time;
+    $datetime = Carbon\Carbon::createFromFormat('Y-m-d H:i', $date);
+    if($pm)
+    {
+        $datetime->addHours(12);
+    }
+    return $datetime->toDateTimeString();
+}

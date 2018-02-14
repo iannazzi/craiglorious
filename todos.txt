@@ -6,6 +6,8 @@ create a purchase order
 create accounts
 
 ### Todos - for full release
+Calendar - only get results of current date range
+
 Mail - registration email, confirmation method, password reset email....
 
 ### Bugs
@@ -23,3 +25,5 @@ Calendar - mini calendar drag n drop, not sure how many events we are grabbing
 
 awesome table - validation error modal is not showing on the pop up update form
 
+#sites to copy
+https://facebook.github.io/jest/

@@ -19,8 +19,6 @@ class EmployeeTest extends ApiTester
         $fac = Factory('App\Models\Tenant\Employee', 30)->create();
         $this->assertNotNull($fac);
     }
-
-
     /** @test */
     function index()
     {

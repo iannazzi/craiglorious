@@ -23,6 +23,22 @@ export class RecordTableController extends TableController {
         this.model.tdo[row][column_name]['data'] = val;
         this.view.updateTable();
     }
+    getSelectValueName(column_name, value){
+        value = parseInt(value);
+        let return_value = false;
+        let col = this.model.getCDOColumnNumberFromName(column_name);
+
+        let col_def = this.model.cdo[col];
+        let select_values = col_def.select_values;
+        select_values.forEach(select_value =>{
+
+            if (parseInt(select_value.value) == value)
+            {
+                return_value = select_value.name;
+            }
+        })
+        return return_value;
+    }
     copyTable() {
         this.cdo.forEach((col_def) => {
             let element = this.view.elements[col_def.db_field];

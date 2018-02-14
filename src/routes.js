@@ -131,6 +131,8 @@ let routes = [
     commonRoute('employees'),
     commonRoute('accounts'),
     commonRoute('customers'),
+    commonRoute('schedules'),
+
 
 
     {
