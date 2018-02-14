@@ -47,9 +47,9 @@
         methods: {
             renderTable(){
                 let self = this;
-                this.column_definition = columnDefinition(this);
+                //this.column_definition = columnDefinition(this);
                 let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
-
+                recordTable.options.column_definition = columnDefinition(this, recordTable);
 
                 $(function(){
                     recordTable.addTo('record_table');

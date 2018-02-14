@@ -12,7 +12,6 @@ import {SearchTableController}  from './SearchTableController';
 
 export class AwesomeTable {
     constructor(options) {
-        //these need to go to awesometable....and should go there
 
         //table types: record, collection,
         //record table_view create edit show  i.e. read write
@@ -29,6 +28,10 @@ export class AwesomeTable {
 
 
         this.options = options;
+
+        //i want to be able to set/ get data like
+        //this.data.value = new value
+
 
     }
 

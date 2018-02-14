@@ -7,7 +7,7 @@ use App\Models\Tenant\CalendarEntry;
 use App\Models\Tenant\Employee;
 use Carbon\Carbon;
 
-class ShiftEntriesTableSeeder extends BaseSeeder
+class ScheduleEntriesTableSeeder extends BaseSeeder
 {
     public static function run()
     {

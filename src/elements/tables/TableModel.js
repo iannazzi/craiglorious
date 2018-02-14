@@ -16,6 +16,7 @@ export class TableModel {
         this.options = options;
         this.td = this.table_definition = options;
         this.tdo = [];
+        this.data = this.tdo;
         this.rdo = {};
         this.cdo = this.options.column_definition;
         this.sort = []; //[{name:'asc'},{name:'desc'}....]
@@ -40,7 +41,6 @@ export class TableModel {
     }
     loadData(data) {
         this.tdo = [];
-        this.data = data;
         // console.log('data');
         //  console.log(data);
         for (let i = 0; i < data.length; i++) {

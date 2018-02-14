@@ -16,6 +16,7 @@ class ScheduleController extends Controller
     {
         $return_data = [];
         $return_data['employees'] = Employee::employeeSelectArray();
+
         return $return_data;
     }
 
@@ -45,29 +46,27 @@ class ScheduleController extends Controller
         $data = $request->all();
         $table_name = $data['table_name'] . '_';
         $search = $data['search_fields'];
-        $title = $search[$table_name .'title'];
-        $comments = $search[$table_name .'comments'];
+        $title = $search[ $table_name . 'title' ];
+        $comments = $search[ $table_name . 'comments' ];
         $start = $search[ $table_name . 'start_date_start' ];
         $end = $search[ $table_name . 'start_date_end' ];
         $employee_id = $search[ $table_name . 'employee_id' ];
 
 
-
         $q = CalendarEntry::where('title', 'LIKE', "%{$title}%")
             ->where('comments', 'LIKE', "%{$comments}%")
-            ->where('class_name', 'scheduled_shift')
-
-        ;
+            ->where('class_name', 'scheduled_shift');
         if ($employee_id != "null")
         {
-            $q->where('employee_id',$employee_id);
+            $q->where('employee_id', $employee_id);
         }
         if ($start != '')
         {
-           $start = $start . ' 00:00:00';
-           $from = Carbon::createFromFormat('Y-m-d H:i:s', $start);
+            $start = $start . ' 00:00:00';
+            $from = Carbon::createFromFormat('Y-m-d H:i:s', $start);
 
-            if ($end != ''){
+            if ($end != '')
+            {
                 $end = $end . ' 00:00:00';
                 $to = Carbon::createFromFormat('Y-m-d H:i:s', $end);
                 //add one day to include the end date results
@@ -75,8 +74,8 @@ class ScheduleController extends Controller
 
                 $q->where('end', '>=', $from)
                     ->where('end', '<=', $to);
-            }
-            else{
+            } else
+            {
                 $q->where('end', '>=', $from);
             }
 
@@ -108,6 +107,7 @@ class ScheduleController extends Controller
             'data' => $return_data
         ], 200);
     }
+
     public function show($id)
     {
         $data = CalendarEntry::findOrFail($id);
@@ -133,18 +133,60 @@ class ScheduleController extends Controller
 
     public function update(Request $request)
     {
-        //just call the calendar to update
-        //we need to add a few items here....
+        $data = $request->data[0];
+
+        $id = $data['id'];
+        //$end = scrubDate($data['end_date'], $data['end_time']);
+        //$start = scrubDate($data['start_date'], $data['start_time']);
+
+        $fill = [];
+        $fill['id'] = $id;
+        $fill['class_name'] = 'scheduled_shift';
+        $fill['employee_id'] = $data['employee_id'];
+        $fill['title'] = $data['title'];
+        $fill['start'] = $data['start'];
+        $fill['end'] = $data['end'];
 
 
-        $cc = new CalendarController();
-        return $cc->update($request);
+        $rules = array(
+            'title' => 'required',
+            'employee_id'=>'required',
+            'start' => 'required|date',
+            'end' => 'required|date|after:' . $data['start'],
+        );
+
+        $validation = \Validator::make($fill, $rules);
+        if ($validation->passes())
+        {
+
+
+
+            $update = CalendarEntry::firstOrNew(['id' => $id]);
+
+            $update->fill($fill);
+            if ($update->save())
+            {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'record updated',
+                    'id' => $update['id']
+                ], 200);
+            }
+        }
+        $errors = $validation->errors();
+        $errors = json_decode($errors);
+
+        return response()->json([
+            'success' => false,
+            'message' => $errors
+        ], 422);
     }
 
     public function destroy(Request $request)
     {
         //just call the calendar to delete
         $cc = new CalendarController();
+
         return $cc->destroy($request);
 
     }

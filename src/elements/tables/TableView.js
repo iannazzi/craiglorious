@@ -464,10 +464,11 @@ export class TableView {
                 for (let index in event)
                 {
                     let self = this;
-                    element.addEventListener(index, function(e){
-                        e = e || window.event;
-                        self[event[index]].notify(e);
-                    });
+                    // element.addEventListener(index, function(e){
+                    //     e = e || window.event;
+                    //     self[event[index]].notify(e);
+                    // });
+                    element.addEventListener(index, event[index]);
                 }
             });
         }
@@ -515,6 +516,7 @@ export class TableView {
                 element.onchange = function(){self.inputChanged.notify()}
             }
             this.addProperties(col_def,element);
+            this.addEvents(col_def,element);
             element.value = data+'';
             return element;
         }

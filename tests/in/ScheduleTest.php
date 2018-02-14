@@ -1,5 +1,6 @@
 <?php
 use App\Classes\Accounting\Payroll\Payroll;
+use App\Classes\Seeder\Demo\tables\ScheduleEntriesTableSeeder;
 use App\Classes\Seeder\Demo\tables\ShiftEntriesTableSeeder;
 use App\Models\Tenant\CalendarEntry;
 use App\Models\Tenant\Employee;
@@ -73,7 +74,7 @@ class ScheduleTest extends ApiTester
     /** @test */
     function can_be_created()
     {
-        $rawContent = '{"data":{"id":"","title":"Shift: Craig Iannazzi","comments":"","start":"2018-02-09 10:00:00","end":"2018-02-09 11:00:00","class_name":"scheduled_shift","employee_id":1},"_method":"put"}';
+        $rawContent = '{"data":[{"id":"","employee_id":"1","title":"Shift: Kody Brown","start":"2018-01-31 12:30","end":"2018-01-31 18:30","comments":"yes"}],"_method":"put"}';
 
         $response = $this->createSuccess($this->route, $rawContent);
         $data = json_decode($response->getContent());
@@ -191,7 +192,7 @@ class ScheduleTest extends ApiTester
     {
         $system = $this->getSystem('demo');
         \DB::table('calendar_entries')->truncate();
-        ShiftEntriesTableSeeder::run();
+        ScheduleEntriesTableSeeder::run();
         $entries = CalendarEntry::all()->toArray();
         $this->assertCount(300,$entries);
 

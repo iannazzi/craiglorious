@@ -38,7 +38,7 @@
                 // page is now ready, initialize the calendar...
 
                 $('#calendar').fullCalendar({
-                    height: 100,
+                    height: 'auto',
                     header:false,
                     eventDrop(event, delta, revertFunc, jsEvent, ui, view) {
                         //revertFunc();

@@ -1,4 +1,4 @@
-export default function (component) {
+export default function (component, awesomeTable) {
     let column_definition = [{
         "db_field": "id",
         "caption": "Id",
@@ -31,7 +31,12 @@ export default function (component) {
             "th_width": "150px",
             "td_tags": "",
             "class": "",
-            "events": [],
+            "events": [{"change":function(){
+                let empname = awesomeTable.controller.getSelectValueName('employee_id', awesomeTable.model.tdo[0].employee_id.data);
+                console.log(empname);
+                awesomeTable.controller.updateCellValue('title', 'Shift: ' + empname, 0)
+            }}],
+
             "search": "LIKE ANY BETWEEN EXACT",
             "properties": [],
             "word_wrap": true,
@@ -52,7 +57,42 @@ export default function (component) {
             "properties": [],
             "word_wrap": true,
             "post": true
-        }, {
+        },  {
+            "db_field": "start",
+            "caption": "Start",
+            "type": "text",
+            "placeholder": "YYYY-MM-DD HH:MM 24 Hour Format (sorry!)",
+            "show_on_list": true,
+            "show_on_view": true,
+            "show_on_edit": true,
+            "show_on_create": true,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "search": "LIKE ANY BETWEEN EXACT",
+            "properties": [],
+            "word_wrap": true,
+            "post": true
+        },
+        {
+            "db_field": "end",
+            "caption": "End",
+            "placeholder": "YYYY-MM-DD HH:MM 24 Hour Format (sorry!)",
+            "type": "text",
+            "show_on_list": true,
+            "show_on_view": true,
+            "show_on_edit": true,
+            "show_on_create": true,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "properties": [],
+            "word_wrap": true,
+            "post": true
+        },
+        {
             "db_field": "comments",
             "caption": "Comments",
             "type": "textarea",
@@ -68,74 +108,8 @@ export default function (component) {
             "properties": [],
             "word_wrap": true,
             "post": true
-        }, {
-            "db_field": "start_date",
-            "caption": "Start Date",
-            "type": "input",
-            "placeholder": "YYYY-MM-DD",
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "search": "LIKE ANY BETWEEN EXACT",
-            "properties": [],
-            "word_wrap": true,
-            "post": true
         },
-        {
-            "db_field": "start_time",
-            "caption": "Start Time",
-            "type": "input",
-            "placeholder": "HH:MM 24, HH:MM p, HH:MM a",
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        }, {
-            "db_field": "end_date",
-            "caption": "Date End",
-            "placeholder": "YYYY-MM-DD",
-            "type": "input",
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        },
-        {
-            "db_field": "end_time",
-            "caption": "End Time",
-            "type": "input",
-            "placeholder": "HH:MM 24, HH:MM p, HH:MM a",
-            "show_on_list": true,
-            "show_on_view": true,
-            "show_on_edit": true,
-            "show_on_create": true,
-            "th_width": "150px",
-            "td_tags": "",
-            "class": "",
-            "events": [],
-            "properties": [],
-            "word_wrap": true,
-            "post": true
-        },];
+      ];
 
     return column_definition;
 }

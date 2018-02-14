@@ -52,8 +52,6 @@ export class AwesomeTableWrapper
             },
             onDelete(){
                 component.loading = true;
-
-
             },
             onDeleteSuccess(){
                 //back to roles
