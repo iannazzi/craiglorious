@@ -1,8 +1,12 @@
 <?php namespace App\Models\Tenant;
 
 use App\Models\BaseTenantModel;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class CalendarEntry extends BaseTenantModel {
+    use SoftDeletes;
 
 
     protected $guarded = ['id'];
@@ -60,5 +64,25 @@ class CalendarEntry extends BaseTenantModel {
                 ];
         return array_merge($event_types,$remaining_events);
     }
+    public function hours($from, $to){
+        $start = Carbon::createFromFormat('Y-m-d H:i:s', $this->start);
+        $end = Carbon::createFromFormat('Y-m-d H:i:s', $this->end);
 
+        $from = Carbon::createFromFormat('Y-m-d H:i:s', $from);
+        $to = Carbon::createFromFormat('Y-m-d H:i:s', $to);
+
+
+        if($start->lt($from)){
+            $start = $from;
+        }
+        if($end->gt($to))
+        {
+            $end = $to;
+        }
+
+
+        $hours = $start->diffInMinutes($end)/60;
+        return $hours;
+
+    }
 }

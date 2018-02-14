@@ -5,6 +5,7 @@ use App\Classes\Seeder\BaseSeeder;
 use App\Classes\Seeder\Demo\tables\CalendarEntriesTableSeeder;
 use App\Classes\Seeder\Demo\tables\CustomersTableSeeder;
 use App\Classes\Seeder\Demo\tables\EmployeesTableSeeder;
+use App\Classes\Seeder\Demo\tables\ScheduleEntriesTableSeeder;
 use App\Classes\Seeder\Demo\tables\UsersTableSeeder;
 use App\Classes\Seeder\Demo\tables\VendorsTableSeeder;
 use App\Classes\TenantSystem\TenantSystemBuilder;
@@ -25,6 +26,7 @@ class DemoDatabaseSeeder extends BaseSeeder
         CalendarEntriesTableSeeder::run();
         EmployeesTableSeeder::run();
         CustomersTableSeeder::run();
+        ScheduleEntriesTableSeeder::run();
 
     }
 }

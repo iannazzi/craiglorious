@@ -182,5 +182,3 @@ fix nginx
 sudo service nginx restart
 
 
-#sites to copy
-https://facebook.github.io/jest/

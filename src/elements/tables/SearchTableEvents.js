@@ -100,6 +100,11 @@ export class SearchTableEvents {
                     else{
                         let message = "There are " + controller.model.options.number_of_records_available + " records available, please search to limit the results.";
                         controller.view.addMessageInsteadOfTable(message)
+                        controller.setFocusToFirstInputOfSearch()
+
+
+                        // focus
+
                     }
 
 

@@ -6,6 +6,7 @@ f=/var/www/craiglorious.com
 
 DATE=`date +%Y%m%d`
 DATEP=$DATE'-StageFromGit'
+GIT='schedule'
 
 
 ssh -t craig@craiglorious.com "cd $f &&\
@@ -13,7 +14,7 @@ rm -rf $DATEP &&\
 git clone https://github.com/iannazzi/craiglorious.git $DATEP &&\
 chgrp -R www-data $DATEP &&\
 cd $f/$DATEP &&\
-git checkout develop &&\
+git checkout $GIT &&\
 cp $f/env/stag/.env . &&\
 composer install &&\
 php artisan jwt:secret &&\

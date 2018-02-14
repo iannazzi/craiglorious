@@ -76,6 +76,13 @@ class ViewsTableSeeder extends BaseSeeder
                 'route'=> 'payroll',
             ],
             [
+                'name' => 'Schedule',
+                'icon' => 'fa fa-user-plus',
+                'place' => json_encode(['Office']),
+                'priority'=> 0,
+                'route'=> 'schedules',
+            ],
+            [
                 'name' => 'Reports',
                 'icon' => 'fa fa-pie-chart',
                 'place' => json_encode(['Office']),
