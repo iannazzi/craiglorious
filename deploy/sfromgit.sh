@@ -6,7 +6,7 @@ f=/var/www/craiglorious.com
 
 DATE=`date +%Y%m%d`
 DATEP=$DATE'-StageFromGit'
-GIT='schedule'
+GIT='develop'
 
 
 ssh -t craig@craiglorious.com "cd $f &&\
