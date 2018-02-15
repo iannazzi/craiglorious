@@ -85,4 +85,7 @@ class CalendarEntry extends BaseTenantModel {
         return $hours;
 
     }
+    public function employee(){
+        return Employee::find($this->employee_id);
+    }
 }

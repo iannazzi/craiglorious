@@ -48,8 +48,8 @@ class ScheduleController extends Controller
         $search = $data['search_fields'];
         $title = $search[ $table_name . 'title' ];
         $comments = $search[ $table_name . 'comments' ];
-        $start = $search[ $table_name . 'start_date_start' ];
-        $end = $search[ $table_name . 'start_date_end' ];
+        $from = $search[ $table_name . 'start' ];
+        $to = $search[ $table_name . 'end' ];
         $employee_id = $search[ $table_name . 'employee_id' ];
 
 
@@ -60,15 +60,15 @@ class ScheduleController extends Controller
         {
             $q->where('employee_id', $employee_id);
         }
-        if ($start != '')
+        if ($from != '')
         {
-            $start = $start . ' 00:00:00';
-            $from = Carbon::createFromFormat('Y-m-d H:i:s', $start);
+            $from = $from . ' 00:00:00';
+            $from = Carbon::createFromFormat('Y-m-d H:i:s', $from);
 
-            if ($end != '')
+            if ($to != '')
             {
-                $end = $end . ' 00:00:00';
-                $to = Carbon::createFromFormat('Y-m-d H:i:s', $end);
+                $to = $to . ' 00:00:00';
+                $to = Carbon::createFromFormat('Y-m-d H:i:s', $to);
                 //add one day to include the end date results
                 $to->addDays(1);
 
@@ -82,7 +82,14 @@ class ScheduleController extends Controller
         }
 
         $return_data = $this->returnData();
-        $return_data['records'] = $q->get();
+        $records = $q->get();
+        //need to calculate total hours and pay per entry
+        foreach($records as &$record){
+            $record['hours'] = $record->hours($from,$to);
+            $record['rate'] = $record->employee()->pay_rate;
+            $record['pay'] = $record->employee()->pay_rate*$record['hours'];
+        }
+        $return_data['records'] =  $records;
 
 
         return response()->json([
