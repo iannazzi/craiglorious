@@ -127,7 +127,6 @@ export default function (component, awesomeTable) {
             "events": [],
             "properties": [],
             "word_wrap": true,
-            'total':2,
             "post": true
         },
         {

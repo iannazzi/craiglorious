@@ -45,6 +45,7 @@ $api->version('v1', function ($api)
                 $api->resource('tests', 'TestController');
 
 
+                CIRoutes::addRoutes($api, 'schedules');
 
                 CIRoutes::addRoutes($api, 'users');
                 CIRoutes::addRoutes($api, 'locations');
@@ -54,7 +55,6 @@ $api->version('v1', function ($api)
                 CIRoutes::addRoutes($api, 'employees');
                 CIRoutes::addRoutes($api, 'accounts');
                 CIRoutes::addRoutes($api, 'customers');
-                CIRoutes::addRoutes($api, 'schedules');
 
 
             });
