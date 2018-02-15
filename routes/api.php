@@ -45,7 +45,6 @@ $api->version('v1', function ($api)
                 $api->resource('tests', 'TestController');
 
 
-                CIRoutes::addRoutes($api, 'schedules');
 
                 CIRoutes::addRoutes($api, 'users');
                 CIRoutes::addRoutes($api, 'locations');
@@ -55,6 +54,14 @@ $api->version('v1', function ($api)
                 CIRoutes::addRoutes($api, 'employees');
                 CIRoutes::addRoutes($api, 'accounts');
                 CIRoutes::addRoutes($api, 'customers');
+
+                //CIRoutes::addRoutes($api, 'schedules');
+                $api->get('schedules'.'/', 'ScheduleController@index');
+                $api->get('schedules'.'/create', 'ScheduleController@create');
+                $api->get('schedules'.'/{id}', 'ScheduleController@show');
+                $api->post('schedules'.'/search', 'ScheduleController@search');
+                $api->put('schedules'.'/', 'ScheduleController@update');
+                $api->delete('schedules'.'/', 'ScheduleController@destroy');
 
 
             });
