@@ -201,7 +201,7 @@ class ScheduleTest extends ApiTester
     /** @test */
     function can_be_searched()
     {
-        $rawContent = '{"search_fields":{"schedules_employee_id":"null","schedules_title":"","schedules_comments":"","schedules_start_date_start":"2018-02-07","schedules_start_date_end":"2018-02-11"},"table_name":"schedules"}
+        $rawContent = '{"search_fields":{"schedules_employee_id":"null","schedules_title":"","schedules_start":"2018-01-13","schedules_end":"2018-01-17","schedules_comments":""},"table_name":"schedules"}
 ';
         $results = $this->searchSuccess($this->route, $rawContent);
         //dd($this->dump($results));

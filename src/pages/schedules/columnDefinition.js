@@ -32,9 +32,9 @@ export default function (component, awesomeTable) {
             "td_tags": "",
             "class": "",
             "events": [{"change":function(){
-                let empname = awesomeTable.controller.getSelectValueName('employee_id', awesomeTable.model.tdo[0].employee_id.data);
-                console.log(empname);
-                awesomeTable.controller.updateCellValue('title', 'Shift: ' + empname, 0)
+                let employee_id = awesomeTable.getValue('employee_id',0);
+                let employee_name = awesomeTable.getSelectName('employee_id',employee_id);
+                awesomeTable.setValue('title',0,'Shift: ' + employee_name);
             }}],
 
             "search": "LIKE ANY BETWEEN EXACT",
@@ -90,6 +90,61 @@ export default function (component, awesomeTable) {
             "events": [],
             "properties": [],
             "word_wrap": true,
+            "post": true,
+            "search": "LIKE ANY BETWEEN EXACT",
+
+        },
+        {
+            "db_field": "hours",
+            "caption": "Hours",
+            "placeholder": "YYYY-MM-DD HH:MM 24 Hour Format (sorry!)",
+            "type": "text",
+            "show_on_list": true,
+            "show_on_view": false,
+            "show_on_edit": false,
+            "show_on_create": false,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "properties": [],
+            "word_wrap": true,
+            'total':2,
+            "post": true
+        },
+        {
+            "db_field": "rate",
+            "caption": "Est Pay Rate",
+            "placeholder": "YYYY-MM-DD HH:MM 24 Hour Format (sorry!)",
+            "type": "text",
+            "show_on_list": true,
+            "show_on_view": false,
+            "show_on_edit": false,
+            "show_on_create": false,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "properties": [],
+            "word_wrap": true,
+            'total':2,
+            "post": true
+        },
+        {
+            "db_field": "pay",
+            "caption": "Estimated Pay",
+            "type": "text",
+            "show_on_list": true,
+            "show_on_view": false,
+            "show_on_edit": false,
+            "show_on_create": false,
+            "th_width": "150px",
+            "td_tags": "",
+            "class": "",
+            "events": [],
+            "properties": [],
+            "word_wrap": true,
+            'total':2,
             "post": true
         },
         {

@@ -238,6 +238,30 @@ export class AwesomeTable {
 
     }
 
+    setValue(column, row, value){
+        if(this.options.edit_display == 'on_page'){
+            this.controller.updateCellValue(column, value, row)
+        }
+        else{
+            this.controllerModal.updateCellValue(column, value, row)
+        }
+    }
+    getValue(column_name, row_number){
+        if(this.options.edit_display == 'on_page'){
+            return this.model.tdo[row_number][column_name].data
+        }
+        else{
+            return this.modelModal.tdo[row_number][column_name].data
+        }
+
+    }
+    getSelectName(column, value){
+        //should not matter if it is modal or not
+        return this.controller.getSelectValueName(column,value );
+
+    }
+
+
     collectionTable() {
         let self = this;
 
