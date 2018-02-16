@@ -31,4 +31,5 @@ cd $f &&\
 rm live &&\
 ln -s $DATEP $f/live &&\
 cd $f/live &&\
-pwd"
+pwd &&\
+sudo reboot"

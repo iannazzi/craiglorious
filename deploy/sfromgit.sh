@@ -38,4 +38,5 @@ pwd &&\
 rm $f/staging &&\
 ln -s $DATEP $f/staging &&\
 cd $f/staging &&\
-pwd"
+pwd &&\
+sudo reboot"
