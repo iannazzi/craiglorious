@@ -18,6 +18,15 @@ window.fullcalendar = require('fullcalendar');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Echo from "laravel-echo";
+window.Echo = new Echo({
+    broadcaster: 'redis',
+    key: 'your-pusher-key'
+});
+Echo.channel('test')
+    .listen('testEvent', (e) => {
+        console.log(e);
+    });
 
 window.Vue = Vue;
 Vue.use(VueRouter);

@@ -37,5 +37,9 @@
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.4.4",
     "vue-test-utils": "1.0.0-beta"
+  },
+  "dependencies": {
+    "laravel-echo": "^1.3.5",
+    "socket.io": "^2.0.4"
   }
 }

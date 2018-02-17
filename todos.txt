@@ -27,3 +27,5 @@ awesome table - validation error modal is not showing on the pop up update form
 
 #sites to copy
 https://facebook.github.io/jest/
+https://pusher.com/
+https://socket.io/#examples

@@ -11,12 +11,14 @@ export function getData (options) {
     var interceptor = require('rest/interceptor')
     var jwtAuth = require('../config/interceptors/jwtAuth')
 
+    //need to add
+
+
     // let axios = axios;
     //
     // axios.defaults.headers.common = {
     //     'X-Requested-With': 'XMLHttpRequest'
     // };
-
 
     let config = require('../config/index')
 
@@ -25,7 +27,12 @@ export function getData (options) {
         .wrap(mime)
         .wrap(defaultRequest, config.api.defaultRequest)
         .wrap(errorCode, { code: 400 })
-        .wrap(jwtAuth);
+        .wrap(jwtAuth)
+        .wrap(defaultRequest, { headers: { ' X-Socket-ID': Echo.socketId() } });
+
+
+
+
 
 
 
