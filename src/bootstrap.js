@@ -20,8 +20,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Echo from "laravel-echo";
 window.Echo = new Echo({
-    broadcaster: 'redis',
-    key: 'your-pusher-key'
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001'
 });
 Echo.channel('test')
     .listen('testEvent', (e) => {
