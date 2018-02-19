@@ -12,9 +12,25 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 class TestEvent implements ShouldBroadcast
 {
 
+    use SerializesModels;
     public $update;
+    public $data;
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+
     public function broadcastOn()
     {
-        return new PrivateChannel('test');
+
+//        $data = [
+//            'event' => 'Lover',
+//            'data' => [
+//                'username' => 'Lover'
+//            ]
+//        ];
+        \Redis::publish('test-channel',json_encode($this->data));
+
+        //return new PrivateChannel('test');
     }
 }

@@ -8,9 +8,10 @@ redis.subscribe('test-channel');
 redis.on('message', function(channel, message){
     console.log('message received')
     console.log(message);
+    message = JSON.parse(message);
     console.log('on channel');
-    console.log(channel+':'+message.event);
-    io.emit(channel+':'+message.event,message.data);
+    console.log(channel +':'+ message.event);
+    io.emit(channel +':'+ message.event,message.data);
     io.emit('news', { hello: 'world' });
 
 

@@ -17,7 +17,21 @@ class TestBroadcast extends Command
 
     public function handle()
     {
-        event(new TestEvent());
+
+
+
+        $data = [
+            'event' => 'Lover',
+            'data' => [
+                'username' => 'Lover'
+            ]
+        ];
+
+        event(new TestEvent($data));
+
+
+        echo 'done';
+
 
     }
 }
