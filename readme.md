@@ -70,7 +70,11 @@ and login with admin secret
 
 
 
-
+#set up the production server
+DO LEMP
+add node
+add redis
+re
 
 ##Set up staging
 ### set up code base

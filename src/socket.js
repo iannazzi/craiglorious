@@ -1,7 +1,12 @@
-var server = require('http').Server();
-var io = require('socket.io')(server);
-var Redis = require('ioredis');
-var redis = new Redis();
+//start up like this: PORT=3000 node src/socket.js
+
+let server = require('http').Server();
+let io = require('socket.io')(server);
+let Redis = require('ioredis');
+let redis = new Redis();
+const PORT = process.env.PORT || 3000;
+
+console.log('Listening on Port ' + PORT);
 
 redis.subscribe('test-channel');
 
@@ -18,4 +23,4 @@ redis.on('message', function(channel, message){
 
 })
 
-server.listen(3000);
+server.listen(PORT);
