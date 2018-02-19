@@ -18,15 +18,43 @@ window.fullcalendar = require('fullcalendar');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Echo from "laravel-echo";
-window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001'
-});
-Echo.channel('test')
-    .listen('testEvent', (e) => {
-        console.log(e);
-    });
+
+// import Echo from "laravel-echo";
+// window.Echo = new Echo({
+//     broadcaster: 'socket.io',
+//     host: window.location.hostname + ':3000'
+// });
+// Echo.channel('test-channel')
+//     .listen('UserSignedUp', (e) => {
+//         console.log(e);
+//     });
+//var io = require('socket.io')(80);
+// var io = require('socket.io')("http://homestead.test:3000");
+import io from 'socket.io-client'
+var socket = io('http://homestead.test:3000');
+socket.on('UserSignedUp', function(message) {
+    console.log(message);
+})
+
+
+socket.on('news', function(message) {
+    console.log(message);
+})
+
+$(document).ready(
+
+)
+
+// var io = require('socket.io')();
+// io.on('connection', function(client){});
+// io.listen(3000);
+
+// io.on('connection', function(client){});
+// io.listen(3000);
+// var io = require('socket.io')()
+// var socket = io('http://192.168.10.10:3000');
+//window.socket = io();
+
 
 window.Vue = Vue;
 Vue.use(VueRouter);

@@ -38,12 +38,17 @@ class test extends Command
      */
     public function handle()
     {
-        $system = System::first();
-        $system->createTenantConnection();
+//        $system = System::first();
+//        $system->createTenantConnection();
 
-        $role = \App\Models\Tenant\Role::find(2);
-        dd($role->getSelectableParents());;
-
+            $data = [
+                'event' => 'UserSignedUp',
+                'data' => [
+                    'username' => 'JohnDoe'
+                ]
+            ];
+            \Redis::publish('test-channel',json_encode($data));
+            echo 'done';
 
 
 

@@ -28,7 +28,7 @@ export function getData (options) {
         .wrap(defaultRequest, config.api.defaultRequest)
         .wrap(errorCode, { code: 400 })
         .wrap(jwtAuth)
-        .wrap(defaultRequest, { headers: { ' X-Socket-ID': Echo.socketId() } });
+//        .wrap(defaultRequest, { headers: { ' X-Socket-ID': Echo.socketId() } });
 
 
 
