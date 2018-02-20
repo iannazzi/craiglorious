@@ -12,7 +12,7 @@ GIT='websocket'
 ssh -t craig@craiglorious.com "cd $f &&\
 rm -rf $DATEP &&\
 git clone https://github.com/iannazzi/craiglorious.git $DATEP &&\
-sudo chgrp -R www-data $DATEP &&\
+chgrp -R www-data $DATEP &&\
 cd $f/$DATEP &&\
 git checkout $GIT &&\
 cp $f/env/stag/.env . &&\
@@ -20,7 +20,7 @@ composer install &&\
 php artisan jwt:secret &&\
 
 npm install &&\
-sudo npm run production &&\
+npm run production &&\
 
 chown -R craig:www-data storage &&\
 chmod -R ug+w storage &&\
