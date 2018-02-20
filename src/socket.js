@@ -3,6 +3,9 @@
 let server = require('http').Server();
 let io = require('socket.io')(server);
 let Redis = require('ioredis');
+
+//staging is 6379, production is 6380
+
 let redis = new Redis();
 const PORT = process.env.PORT || 3000;
 

@@ -39,6 +39,5 @@
     "vue-test-utils": "1.0.0-beta"
   },
   "dependencies": {
-    "socket.io": "^2.0.4"
   }
 }
