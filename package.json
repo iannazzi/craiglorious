@@ -38,5 +38,7 @@
     "vue-template-compiler": "^2.4.4",
     "vue-test-utils": "1.0.0-beta"
   },
-  "dependencies": {}
+  "dependencies": {
+    "socket.io": "^2.0.4"
+  }
 }
