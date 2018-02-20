@@ -2,7 +2,7 @@
 window.craiglorious = {};
 
 craiglorious.host = window.location.hostname;
-
+console.log('Welcome to Craiglorious bootstrapper.... ');
 console.log(craiglorious.host);
 
 if(craiglorious.host == 'craiglorious.com' || craiglorious.host == 'www.craiglorious.com') {
