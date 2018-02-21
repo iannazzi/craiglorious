@@ -39,6 +39,7 @@
     "vue-test-utils": "1.0.0-beta"
   },
   "dependencies": {
+    "ioredis": "^3.2.2",
     "socket.io": "^2.0.4"
   }
 }
