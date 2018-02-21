@@ -53,19 +53,19 @@ import VueRouter from 'vue-router';
 // ws.on('news', function incoming(data) {
 //     console.log(data);
 // });
-// import io from 'socket.io-client'
-// var socket = io('http://' + craiglorious.host + ':' + craiglorious.socketPort);
-//
-// socket.on('test-channel:UserSignedUp', function(message) {
-//     console.log(message);
-// })
-// socket.on('test-channel:Lover', function(message) {
-//     console.log(message);
-// })
-//
-// socket.on('news', function(message) {
-//     console.log(message);
-// })
+import io from 'socket.io-client'
+var socket = io('http://' + craiglorious.host + ':' + craiglorious.socketPort);
+
+socket.on('test-channel:UserSignedUp', function(message) {
+    console.log(message);
+})
+socket.on('test-channel:Lover', function(message) {
+    console.log(message);
+})
+
+socket.on('news', function(message) {
+    console.log(message);
+})
 
 
 
