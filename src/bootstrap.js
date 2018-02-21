@@ -13,7 +13,7 @@ else  if (craiglorious.host == 'staging.craiglorious.com')
 {
     craiglorious.env = 'staging';
     craiglorious.socketPort = 3001;
-    craiglorious.socketUrl = "http://staging.craiglorious.com:3001"
+    craiglorious.socketUrl = "https://staging.craiglorious.com:3001"
 
 }
 else if (craiglorious.host == 'homestead.test'){
