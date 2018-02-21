@@ -13,7 +13,7 @@ else  if (craiglorious.host == 'staging.craiglorious.com')
 {
     craiglorious.env = 'staging';
     craiglorious.socketPort = 3001;
-    craiglorious.socketUrl = "https://stagingcraiglorious.com:3001"
+    craiglorious.socketUrl = "https://staging.craiglorious.com:3001"
 
 }
 else if (craiglorious.host == 'homestead.test'){
@@ -29,6 +29,7 @@ console.log('############################################################');
 
 
 //some things may need to be turned off for debugging......
+
 window.verify_timer_flag = false;
 window.last_page_accessed_flag = false;
 window.user_input_flag = false;
