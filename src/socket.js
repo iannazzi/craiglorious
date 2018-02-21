@@ -10,11 +10,11 @@ let redis_port = 6879;
 if (process.env.APP == 'staging')
 {
     socket_port = 3001;
-    redis_port = 6879;
+    redis_port = 6379;
 }
 else if (process.env.APP == 'production'){
     socket_port = 3002;
-    redis_port = 6880;
+    redis_port = 6380;
 }
 
 let redis = new Redis(redis_port);
