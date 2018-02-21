@@ -1,9 +1,9 @@
-// //start up like this: PORT=3000 node src/socket.js
+// //start up like this: PORT=3001 node src/socket.js
 
 let server = require('http').Server();
 let io = require('socket.io')(server);
 let Redis = require('ioredis');
-
+//staging is 3001, production is 3002
 //staging is 6379, production is 6380
 
 let redis = new Redis();
