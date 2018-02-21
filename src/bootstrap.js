@@ -44,7 +44,15 @@ window.fullcalendar = require('fullcalendar');
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+//const WebSocket = require('ws');
 
+// const ws = new WebSocket('ws://www.host.com/path');
+// const ws = new WebSocket('http://' + craiglorious.host + ':' + craiglorious.socketPort);
+//
+//
+// ws.on('news', function incoming(data) {
+//     console.log(data);
+// });
 // import io from 'socket.io-client'
 // var socket = io('http://' + craiglorious.host + ':' + craiglorious.socketPort);
 //
