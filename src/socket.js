@@ -1,15 +1,25 @@
-// //start up like this: PORT=3001 node src/socket.js
+// //start up like this: APP=staging node src/socket.js APP=production node src/socket.js
 
 let server = require('http').Server();
 let io = require('socket.io')(server);
 let Redis = require('ioredis');
-//staging is 3001, production is 3002
-//staging is 6379, production is 6380
 
-let redis = new Redis();
-const PORT = process.env.PORT || 3000;
+let socket_port = 3000;
+let redis_port = 6879;
 
-console.log('Listening on Port ' + PORT);
+if (process.env.APP == 'staging')
+{
+    socket_port = 3001;
+    redis_port = 6879;
+}
+else if (process.env.APP == 'production'){
+    socket_port = 3002;
+    redis_port = 6880;
+}
+
+let redis = new Redis(redis_port);
+
+console.log('Listening on Port ' + socket_port);
 
 redis.subscribe('test-channel');
 
@@ -21,10 +31,7 @@ redis.on('message', function(channel, message){
     console.log(channel +':'+ message.event);
     io.emit(channel +':'+ message.event,message.data);
     io.emit('news', { hello: 'world' });
-
-
-
 })
 
-server.listen(PORT);
+server.listen(socket_port);
 
