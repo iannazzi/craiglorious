@@ -1,11 +1,17 @@
-// //start up like this: APP=staging node src/socket.js APP=production node src/socket.js
+// //start up like this: APP=staging node src/socket.js APP=production node src/socket.js APP=development node src/socket.js
+// php artisan zz:testBroadcast
+//might need to kill an old server....
+//ps aux | grep node
+//kill -9 {PID}
+// or who is using the port
+// sudo lsof -i :3000
 
 let server = require('http').Server();
 let io = require('socket.io')(server);
 let Redis = require('ioredis');
 
 let socket_port = 3000;
-let redis_port = 6879;
+let redis_port = 6379;
 
 if (process.env.APP == 'staging')
 {

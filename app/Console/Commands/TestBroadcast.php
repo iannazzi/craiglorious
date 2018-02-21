@@ -6,7 +6,7 @@ use App\Models\Craiglorious\System;
 
 class TestBroadcast extends Command
 {
-    protected $signature = 'zz:event';
+    protected $signature = 'zz:testBroadcast';
 
     protected $description = 'Test Broadcast';
 
