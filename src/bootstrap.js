@@ -3,16 +3,18 @@ window.craiglorious = {};
 
 craiglorious.host = window.location.hostname;
 console.log('Welcome to Craiglorious bootstrapper.... ');
-console.log(craiglorious.host);
 
 if(craiglorious.host == 'craiglorious.com' || craiglorious.host == 'www.craiglorious.com') {
     craiglorious.env = 'production';
     craiglorious.socketPort = 3002;
+    craiglorious.socketUrl = "https://craiglorious.com:3002"
 }
 else  if (craiglorious.host == 'staging.craiglorious.com')
 {
     craiglorious.env = 'staging';
     craiglorious.socketPort = 3001;
+    craiglorious.socketUrl = "https://stagingcraiglorious.com:3001"
+
 }
 else if (craiglorious.host == 'homestead.test'){
     craiglorious.env = 'development';
@@ -21,7 +23,9 @@ else if (craiglorious.host == 'homestead.test'){
 else{
     console.error(craiglorious.host + ' Host does not match any expected ... check bootstrap.js file')
 }
-
+console.log('Listening to socket on port ' + craiglorious.socketPort);
+console.log('Environment.... ' + craiglorious.env);
+console.log('############################################################');
 
 
 //some things may need to be turned off for debugging......
@@ -45,7 +49,10 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import io from 'socket.io-client'
-var socket = io(location.protocol + '://' + craiglorious.host + ':' + craiglorious.socketPort);
+console.log(location.protocol + '://' + craiglorious.host + ':' + craiglorious.socketPort);
+// var socket = io(location.protocol + '://' + craiglorious.host + ':' + craiglorious.socketPort);
+
+var socket = io(craiglorious.socketUrl);
 
 socket.on('test-channel:UserSignedUp', function(message) {
     console.log(message);
