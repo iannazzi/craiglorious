@@ -186,6 +186,10 @@ let vm = new Vue({
     },
 
     mounted(){
+        // socket.on('test-channel:UserSignedUp',function(data){
+        //     console.log('event received from socket');
+        //     console.log(data);
+        // })
         let self = this;
         this.validateAuth();
 
