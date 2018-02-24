@@ -8,18 +8,22 @@ if(craiglorious.host == 'craiglorious.com' || craiglorious.host == 'www.craiglor
     craiglorious.env = 'production';
     craiglorious.socketPort = 3002;
     craiglorious.socketUrl = "https://craiglorious.com:3002"
+    craiglorious.PUSHER_KEY='c8661dd3efcddb87bf1a';
+
 }
 else  if (craiglorious.host == 'staging.craiglorious.com')
 {
     craiglorious.env = 'staging';
     craiglorious.socketPort = 3001;
     craiglorious.socketUrl = "https://staging.craiglorious.com:3001"
+    craiglorious.PUSHER_KEY='b85b048fe51e53e7c20c';
 
 }
 else if (craiglorious.host == 'homestead.test'){
     craiglorious.env = 'development';
     craiglorious.socketPort = 3000;
     craiglorious.socketUrl = "http://homestead.test:3000"
+    craiglorious.PUSHER_KEY='b4c3b3f485a9ab4684a8';
 }
 else{
     console.error(craiglorious.host + ' Host does not match any expected ... check bootstrap.js file')
@@ -50,22 +54,35 @@ window.fullcalendar = require('fullcalendar');
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import io from 'socket.io-client'
-console.log(location.protocol + '://' + craiglorious.host + ':' + craiglorious.socketPort);
-// var socket = io(location.protocol + '://' + craiglorious.host + ':' + craiglorious.socketPort);
+// import io from 'socket.io-client'
+// console.log(location.protocol + '://' + craiglorious.host + ':' + craiglorious.socketPort);
+// // var socket = io(location.protocol + '://' + craiglorious.host + ':' + craiglorious.socketPort);
+//
+// var socket = io(craiglorious.socketUrl);
+//
+// socket.on('test-channel:UserSignedUp', function(message) {
+//     console.log(message);
+// })
+// socket.on('test-channel:Lover', function(message) {
+//     console.log(message);
+// })
+//
+// socket.on('news', function(message) {
+//     console.log(message);
+// })
 
-var socket = io(craiglorious.socketUrl);
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
 
-socket.on('test-channel:UserSignedUp', function(message) {
-    console.log(message);
-})
-socket.on('test-channel:Lover', function(message) {
-    console.log(message);
-})
+var pusher = new Pusher(craiglorious.PUSHER_KEY, {
+    cluster: 'us2',
+    encrypted: true
+});
 
-socket.on('news', function(message) {
-    console.log(message);
-})
+var channel = pusher.subscribe('my-channel');
+channel.bind('my-event', function(data) {
+    alert(data.message);
+});
 
 
 

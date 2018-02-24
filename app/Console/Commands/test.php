@@ -41,14 +41,30 @@ class test extends Command
 //        $system = System::first();
 //        $system->createTenantConnection();
 
-            $data = [
-                'event' => 'UserSignedUp',
-                'data' => [
-                    'username' => 'JohnDoe'
-                ]
-            ];
-            \Redis::publish('test-channel',json_encode($data));
-            echo 'done';
+        $options = array(
+            'cluster' => env('PUSHER_CLUSTER'),
+            'encrypted' => true
+        );
+        $pusher = new \Pusher\Pusher(
+            env('PUSHER_KEY'),
+            env('PUSHER_SECRET'),
+            env('PUSHER_APP_ID'),
+            $options
+        );
+
+        $data['message'] = 'hello world';
+        $pusher->trigger('my-channel', 'my-event', $data);
+
+
+
+//            $data = [
+//                'event' => 'UserSignedUp',
+//                'data' => [
+//                    'username' => 'JohnDoe'
+//                ]
+//            ];
+//            \Redis::publish('test-channel',json_encode($data));
+//            echo 'done';
 
 
 
