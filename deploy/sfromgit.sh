@@ -8,6 +8,7 @@ DATE=`date +%Y%m%d`
 DATEP=$DATE'-StageFromGit'
 GIT='websocket'
 
+#sudo systemctl restart nginx
 
 ssh -t craig@craiglorious.com "cd $f &&\
 rm -rf $DATEP &&\
