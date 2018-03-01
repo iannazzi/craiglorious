@@ -33,8 +33,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('zz:testBroadcast')
-                  ->everyMinute();
+//         $schedule->command('zz:testBroadcast')
+//                  ->everyMinute();
     }
 
     /**
