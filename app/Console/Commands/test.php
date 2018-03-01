@@ -53,7 +53,7 @@ class test extends Command
         );
 
         $data['message'] = 'hello world';
-        $pusher->trigger('my-channel', 'my-event', $data);
+        $pusher->trigger('global', 'my-event', $data);
 
 
 

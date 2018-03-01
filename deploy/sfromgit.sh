@@ -6,9 +6,13 @@ f=/var/www/craiglorious.com
 
 DATE=`date +%Y%m%d`
 DATEP=$DATE'-StageFromGit'
-GIT='websocket'
+GIT='pusher'
 
 #sudo systemctl restart nginx
+#sudo service nginx restart
+#sudo nginx -t
+#sudo service php7.2-fpm restart
+#sudo reboot
 
 ssh -t craig@craiglorious.com "cd $f &&\
 rm -rf $DATEP &&\
@@ -40,4 +44,4 @@ rm $f/staging &&\
 ln -s $DATEP $f/staging &&\
 cd $f/staging &&\
 pwd &&\
-sudo reboot"
+sudo service php7.2-fpm reload"

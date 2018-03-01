@@ -73,8 +73,14 @@ and login with admin secret
 #set up the production server
 DO LEMP
 add node
-add redis
-re
+
+cron job:
+
+crontab -e
+
+* * * * * php /home/vagrant/code/artisan schedule:run >> /dev/null 2>&1
+* * * * * php /var/www/craiglorious.com/staging/artisan schedule:run >> /dev/null 2>&1
+* * * * * php /var/www/craiglorious.com/live/artisan schedule:run >> /dev/null 2>&1
 
 ##Set up staging
 ### set up code base

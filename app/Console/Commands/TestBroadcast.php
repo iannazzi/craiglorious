@@ -19,15 +19,30 @@ class TestBroadcast extends Command
     {
 
 
+        $options = array(
+            'cluster' => env('PUSHER_CLUSTER'),
+            'encrypted' => true
+        );
+        $pusher = new \Pusher\Pusher(
+            env('PUSHER_KEY'),
+            env('PUSHER_SECRET'),
+            env('PUSHER_APP_ID'),
+            $options
+        );
 
-        $data = [
-            'event' => 'Lover',
-            'data' => [
-                'username' => 'Lover'
-            ]
-        ];
+        $data['message'] = 'hello world';
+        $pusher->trigger('global', 'my-event', $data);
 
-        event(new TestEvent($data));
+
+//
+//        $data = [
+//            'event' => 'Lover',
+//            'data' => [
+//                'username' => 'Lover'
+//            ]
+//        ];
+//
+//        event(new TestEvent($data));
 
 
         echo 'done';
