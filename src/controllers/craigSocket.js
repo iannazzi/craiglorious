@@ -87,7 +87,7 @@ export class craigSocket {
                 }
             })
 
-        }, 3000); // every 100 seconds
+        }, craiglorious.craigsocket_timer); // every 100 seconds
     }
 
     verifyTimerStop() {

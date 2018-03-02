@@ -91,7 +91,7 @@
 
                         //bus.$emit('userHasLoggedIn');
                         self.$root.setLogin();
-                        if (verify_timer_flag) {
+                        if (craiglorious.craigsocket) {
                             cs.verifyTimerStart();
                         }
                         self.$router.push('/dashboard');

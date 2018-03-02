@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Commands\TestBroadcast::class,
         Commands\SpitTableDef::class,
         Commands\TestMainConnection::class,
         Commands\MigrateProduction::class,
@@ -32,8 +33,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+//         $schedule->command('zz:testBroadcast')
+//                  ->everyMinute();
     }
 
     /**

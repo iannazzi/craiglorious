@@ -143,7 +143,7 @@ let vm = new Vue({
                         bus.$emit('userHasLoggedIn');
 
                             self.setLogin()
-                            if(last_page_accessed_flag){
+                            if(craiglorious.last_page_accessed_flag){
                                 let last_page_accessed = self.last_page_accessed;
                                 if(last_page_accessed){
                                     self.$router.push(last_page_accessed)
@@ -154,7 +154,7 @@ let vm = new Vue({
                                 }
                             }
 
-                            if(verify_timer_flag){
+                            if(craiglorious.craigsocket){
                                 cs.verifyTimerStart();
                             }
 
@@ -186,6 +186,10 @@ let vm = new Vue({
     },
 
     mounted(){
+        // socket.on('test-channel:UserSignedUp',function(data){
+        //     console.log('event received from socket');
+        //     console.log(data);
+        // })
         let self = this;
         this.validateAuth();
 
@@ -206,7 +210,7 @@ let vm = new Vue({
         //     //console.log(self.$route.name);
         //     self.setLogin()
         //     // let last_page_accessed = localStorage.getItem('last_page_accessed')
-        //     if(last_page_accessed_flag){
+        //     if(craiglorious.last_page_accessed_flag){
         //         let last_page_accessed = self.last_page_accessed;
         //         if(last_page_accessed){
         //             self.$router.push(last_page_accessed)
@@ -217,7 +221,7 @@ let vm = new Vue({
         //         }
         //     }
         //
-        //     if(verify_timer_flag){
+        //     if(craiglorious.craigsocket){
         //         cs.verifyTimerStart();
         //     }
         // })
@@ -226,7 +230,7 @@ let vm = new Vue({
 
         });
         bus.$on('userInput', function () {
-            if(user_input_flag){
+            if(craiglorious.autosave){
                 console.log('user input detected.... ');
                 if( ! self.inactivityTimer)
                 {
@@ -264,7 +268,7 @@ let vm = new Vue({
                                     self.inactivityTimer=false;
 
 
-                                }, 10000);
+                                }, craiglorious.autosave_timer);
                             }
 
                         },
@@ -297,7 +301,7 @@ window.addEventListener('storage', function(e) {
         else{
             if(e.oldValue === null){
                 vm.setLogin()
-                if(last_page_accessed_flag){
+                if(craiglorious.last_page_accessed_flag){
                     let last_page_accessed = vm.last_page_accessed;
                     if(last_page_accessed){
                         vm.$router.push(last_page_accessed)
@@ -306,7 +310,7 @@ window.addEventListener('storage', function(e) {
                         vm.$router.push('/dashboard');
                     }
                 }
-                if(verify_timer_flag){
+                if(craiglorious.craigsocket){
                     cs.verifyTimerStart();
                 }
 

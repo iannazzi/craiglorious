@@ -1,5 +1,7 @@
 var config = {
   env: 'development',
+    url: 'homestead.test',
+    socket_port: '3000',
   api: {
     base_url: 'http://homestead.test/api',
     defaultRequest: {
