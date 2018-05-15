@@ -142,12 +142,12 @@ let routes = [
     },
     {
         path: '/test',
-        meta: {guarded: true},
+        meta: {guarded: false},
         component: require('./pages/tests/test.vue')
     },
     {
         path: '/test2',
-        meta: {guarded: true},
+        meta: {guarded: false},
         component: require('./pages/tests/test2.vue')
     },
 

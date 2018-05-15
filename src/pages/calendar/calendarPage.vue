@@ -122,8 +122,15 @@
                     });
 
                     let cal = $("#calendar");
+                    // i found this in the fullcalendar test code... maybe it is useful?
+//                var Calendar = $.fullCalendar.Calendar
+//                window.currentCalendar = new Calendar($el, getCurrentOptions()) // set the global
+//                return window.currentCalendar.render()
 
-                    cal.fullCalendar({
+
+                //    var holidays = $.fullCalendar.gcalFeed('http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic');
+// calendar.fullCalendar('addEventSource', holidays);
+                cal.fullCalendar({
                         //height: 650,
                         selectable: true,
                         height: "auto",

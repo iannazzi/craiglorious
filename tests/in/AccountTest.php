@@ -26,7 +26,10 @@ class AccountTest extends ApiTester
     function can_be_searched_raw_json()
     {
         $rawContent = '{"search_fields":{"accounts_coa_number":"1","accounts_name":"","accounts_type":"Cash","accounts_parent_id":"","accounts_comments":"","accounts_active":"1"},"table_name":"accounts"}';
-        $this->searchSuccess($this->route, $rawContent);
+        $result = $this->searchSuccess($this->route, $rawContent);
+        $result->dump();
+
+
 
     }
     /** @test */

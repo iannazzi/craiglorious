@@ -35,13 +35,16 @@ craiglorious.last_page_accessed_flag = false;
 
 craiglorious.autosave = true;
 craiglorious.autosave_timer = 30000;
+// craiglorious.AwesomeTable = require('@iannazzi/awesome-table');
+// console.log(craiglorious.AwesomeTable);
+
 
 window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 
 //these are for modifying the url and sorting the table
-window.firstBy = require('thenby');
+//window.firstBy = require('thenby');
 window.JsUri = require('jsuri');
 //these are for full calendar
 window.moment = require('moment');

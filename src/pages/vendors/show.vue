@@ -51,7 +51,7 @@
                 let self = this;
                 this.column_definition = columnDefinition(this);
                 let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
-
+                console.log(recordTable);
 
                 $(function(){
                     recordTable.addTo('record_table');

@@ -35,26 +35,67 @@
                 searchableTable: null
             }
         },
-        mixins: [searchPageMixins],
+        //mixins: [searchPageMixins],
         props: ['page', 'route'],
         mounted: function () {
 
+
+
+
+            //several options to do now.....
+            //check the url
+            //    awesomeTable.controller.uri.loadFromUri(query);
+
+            //load from storage
+            //populate search data
+
+            //load automatic results
+            //go get data and render the search table......
+
+
             this.dataReady = false;
-            AwesomeTableWrapper.getPageDataThenRenderSearchTable(this);
+            let component = this;
 
-        },
-        methods: {
-            renderTable(){
-                let self = this;
-                this.column_definition = columnDefinition(this);
-                this.searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(this, 100);
+            component.dataReady = true;
+            component.column_definition = columnDefinition(component);
+            let searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(component, 100);
+            component.$nextTick(function () {
+                // Code that will run only after the
+                // entire view has been rendered
+                searchableTable.addTo('searchableTable')
 
-                $(function () {
-                    self.searchableTable.addTo('searchableTable')
-                })
+            })
+            //this is saying go get records right away.... lets back off a bit....
+//             getData({
+//                method: 'get',
+//                url: component.route,
+//                //            params: {number_of_records:number_of_records},
+//                onSuccess: function(response){
+//                    console.log(response)
+//                    transfomer.removeNull(response.data.records);
+//                    component.data = response.data;
+//                    component.dataReady = true;
+//
+//                    component.column_definition = columnDefinition(component);
+//                    let searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(component, 100);
+//
+//
+//                    component.$nextTick(function () {
+//                        // Code that will run only after the
+//                        // entire view has been rendered
+//                        searchableTable.addTo('searchableTable')
+//
+//                    })
+//                    //
+//
+//                    //component.renderTable();
+//                }
+//
+//            })
 
 
-            }
+
+
         },
     }
 
