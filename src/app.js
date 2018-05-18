@@ -1,7 +1,6 @@
 import './bootstrap';
 import router from './routes'
 import {getData} from './controllers/getData'
-import {AwesomeTable} from './elements/tables/AwesomeTable';
 import {AwesomeTableWrapper} from './controllers/AwesomeTableWrapper'
 import {craigSocket} from './controllers/craigSocket'
 import {transformer} from './helpers/transformer'
@@ -9,7 +8,6 @@ import {transformer} from './helpers/transformer'
 //99% of page data will be the table......
 window.transfomer = new transformer;
 window.AwesomeTableWrapper = new AwesomeTableWrapper();
-window.AwesomeTable = AwesomeTable;
 window.cs = new craigSocket();
 
 

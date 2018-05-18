@@ -116,12 +116,10 @@ export class AwesomeTableWrapper {
 
             },
 
-            onSortClick(data){
-                //we need to add to the url
-                console.log(data)
-                console.log('sort click')
-                data['sort'] = true;
-                component.$router.push({path: '/' + component.route, query: data})
+            onHeaderClick(data){
+               //we need both the search and the sort query now.....
+                awesomeTable.controller.sort.storeSort();
+                component.$router.push({path: '/' + component.route, query: awesomeTable.controller.getQueryValues()})
             },
             onResetClick(){
                 //kill storage and push to
@@ -141,21 +139,36 @@ export class AwesomeTableWrapper {
         }
         config.onSearchClick = function(query){
 
-            console.log(component.route + '/search?' + query)
-            let q = awesomeTable.controller.getQueryValues();
+            //awesomeTable.controller.storeSearch();
+            let search_values = awesomeTable.controller.getSearchFormValues();
+            window.localStorage.setItem(awesomeTable.controller.getStoredSearchName(),JSON.stringify(search_values))
+
+            //remove sorting...
+            awesomeTable.controller.sort.removeAllSort()
+
+            //update the url....
+            component.$router.push({path: '/' + component.route, query: awesomeTable.controller.getQueryValues()})
+
             getData( {
                 method: 'post',
                 url: component.route + '/search',
-                entity: q,
+                entity: awesomeTable.controller.getSearchPostData(),
                 onSuccess(response) {
                     console.log('response')
 
                     console.log(response)
-                    if (response.data === false){
+                    if (response.data.records.length == 0){
                         awesomeTable.view.addMessageInsteadOfTable('no data')
                     }
                     else{
-                        awesomeTable.controller.renderSearch(response.data)
+                        //got some double hitting.... we want the data, then we want to sort, then render
+                        awesomeTable.controller.renderSearch(response.data.records)
+                        awesomeTable.controller.sort.loadSortFromDefault()
+                        awesomeTable.controller.sort.renderSort();
+
+
+
+
                     }
                 },
                 onError(response) {

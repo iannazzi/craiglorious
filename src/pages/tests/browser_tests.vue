@@ -15,7 +15,6 @@
 </template>
 
 <script>
-    import {tableTests} from '../../elements/tables/tests/tableTests';
 
     export default {
         data() {
@@ -44,7 +43,6 @@
 
             });
             let div = document.getElementById("tests");
-            div.appendChild(tableTests());
         },
     }
 </script>

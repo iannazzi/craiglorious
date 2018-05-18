@@ -40,29 +40,88 @@
         mounted: function () {
 
 
-
-
-            //several options to do now.....
-            //check the url
-            //    awesomeTable.controller.uri.loadFromUri(query);
-
-            //load from storage
-            //populate search data
-
-            //load automatic results
-            //go get data and render the search table......
-
-
             this.dataReady = false;
             let component = this;
-
             component.dataReady = true;
             component.column_definition = columnDefinition(component);
-            let searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(component, 100);
+            let awesomeTable = AwesomeTableWrapper.createSearchableCollectionTable(component, 100);
+
+            //all this will get extracted....
+
             component.$nextTick(function () {
-                // Code that will run only after the
-                // entire view has been rendered
-                searchableTable.addTo('searchableTable')
+
+                awesomeTable.addTo('searchableTable')
+                let query = component.$route.query
+                //if there is data on the url load that first....
+                if(awesomeTable.controller.checkQuery(query))
+                {
+                    awesomeTable.controller.loadSearchValues(query);
+                    getData( {
+                        method: 'post',
+                        url: component.route + '/search',
+                        entity: awesomeTable.controller.getSearchPostData(),
+                        onSuccess(response) {
+                            console.log('response')
+
+                            console.log(response)
+                            if (response.data.records.length == 0){
+                                awesomeTable.view.addMessageInsteadOfTable('no data')
+                            }
+                            else{
+                                awesomeTable.controller.renderSearch(response.data.records)
+                                awesomeTable.controller.sort.loadSortFromQuery(query)
+                                awesomeTable.controller.sort.renderSort();
+                            }
+                        },
+                        onError(response) {
+                            console.log('error')
+                            console.log(response)
+                        }
+                    })
+                }
+                //next check the storage...
+                else if(awesomeTable.controller.checkSearchStorage()) {
+                    awesomeTable.controller.loadSearchFromStorage()
+                    getData( {
+                        method: 'post',
+                        url: component.route + '/search',
+                        entity: awesomeTable.controller.getSearchPostData(),
+                        onSuccess(response) {
+                            console.log('response')
+
+                            console.log(response)
+                            if (response.data.records.length == 0){
+                                awesomeTable.view.addMessageInsteadOfTable('no data')
+                            }
+                            else{
+                                awesomeTable.controller.renderSearch(response.data.records)
+                                console.log('loading sort from storage')
+                                console.log(awesomeTable.controller.sort.getSort())
+                                awesomeTable.controller.sort.loadSortFromStorage()
+                                awesomeTable.controller.sort.renderSort();
+                            }
+                        },
+                        onError(response) {
+                            console.log('error')
+                            console.log(response)
+                        }
+                    })
+
+
+                }
+                else{
+                    awesomeTable.controller.populateSearchValuesFromDefaultValues()
+                    console.log(number_of_records)
+
+                    //now here can we just go get some shizz????
+
+                    //                    awesomeTable.controller.sort.loadSortFromDefault()
+
+
+                }
+
+
+
 
             })
             //this is saying go get records right away.... lets back off a bit....

@@ -12,14 +12,14 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
-    "@iannazzi/awesome-table": "^1.0.9",
+    "@iannazzi/awesome-table": "^1.0.20",
     "babel-jest": "^21.2.0",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.7.0",
     "babel-register": "^6.24.0",
     "bootstrap": "^3.3.7",
     "bootstrap-sass": "^3.3.7",
     "browser-env": "^2.0.29",
-    "cross-env": "^5.1.4",
+    "cross-env": "^5.1.5",
     "font-awesome": "^4.7.0",
     "fullcalendar": "^3.9.0",
     "gulp": "^3.9.1",
@@ -41,6 +41,6 @@
   },
   "dependencies": {
     "ioredis": "^3.2.2",
-    "socket.io": "^2.1.0"
+    "socket.io": "^2.1.1"
   }
 }

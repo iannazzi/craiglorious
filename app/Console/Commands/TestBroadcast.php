@@ -31,7 +31,7 @@ class TestBroadcast extends Command
         );
 
         $data['message'] = 'hello world';
-        $pusher->trigger('global', 'my-event', $data);
+//        $pusher->trigger('global', 'my-event', $data);
 
 
 //
