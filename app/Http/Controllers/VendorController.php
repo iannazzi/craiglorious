@@ -46,9 +46,9 @@ class VendorController extends Controller
         $return_data['page'] = 'index';
         $return_data['records'] = []; //let js handle the data through ajax
         $return_data['number_of_records_available'] = $number_of_records_available;
-        if($number_of_records_available<=$request->number_of_records){
-            $return_data['records'] = Vendor::all(); //let js handle the data through ajax
-        }
+//        if($number_of_records_available<=$request->number_of_records){
+//            $return_data['records'] = Vendor::all(); //let js handle the data through ajax
+//        }
         return response()->json([
             'success' => true,
             'message' => 'index returned',

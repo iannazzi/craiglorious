@@ -12,7 +12,7 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
-    "@iannazzi/awesome-table": "^1.0.20",
+    "@iannazzi/awesome-table": "^1.1.2",
     "babel-jest": "^21.2.0",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.24.0",

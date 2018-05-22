@@ -35,8 +35,7 @@ export class AwesomeTableWrapper {
 
         let config = {
             //name: "role",
-            data: component.data.records,
-            route: component.route,
+            data: [],
             name: component.route,
             column_definition: component.column_definition,
             table_buttons: ['edit', 'delete'],
@@ -81,13 +80,14 @@ export class AwesomeTableWrapper {
 
             name: component.route,
             access: "read",
+            table_view: 'index',
             table_buttons: [],
             column_definition: component.column_definition,
             data: component.data,
-            number_of_records_available: component.data.number_of_records_available,
-            number_of_records_to_automatically_get,
-            search_query: component.$root.$route.fullPath,
-            search_route: component.route + '/search',
+            //number_of_records_available: component.data.number_of_records_available,
+            //number_of_records_to_automatically_get,
+            //search_query: component.$root.$route.fullPath,
+            //search_route: component.route + '/search',
             //initial_page_load_data: component.data.records,
             onUriLoadPageStart(){
                 //we came to a page with a search in the uri
@@ -134,17 +134,21 @@ export class AwesomeTableWrapper {
             },
             beforeSearchClicked(){
                 component.searching = true;
+            },
+            onRowClick(row){
+                let id = awesomeTable.getValue('id',row);
+                component.$router.push(component.route + '/' + id)
             }
 
         }
         config.onSearchClick = function(query){
 
-            //awesomeTable.controller.storeSearch();
-            let search_values = awesomeTable.controller.getSearchFormValues();
-            window.localStorage.setItem(awesomeTable.controller.getStoredSearchName(),JSON.stringify(search_values))
+            awesomeTable.controller.storeSearch();
+            // let search_values = awesomeTable.controller.getSearchFormValues();
+            // window.localStorage.setItem(awesomeTable.controller.getStoredSearchName(),JSON.stringify(search_values))
 
-            //remove sorting...
-            awesomeTable.controller.sort.removeAllSort()
+            //remove sorting... no there may not be
+//
 
             //update the url....
             component.$router.push({path: '/' + component.route, query: awesomeTable.controller.getQueryValues()})
@@ -163,7 +167,10 @@ export class AwesomeTableWrapper {
                     else{
                         //got some double hitting.... we want the data, then we want to sort, then render
                         awesomeTable.controller.renderSearch(response.data.records)
+                        awesomeTable.controller.sort.removeAllSort()
+                        console.log('loading sort from default')
                         awesomeTable.controller.sort.loadSortFromDefault()
+                        awesomeTable.controller.sort.storeSort();
                         awesomeTable.controller.sort.renderSort();
 
 
@@ -195,18 +202,7 @@ export class AwesomeTableWrapper {
     }
 
     loadRecordTableDataThenCallRenderTable(component) {
-        component.dataReady = false;
-        let url = '/' + component.route + '/create';
-        if (component.page != 'create') {
-            url = '/' + component.route + '/' + component.$route.params.id;
-        }
-        let self = this;
-        this.getData({
-            method: 'get',
-            url: url,
-            entity: false,
-            onSuccess: self.loadDataAndRenderTable(component)
-        })
+
     }
 
     getPageDataThenRenderSearchTable(component) {

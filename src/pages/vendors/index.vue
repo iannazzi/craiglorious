@@ -35,9 +35,16 @@
                 searchableTable: null
             }
         },
-        //mixins: [searchPageMixins],
+        mixins: [searchPageMixins],
         props: ['page', 'route'],
         mounted: function () {
+
+
+            //failure here
+            //search
+            //reset
+            //dashboard
+            //page
 
 
             this.dataReady = false;
@@ -81,6 +88,7 @@
                 }
                 //next check the storage...
                 else if(awesomeTable.controller.checkSearchStorage()) {
+                    console.log('loading from storage')
                     awesomeTable.controller.loadSearchFromStorage()
                     getData( {
                         method: 'post',
@@ -96,9 +104,11 @@
                             else{
                                 awesomeTable.controller.renderSearch(response.data.records)
                                 console.log('loading sort from storage')
-                                console.log(awesomeTable.controller.sort.getSort())
+                                console.log(awesomeTable.controller.sort.getSort());
                                 awesomeTable.controller.sort.loadSortFromStorage()
                                 awesomeTable.controller.sort.renderSort();
+                                component.$router.push({path: '/' + component.route, query: awesomeTable.controller.getQueryValues()})
+
                             }
                         },
                         onError(response) {
@@ -107,54 +117,39 @@
                         }
                     })
 
-
                 }
                 else{
+                    console.log('loading default values')
                     awesomeTable.controller.populateSearchValuesFromDefaultValues()
-                    console.log(number_of_records)
+                    let request = awesomeTable.controller.getSearchPostData();
+                    console.log(request);
+                    request.number_of_records = 300;
 
-                    //now here can we just go get some shizz????
+                    //I could go to the server, check how many records are available, come back, go back and get them
+
+                    //I could go to the server, if the threshold is good send back the default search....
+
+                    getData( {
+                        method: 'get',
+                        url: component.route,
+                        entity: {'number_of_records':300},
+                        onSuccess(response) {
+                            console.log('response')
+                            console.log(response)
+                            if(response.data.number_of_records_available <= 300){
+                                awesomeTable.controller.onSearchClicked()
+                            }
+                        },
+                        onError(response) {
+
+                        }
+                    })
 
                     //                    awesomeTable.controller.sort.loadSortFromDefault()
 
 
                 }
-
-
-
-
             })
-            //this is saying go get records right away.... lets back off a bit....
-//             getData({
-//                method: 'get',
-//                url: component.route,
-//                //            params: {number_of_records:number_of_records},
-//                onSuccess: function(response){
-//                    console.log(response)
-//                    transfomer.removeNull(response.data.records);
-//                    component.data = response.data;
-//                    component.dataReady = true;
-//
-//                    component.column_definition = columnDefinition(component);
-//                    let searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(component, 100);
-//
-//
-//                    component.$nextTick(function () {
-//                        // Code that will run only after the
-//                        // entire view has been rendered
-//                        searchableTable.addTo('searchableTable')
-//
-//                    })
-//                    //
-//
-//                    //component.renderTable();
-//                }
-//
-//            })
-
-
-
-
         },
     }
 

@@ -41,22 +41,54 @@
         props: ['page','justcreated', 'route'],
         mounted: function () {
 
-            AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
+            //AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
+
+            let component = this;
+            this.column_definition = columnDefinition(this);
+
+            component.dataReady = false;
+            let url = '/' + component.route + '/create';
+            if (component.page != 'create') {
+                url = '/' + component.route + '/' + component.$route.params.id;
+            }
+
+
+
+
+            let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
+
+
+
+            component.$nextTick(function () {
+                getData({
+                    method: 'get',
+                    url: url,
+                    entity: false,
+                    onSuccess: function(response){
+                        console.log(response)
+                        transfomer.removeNull(response.data.records);
+                        component.data = response.data;
+                        bus.$emit('zzwaitoverevent');
+                        component.dataReady = true;
+                        console.log(document.getElementById('record_table'));
+                        recordTable.addTo('record_table');
+                        recordTable.controller.loadRecord(response.data.records)
+
+                    }
+                })
+
+
+
+            })
+
+
 
         },
         mixins: [recordPageMixins],
 
         methods: {
             renderTable(){
-                let self = this;
-                this.column_definition = columnDefinition(this);
-                let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
-                console.log(recordTable);
 
-                $(function(){
-                    recordTable.addTo('record_table');
-                    bus.$emit('zzwaitoverevent');
-                })
             }
         }
     }
