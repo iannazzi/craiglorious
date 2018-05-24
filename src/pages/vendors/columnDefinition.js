@@ -285,6 +285,7 @@ export default function(component){
             "class": "",
             "events": [],
             "search": "LIKE ANY BETWEEN EXACT",
+            search_default: 1,
             "properties": [],
             "word_wrap": true
         }, {

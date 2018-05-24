@@ -1,76 +1,12 @@
 import {getData} from './getData'
-// import {AwesomeTable} from '../elements/tables/AwesomeTable';
 import {AwesomeTable} from '@iannazzi/awesome-table'
+import {ErrorModal} from '../elements/modal/ErrorModal'
 
 export class AwesomeTableWrapper {
     constructor() {
         //how to handle modal??? that is this wrapper's job...
         this.AwesomeTable = AwesomeTable;
-    }
-
-    //most pages with tables need to get data then display it
-    loadDataAndRenderTable(component) {
-        return function (response) {
-            //this is page data.....
-            console.log(response)
-            transfomer.removeNull(response.data.records);
-            component.data = response.data;
-            component.renderTable();
-            component.dataReady = true;
-
-        }
-
-    }
-
-    //most record pages have show edit and create with corresponding tables
-    createShowEditOrCreateRecordTable(component) {
-        let access;
-        if (component.page == 'show') {
-            access = 'read';
-        }
-        else {
-            access = 'write';
-        }
-        let awesomeTable = new AwesomeTable('record');
-
-        let config = {
-            //name: "role",
-            data: [],
-            name: component.route,
-            column_definition: component.column_definition,
-            table_buttons: ['edit', 'delete'],
-            access: access, //read vs write
-            onSaveSuccess(){
-                delete cached_page_data[component.route]
-            },
-            onDelete(){
-                component.loading = true;
-            },
-            onDeleteSuccess(){
-                //back to roles
-                component.loading = false;
-                delete cached_page_data[component.route]
-                component.$router.push('/' + component.route);
-            },
-            onCreateSaved(id){
-                //pop up a modal
-                // this.create() //check the display
-                //back to roles
-                console.log('saving....')
-                component.dataReady = false;
-                delete cached_page_data[component.route]
-                component.$router.push({path: '/' + component.route + '/' + id, props: {justcreated: 'true'}});
-
-            },
-            onCancelCreateClick(){
-                component.$router.push('/' + component.route);
-            }
-
-        }
-        awesomeTable.loadConfiguration(config);
-
-        return awesomeTable;
-
+        this.ErrorModal = ErrorModal;
     }
 
     createSearchableCollectionTable(component, number_of_records_to_automatically_get = 100) {
@@ -200,50 +136,274 @@ export class AwesomeTableWrapper {
         awesomeTable.loadConfiguration(config);
         return awesomeTable;
     }
+    renderSearchTable(component, columnDefinition, div_id){
+        component.column_definition = columnDefinition(component);
+        let awesomeTable = this.createSearchableCollectionTable(component, 100);
+        awesomeTable.addTo(div_id)
+        component.loading = true;
+        let query = component.$route.query
+        //if there is data on the url load that first....
+        if(awesomeTable.controller.checkQuery(query))
+        {
+            awesomeTable.controller.loadSearchValues(query);
+            getData( {
+                method: 'post',
+                url: component.route + '/search',
+                entity: awesomeTable.controller.getSearchPostData(),
+                onSuccess(response) {
+                    console.log('response')
+                    component.loading = false;
 
-    loadRecordTableDataThenCallRenderTable(component) {
-
-    }
-
-    getPageDataThenRenderSearchTable(component) {
-
-        if (cached_page_data[component.route]) {
-            //for components that need no data i can just set the page cache once....
-            console.log('cached page data');
-            component.renderTable();
-            component.dataReady = true;
-        }
-        else {
-            let self = this;
-            this.getData({
-                method: 'get',
-                url: component.route,
-                //            params: {number_of_records:number_of_records},
-                onSuccess: self.loadDataAndRenderTable(component)
-
+                    console.log(response)
+                    if (response.data.records.length == 0){
+                        awesomeTable.view.addMessageInsteadOfTable('no data')
+                    }
+                    else{
+                        awesomeTable.controller.renderSearch(response.data.records)
+                        awesomeTable.controller.sort.loadSortFromQuery(query)
+                        awesomeTable.controller.sort.renderSort();
+                    }
+                },
+                onError(response) {
+                    console.log('error')
+                    console.log(response)
+                }
             })
         }
+        //next check the storage...
+        else if(awesomeTable.controller.checkSearchStorage()) {
+            console.log('loading from storage')
+            awesomeTable.controller.loadSearchFromStorage()
+            getData( {
+                method: 'post',
+                url: component.route + '/search',
+                entity: awesomeTable.controller.getSearchPostData(),
+                onSuccess(response) {
+                    console.log('response')
+                    component.loading = false;
 
+                    console.log(response)
+                    if (response.data.records.length == 0){
+                        awesomeTable.view.addMessageInsteadOfTable('no data')
+                    }
+                    else{
+                        awesomeTable.controller.renderSearch(response.data.records)
+                        console.log('loading sort from storage')
+                        console.log(awesomeTable.controller.sort.getSort());
+                        awesomeTable.controller.sort.loadSortFromStorage()
+                        awesomeTable.controller.sort.renderSort();
+                        component.$router.push({path: '/' + component.route, query: awesomeTable.controller.getQueryValues()})
+
+                    }
+                },
+                onError(response) {
+                    console.log('error')
+                    console.log(response)
+                }
+            })
+
+        }
+        else{
+            console.log('loading default values')
+            awesomeTable.controller.populateSearchValuesFromDefaultValues()
+            let request = awesomeTable.controller.getSearchPostData();
+            console.log(request);
+            request.number_of_records = 300;
+
+            //I could go to the server, check how many records are available, come back, go back and get them
+
+            //I could go to the server, if the threshold is good send back the default search....
+
+            getData( {
+                method: 'get',
+                url: component.route,
+                entity: {'number_of_records':300},
+                onSuccess(response) {
+                    component.loading = false;
+
+                    console.log('response')
+                    console.log(response)
+                    if(response.data.number_of_records_available <= 300){
+                        awesomeTable.controller.onSearchClicked()
+                    }
+                },
+                onError(response) {
+
+                }
+            })
+
+            //                    awesomeTable.controller.sort.loadSortFromDefault()
+
+
+        }
+    }
+    createRecordTable(component) {
+        let access;
+        if (component.page == 'show') {
+            access = 'read';
+        }
+        else {
+            access = 'write';
+        }
+        let awesomeTable = new AwesomeTable('record');
+
+        awesomeTable.errorModal = new ErrorModal(component.route + '_error_modal');
+
+
+        let config = {
+            data: [],
+            name: component.route,
+            table_view: component.page,
+            column_definition: component.column_definition,
+            table_buttons: ['edit', 'delete'],
+            access: access, //read vs write
+            onDeleteClick(){
+                if (confirm("Confirm Delete?")) {
+                    let post_data = {_method: 'delete', data: {id: component.$route.params.id}};
+                    getData({
+                        method: 'post',
+                        url: component.route,
+                        entity:post_data,
+                        onSuccess: function (response) {
+                            console.log(response)
+                            component.$router.push('/' + component.route)
+                        }
+                    })
+                }
+
+
+            },
+            onSaveClick(){
+                //only one save event for both
+                let post_data = {_method: 'put', data: awesomeTable.controller.getPostData()};
+                getData({
+                    method: 'post',
+                    url: component.route,
+                    entity:post_data,
+                    onSuccess: function (response) {
+                        console.log(response)
+                        if(awesomeTable.model.td.table_view =='create'){
+                            component.$router.push({path: '/' + component.route + '/' + response.id, props: {justcreated: 'true'}});
+
+                        }else
+                        {
+                            awesomeTable.controller.makeReadable();
+                        }
+                    },
+                    onError(response){
+                        //so we have an error on the save... now what....
+                        //pop up a modal...
+                        awesomeTable.errorModal.addErrorMessage(response.message);
+                        awesomeTable.errorModal.show();
+                    }
+                })
+
+
+            },
+            // onCreateSaved(id){
+            //     //pop up a modal
+            //     // this.create() //check the display
+            //     //back to roles
+            //     console.log('saving....')
+            //     component.dataReady = false;
+            //     delete cached_page_data[component.route]
+            //     component.$router.push({path: '/' + component.route + '/' + id, props: {justcreated: 'true'}});
+            //
+            // },
+            onCancelCreateClick(){
+                if (confirm("Confirm Cancel?")) {
+                    component.$router.push('/' + component.route);}
+            }
+
+        }
+        awesomeTable.loadConfiguration(config);
+
+        return awesomeTable;
 
     }
-
-    getPageData(component) {
+    renderRecordTable(component, columnDefinition, div_id){
         let self = this;
-        let data = this.getData({
+        let url = '/' + component.route + '/create';
+        if (component.page != 'create') {
+            url = '/' + component.route + '/' + component.$route.params.id;
+        }
+        getData({
             method: 'get',
-            url: component.route,
-            //            params: {number_of_records:number_of_records},
-            onSuccess: function(response){
+            url: url,
+            entity: false,
+            onSuccess: function (response) {
+                component.dataReady=true;
                 console.log(response)
                 transfomer.removeNull(response.data.records);
-                return response
+                component.data = response.data;
+                component.column_definition = columnDefinition(component);
+                let awesomeTable = self.createRecordTable(component);
+                Vue.nextTick(function () {
+                    awesomeTable.addTo(div_id);
+                    document.getElementById(div_id).appendChild(awesomeTable.errorModal.createErrorModal());
+
+                    if (component.page != 'create') {
+                        awesomeTable.controller.loadRecord(response.data.records[0])
+                    }
+                })
+                bus.$emit('zzwaitoverevent');
             }
 
         })
-        console.log('data')
-        console.log(data)
-
     }
+
+    //most pages with tables need to get data then display it
+    // loadDataAndRenderTable(component) {
+    //     return function (response) {
+    //         //this is page data.....
+    //         console.log(response)
+    //         transfomer.removeNull(response.data.records);
+    //         component.data = response.data;
+    //         component.renderTable();
+    //         component.dataReady = true;
+    //
+    //     }
+    //
+    // }
+    // getPageDataThenRenderSearchTable(component) {
+    //
+    //     if (cached_page_data[component.route]) {
+    //         //for components that need no data i can just set the page cache once....
+    //         console.log('cached page data');
+    //         component.renderTable();
+    //         component.dataReady = true;
+    //     }
+    //     else {
+    //         let self = this;
+    //         this.getData({
+    //             method: 'get',
+    //             url: component.route,
+    //             //            params: {number_of_records:number_of_records},
+    //             onSuccess: self.loadDataAndRenderTable(component)
+    //
+    //         })
+    //     }
+    //
+    //
+    // }
+    //
+    // getPageData(component) {
+    //     let self = this;
+    //     let data = this.getData({
+    //         method: 'get',
+    //         url: component.route,
+    //         //            params: {number_of_records:number_of_records},
+    //         onSuccess: function(response){
+    //             console.log(response)
+    //             transfomer.removeNull(response.data.records);
+    //             return response
+    //         }
+    //
+    //     })
+    //     console.log('data')
+    //     console.log(data)
+    //
+    // }
 
 
 }
