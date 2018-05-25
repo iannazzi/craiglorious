@@ -30,6 +30,8 @@
 <script>
     import columnDefinition from './columnDefinition'
     import recordPageMixins from '../../controllers/recordPageMixins'
+    import {AwesomeTable} from '@iannazzi/awesome-table'
+
 
 
     export default {
@@ -42,7 +44,75 @@
         mixins:[recordPageMixins],
         props: ['page','justcreated', 'route'],
         mounted: function () {
-            AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
+            let self = this;
+            let awesomeTable = AwesomeTableWrapper.newRecordTable();
+
+            let afterRendered = function () {
+                if (self.page == 'show'){
+                    if(self.data.records[0].id == 1) {
+                        awesomeTable.td.options.table_buttons = [];
+                        awesomeTable.view.drawTableEditSaveButtons();
+                    }
+                }
+                if(self.page == 'show'){
+                    let access_table_column_definition = [
+                        {
+                            "db_field": "view_id",
+                            "caption": "view_id",
+                            "type": "html",
+                            "show_on_list": false,
+                            "th_width": 80,
+                        },
+                        {
+                            "db_field": "name",
+                            "caption": "View",
+                            "type": "html",
+                            "show_on_list": true,
+                            "th_width": 80,
+                            'post':false,
+                        }, {
+                            "db_field": "access",
+                            "caption": "Access",
+                            "type": "select",
+                            "select_names": ['Write', 'Read', 'None'],
+                            "select_values": [{'value': 'write', 'name': 'Write'}, {
+                                'value': 'read',
+                                'name': 'Read'
+                            }, {'value': 'none', 'name': 'None'}],
+
+                            "show_on_list": true,
+                        },];
+                    let accessTable = new AwesomeTable({
+                        data: self.data.views,
+                        //name: "views_table",
+                        additionalPostValues:{
+                            id: self.data.records[0].id
+                        },
+                        //tuck read/write away?
+                        //show: read
+                        //edit: write
+                        //create: write
+
+                        type: 'collection', //record, collection or searchable
+                        //table_view: 'index', //index, edit,show,create used for column_definition show_on_index, show_on_create show_on_edit
+                        edit_display:'modal', //how to edit the data on_page (default, confusing if there are multiple tables) modal_only modal
+
+                        table_buttons: ['edit'],
+                        route: "/roles/rights",
+                        column_definition: access_table_column_definition,
+                        getData:getData
+                    })
+                    if(self.data.records[0].id == 1) {
+                        accessTable.options.table_buttons = [];
+                    }
+                    accessTable.addTo('rights');
+
+
+
+                }
+            }
+
+            AwesomeTableWrapper.renderRecordTable(awesomeTable, this, columnDefinition, 'record_table', afterRendered)
 
         },
         methods: {

@@ -44,7 +44,12 @@
         props: ['page', 'justcreated', 'route'],
         mounted: function () {
 
-            AwesomeTableWrapper.renderRecordTable(this, columnDefinition, 'record_table')
+
+            let awesomeTable = AwesomeTableWrapper.newRecordTable();
+            let afterRendered = function () {
+            }
+
+            AwesomeTableWrapper.renderRecordTable(awesomeTable, this, columnDefinition, 'record_table', afterRendered)
 
         },
         mixins: [recordPageMixins],

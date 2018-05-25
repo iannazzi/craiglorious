@@ -38,9 +38,17 @@
         props: ['page', 'route'],
         mounted: function () {
 
+            //vendors does not need any initial data.....
+            let callback = function(){
+                //do what we want with awesomeTable.....
+            }
+
+
+
             let component = this;
+            let awesomeTable = AwesomeTableWrapper.newSearchTable();
             component.$nextTick(function () {
-                AwesomeTableWrapper.renderSearchTable(component, columnDefinition, 'searchableTable')
+                AwesomeTableWrapper.renderSearchTable(awesomeTable, component, columnDefinition, 'searchableTable', callback)
             })
         },
     }
@@ -50,5 +58,8 @@
 <style>
     #sr0sc0{
         width:200px;
+    }
+    #vendors_table{
+        width:100%;
     }
 </style>

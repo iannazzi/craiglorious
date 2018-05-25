@@ -39,29 +39,22 @@
         mixins:[searchPageMixins],
         props: ['page', 'route'],
         mounted: function () {
+            let component = this;
+            let awesomeTable = AwesomeTableWrapper.newSearchTable();
+            let callback = function(){
+                //do what we want with awesomeTable.....
+            }
+            AwesomeTableWrapper.getDataThenRenderSearchTable(awesomeTable,component, columnDefinition, 'searchableTable', callback)
 
-            //create table definition
-            //get data... default, uri, storage
-            //update column definition with select values, etc....
-            //render table
-            AwesomeTableWrapper.getPageDataThenRenderSearchTable(this);
+
+
 
         },
         methods: {
 
-            renderTable(){
-                this.column_definition = columnDefinition(this);
-                this.searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(this, 100);
-
-                let self = this;
-                $(function () {
-                    self.searchableTable.addTo('searchableTable')
-                    // self.dataReady = true;
-
-                })
 
 
-            }
+
         },
 
     }

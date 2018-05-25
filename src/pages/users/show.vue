@@ -3,11 +3,13 @@
     <div>
         <div v-if="dataReady">
 
-            <button class="btn-back" @click="$router.push('/'+route)"><i class="fa fa-arrow-left" aria-hidden="true"></i>Back
+            <button class="btn-back" @click="$router.push('/'+route)"><i class="fa fa-arrow-left"
+                                                                         aria-hidden="true"></i>Back
                 To {{modelName}} List
             </button>
-            <button v-if="page!='create'" class="btn-new" @click="$router.push('/'+ route + '/create')"><i class="fa fa-plus"
-                                                                                                           aria-hidden="true"></i>New
+            <button v-if="page!='create'" class="btn-new" @click="$router.push('/'+ route + '/create')"><i
+                    class="fa fa-plus"
+                    aria-hidden="true"></i>New
                 {{modelName}}
             </button>
 
@@ -38,33 +40,36 @@
                 dataReady: false,
             }
         },
-        props: ['page','justcreated', 'route'],
+        props: ['page', 'justcreated', 'route'],
         mounted: function () {
+            let component = this;
 
-            AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
+
+            let awesomeTable = AwesomeTableWrapper.newRecordTable();
+            let afterRendered = function () {
+                //should be able to over-ride everything awesomeTable here????
+                if(component.page == 'create'){
+                    console.log(component.data);
+                    awesomeTable.controller.updateCellValue('password',0, component.data.password_suggestions.password);
+                    awesomeTable.controller.updateCellValue('passcode',0, component.data.password_suggestions.passcode);
+                }
+            }
+
+            AwesomeTableWrapper.renderRecordTable(awesomeTable, this, columnDefinition, 'record_table', afterRendered)
+
+
+
 
         },
         mixins: [recordPageMixins],
         methods: {
-            renderTable(){
-                let self = this;
-                this.column_definition = columnDefinition(this);
 
-
-
-                let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
-
-
-                $(function(){
-                    recordTable.addTo('record_table');
-                    //to add data to the page now....
-                    recordTable.controller.updateCellValue('password',self.data.password_suggestions.password);
-                    recordTable.controller.updateCellValue('passcode',self.data.password_suggestions.passcode);
-                    console.log(recordTable.model);
-                    bus.$emit('zzwaitoverevent');
-                })
-            }
         }
     }
 
 </script>
+<style>
+    #record_table{
+        width:600px;
+    }
+</style>

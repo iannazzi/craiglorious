@@ -4,14 +4,13 @@ import {ErrorModal} from '../elements/modal/ErrorModal'
 
 export class AwesomeTableWrapper {
     constructor() {
-        //how to handle modal??? that is this wrapper's job...
-        this.AwesomeTable = AwesomeTable;
-        this.ErrorModal = ErrorModal;
     }
+    newSearchTable() {
+        return new AwesomeTable('searchable');
+    }
+    createSearchableCollectionConfig(awesomeTable, component, number_of_records_to_automatically_get = 100) {
 
-    createSearchableCollectionTable(component, number_of_records_to_automatically_get = 100) {
-
-        let awesomeTable = new AwesomeTable('searchable')
+        //let awesomeTable = new AwesomeTable('searchable')
         let config = {
 
             name: component.route,
@@ -53,7 +52,7 @@ export class AwesomeTableWrapper {
             },
 
             onHeaderClick(data){
-               //we need both the search and the sort query now.....
+                //we need both the search and the sort query now.....
                 awesomeTable.controller.sort.storeSort();
                 component.$router.push({path: '/' + component.route, query: awesomeTable.controller.getQueryValues()})
             },
@@ -72,12 +71,12 @@ export class AwesomeTableWrapper {
                 component.searching = true;
             },
             onRowClick(row){
-                let id = awesomeTable.getValue('id',row);
+                let id = awesomeTable.getValue('id', row);
                 component.$router.push(component.route + '/' + id)
             }
 
         }
-        config.onSearchClick = function(query){
+        config.onSearchClick = function (query) {
 
             awesomeTable.controller.storeSearch();
             // let search_values = awesomeTable.controller.getSearchFormValues();
@@ -89,7 +88,7 @@ export class AwesomeTableWrapper {
             //update the url....
             component.$router.push({path: '/' + component.route, query: awesomeTable.controller.getQueryValues()})
 
-            getData( {
+            getData({
                 method: 'post',
                 url: component.route + '/search',
                 entity: awesomeTable.controller.getSearchPostData(),
@@ -97,10 +96,10 @@ export class AwesomeTableWrapper {
                     console.log('response')
 
                     console.log(response)
-                    if (response.data.records.length == 0){
+                    if (response.data.records.length == 0) {
                         awesomeTable.view.addMessageInsteadOfTable('no data')
                     }
-                    else{
+                    else {
                         //got some double hitting.... we want the data, then we want to sort, then render
                         awesomeTable.controller.renderSearch(response.data.records)
                         awesomeTable.controller.sort.removeAllSort()
@@ -108,8 +107,6 @@ export class AwesomeTableWrapper {
                         awesomeTable.controller.sort.loadSortFromDefault()
                         awesomeTable.controller.sort.storeSort();
                         awesomeTable.controller.sort.renderSort();
-
-
 
 
                     }
@@ -129,24 +126,24 @@ export class AwesomeTableWrapper {
             //component.$router.push({path: '/' + component.route, query: query})
 
 
-
-
-
-        },
-        awesomeTable.loadConfiguration(config);
-        return awesomeTable;
+        }
+            //awesomeTable.loadConfiguration(config);
+        return config;
     }
-    renderSearchTable(component, columnDefinition, div_id){
+    renderSearchTable(awesomeTable, component, columnDefinition, div_id, callback) {
+
         component.column_definition = columnDefinition(component);
-        let awesomeTable = this.createSearchableCollectionTable(component, 100);
-        awesomeTable.addTo(div_id)
+
+        //let awesomeTable = this.createSearchableCollectionTable(component, 100);
+        let config = this.createSearchableCollectionConfig(awesomeTable, component, 100)
+        awesomeTable.loadConfiguration(config);
+        awesomeTable.addTo(div_id);
         component.loading = true;
         let query = component.$route.query
         //if there is data on the url load that first....
-        if(awesomeTable.controller.checkQuery(query))
-        {
+        if (awesomeTable.controller.checkQuery(query)) {
             awesomeTable.controller.loadSearchValues(query);
-            getData( {
+            getData({
                 method: 'post',
                 url: component.route + '/search',
                 entity: awesomeTable.controller.getSearchPostData(),
@@ -155,13 +152,16 @@ export class AwesomeTableWrapper {
                     component.loading = false;
 
                     console.log(response)
-                    if (response.data.records.length == 0){
+                    if (response.data.records.length == 0) {
                         awesomeTable.view.addMessageInsteadOfTable('no data')
                     }
-                    else{
+                    else {
                         awesomeTable.controller.renderSearch(response.data.records)
                         awesomeTable.controller.sort.loadSortFromQuery(query)
                         awesomeTable.controller.sort.renderSort();
+                    }
+                    if (typeof callback === 'function') {
+                        callback()
                     }
                 },
                 onError(response) {
@@ -171,10 +171,10 @@ export class AwesomeTableWrapper {
             })
         }
         //next check the storage...
-        else if(awesomeTable.controller.checkSearchStorage()) {
+        else if (awesomeTable.controller.checkSearchStorage()) {
             console.log('loading from storage')
             awesomeTable.controller.loadSearchFromStorage()
-            getData( {
+            getData({
                 method: 'post',
                 url: component.route + '/search',
                 entity: awesomeTable.controller.getSearchPostData(),
@@ -183,16 +183,19 @@ export class AwesomeTableWrapper {
                     component.loading = false;
 
                     console.log(response)
-                    if (response.data.records.length == 0){
+                    if (response.data.records.length == 0) {
                         awesomeTable.view.addMessageInsteadOfTable('no data')
                     }
-                    else{
+                    else {
                         awesomeTable.controller.renderSearch(response.data.records)
                         console.log('loading sort from storage')
                         console.log(awesomeTable.controller.sort.getSort());
                         awesomeTable.controller.sort.loadSortFromStorage()
                         awesomeTable.controller.sort.renderSort();
-                        component.$router.push({path: '/' + component.route, query: awesomeTable.controller.getQueryValues()})
+                        component.$router.push({
+                            path: '/' + component.route,
+                            query: awesomeTable.controller.getQueryValues()
+                        })
 
                     }
                 },
@@ -203,7 +206,7 @@ export class AwesomeTableWrapper {
             })
 
         }
-        else{
+        else {
             console.log('loading default values')
             awesomeTable.controller.populateSearchValuesFromDefaultValues()
             let request = awesomeTable.controller.getSearchPostData();
@@ -214,16 +217,16 @@ export class AwesomeTableWrapper {
 
             //I could go to the server, if the threshold is good send back the default search....
 
-            getData( {
+            getData({
                 method: 'get',
                 url: component.route,
-                entity: {'number_of_records':300},
+                entity: {'number_of_records': 300},
                 onSuccess(response) {
                     component.loading = false;
 
                     console.log('response')
                     console.log(response)
-                    if(response.data.number_of_records_available <= 300){
+                    if (response.data.number_of_records_available <= 300) {
                         awesomeTable.controller.onSearchClicked()
                     }
                 },
@@ -237,7 +240,33 @@ export class AwesomeTableWrapper {
 
         }
     }
-    createRecordTable(component) {
+    getDataThenRenderSearchTable(awesomeTable, component, columnDefinition, div_id, callback) {
+        let self = this;
+        getData( {
+            method: 'get',
+            url: component.route,
+            entity: {'number_of_records':300},
+            onSuccess(response) {
+                console.log(response);
+                component.data = response.data;
+                component.$nextTick(function () {
+                    self.renderSearchTable(awesomeTable, component, columnDefinition, div_id, callback)
+                })
+            },
+            onError(response) {
+
+            }
+        })
+
+    }
+
+    newRecordTable() {
+        return new AwesomeTable('record');
+    }
+
+    createRecordTableConfig(awesomeTable, component) {
+        //component now has the route, the page, select values.... etc....
+        //what I really want is col_def,
         let access;
         if (component.page == 'show') {
             access = 'read';
@@ -245,9 +274,8 @@ export class AwesomeTableWrapper {
         else {
             access = 'write';
         }
-        let awesomeTable = new AwesomeTable('record');
 
-        awesomeTable.errorModal = new ErrorModal(component.route + '_error_modal');
+        component.errorModal = new ErrorModal(component.route + '_error_modal');
 
 
         let config = {
@@ -258,12 +286,14 @@ export class AwesomeTableWrapper {
             table_buttons: ['edit', 'delete'],
             access: access, //read vs write
             onDeleteClick(){
+
+
                 if (confirm("Confirm Delete?")) {
                     let post_data = {_method: 'delete', data: {id: component.$route.params.id}};
                     getData({
                         method: 'post',
                         url: component.route,
-                        entity:post_data,
+                        entity: post_data,
                         onSuccess: function (response) {
                             console.log(response)
                             component.$router.push('/' + component.route)
@@ -275,53 +305,56 @@ export class AwesomeTableWrapper {
             },
             onSaveClick(){
                 //only one save event for both
+
                 let post_data = {_method: 'put', data: awesomeTable.controller.getPostData()};
                 getData({
                     method: 'post',
                     url: component.route,
-                    entity:post_data,
+                    entity: post_data,
                     onSuccess: function (response) {
                         console.log(response)
-                        if(awesomeTable.model.td.table_view =='create'){
-                            component.$router.push({path: '/' + component.route + '/' + response.id, props: {justcreated: 'true'}});
+                        if (awesomeTable.model.td.table_view == 'create') {
+                            component.$router.push({
+                                path: '/' + component.route + '/' + response.id,
+                                props: {justcreated: 'true'}
+                            });
 
-                        }else
-                        {
+                        } else {
                             awesomeTable.controller.makeReadable();
                         }
                     },
                     onError(response){
                         //so we have an error on the save... now what....
                         //pop up a modal...
-                        awesomeTable.errorModal.addErrorMessage(response.message);
-                        awesomeTable.errorModal.show();
+                        component.errorModal.addErrorMessage(response.message);
+                        component.errorModal.show();
+                        //awesomeTable.view.addError(response.message)
+
+
                     }
                 })
 
 
             },
-            // onCreateSaved(id){
-            //     //pop up a modal
-            //     // this.create() //check the display
-            //     //back to roles
-            //     console.log('saving....')
-            //     component.dataReady = false;
-            //     delete cached_page_data[component.route]
-            //     component.$router.push({path: '/' + component.route + '/' + id, props: {justcreated: 'true'}});
-            //
-            // },
+
             onCancelCreateClick(){
                 if (confirm("Confirm Cancel?")) {
-                    component.$router.push('/' + component.route);}
+                    component.$router.push('/' + component.route);
+                }
             }
 
         }
-        awesomeTable.loadConfiguration(config);
-
-        return awesomeTable;
-
+        return config;
     }
-    renderRecordTable(component, columnDefinition, div_id){
+    renderRecordTable(awesomeTable, component, columnDefinition, div_id, callback) {
+        //in order to render the record table
+        //we need to go get data
+        // then we need to attach the data to the component
+        // then we need to build the column definition
+        // then we can build up the config
+        //then we can render the table
+        //then we can do stuff to the table....
+
         let self = this;
         let url = '/' + component.route + '/create';
         if (component.page != 'create') {
@@ -332,25 +365,35 @@ export class AwesomeTableWrapper {
             url: url,
             entity: false,
             onSuccess: function (response) {
-                component.dataReady=true;
+                component.dataReady = true;
                 console.log(response)
                 transfomer.removeNull(response.data.records);
                 component.data = response.data;
                 component.column_definition = columnDefinition(component);
-                let awesomeTable = self.createRecordTable(component);
+                //let awesomeTable = self.createRecordTable(component);
+                let config = self.createRecordTableConfig(awesomeTable, component)
+                awesomeTable.loadConfiguration(config);
                 Vue.nextTick(function () {
                     awesomeTable.addTo(div_id);
-                    document.getElementById(div_id).appendChild(awesomeTable.errorModal.createErrorModal());
-
+                    awesomeTable.controller.setFocusToFirstInput()
+                    document.getElementById(div_id).appendChild(component.errorModal.createErrorModal());
                     if (component.page != 'create') {
                         awesomeTable.controller.loadRecord(response.data.records[0])
                     }
+                    if (typeof callback === 'function') {
+                        callback()
+                    }
                 })
                 bus.$emit('zzwaitoverevent');
+                return awesomeTable;
             }
 
         })
+        return awesomeTable;
     }
+
+
+
 
     //most pages with tables need to get data then display it
     // loadDataAndRenderTable(component) {

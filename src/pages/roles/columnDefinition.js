@@ -4,10 +4,10 @@ export default function(component){
             "db_field": "id",
             "caption": "Id",
             "type": "link",
-            "onClick":  function(id){
-                component.$router.push({query:{}})
-                component.$router.push({path: '/' + component.route + '/' + id})
-            },
+            // "onClick":  function(id){
+            //     component.$router.push({query:{}})
+            //     component.$router.push({path: '/' + component.route + '/' + id})
+            // },
             "route": "roles",
             "show_on_list": true,
             "show_on_view": true,
