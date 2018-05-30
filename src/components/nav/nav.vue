@@ -23,7 +23,7 @@
 
                             <li><a href="" target="_blank"><i class="fa fa-plus-circle fa-2x"></i></a></li>
                             <li class="nav_text dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                <a id="username" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                    aria-haspopup="true"
                                    aria-expanded="false">
                                     <span>{{this.$root.user.username}}</span>

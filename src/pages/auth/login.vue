@@ -17,27 +17,27 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Company</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" v-model="user.company">
+                            <input id="company" type="text" class="form-control" v-model="user.company">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label">Username</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" ref="username" v-model="user.username">
+                            <input id="username" type="text" class="form-control" ref="username" v-model="user.username">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label">Password</label>
                         <div class="col-md-6">
-                            <input type="password" class="form-control" ref="password" v-model="user.password">
+                            <input id="password" type="password" class="form-control" ref="password" v-model="user.password">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-md-6 col-md-offset-4">
-                            <button type="submit" class="btn btn-primary" :disabled="loggingIn">
+                            <button id="login" type="submit" class="btn btn-primary" :disabled="loggingIn">
                                 <i class="fa fa-btn fa-sign-in"></i>Login
                             </button>
                             <router-link class="btn btn-link" to="{ path: '/auth/forgot' }">Forgot Your Password?

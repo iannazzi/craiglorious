@@ -6,6 +6,7 @@ bring up vm with vmu or cd ~/Homestead && vagrant up
 connect to vm with vmo or vm?
 from here we should be all set to serve, run tests, etc.
 
+//problems??? try vagrant halt vagrant up
 front end:
 from the vm run npm run watch
 then go to homestead.test

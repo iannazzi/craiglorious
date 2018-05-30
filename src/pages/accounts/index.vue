@@ -39,22 +39,17 @@
         props: ['page', 'route'],
         mounted: function () {
 
-            this.dataReady = false;
-            AwesomeTableWrapper.getPageDataThenRenderSearchTable(this);
+            let component = this;
+            let awesomeTable = AwesomeTableWrapper.newSearchTable();
+            let callback = function(){
+                //do what we want with awesomeTable.....
+            }
+            AwesomeTableWrapper.getDataThenRenderSearchTable(awesomeTable,component, columnDefinition, 'searchableTable', callback)
+
 
         },
         methods: {
-            renderTable(){
-                let self = this;
-                this.column_definition = columnDefinition(this);
-                this.searchableTable = AwesomeTableWrapper.createSearchableCollectionTable(this, 100);
 
-                $(function () {
-                    self.searchableTable.addTo('searchableTable')
-                })
-
-
-            }
         },
 
     }

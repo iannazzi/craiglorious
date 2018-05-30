@@ -4,9 +4,6 @@ export default function(component){
             "db_field": "id",
             "caption": "Id",
             "type": "link",
-            "onClick":  function(id){
-                component.$router.push(component.route + '/' + id)
-            },
             "route": "accounts",
             "show_on_list": true,
             "show_on_view": true,
@@ -33,6 +30,7 @@ export default function(component){
             "events": [],
             "search": "LIKE",
             "search_default": "",
+
             "properties": [],
             "word_wrap": true,
             "post": true
@@ -52,6 +50,7 @@ export default function(component){
             "events": [],
             "search": "LIKE",
             "search_default": "",
+            sort: 'asc',
             "properties": [],
             "word_wrap": true,
             "post": true

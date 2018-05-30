@@ -248,6 +248,7 @@ export class AwesomeTableWrapper {
             entity: {'number_of_records':300},
             onSuccess(response) {
                 console.log(response);
+                component.dataReady = true;
                 component.data = response.data;
                 component.$nextTick(function () {
                     self.renderSearchTable(awesomeTable, component, columnDefinition, div_id, callback)

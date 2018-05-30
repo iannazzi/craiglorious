@@ -31,8 +31,6 @@
 <script>
     import columnDefinition from './columnDefinition'
     import recordPageMixins from '../../controllers/recordPageMixins'
-    import {createConfirmModal} from '../../elements/modal/confirmModal'
-
 
     export default {
         data() {

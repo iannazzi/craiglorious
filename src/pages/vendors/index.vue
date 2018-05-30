@@ -29,7 +29,7 @@
         data() {
             return {
                 data: {},
-                dataReady: true,
+                dataReady: false,
                 loading: false,
                 searchableTable: null
             }
@@ -39,14 +39,13 @@
         mounted: function () {
 
             //vendors does not need any initial data.....
-            let callback = function(){
-                //do what we want with awesomeTable.....
-            }
-
-
+            this.dataReady=true;
 
             let component = this;
             let awesomeTable = AwesomeTableWrapper.newSearchTable();
+            let callback = function(){
+                //do what we want with awesomeTable.....
+            }
             component.$nextTick(function () {
                 AwesomeTableWrapper.renderSearchTable(awesomeTable, component, columnDefinition, 'searchableTable', callback)
             })

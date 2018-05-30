@@ -43,22 +43,22 @@
         props: ['page','justcreated', 'route'],
         mounted: function () {
 
-            AwesomeTableWrapper.loadRecordTableDataThenCallRenderTable(this)
+            let awesomeTable = AwesomeTableWrapper.newRecordTable();
+            let afterRendered = function () {
+
+            }
+
+            AwesomeTableWrapper.renderRecordTable(awesomeTable, this, columnDefinition, 'record_table', afterRendered)
 
         },
         methods: {
-            renderTable(){
-                let self = this;
-                this.column_definition = columnDefinition(this);
-                let recordTable = AwesomeTableWrapper.createShowEditOrCreateRecordTable(this);
 
-
-                $(function(){
-                    recordTable.addTo('record_table');
-                    bus.$emit('zzwaitoverevent');
-                })
-            }
         }
     }
 
 </script>
+<style>
+    #record_table{
+        width:600px;
+    }
+</style>
