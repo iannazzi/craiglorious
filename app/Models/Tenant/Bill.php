@@ -2,17 +2,21 @@
 
 use App\Models\BaseModel;
 
-class Payment extends BaseModel {
-
+class Bill extends BaseModel
+{
 
     protected $guarded = ['id'];
 
-    function getBills(){
-        //a payment can have many bills.....
+
+    function getPayments()
+    {
+        //a bill can have many payments....
         $query = \DB::table('bill_payment');
-        $query->where('payment_id', '=', $this->id);
+        $query->where('bill_id', '=', $this->id);
         $results = $query->get();
         return $results;
+
     }
+
 
 }

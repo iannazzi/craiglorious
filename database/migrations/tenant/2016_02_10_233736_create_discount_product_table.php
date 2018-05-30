@@ -15,9 +15,9 @@ class CreateDiscountProductTable extends Migration
         Schema::create('discount_product', function (Blueprint $table) {
             $table->integer('discount_id')->unsigned();
             $table->integer('product_id')->unsigned();
-            $table->integer('manufacturer_id')->unsigned();
+            $table->integer('vendor_id')->unsigned();
             $table->integer('product_category_id')->unsigned();
-            $table->unique(['discount_id','product_id','manufacturer_id','product_category_id'],'discount_id');
+            $table->unique(['discount_id','product_id','vendor_id','product_category_id'],'discount_id');
             $table->timestamps();
         });
     }

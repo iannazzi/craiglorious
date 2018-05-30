@@ -5,7 +5,7 @@ use App\Models\Tenant\Account;
 use Tests\ApiTester;
 
 
-class AccountTest extends ApiTester
+class BillPaymentTest extends ApiTester
 {
     //account has initialized data
     //this test would truncate account and load the inital data?

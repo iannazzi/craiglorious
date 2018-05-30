@@ -16,7 +16,6 @@ class CreateInventoryEventsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->integer('user_id_for_entry_lock')->unsigned()->index();
-            $table->integer('store_id')->unsigned()->default(0)->index();
             $table->integer('location_id')->unsigned()->index();
             $table->dateTime('inventory_date');
             $table->text('comments')->nullable();

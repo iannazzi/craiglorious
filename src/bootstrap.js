@@ -35,17 +35,15 @@ craiglorious.last_page_accessed_flag = false;
 
 craiglorious.autosave = true;
 craiglorious.autosave_timer = 30000;
-// craiglorious.AwesomeTable = require('@iannazzi/awesome-table');
-// console.log(craiglorious.AwesomeTable);
 
 
+//not sure we are usig lodash
 window._ = require('lodash');
+
 window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 
-//these are for modifying the url and sorting the table
-//window.firstBy = require('thenby');
-window.JsUri = require('jsuri');
+
 //these are for full calendar
 window.moment = require('moment');
 window.fullcalendar = require('fullcalendar');
@@ -53,22 +51,10 @@ window.fullcalendar = require('fullcalendar');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
-// Enable pusher logging - don't include this in production
-
-Pusher.logToConsole = true;
-
-craiglorious.pusher = new Pusher(craiglorious.PUSHER_KEY, {
-    cluster: craiglorious.pusherCluster,
-    encrypted: true
-});
-
-
-
-let channel = craiglorious.pusher.subscribe('global');
-channel.bind('my-event', function(data) {
-    alert(data.message);
-});
-
 window.Vue = Vue;
 Vue.use(VueRouter);
+
+//this code works.... just not using it yet.... still using polling.....
+
+
+

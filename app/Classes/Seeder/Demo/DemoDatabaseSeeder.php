@@ -28,5 +28,9 @@ class DemoDatabaseSeeder extends BaseSeeder
         CustomersTableSeeder::run();
         ScheduleEntriesTableSeeder::run();
 
+
+        //once vendors employees, users, accounts are set up we can fake some bills.....deposits..... payments.....
+
+
     }
 }

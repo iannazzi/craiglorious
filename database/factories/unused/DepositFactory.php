@@ -18,10 +18,6 @@ $factory->define(App\Models\Tenant\Payment::class, function (Faker\Generator $fa
 		'applied_status' => $faker->name,
 		'validated' => $faker->name,
 		'post_validated' => $faker->name,
-		'comments' => $faker->name,
-		'binary_content' => $faker->name,
-		'file_name' => $faker->name,
-		'file_type' => $faker->name,
-		'file_size' => $faker->name
+
     ];
 });

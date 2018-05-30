@@ -95,6 +95,10 @@
             <file>tests/in/CalendarEntryTest.php</file>
         </testsuite>
 
+        <testsuite name="bill">
+            <file>tests/in/BillTest.php</file>
+        </testsuite>
+
     </testsuites>
     <filter>
         <whitelist>
