@@ -8,6 +8,7 @@ class Payroll
     {
 
     }
+
     public static function getEmployees( $from, $to){
         $entries = CalendarEntry::select('employee_id')->where('end', '>=', $from)
             ->distinct()
