@@ -1,19 +1,22 @@
 <?php
 
 
-use App\Models\Tenant\PayrollPeriod;
+use App\Classes\Seeder\Demo\tables\PayrollContentsTableSeeder;
 use Tests\TestCase;
-use App\Classes\Accounting\Payroll\Payroll;
 use App\Classes\Accounting\Payroll\StatePayrollTaxes;
 use App\Classes\Accounting\Payroll\FederalPayrollTaxes;
+use App\Classes\Accounting\Payroll\Payroll;
+
 
 
 
 class PayrollTest extends TestCase
 {
+    //test the individual calculations.....
 
     //test the database.....demo seeded
-    //test the individual calculations.....
+
+    //create a fake payroll periods.....
 
     /** @test */
     function state_withholding()
@@ -69,31 +72,57 @@ class PayrollTest extends TestCase
     /** @test */
     function federal_withholding(){
 
-
         $fw = FederalPayrollTaxes::calculateWithholding('2017', 131.25, true, 1);
         $this->assertEquals($fw,0);
 
-
-
     }
-
     /** @test */
     function medicaide(){
+        $year = '2018';
+        $pay = 300;
+        $medicaide = FederalPayrollTaxes::calculateEmployeeMedicaideTax($year, $pay);
+        $expected = $pay*.0145;
+        $this->assertEquals($medicaide,$expected);
 
     }
     /** @test */
     function FICA(){
+        $year = '2018';
+        $pay = 300;
+        $fica = FederalPayrollTaxes::calculateEmployeeFicaTax($year, $pay);
+        $expected = $pay*.062;
+        $this->assertEquals($fica,$expected);
 
     }
+
+
+    //now i got to test the seeder...
+    /** @test */
+    function create_seed()
+    {
+    }
+
 
     /** @test */
     function check_demo_seeded()
     {
-//        $system = $this->getSystem('demo');
-//        $payroll_period = Payroll::getPayrollPeriod('2017-12-27');
-////        $payroll_period = PayrollPeriod::getPayrollPeriod('2017-12-26');
-//        //this should be id 0;
+        $system = $this->getSystem('demo');
+
+//        PayrollContentsTableSeeder::run();
+
 //
+        //these should get the same id
+        $payroll_period = Payroll::getPayrollPeriod('2017-12-27');
+
+        $this->assertEquals(1, $payroll_period->id);
+
+        $payroll_period = Payroll::getPayrollPeriod('2018-01-08');
+        $this->assertEquals(1, $payroll_period->id);
+
+
+//        $payroll_period = PayrollPeriod::getPayrollPeriod('2017-12-26');
+        //this should be id 0;
+
 //        dd($payroll_period->contents());
 //        $this->assertCount(1, $payroll_period->contents());
 

@@ -1,8 +1,6 @@
 <?php namespace App\Models\Tenant;
 
 use App\Models\BaseModel;
-use App\Models\Craiglorious\FederalPayrollTax;
-use App\Models\Craiglorious\StatePayrollTax;
 
 
 

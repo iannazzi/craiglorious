@@ -24,20 +24,6 @@ class PayrollPeriodsTableSeeder extends BaseSeeder
         $end = Carbon::createFromFormat('Y-m-d', '2018-01-08');
 
 
-
-        $content = [
-            'payroll_period_id' => 0,
-            'employee_id' => 1,
-            'hours' => 8.75,
-            'deductions' => 0,
-            'pay_rate' => 15,
-            'single' => true,
-            'wa' => 1,
-            'year' => '2017'
-        ];
-        $payroll_content = self::createPayrollContent($content);
-
-
         self::payrollPeriodGeneric($start->toDateString(), $end->toDateString(), 22.25, 8.75, 15.25);
         self::payrollPeriodGeneric($start->addDays(14)->toDateString(), $end->addDays(14)->toDateString(), 29, 11.5, 25.5);
         self::payrollPeriodGeneric($start->addDays(14)->toDateString(), $end->addDays(14)->toDateString(), 25.75, 18.5, 38.5);
@@ -89,85 +75,7 @@ class PayrollPeriodsTableSeeder extends BaseSeeder
         $payroll_content = self::createPayrollContent($content);
 
     }
-    public static function payrollPeriodOne()
-    {
-        $payroll_period = self::createPayrollPeriod('2017-12-26', '2018-01-08', 305.5, '270841730270147');
-        $content = [
-            'payroll_period_id' => $payroll_period->id,
-            'employee_id' => 0,
-            'hours' => 22.25,
-            'deductions' => 0,
-            'pay_rate' => 18.5,
-            'single' => false,
-            'wa' => 1,
-            'year' => '2017'
-        ];
-        $payroll_content = self::createPayrollContent($content);
 
-        $content = [
-            'payroll_period_id' => $payroll_period->id,
-            'employee_id' => 1,
-            'hours' => 8.75,
-            'deductions' => 0,
-            'pay_rate' => 15,
-            'single' => true,
-            'wa' => 1,
-            'year' => '2017'
-        ];
-        $payroll_content = self::createPayrollContent($content);
-
-        $content = [
-            'payroll_period_id' => $payroll_period->id,
-            'employee_id' => 2,
-            'hours' => 15.25,
-            'deductions' => 0,
-            'pay_rate' => 14,
-            'single' => true,
-            'wa' => 1,
-            'year' => '2017'
-        ];
-        $payroll_content = self::createPayrollContent($content);
-
-    }
-    public static function payrollPeriodTwo()
-    {
-        $payroll_period = self::createPayrollPeriod('2018-01-09', '2018-01-22', 264.22, '270843132988096');
-        $content = [
-            'payroll_period_id' => $payroll_period->id,
-            'employee_id' => 0,
-            'hours' => 29,
-            'deductions' => 0,
-            'pay_rate' => 18.5,
-            'single' => false,
-            'wa' => 1,
-            'year' => '2017'
-        ];
-        $payroll_content = self::createPayrollContent($content);
-        $content = [
-            'payroll_period_id' => $payroll_period->id,
-            'employee_id' => 1,
-            'hours' => 11.5,
-            'deductions' => 0,
-            'pay_rate' => 15,
-            'single' => true,
-            'wa' => 1,
-            'year' => '2017'
-        ];
-        $payroll_content = self::createPayrollContent($content);
-
-        $content = [
-            'payroll_period_id' => $payroll_period->id,
-            'employee_id' => 2,
-            'hours' => 25.5,
-            'deductions' => 0,
-            'pay_rate' => 14,
-            'single' => true,
-            'wa' => 1,
-            'year' => '2017'
-        ];
-        $payroll_content = self::createPayrollContent($content);
-
-    }
     public static function createPayrollContent($content)
     {
 
@@ -198,17 +106,25 @@ class PayrollPeriodsTableSeeder extends BaseSeeder
             'post_tax_pay' => $post_tax_pay,
             'paycheck_total' => $paycheck_total
         ];
-        dd($insert);
         return PayrollContent::create($insert);
     }
     public static function createPayrollPeriod($start, $end, $deposit, $conf){
+//        $pp = new PayrollPeriod();
+//        $pp->start = $start . ' 00:00:00';
+//        $pp->end = $end . ' 23:59:59';
+//        $pp->federal_deposit = $deposit;
+//        $pp->federal_confirmation = $conf;
+//        $pp->save();
+//        dd($pp->toArray());
+
+
         $insert = [
-            [
-                'start' => $start . ' 00:00',
-                'end' => $end. ' 23:59',
+
+                'start' => $start . ' 00:00:00',
+                'end' => $end. ' 23:59:59',
                 'federal_deposit' => $deposit,
                 'federal_confirmation' => $conf,
-            ]
+
         ];
         return PayrollPeriod::create($insert);
     }

@@ -42,33 +42,58 @@ class Payroll
 
     public static function getPayrollPeriod($date)
     {
+//query example
+//this works
+//        $payroll_period = \DB::select("SELECT id FROM payroll_periods WHERE start <= ? AND end >= ?", [$date." 00:00:00", $date." 23:59:59"]);
 
-//        $entry = PayrollPeriod::where('start', '>=', $date)
-//            ->where('end', '<=', $date)
-//            ->firstOrFail()->toArray();
+        //this will return an array not an object
+//        dd($sql);
+
+//this works
+
+        $payroll_period = PayrollPeriod::where('start', '<=', $date)
+            ->where('end', '>=', $date)
+            ->firstOrFail();
 //        dd($entry);
 
+        //this works...
 //        $payroll_period = PayrollPeriod::whereRaw("start <= ? AND end >= ?",
 //            array($date." 00:00:00", $date." 23:59:59")
 //        )->get();
-//        dd($payroll_period);
-
-        $payroll_period = PayrollPeriod::whereRaw("start >= ? AND end <= ?",
-            array($date . " 00:00:00", $date . " 23:59:59")
-        )->get();
-        dd($payroll_period);
+//        dd($payroll_period->toArray());
 
 
-        //$payroll_period = PayrollPeriod::whereBetween('start', [$from, $to])->get();
 
-        //dd(\DB::getQueryLog());
-
-
-        dd(PayrollPeriod::all()->toArray());
 
 
         return $payroll_period;
     }
+
+    public static function getPayrollPeriodsForYear($year){
+
+        $sql = \DB::select("SELECT id FROM payroll_periods WHERE start <= ? AND end >= ?", [$year."-01-01 00:00:00", $year."-12-31 23:59:59"]);
+        dd($sql);
+
+    }
+    public static function getQuarterDateRange($year, $quarter){
+        // 1 2 3 or 4
+        switch ($quarter) {
+            case 1:
+                return ['start' => $year.'-01-01 00:00:00', 'end' => $year.'-03-31 23:59:59' ];
+                break;
+            case 2:
+                return ['start' => $year.'-04-01 00:00:00', 'end' => $year.'-06-30 23:59:59' ];
+                break;
+            case 3:
+                return ['start' => $year.'-07-01 00:00:00', 'end' => $year.'-09-30 23:59:59' ];
+                break;
+            case 4:
+                return ['start' => $year.'-10-01 00:00:00', 'end' => $year.'-12-31 23:59:59' ];
+                break;
+        }
+
+    }
+
 
     public static function getEmployees($from, $to)
     {
