@@ -1,5 +1,5 @@
 <?php
-use App\Classes\Accounting\Payroll\Payroll;
+use App\Classes\Accounting\Payroll\Schedule;
 use App\Classes\Seeder\Demo\tables\ScheduleEntriesTableSeeder;
 use App\Classes\Seeder\Demo\tables\ShiftEntriesTableSeeder;
 use App\Models\Tenant\CalendarEntry;
@@ -174,12 +174,12 @@ class ScheduleTest extends ApiTester
         //23.75
         $total = 21.75;
 
-        $hours = Payroll::calculateHours(1, $from, $to);
+        $hours = Schedule::calculateHours(1, $from, $to);
         $this->assertEquals($hours, $total);
-        $hours = Payroll::calculateHours(2, $from, $to);
+        $hours = Schedule::calculateHours(2, $from, $to);
         $this->assertEquals($hours, 2.5);
 
-        $hours = Payroll::totalHours($from, $to);
+        $hours = Schedule::totalHours($from, $to);
         $this->assertEquals($hours, 24.25);
 
         //calculate hours for an employee date range

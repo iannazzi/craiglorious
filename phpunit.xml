@@ -20,16 +20,16 @@
 
 
 
-            <file>tests/in/LoginTest.php</file>
+            <file>tests/api/LoginTest.php</file>
             <file>tests/api/RoleTest.php</file>
             <file>tests/api/UserTest.php</file>
-            <file>tests/in/RegisterTest.php</file>
-            <file>tests/in/VendorTest.php</file>
-            <file>tests/in/AccountTest.php</file>
-            <file>tests/in/EmployeeTest.php</file>
-            <file>tests/in/LocationTest.php</file>
-            <file>tests/in/AccountTest.php</file>
-            <file>tests/in/CustomerTest.php</file>
+            <file>tests/api/RegisterTest.php</file>
+            <file>tests/api/VendorTest.php</file>
+            <file>tests/api/AccountTest.php</file>
+            <file>tests/api/EmployeeTest.php</file>
+            <file>tests/api/LocationTest.php</file>
+            <file>tests/api/AccountTest.php</file>
+            <file>tests/api/CustomerTest.php</file>
             <file>tests/File/CsvTest.php</file>
 
 
@@ -54,7 +54,7 @@
             <file>tests/database/production/ProductionDatabaseTest.php</file>
         </testsuite>
         <testsuite name="schedule">
-            <file>tests/in/ScheduleTest.php</file>
+            <file>tests/api/ScheduleTest.php</file>
         </testsuite>
 
 
@@ -64,27 +64,27 @@
 
 
         <testsuite name="login">
-            <file>tests/in/LoginTest.php</file>
+            <file>tests/api/LoginTest.php</file>
         </testsuite>
         <testsuite name="register">
-            <file>tests/in/RegisterTest.php</file>
+            <file>tests/api/RegisterTest.php</file>
         </testsuite>
         
         <testsuite name="vendors">
-            <file>tests/in/VendorTest.php</file>
+            <file>tests/api/VendorTest.php</file>
         </testsuite>
         <testsuite name="locations">
-            <file>tests/in/LocationTest.php</file>
+            <file>tests/api/LocationTest.php</file>
         </testsuite>
         <testsuite name="employees">
-            <file>tests/in/EmployeeTest.php</file>
+            <file>tests/api/EmployeeTest.php</file>
         </testsuite>
 
         <testsuite name="accounts">
-            <file>tests/in/AccountTest.php</file>
+            <file>tests/api/AccountTest.php</file>
         </testsuite>
         <testsuite name="customers">
-            <file>tests/in/CustomerTest.php</file>
+            <file>tests/api/CustomerTest.php</file>
         </testsuite>
 
         <testsuite name="csv">
@@ -92,11 +92,17 @@
         </testsuite>
 
         <testsuite name="cal">
-            <file>tests/in/CalendarEntryTest.php</file>
+            <file>tests/api/CalendarEntryTest.php</file>
+        </testsuite>
+        <testsuite name="schedule">
+            <file>tests/api/ScheduleTest.php</file>
+        </testsuite>
+        <testsuite name="payroll">
+            <file>tests/accounting/PayrollTest.php</file>
         </testsuite>
 
         <testsuite name="bill">
-            <file>tests/in/BillTest.php</file>
+            <file>tests/api/BillTest.php</file>
         </testsuite>
 
     </testsuites>

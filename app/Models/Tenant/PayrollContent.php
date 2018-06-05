@@ -6,18 +6,12 @@ use App\Models\Craiglorious\StatePayrollTax;
 
 
 
-class Payroll extends BaseModel {
+class PayrollContent extends BaseModel {
 
 
     protected $guarded = ['id'];
 
-    function getBills(){
-        //a payment can have many bills.....
-        $query = \DB::table('bill_payment');
-        $query->where('payment_id', '=', $this->id);
-        $results = $query->get();
-        return $results;
-    }
+
     function totalPay(){
         return ($this->regular_hours * $this->pay_rate) + $this->calculateOvertimePay() -$this->pre_tax_deductions;
     }
@@ -29,7 +23,6 @@ class Payroll extends BaseModel {
         return $date->format("Y");
     }
     function getFederalTax(){
-
         $tax = FederalPayrollTax::where('year',$this->year())->firstOrFail();
         return $tax;
     }

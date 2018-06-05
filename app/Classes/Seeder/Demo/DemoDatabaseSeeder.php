@@ -3,11 +3,14 @@ namespace App\Classes\Seeder\Demo;
 
 use App\Classes\Seeder\BaseSeeder;
 use App\Classes\Seeder\Demo\tables\CalendarEntriesTableSeeder;
+
 use App\Classes\Seeder\Demo\tables\CustomersTableSeeder;
 use App\Classes\Seeder\Demo\tables\EmployeesTableSeeder;
 use App\Classes\Seeder\Demo\tables\ScheduleEntriesTableSeeder;
 use App\Classes\Seeder\Demo\tables\UsersTableSeeder;
 use App\Classes\Seeder\Demo\tables\VendorsTableSeeder;
+use App\Classes\Seeder\Demo\tables\PayrollPeriodsTableSeeder;
+
 use App\Classes\TenantSystem\TenantSystemBuilder;
 use App\Models\Craiglorious\System;
 
@@ -27,6 +30,7 @@ class DemoDatabaseSeeder extends BaseSeeder
         EmployeesTableSeeder::run();
         CustomersTableSeeder::run();
         ScheduleEntriesTableSeeder::run();
+        PayrollPeriodsTableSeeder::run();
 
 
         //once vendors employees, users, accounts are set up we can fake some bills.....deposits..... payments.....

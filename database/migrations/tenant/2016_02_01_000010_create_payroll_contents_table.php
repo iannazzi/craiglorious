@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePayrollTable extends Migration
+class CreatePayrollContentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,14 @@ class CreatePayrollTable extends Migration
      */
     public function up()
     {
-        Schema::create('payroll', function (Blueprint $table)
+        Schema::create('payroll_contents', function (Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('payroll_period_id')->unsigned()->index();
             $table->integer('employee_id');
             $table->text('comments');
-            $table->dateTime('start');
-            $table->dateTime('end');
+            //$table->dateTime('start');
+            //$table->dateTime('end');
             $table->decimal('regular_hours', 20, 5);
             $table->decimal('overtime_hours', 20, 5);
             $table->decimal('overtime_rate', 20, 5);
@@ -28,13 +28,12 @@ class CreatePayrollTable extends Migration
             $table->decimal('pay_rate', 20, 5);
             $table->boolean('single');
             $table->integer('withholding_allowance');
-            $table->decimal('medicaide', 20, 5);
-            $table->decimal('fica', 20, 5);
+            $table->decimal('medicaide_tax', 20, 5);
+            $table->decimal('fica_tax', 20, 5);
             $table->decimal('federal_withholding', 20, 5);
             $table->decimal('state_withholding', 20, 5);
-            $table->integer('state_id')->unsigned()->index()->nullable();
+            $table->integer('state_id')->unsigned()->index();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -45,6 +44,6 @@ class CreatePayrollTable extends Migration
      */
     public function down()
     {
-        Schema::drop('payroll');
+        Schema::drop('payroll_contents');
     }
 }

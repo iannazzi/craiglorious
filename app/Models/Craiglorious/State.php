@@ -19,5 +19,8 @@ class State extends BaseCraigloriousModel {
         }
         return $rtn;
     }
+    public static function getStateId($name){
+	    return State::select('id')->where('name', $name)->orWhere('short_name', $name)->first();
+    }
 
 }
