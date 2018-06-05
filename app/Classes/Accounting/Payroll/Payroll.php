@@ -15,16 +15,18 @@ class Payroll
     //calculate payroll for a quarter same as above
     //select a payroll period .... it will have an id... nice...
     //calculate how much one employee made during a date range
-        //get the payroll periods
-        //get the contents for just the one employee
-        //should now be able to calculate
+    //get the payroll periods
+    //get the contents for just the one employee
+    //should now be able to calculate
 
 
     public function __construct()
     {
 
     }
-    public static function getPayrollPeriods($from, $to){
+
+    public static function getPayrollPeriods($from, $to)
+    {
         $entries = \DB::table('payroll_periods')
             ->where('end', '>=', $from)
             ->where('end', '<=', $to)
@@ -37,7 +39,9 @@ class Payroll
 
         return $entries;
     }
-    public static function getPayrollPeriod($date){
+
+    public static function getPayrollPeriod($date)
+    {
 
 //        $entry = PayrollPeriod::where('start', '>=', $date)
 //            ->where('end', '<=', $date)
@@ -50,10 +54,9 @@ class Payroll
 //        dd($payroll_period);
 
         $payroll_period = PayrollPeriod::whereRaw("start >= ? AND end <= ?",
-            array($date." 00:00:00", $date." 23:59:59")
+            array($date . " 00:00:00", $date . " 23:59:59")
         )->get();
-        dd('buggg');
-
+        dd($payroll_period);
 
 
         //$payroll_period = PayrollPeriod::whereBetween('start', [$from, $to])->get();
@@ -61,13 +64,14 @@ class Payroll
         //dd(\DB::getQueryLog());
 
 
-dd(PayrollPeriod::all()->toArray());
-
+        dd(PayrollPeriod::all()->toArray());
 
 
         return $payroll_period;
     }
-    public static function getEmployees( $from, $to){
+
+    public static function getEmployees($from, $to)
+    {
         $entries = PayrollPeriod::select('employee_id')->where('payroll_id')
             ->distinct()
             ->where('end', '<=', $to)
@@ -77,10 +81,22 @@ dd(PayrollPeriod::all()->toArray());
         //joining.....
 
 
-
         return $entries;
     }
-    public static function calculatePay($hours, $rate, $ot_hours, $ot_rate, $pre_tax_deduction){
-        return ($hours*$rate) + ($ot_hours*$ot_rate) - $pre_tax_deduction;
+
+    public static function calculatePreTaxPay($hours, $rate, $ot_hours, $ot_rate, $pre_tax_deduction)
+    {
+        return ($hours * $rate) + ($ot_hours * $ot_rate) - $pre_tax_deduction;
     }
+
+    public static function calculatePostTaxPay($pre_tax_pay, $medicaide, $fica, $fw, $sw)
+    {
+        return $pre_tax_pay - $medicaide - $fica - $fw - $sw;
+    }
+
+    public static function calculatePaycheckTotal($post_tax_pay, $deductions)
+    {
+        return $post_tax_pay - $deductions;
+    }
+
 }

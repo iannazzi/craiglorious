@@ -24,7 +24,10 @@ class CreatePayrollContentsTable extends Migration
             $table->decimal('overtime_hours', 20, 5);
             $table->decimal('overtime_rate', 20, 5);
             $table->decimal('pre_tax_deductions', 20, 5);
+            $table->decimal('pre_tax_pay', 20, 5);
+            $table->decimal('post_tax_pay', 20, 5);
             $table->decimal('post_tax_deductions', 20, 5);
+            $table->decimal('paycheck_total', 20, 5);
             $table->decimal('pay_rate', 20, 5);
             $table->boolean('single');
             $table->integer('withholding_allowance');
