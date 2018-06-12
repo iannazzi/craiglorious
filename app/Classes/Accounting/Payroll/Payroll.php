@@ -28,20 +28,41 @@ class Payroll
     public static function getPayrollPeriods($from, $to)
     {
         $entries = \DB::table('payroll_periods')
-            ->where('end', '>=', $from)
+            ->where('start', '>=', $from)
             ->where('end', '<=', $to)
             ->get()->toArray();
 
         //or
-        $entries = PayrollPeriod::where('end', '>=', $from)
-            ->where('end', '<=', $to)
-            ->get()->toArray();
+
+//1 and 3        $entries = PayrollPeriod::where('start', '<=', $from)
+//            ->orWhere('end', '>=', $to)
+//            ->get()->toArray();
+
+//1 and 3        $entries = PayrollPeriod::whereRaw("start <= ? OR end >= ?",
+//            array($from." 00:00:00", $to." 23:59:59")
+//        )->get();
+
+    $entries = \DB::select("SELECT id FROM payroll_periods WHERE start >= ? AND end <= ?", [$from." 00:00:00", $to." 23:59:59"]);
+
+        $entries = \DB::select("SELECT id FROM payroll_periods WHERE start <= ? AND end <= ?", [$to." 00:00:00", $to." 23:59:59"]);
+
+
+
+
+
+//    dd($entries);
+        // 2 and 3  $entries = \DB::select("SELECT id FROM payroll_periods WHERE start BETWEEN str_to_date(?,'%Y-%m-%d') AND str_to_date(?,'%Y-%m-%d')", [$from. " 00:00:00", $to." 23:59:59"]);
+      // 2 and 3  $entries = \DB::select("SELECT id FROM payroll_periods WHERE start BETWEEN ? AND ?", [$from, $to]);
+//        $entries =  PayrollPeriod::all();
 
         return $entries;
     }
 
     public static function getPayrollPeriod($date)
     {
+
+        // date should be format YYYY-MM-DD
+
 //query example
 //this works
 //        $payroll_period = \DB::select("SELECT id FROM payroll_periods WHERE start <= ? AND end >= ?", [$date." 00:00:00", $date." 23:59:59"]);
@@ -71,10 +92,26 @@ class Payroll
 
     public static function getPayrollPeriodsForYear($year){
 
-        $sql = \DB::select("SELECT id FROM payroll_periods WHERE start <= ? AND end >= ?", [$year."-01-01 00:00:00", $year."-12-31 23:59:59"]);
-        dd($sql);
+//        $sql = \DB::select("SELECT id FROM payroll_periods WHERE start >= ? AND end <= ?", [$year."-01-01 00:00:00", $year."-12-31 23:59:59"]);
+
+        $entries = \DB::select("SELECT id FROM payroll_periods WHERE end >= ? AND end <= ?",[$year."-01-01 00:00:00", $year."-12-31 23:59:59"]);
+        return $entries;
+
 
     }
+    public static function getPayrollPeriodsForQuarter($year, $quarter_number){
+
+        $date_range = self::getQuarterDateRange($year, $quarter_number);
+
+        //  the end date must be greater than or equal to  than  1-1-2018 quarter-start
+        // and the end date must be less than or equal to 3-31-2018
+
+        $entries = \DB::select("SELECT id FROM payroll_periods WHERE end >= ? AND end <= ?", [$date_range['start']." 00:00:00", $date_range['end']." 23:59:59"]);
+        return $entries;
+
+    }
+
+
     public static function getQuarterDateRange($year, $quarter){
         // 1 2 3 or 4
         switch ($quarter) {

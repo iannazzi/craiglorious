@@ -2,16 +2,21 @@
 
 
 use App\Classes\Seeder\Demo\tables\PayrollContentsTableSeeder;
+use App\Models\Tenant\PayrollPeriod;
 use Tests\TestCase;
 use App\Classes\Accounting\Payroll\StatePayrollTaxes;
 use App\Classes\Accounting\Payroll\FederalPayrollTaxes;
 use App\Classes\Accounting\Payroll\Payroll;
 
 
-
-
 class PayrollTest extends TestCase
 {
+
+
+    //data for testing --- i think we always want to seed the demo and test with it.... makes sense....
+
+    //data populating options..... faker, manual seeder, csv, pulling in from pos database.... hmmmmmmm
+
     //test the individual calculations.....
 
     //test the database.....demo seeded
@@ -23,32 +28,32 @@ class PayrollTest extends TestCase
     {
 
         $sw = StatePayrollTaxes::calculateWithholding('2017', 'NY', 131.25, true, 1);
-        $this->assertEquals($sw,0);
+        $this->assertEquals($sw, 0);
 
         $pay = 345;
         $wa = 323.1;
-        $pay_subject_to_withholding = $pay-$wa;
-        $expected = ($pay_subject_to_withholding-0)*0.04 + 0;
+        $pay_subject_to_withholding = $pay - $wa;
+        $expected = ($pay_subject_to_withholding - 0) * 0.04 + 0;
         $sw = StatePayrollTaxes::calculateWithholding('2017', 'NY', $pay, true, 1);
-        $this->assertEquals($sw,$expected);
+        $this->assertEquals($sw, $expected);
 
         $pay = 587.4;
         $married = false;
         $withholding_allowance = 1;
         $wa = StatePayrollTaxes::getWithholdingAllowance($married, $withholding_allowance);
-        $pay_subject_to_withholding = $pay-$wa;
-        $expected = ($pay_subject_to_withholding-0)*0.04 + 0;
+        $pay_subject_to_withholding = $pay - $wa;
+        $expected = ($pay_subject_to_withholding - 0) * 0.04 + 0;
         $sw = StatePayrollTaxes::calculateWithholding('2017', 'NY', $pay, $married, $withholding_allowance);
-        $this->assertEquals($sw,$expected);
+        $this->assertEquals($sw, $expected);
 
         $pay = 587.4;
         $married = false;
         $withholding_allowance = 1;
         $wa = StatePayrollTaxes::getWithholdingAllowance($married, $withholding_allowance);
-        $pay_subject_to_withholding = $pay-$wa;
-        $expected = ($pay_subject_to_withholding-0)*0.04 + 0;
+        $pay_subject_to_withholding = $pay - $wa;
+        $expected = ($pay_subject_to_withholding - 0) * 0.04 + 0;
         $sw = StatePayrollTaxes::calculateWithholding('2017', 'NY', $pay, $married, $withholding_allowance);
-        $this->assertEquals($sw,$expected);
+        $this->assertEquals($sw, $expected);
 
 
         $pay = 587.4;
@@ -56,44 +61,51 @@ class PayrollTest extends TestCase
         $withholding_allowance = 13;
         $expected = 'error withholding allowance is greater than nys allowance table';
         $sw = StatePayrollTaxes::calculateWithholding('2017', 'NY', $pay, $married, $withholding_allowance);
-        $this->assertEquals($sw,$expected);
+        $this->assertEquals($sw, $expected);
 
 
         //didn't actually calculate this .....
         $pay = 80000.4;
         $married = false;
         $withholding_allowance = 1;
-        $expected =22899.712;
+        $expected = 22899.712;
         $sw = StatePayrollTaxes::calculateWithholding('2017', 'NY', $pay, $married, $withholding_allowance);
-        $this->assertEquals($sw,$expected);
+        $this->assertEquals($sw, $expected);
 
 
     }
+
     /** @test */
-    function federal_withholding(){
+    function federal_withholding()
+    {
 
         $fw = FederalPayrollTaxes::calculateWithholding('2017', 131.25, true, 1);
-        $this->assertEquals($fw,0);
+        $this->assertEquals($fw, 0);
 
     }
+
     /** @test */
-    function medicaide(){
+    function medicaide()
+    {
         $year = '2018';
         $pay = 300;
         $medicaide = FederalPayrollTaxes::calculateEmployeeMedicaideTax($year, $pay);
-        $expected = $pay*.0145;
-        $this->assertEquals($medicaide,$expected);
+        $expected = $pay * .0145;
+        $this->assertEquals($medicaide, $expected);
 
     }
+
     /** @test */
-    function FICA(){
+    function FICA()
+    {
         $year = '2018';
         $pay = 300;
         $fica = FederalPayrollTaxes::calculateEmployeeFicaTax($year, $pay);
-        $expected = $pay*.062;
-        $this->assertEquals($fica,$expected);
+        $expected = $pay * .062;
+        $this->assertEquals($fica, $expected);
 
     }
+
 
 
     //now i got to test the seeder...
@@ -108,37 +120,80 @@ class PayrollTest extends TestCase
     {
         $system = $this->getSystem('demo');
 
-//        PayrollContentsTableSeeder::run();
+        $payroll_period = PayrollPeriod::all()->toArray();
+        $this->Count(3, $payroll_period);
 
-//
-        //these should get the same id
+    }
+
+    /** @test */
+    function payrol_periods(){
+
+        //make sure I can get payroll periods
+
+        $system = $this->getSystem('demo');
         $payroll_period = Payroll::getPayrollPeriod('2017-12-27');
-
         $this->assertEquals(1, $payroll_period->id);
 
         $payroll_period = Payroll::getPayrollPeriod('2018-01-08');
         $this->assertEquals(1, $payroll_period->id);
 
+        $payroll_period = Payroll::getPayrollPeriod('2018-01-09');
+        $this->assertEquals(2, $payroll_period->id);
 
-//        $payroll_period = PayrollPeriod::getPayrollPeriod('2017-12-26');
-        //this should be id 0;
+        $payroll_period = Payroll::getPayrollPeriod('2018-01-23');
+        $this->assertEquals(3, $payroll_period->id);
 
-//        dd($payroll_period->contents());
-//        $this->assertCount(1, $payroll_period->contents());
+        $payroll_periods = Payroll::getPayrollPeriods('2017-12-27', '2018-02-05');
+        $this->assertCount(3, $payroll_periods);
 
+        $payroll_periods = Payroll::getPayrollPeriodsForQuarter('2018', 1);
+        $this->assertCount(3, $payroll_periods);
+
+        $payroll_periods = Payroll::getPayrollPeriodsForQuarter('2018', 2);
+        $this->assertCount(0, $payroll_periods);
+
+        $payroll_periods = Payroll::getPayrollPeriodsForQuarter('2017', 1);
+        $this->assertCount(0, $payroll_periods);
+
+        $payroll_periods = Payroll::getPayrollPeriodsForYear('2017');
+        $this->assertCount(0, $payroll_periods);
+
+        $payroll_periods = Payroll::getPayrollPeriodsForYear('2018');
+        $this->assertCount(3, $payroll_periods);
 
 
     }
+
+
+    /** @test */
     function calculate_total_pay()
     {
 
     }
 
-    //add in employees, hours, payrate, witholding
-
-
-
     /** @test */
+    function quarterly_federal_941()
+    {
+
+    }
+    /** @test */
+    function annual_federal_940()
+    {
+
+    }
+    /** @test */
+    function quarterly_state_nys45()
+    {
+
+    }
+    /** @test */
+    function annual_state_nys45()
+    {
+
+    }
+
+
+
 
 
 
