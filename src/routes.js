@@ -132,7 +132,7 @@ let routes = [
     commonRoute('accounts'),
     commonRoute('customers'),
     commonRoute('schedules'),
-
+    commonRoute('payroll'),
 
 
     {

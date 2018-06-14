@@ -134,6 +134,8 @@ class Payroll
 
     public static function getEmployees($from, $to)
     {
+        //did I even code this?
+
         $entries = PayrollPeriod::select('employee_id')->where('payroll_id')
             ->distinct()
             ->where('end', '<=', $to)

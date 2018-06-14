@@ -393,7 +393,9 @@ export class AwesomeTableWrapper {
         return awesomeTable;
     }
 
-
+    newCollectionTable(){
+        return new AwesomeTable('collection');
+    }
 
 
     //most pages with tables need to get data then display it

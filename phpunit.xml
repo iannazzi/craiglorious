@@ -98,7 +98,8 @@
             <file>tests/api/ScheduleTest.php</file>
         </testsuite>
         <testsuite name="payroll">
-            <file>tests/accounting/PayrollTest.php</file>
+            <file>tests/accounting/PayrollCalculationTest.php</file>
+            <file>tests/api/PayrollTest.php</file>
         </testsuite>
 
         <testsuite name="bill">

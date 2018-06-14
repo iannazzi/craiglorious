@@ -9,7 +9,7 @@ use App\Classes\Accounting\Payroll\FederalPayrollTaxes;
 use App\Classes\Accounting\Payroll\Payroll;
 
 
-class PayrollTest extends TestCase
+class PayrollCalculationTest extends TestCase
 {
 
 
@@ -126,7 +126,7 @@ class PayrollTest extends TestCase
     }
 
     /** @test */
-    function payrol_periods(){
+    function get_payroll_periods(){
 
         //make sure I can get payroll periods
 
@@ -166,8 +166,43 @@ class PayrollTest extends TestCase
 
 
     /** @test */
-    function calculate_total_pay()
+    function create_payroll_contents()
     {
+        $pay_rate = 18.5;
+       $deductions = 0;
+       $single = false;
+       $wa = 1;
+
+
+        $insert = [
+            'payroll_period_id' => $content->payroll_period_id,
+            'employee_id' => $content->employee_id,
+            'regular_hours' => $content->hours,
+            'pre_tax_deductions' => $content->deductions,
+            'pay_rate' => $content->pay_rate,
+            'single' => $content->single,
+            'withholding_allowance' => $content->wa,
+            'state_id' => State::getStateId('NY'),
+            'medicaide_tax' => $medicaide,
+            'fica_tax' => $fica,
+            'federal_withholding' => $fw,
+            'state_withholding' => $sw,
+            'pre_tax_pay' => $pre_tax_pay,
+            'post_tax_pay' => $post_tax_pay,
+            'paycheck_total' => $paycheck_total
+        ];
+        return PayrollContent::create($insert);
+        $payroll_content = self::createPayrollContent($content);
+
+
+
+        //a period
+        //see the contents....
+        //add in the
+
+
+        //many periods
+
 
     }
 
@@ -193,6 +228,23 @@ class PayrollTest extends TestCase
     }
 
 
+    //api
+    //view ..... payroll-periods index..... search... etc
+    /** @test */
+    function crud_payroll_period()
+    {
+
+    }
+    /** @test */
+    function crud_payroll_period_content()
+    {
+
+    }
+    /** @test */
+    function crud_payroll_period_contents()
+    {
+
+    }
 
 
 

@@ -18,8 +18,8 @@ class CreatePayrollPeriodsTable extends Migration
             $table->integer('user_id');
             $table->dateTime('start');
             $table->dateTime('end');
-            $table->decimal('federal_deposit', 20, 5);
-            $table->string('federal_confirmation');
+            $table->decimal('eftps_deposit', 20, 5);
+            $table->string('eftps_confirmation');
             $table->string('comments');
             $table->timestamps();
 //            $table->softDeletes();
